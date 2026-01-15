@@ -44,7 +44,7 @@ export default function Home() {
                     Ready to question your life choices in another language? Let's go!
                 </p>
             </CardHeader>
-            <CardContent className="flex flex-col space-y-4 p-6">
+            <CardContent className="flex flex-col space-y-4 p-6 pt-0">
                 <Link href="/quiz/en-pl" passHref>
                     <Button className="w-full h-12 text-lg" size="lg">
                         <BookOpen className="mr-2 h-5 w-5" />
