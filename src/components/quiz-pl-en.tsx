@@ -20,6 +20,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { updateStats, addError } from "@/lib/storage";
 
 
 function shuffleArray<T>(array: T[]): T[] {
@@ -79,6 +80,15 @@ export default function QuizPlEn() {
           clearInterval(interval);
           setAnswerStatus("timeout");
           setSelectedAnswer(null);
+
+          updateStats(false);
+          addError({
+            word: questions[currentQuestionIndex].word,
+            userAnswer: 'No answer',
+            correctAnswer: questions[currentQuestionIndex].correctAnswer,
+            quiz: 'Polish - English',
+          });
+
           return 0;
         }
         return prev - 1;
@@ -108,11 +118,19 @@ export default function QuizPlEn() {
 
     setSelectedAnswer(answer);
     const isCorrect = answer === currentQuestion.correctAnswer;
+    updateStats(isCorrect);
+
     if (isCorrect) {
       setScore((prevScore) => prevScore + 1);
       setAnswerStatus("correct");
     } else {
       setAnswerStatus("incorrect");
+      addError({
+        word: currentQuestion.word,
+        userAnswer: answer,
+        correctAnswer: currentQuestion.correctAnswer,
+        quiz: 'Polish - English',
+      });
     }
   };
 
@@ -219,7 +237,7 @@ export default function QuizPlEn() {
         </CardHeader>
         <CardContent className="flex flex-col items-center justify-center p-6 space-y-8">
             <div className="w-full flex justify-around gap-4 text-center">
-                <div className="flex items-center gap-2 text-card-foreground">
+                <div className="flex items-center gap-2">
                     <Clock className="h-6 w-6" />
                     <span className={cn(
                         "text-2xl font-bold transition-colors duration-300 text-card-foreground",
@@ -228,9 +246,9 @@ export default function QuizPlEn() {
                         {questionTimer}s
                     </span>
                 </div>
-                <div className="flex items-center gap-2 text-card-foreground">
+                <div className="flex items-center gap-2">
                     <Clock className="h-6 w-6" />
-                    <span className="text-2xl font-bold">{formatTime(totalTime)}</span>
+                    <span className="text-2xl font-bold text-card-foreground">{formatTime(totalTime)}</span>
                 </div>
             </div>
             <Progress value={questionTimeProgress} className="w-full h-2" />

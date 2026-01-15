@@ -21,6 +21,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { updateStats } from "@/lib/storage";
 
 
 function shuffleArray<T>(array: T[]): T[] {
@@ -86,6 +87,7 @@ export default function QuizIrregularVerbs() {
           clearInterval(interval);
           setAnswerStatus("timeout");
           setSelectedTranslation(null);
+          updateStats(false);
           return 0;
         }
         return prev - 1;
@@ -128,8 +130,11 @@ export default function QuizIrregularVerbs() {
     const isTranslationCorrect = selectedTranslation === currentQuestion.correctTranslation;
     const isForm2Correct = form2Input.trim().toLowerCase() === currentQuestion.form2.toLowerCase();
     const isForm3Correct = form3Input.trim().toLowerCase() === currentQuestion.form3.toLowerCase();
+    const isCorrect = isTranslationCorrect && isForm2Correct && isForm3Correct;
 
-    if (isTranslationCorrect && isForm2Correct && isForm3Correct) {
+    updateStats(isCorrect);
+
+    if (isCorrect) {
       setScore((prevScore) => prevScore + 1);
       setAnswerStatus("correct");
     } else {
@@ -254,7 +259,7 @@ export default function QuizIrregularVerbs() {
         </CardHeader>
         <CardContent className="flex flex-col items-center justify-center p-6 space-y-6">
             <div className="w-full flex justify-around gap-4 text-center">
-                <div className="flex items-center gap-2 text-card-foreground">
+                <div className="flex items-center gap-2">
                     <Clock className="h-6 w-6" />
                     <span className={cn(
                         "text-2xl font-bold transition-colors duration-300 text-card-foreground",
@@ -263,9 +268,9 @@ export default function QuizIrregularVerbs() {
                         {questionTimer}s
                     </span>
                 </div>
-                <div className="flex items-center gap-2 text-card-foreground">
+                <div className="flex items-center gap-2">
                     <Clock className="h-6 w-6" />
-                    <span className="text-2xl font-bold">{formatTime(totalTime)}</span>
+                    <span className="text-2xl font-bold text-card-foreground">{formatTime(totalTime)}</span>
                 </div>
             </div>
             <Progress value={questionTimeProgress} className="w-full h-2" />
@@ -309,7 +314,7 @@ export default function QuizIrregularVerbs() {
                 className={cn("text-center transition-colors duration-300", getInputClass(form3Input, currentQuestion.form3))}
               />
             </div>
-            {(answerStatus === 'incorrect' || (answerStatus === 'timeout' && !form2Input && !form3Input)) && (
+            {(answerStatus === 'incorrect' || (answerStatus === 'timeout' && (!form2Input || !form3Input))) && (
               <div className="text-center text-success font-medium animate-in fade-in">
                   Correct forms: {currentQuestion.form2}, {currentQuestion.form3}
               </div>
