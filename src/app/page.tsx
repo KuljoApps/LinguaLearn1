@@ -1,4 +1,4 @@
-import { BookOpen, Dumbbell, Star } from 'lucide-react';
+import { BookOpen, Dumbbell, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -57,10 +57,12 @@ export default function Home() {
                         Polish - English Quiz
                     </Button>
                 </Link>
-                <Button className="w-full h-12 text-lg" size="lg" disabled>
-                    <Star className="mr-2 h-5 w-5" />
-                    Coming Soon...
-                </Button>
+                <Link href="/quiz/irregular-verbs" passHref>
+                    <Button className="w-full h-12 text-lg" size="lg">
+                        <Sparkles className="mr-2 h-5 w-5" />
+                        Irregular Verbs
+                    </Button>
+                </Link>
             </CardContent>
         </Card>
     </main>
