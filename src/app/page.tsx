@@ -3,30 +3,19 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 
-const BrainCircuit = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+const LinguaLearnLogo = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <defs>
-            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style={{stopColor: 'hsl(var(--chart-1))', stopOpacity:1}} />
-                <stop offset="100%" style={{stopColor: 'hsl(var(--chart-3))', stopOpacity:1}} />
+            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style={{stopColor: 'hsl(var(--chart-2))', stopOpacity:1}} />
+                <stop offset="100%" style={{stopColor: 'hsl(var(--chart-4))', stopOpacity:1}} />
             </linearGradient>
         </defs>
-        <path d="M12 5a3 3 0 1 0-5.997.125" stroke="url(#grad1)"/>
-        <path d="M12 5a3 3 0 1 1 5.997.125" stroke="url(#grad1)"/>
-        <path d="M15 5a3 3 0 0 0-3-3" />
-        <path d="M9 5a3 3 0 0 1 3-3" />
-        <path d="M12 12a3 3 0 1 0-5.997.125" />
-        <path d="M12 12a3 3 0 1 1 5.997.125" />
-        <path d="M15 12a3 3 0 0 0-3-3" />
-        <path d="M9 12a3 3 0 0 1 3-3" />
-        <path d="M12 19a3 3 0 1 0-5.997.125" />
-        <path d="M12 19a3 3 0 1 1 5.997.125" />
-        <path d="M15 19a3 3 0 0 0-3-3" />
-        <path d="M9 19a3 3 0 0 1 3-3" />
-        <path d="M6 7.65V10.35" />
-        <path d="M18 7.65V10.35" />
-        <path d="M6 14.65V17.35" />
-        <path d="M18 14.65V17.35" />
+        <path d="M22 22H2" stroke="url(#grad1)" />
+        <path d="M19 22V9.33a2 2 0 0 0-.64-1.42l-5-5.01a2 2 0 0 0-2.72 0l-5 5.01A2 2 0 0 0 5 9.33V22" stroke="url(#grad1)" />
+        <path d="M9 13h6" stroke="url(#grad1)" />
+        <path d="M9 17h6" stroke="url(#grad1)" />
+        <path d="M15 22v-5a3 3 0 0 0-6 0v5" stroke="url(#grad1)" />
     </svg>
 );
 
@@ -37,7 +26,7 @@ export default function Home() {
         <Card className="w-full max-w-md shadow-2xl text-center">
             <CardHeader>
                 <div className="flex items-center justify-center gap-4 mb-4">
-                    <BrainCircuit />
+                    <LinguaLearnLogo />
                     <h1 className="text-4xl font-bold tracking-tight">LinguaLearn</h1>
                 </div>
                 <p className="text-muted-foreground">

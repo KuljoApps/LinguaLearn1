@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { BrainCircuit, Home, RefreshCw, Pause, Play, Clock } from "lucide-react";
+import { Home, RefreshCw, Pause, Play, Clock } from "lucide-react";
 import { questions as initialQuestions, type Question } from "@/lib/questions-pl-en";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,22 @@ import {
 } from "@/components/ui/alert-dialog";
 import { updateStats, addError } from "@/lib/storage";
 import { playSound } from "@/lib/sounds";
+
+const LinguaLearnLogo = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <defs>
+            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style={{stopColor: 'hsl(var(--chart-2))', stopOpacity:1}} />
+                <stop offset="100%" style={{stopColor: 'hsl(var(--chart-4))', stopOpacity:1}} />
+            </linearGradient>
+        </defs>
+        <path d="M22 22H2" stroke="url(#grad1)" />
+        <path d="M19 22V9.33a2 2 0 0 0-.64-1.42l-5-5.01a2 2 0 0 0-2.72 0l-5 5.01A2 2 0 0 0 5 9.33V22" stroke="url(#grad1)" />
+        <path d="M9 13h6" stroke="url(#grad1)" />
+        <path d="M9 17h6" stroke="url(#grad1)" />
+        <path d="M15 22v-5a3 3 0 0 0-6 0v5" stroke="url(#grad1)" />
+    </svg>
+);
 
 
 function shuffleArray<T>(array: T[]): T[] {
@@ -234,7 +250,7 @@ export default function QuizPlEn() {
       <Card className="w-full max-w-lg shadow-2xl">
         <CardHeader className="text-center">
           <div className="flex items-center justify-center gap-2">
-              <BrainCircuit className="h-8 w-8 text-primary" />
+              <LinguaLearnLogo className="h-8 w-8" />
               <CardTitle className="text-3xl font-bold tracking-tight">LinguaLearn</CardTitle>
           </div>
           <CardDescription>Select the correct translation.</CardDescription>
