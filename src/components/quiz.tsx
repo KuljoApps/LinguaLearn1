@@ -131,15 +131,15 @@ export default function Quiz() {
   };
 
   const handlePauseClick = () => {
-    setIsPaused((prev) => {
-        const currentlyPaused = prev;
-        if (currentlyPaused) { // unpausing
-            setQuestionTimer((t) => Math.max(0, t - PAUSE_PENALTY));
-            setShowTimePenalty(true);
-            setTimeout(() => setShowTimePenalty(false), 500);
-        }
-        return !currentlyPaused;
-    });
+    if (!isPaused) {
+      setIsPaused(true);
+    } else {
+      const newTime = Math.max(0, questionTimer - PAUSE_PENALTY);
+      setQuestionTimer(newTime);
+      setShowTimePenalty(true);
+      setTimeout(() => setShowTimePenalty(false), 500);
+      setIsPaused(false);
+    }
   }
 
   const restartTest = () => {
