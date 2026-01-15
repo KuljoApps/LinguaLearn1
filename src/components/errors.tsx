@@ -34,7 +34,7 @@ interface AggregatedError {
     userAnswers: Set<string>;
 }
 
-type QuizFilter = 'all' | 'English - Polish' | 'Polish - English' | 'Irregular Verbs' | 'Idioms';
+type QuizFilter = 'all' | 'English - Polish' | 'Polish - English' | 'Irregular Verbs' | 'Phrasal Verbs' | 'Idioms';
 
 export default function ErrorsPage() {
     const [errors, setErrors] = useState<ErrorRecord[]>([]);
@@ -162,6 +162,7 @@ export default function ErrorsPage() {
                                     <SelectItem value="English - Polish">English - Polish</SelectItem>
                                     <SelectItem value="Polish - English">Polish - English</SelectItem>
                                     <SelectItem value="Irregular Verbs">Irregular Verbs</SelectItem>
+                                    <SelectItem value="Phrasal Verbs">Phrasal Verbs</SelectItem>
                                     <SelectItem value="Idioms">Idioms</SelectItem>
                                 </SelectContent>
                             </Select>
