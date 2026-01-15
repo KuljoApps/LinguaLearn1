@@ -108,7 +108,7 @@ export default function Quiz() {
             <p className="text-4xl font-headline font-bold text-card-foreground">"{currentQuestion.word}"?</p>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
           {currentQuestion.options.map((option) => (
             <Button
               key={option}
