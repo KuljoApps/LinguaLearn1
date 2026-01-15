@@ -117,12 +117,6 @@ export default function QuizIrregularVerbs() {
     return () => clearInterval(interval);
   }, [currentQuestionIndex, questions.length, isPaused]);
   
-  useEffect(() => {
-    if(currentQuestionIndex < questions.length && !isPaused && !answerStatus) {
-      form2InputRef.current?.focus();
-    }
-  }, [currentQuestionIndex, isPaused, answerStatus, questions.length]);
-
   const currentQuestion = useMemo(() => questions[currentQuestionIndex], [questions, currentQuestionIndex]);
 
   useEffect(() => {
