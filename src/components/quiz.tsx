@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { BrainCircuit, Home, RefreshCw, Pause, Clock } from "lucide-react";
+import { BrainCircuit, Home, RefreshCw, Pause, Play, Clock } from "lucide-react";
 import { questions as initialQuestions, type Question } from "@/lib/questions";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -42,6 +42,8 @@ export default function Quiz() {
   const [isRestartAlertOpen, setIsRestartAlertOpen] = useState(false);
   const [isHomeAlertOpen, setIsHomeAlertOpen] = useState(false);
   const [questionTimer, setQuestionTimer] = useState(QUESTION_TIME_LIMIT);
+  const [totalTime, setTotalTime] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   
   const router = useRouter();
   
@@ -62,7 +64,7 @@ export default function Quiz() {
   }, [answerStatus]);
 
   useEffect(() => {
-    if (currentQuestionIndex >= questions.length || !!answerStatus) {
+    if (currentQuestionIndex >= questions.length || !!answerStatus || isPaused) {
       return;
     }
 
@@ -78,13 +80,25 @@ export default function Quiz() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [currentQuestionIndex, questions.length, answerStatus]);
+  }, [currentQuestionIndex, questions.length, answerStatus, isPaused]);
+
+  useEffect(() => {
+    if (currentQuestionIndex >= questions.length || isPaused) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setTotalTime((prev) => prev + 1);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [currentQuestionIndex, questions.length, isPaused]);
 
 
   const currentQuestion = useMemo(() => questions[currentQuestionIndex], [questions, currentQuestionIndex]);
   
   const handleAnswerClick = (answer: string) => {
-    if (answerStatus) return;
+    if (answerStatus || isPaused) return;
 
     setSelectedAnswer(answer);
     const isCorrect = answer === currentQuestion.correctAnswer;
@@ -111,6 +125,10 @@ export default function Quiz() {
     }
   };
 
+  const handlePauseClick = () => {
+    setIsPaused((prev) => !prev);
+  }
+
   const restartTest = () => {
     setQuestions(shuffleArray(initialQuestions));
     setCurrentQuestionIndex(0);
@@ -118,6 +136,8 @@ export default function Quiz() {
     setSelectedAnswer(null);
     setAnswerStatus(null);
     setQuestionTimer(QUESTION_TIME_LIMIT);
+    setTotalTime(0);
+    setIsPaused(false);
     setIsRestartAlertOpen(false);
   }
 
@@ -164,6 +184,12 @@ export default function Quiz() {
     );
   }
 
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+  };
+
   const progressValue = ((currentQuestionIndex + 1) / questions.length) * 100;
   const questionTimeProgress = (questionTimer / QUESTION_TIME_LIMIT) * 100;
 
@@ -185,13 +211,13 @@ export default function Quiz() {
                 </div>
                 <div className="flex items-center gap-2 text-muted-foreground">
                     <Clock className="h-6 w-6" />
-                    <span className="text-2xl font-bold">--:--</span>
+                    <span className="text-2xl font-bold">{formatTime(totalTime)}</span>
                 </div>
             </div>
             <Progress value={questionTimeProgress} className="w-full h-2" />
 
           <div className="text-center space-y-2">
-              <p className="text-muted-foreground">What is the English meaning of</p>
+              <p className="text-muted-foreground">What is the Polish meaning of</p>
               <p className="text-4xl font-headline font-bold text-card-foreground">"{currentQuestion.word}"?</p>
           </div>
 
@@ -200,7 +226,7 @@ export default function Quiz() {
               <Button
                 key={option}
                 onClick={() => handleAnswerClick(option)}
-                disabled={!!answerStatus}
+                disabled={!!answerStatus || isPaused}
                 className={cn("h-auto text-lg p-4 whitespace-normal transition-all duration-300", getButtonClass(option))}
               >
                 {option}
@@ -216,8 +242,8 @@ export default function Quiz() {
             <Button variant="outline" size="icon" onClick={handleRestartClick}>
               <RefreshCw />
             </Button>
-            <Button variant="outline" size="icon" disabled>
-              <Pause />
+            <Button variant="outline" size="icon" onClick={handlePauseClick}>
+              {isPaused ? <Play /> : <Pause />}
             </Button>
           </div>
         </CardContent>
