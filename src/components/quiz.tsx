@@ -56,7 +56,7 @@ export default function Quiz() {
 
   const getButtonClass = (option: string) => {
     if (!answerStatus) {
-      return "bg-card hover:bg-secondary";
+      return "bg-secondary hover:bg-secondary/80";
     }
 
     const isCorrectAnswer = option === currentQuestion.correctAnswer;
