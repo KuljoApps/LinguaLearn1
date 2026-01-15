@@ -16,8 +16,47 @@ export interface ErrorRecord {
     quiz: string;
 }
 
+export interface Settings {
+    soundsEnabled: boolean;
+    vibrationsEnabled: boolean;
+    volume: number;
+}
+
 const STATS_KEY = 'linguaLearnStats';
 const ERRORS_KEY = 'linguaLearnErrors';
+const SETTINGS_KEY = 'linguaLearnSettings';
+
+// --- Settings Functions ---
+
+export const getSettings = (): Settings => {
+    const defaultSettings = { soundsEnabled: true, vibrationsEnabled: true, volume: 50 };
+    if (typeof window === 'undefined') {
+        return defaultSettings;
+    }
+    try {
+        const settingsJson = localStorage.getItem(SETTINGS_KEY);
+        if (settingsJson) {
+            const settings = JSON.parse(settingsJson);
+            return {
+                soundsEnabled: typeof settings.soundsEnabled === 'boolean' ? settings.soundsEnabled : defaultSettings.soundsEnabled,
+                vibrationsEnabled: typeof settings.vibrationsEnabled === 'boolean' ? settings.vibrationsEnabled : defaultSettings.vibrationsEnabled,
+                volume: typeof settings.volume === 'number' ? settings.volume : defaultSettings.volume,
+            };
+        }
+    } catch (error) {
+        console.error("Failed to parse settings from localStorage", error);
+    }
+    return defaultSettings;
+}
+
+export const saveSettings = (settings: Settings) => {
+    if (typeof window === 'undefined') return;
+    try {
+        localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+    } catch (error) {
+        console.error("Failed to save settings to localStorage", error);
+    }
+}
 
 // --- Stats Functions ---
 

@@ -1,7 +1,10 @@
 'use client';
 
+import { getSettings } from './storage';
+
 export const playSound = (type: 'correct' | 'incorrect') => {
-    if (typeof window === 'undefined' || !window.AudioContext) return;
+    const settings = getSettings();
+    if (!settings.soundsEnabled || typeof window === 'undefined' || !window.AudioContext) return;
 
     const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
     if (!audioContext) return;
@@ -12,8 +15,11 @@ export const playSound = (type: 'correct' | 'incorrect') => {
     oscillator.connect(gainNode);
     gainNode.connect(audioContext.destination);
     
+    const maxGain = 0.1;
+    const volume = (settings.volume / 100) * maxGain;
+
     gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-    gainNode.gain.linearRampToValueAtTime(0.1, audioContext.currentTime + 0.01);
+    gainNode.gain.linearRampToValueAtTime(volume, audioContext.currentTime + 0.01);
 
     oscillator.start(audioContext.currentTime);
 
