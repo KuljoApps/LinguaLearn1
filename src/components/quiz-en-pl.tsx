@@ -21,6 +21,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { updateStats, addError } from "@/lib/storage";
+import { playSound } from "@/lib/sounds";
 
 
 function shuffleArray<T>(array: T[]): T[] {
@@ -80,6 +81,7 @@ export default function QuizEnPl() {
           clearInterval(interval);
           setAnswerStatus("timeout");
           setSelectedAnswer(null);
+          playSound("incorrect");
           
           updateStats(false);
           addError({
@@ -123,8 +125,10 @@ export default function QuizEnPl() {
     if (isCorrect) {
       setScore((prevScore) => prevScore + 1);
       setAnswerStatus("correct");
+      playSound("correct");
     } else {
       setAnswerStatus("incorrect");
+      playSound("incorrect");
       addError({
         word: currentQuestion.word,
         userAnswer: answer,

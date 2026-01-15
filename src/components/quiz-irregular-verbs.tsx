@@ -22,6 +22,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { updateStats, addError } from "@/lib/storage";
+import { playSound } from "@/lib/sounds";
 
 
 function shuffleArray<T>(array: T[]): T[] {
@@ -89,6 +90,7 @@ export default function QuizIrregularVerbs() {
           clearInterval(interval);
           setAnswerStatus("timeout");
           setSelectedTranslation(null);
+          playSound("incorrect");
           updateStats(false);
           addError({
             word: currentQuestion.verb,
@@ -140,9 +142,11 @@ export default function QuizIrregularVerbs() {
 
     if (isCorrect) {
       setTranslationStatus('correct');
+      playSound('correct');
     } else {
       setTranslationStatus('incorrect');
       setAnswerStatus('incorrect');
+      playSound('incorrect');
       updateStats(false);
       addError({
         word: currentQuestion.verb,
@@ -165,8 +169,10 @@ export default function QuizIrregularVerbs() {
     if (isCorrect) {
       setScore((prevScore) => prevScore + 1);
       setAnswerStatus("correct");
+      playSound('correct');
     } else {
       setAnswerStatus("incorrect");
+      playSound('incorrect');
        addError({
         word: currentQuestion.verb,
         userAnswer: `Forms: ${form2Input}, ${form3Input}`,
