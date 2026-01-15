@@ -202,7 +202,7 @@ export default function QuizIrregularVerbs() {
   const getInputClass = (inputValue: string, correctValue: string) => {
     if (!answerStatus) return "";
     
-    if (answerStatus === 'timeout') return "bg-destructive text-destructive-foreground";
+    if (answerStatus === 'timeout') return "bg-destructive/70 text-destructive-foreground";
 
     const isCorrect = inputValue.trim().toLowerCase() === correctValue.toLowerCase();
 
@@ -386,3 +386,5 @@ export default function QuizIrregularVerbs() {
     </>
   );
 }
+
+    
