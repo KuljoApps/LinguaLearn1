@@ -33,11 +33,11 @@ export default function Quiz() {
       const timer = setTimeout(() => {
         setAnswerStatus(null);
         setSelectedAnswer(null);
-        setCurrentQuestionIndex((prevIndex) => (prevIndex + 1) % questions.length);
+        setCurrentQuestionIndex((prevIndex) => (prevIndex + 1));
       }, 1500);
       return () => clearTimeout(timer);
     }
-  }, [answerStatus, questions.length]);
+  }, [answerStatus]);
 
   const currentQuestion = useMemo(() => questions[currentQuestionIndex], [questions, currentQuestionIndex]);
   
@@ -56,7 +56,7 @@ export default function Quiz() {
 
   const getButtonClass = (option: string) => {
     if (!answerStatus) {
-      return ""; // Uses default button variant (primary color)
+      return "bg-primary text-primary-foreground hover:bg-primary/90";
     }
 
     const isCorrectAnswer = option === currentQuestion.correctAnswer;
@@ -71,8 +71,24 @@ export default function Quiz() {
     return "bg-muted text-muted-foreground opacity-70 cursor-not-allowed";
   };
   
-  if (questions.length === 0) {
-    return null; // Or a loading spinner
+  if (questions.length === 0 || currentQuestionIndex >= questions.length) {
+    return (
+        <Card className="w-full max-w-lg shadow-2xl">
+            <CardHeader className="text-center">
+                <CardTitle className="text-3xl font-bold">Quiz Complete!</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <p className="text-center text-xl">Your final score is: {score} / {questions.length}</p>
+            </CardContent>
+            <CardFooter className="flex justify-center">
+                <Button onClick={() => {
+                    setQuestions(shuffleArray(initialQuestions));
+                    setCurrentQuestionIndex(0);
+                    setScore(0);
+                }}>Play Again</Button>
+            </CardFooter>
+        </Card>
+    );
   }
 
   const progressValue = ((currentQuestionIndex + 1) / questions.length) * 100;
@@ -88,7 +104,7 @@ export default function Quiz() {
       </CardHeader>
       <CardContent className="flex flex-col items-center justify-center p-6 space-y-8">
         <div className="text-center space-y-2">
-            <p className="text-muted-foreground">What is the English meaning of</p>
+            <p className="text-muted-foreground">What is the Polish meaning of</p>
             <p className="text-4xl font-headline font-bold text-card-foreground">"{currentQuestion.word}"?</p>
         </div>
 
