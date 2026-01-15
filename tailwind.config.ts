@@ -92,10 +92,16 @@ export default {
             height: '0',
           },
         },
+        'shake-sm': {
+            '0%, 100%': { transform: 'translateX(0)' },
+            '25%': { transform: 'translateX(2px)' },
+            '75%': { transform: 'translateX(-2px)' },
+        }
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'shake-sm': 'shake-sm 0.2s ease-in-out',
       },
     },
   },

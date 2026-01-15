@@ -32,6 +32,9 @@ function shuffleArray<T>(array: T[]): T[] {
 }
 
 const QUESTION_TIME_LIMIT = 15;
+const PAUSE_PENALTY = 5;
+const MIN_TIME_FOR_PAUSE = 6;
+
 
 export default function Quiz() {
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -44,6 +47,7 @@ export default function Quiz() {
   const [questionTimer, setQuestionTimer] = useState(QUESTION_TIME_LIMIT);
   const [totalTime, setTotalTime] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [showTimePenalty, setShowTimePenalty] = useState(false);
   
   const router = useRouter();
   
@@ -126,7 +130,15 @@ export default function Quiz() {
   };
 
   const handlePauseClick = () => {
-    setIsPaused((prev) => !prev);
+    setIsPaused((prev) => {
+        const currentlyPaused = prev;
+        if (currentlyPaused) { // unpausing
+            setQuestionTimer((t) => Math.max(0, t - PAUSE_PENALTY));
+            setShowTimePenalty(true);
+            setTimeout(() => setShowTimePenalty(false), 500);
+        }
+        return !currentlyPaused;
+    });
   }
 
   const restartTest = () => {
@@ -207,7 +219,12 @@ export default function Quiz() {
             <div className="w-full flex justify-around gap-4 text-center">
                 <div className="flex items-center gap-2">
                     <Clock className="h-6 w-6 text-muted-foreground" />
-                    <span className="text-2xl font-bold">{questionTimer}s</span>
+                    <span className={cn(
+                        "text-2xl font-bold transition-colors duration-300",
+                        showTimePenalty && "text-destructive animate-in fade-in-0 shake-sm"
+                    )}>
+                        {questionTimer}s
+                    </span>
                 </div>
                 <div className="flex items-center gap-2 text-muted-foreground">
                     <Clock className="h-6 w-6" />
@@ -242,7 +259,12 @@ export default function Quiz() {
             <Button variant="outline" size="icon" onClick={handleRestartClick}>
               <RefreshCw />
             </Button>
-            <Button variant="outline" size="icon" onClick={handlePauseClick}>
+            <Button 
+                variant="outline" 
+                size="icon" 
+                onClick={handlePauseClick}
+                disabled={!isPaused && questionTimer < MIN_TIME_FOR_PAUSE}
+            >
               {isPaused ? <Play /> : <Pause />}
             </Button>
           </div>
