@@ -1,3 +1,4 @@
+
 'use client';
 
 import { allAchievements, type Achievement } from './achievements';
@@ -48,6 +49,8 @@ export interface AchievementStatus {
     unlockedAt: number | null;
 }
 
+type Language = 'en' | 'fr' | 'de';
+
 const LANGUAGE_KEY = 'linguaLearnLanguage';
 const SETTINGS_KEY = 'linguaLearnSettings_v2';
 const GLOBAL_STATS_KEY = 'linguaLearnGlobalStats_v1';
@@ -63,12 +66,12 @@ const getKey = (baseKey: string): string => {
 }
 
 // --- Language Functions ---
-export const getLanguage = (): 'en' | 'fr' => {
+export const getLanguage = (): Language => {
     if (typeof window === 'undefined') return 'en';
-    return (localStorage.getItem(LANGUAGE_KEY) as 'en' | 'fr') || 'en';
+    return (localStorage.getItem(LANGUAGE_KEY) as Language) || 'en';
 }
 
-export const setLanguage = (lang: 'en' | 'fr') => {
+export const setLanguage = (lang: Language) => {
     if (typeof window === 'undefined') return;
     localStorage.setItem(LANGUAGE_KEY, lang);
 }
@@ -199,6 +202,7 @@ const checkAndUnlockAchievements = (stats: Stats): Achievement[] => {
             case 'grandmaster':
                 currentProgress = stats.totalPerfectScores || 0;
                 break;
+            // English Mastery
             case 'mastery_en_pl':
                 currentProgress = masteryProgress['English - Polish']?.length || 0;
                 break;
@@ -214,7 +218,7 @@ const checkAndUnlockAchievements = (stats: Stats): Achievement[] => {
             case 'mastery_idioms':
                 currentProgress = masteryProgress['Idioms']?.length || 0;
                 break;
-            // Add cases for French mastery
+            // French Mastery
             case 'mastery_fr_pl':
                 currentProgress = masteryProgress['French - Polish']?.length || 0;
                 break;
@@ -229,6 +233,22 @@ const checkAndUnlockAchievements = (stats: Stats): Achievement[] => {
                 break;
             case 'mastery_idioms_fr':
                 currentProgress = masteryProgress['Idioms (FR)']?.length || 0;
+                break;
+             // German Mastery
+            case 'mastery_de_pl':
+                currentProgress = masteryProgress['German - Polish']?.length || 0;
+                break;
+            case 'mastery_pl_de':
+                currentProgress = masteryProgress['Polish - German']?.length || 0;
+                break;
+            case 'mastery_irregular_de':
+                currentProgress = masteryProgress['Irregular Verbs (DE)']?.length || 0;
+                break;
+            case 'mastery_phrasal_de':
+                currentProgress = masteryProgress['Separable Verbs (DE)']?.length || 0;
+                break;
+            case 'mastery_idioms_de':
+                currentProgress = masteryProgress['Idioms (DE)']?.length || 0;
                 break;
             default:
                 break;

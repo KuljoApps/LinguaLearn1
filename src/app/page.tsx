@@ -11,18 +11,62 @@ import { useState, useEffect } from 'react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 export default function Home() {
-    const [language, setCurrentLanguage] = useState<'en' | 'fr'>('en');
+    const [language, setCurrentLanguage] = useState<'en' | 'fr' | 'de'>('en');
 
     useEffect(() => {
         setCurrentLanguage(getLanguage());
     }, []);
 
-    const handleLanguageChange = (lang: 'en' | 'fr') => {
+    const handleLanguageChange = (lang: 'en' | 'fr' | 'de') => {
         setLanguage(lang);
         setCurrentLanguage(lang);
     };
 
     const isFrench = language === 'fr';
+    const isGerman = language === 'de';
+
+    const getWelcomeMessage = () => {
+        if (isFrench) return "Prêt à remettre en question tes choix de vie dans une autre langue? Allons-y!";
+        if (isGerman) return "Bereit, deine Lebensentscheidungen in einer anderen Sprache zu hinterfragen? Los geht's!";
+        return "Ready to question your life choices in another language? Let's go!";
+    };
+
+    const getQuizTitle1 = () => {
+        if (isFrench) return "Français - Polonais";
+        if (isGerman) return "Deutsch - Polnisch";
+        return "English - Polish";
+    };
+
+    const getQuizTitle2 = () => {
+        if (isFrench) return "Polonais - Français";
+        if (isGerman) return "Polnisch - Deutsch";
+        return "Polish - English";
+    };
+    
+    const getQuizTitle3 = () => {
+        if (isFrench) return "Verbes Irréguliers";
+        if (isGerman) return "Unregelmäßige Verben";
+        return "Irregular Verbs";
+    }
+
+    const getQuizTitle4 = () => {
+        if (isFrench) return "Verbes à Particule";
+        if (isGerman) return "Trennbare Verben";
+        return "Phrasal Verbs";
+    }
+    
+    const getQuizTitle5 = () => {
+        if (isFrench) return "Idiomes";
+        if (isGerman) return "Redewendungen";
+        return "Idioms";
+    }
+
+    const getFlag = () => {
+        if (isFrench) return '🇫🇷';
+        if (isGerman) return '🇩🇪';
+        return '🇬🇧';
+    }
+
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
@@ -33,40 +77,38 @@ export default function Home() {
                         <h1 className="text-4xl font-bold tracking-tight">LinguaLearn</h1>
                     </div>
                     <p className="text-muted-foreground">
-                        {isFrench
-                            ? "Prêt à remettre en question tes choix de vie dans une autre langue? Allons-y!"
-                            : "Ready to question your life choices in another language? Let's go!"}
+                        {getWelcomeMessage()}
                     </p>
                 </CardHeader>
                 <CardContent className="flex flex-col space-y-4 p-6 pt-0">
-                    <Link href={isFrench ? "/quiz/fr-pl" : "/quiz/en-pl"} passHref>
+                    <Link href={isFrench ? "/quiz/fr-pl" : isGerman ? "/quiz/de-pl" : "/quiz/en-pl"} passHref>
                         <Button className="w-full h-12 text-lg" size="lg">
                             <BookOpen className="mr-2 h-5 w-5" />
-                            {isFrench ? "Français - Polonais" : "English - Polish"}
+                            {getQuizTitle1()}
                         </Button>
                     </Link>
-                    <Link href={isFrench ? "/quiz/pl-fr" : "/quiz/pl-en"} passHref>
+                    <Link href={isFrench ? "/quiz/pl-fr" : isGerman ? "/quiz/pl-de" : "/quiz/pl-en"} passHref>
                         <Button className="w-full h-12 text-lg" size="lg">
                             <Dumbbell className="mr-2 h-5 w-5" />
-                            {isFrench ? "Polonais - Français" : "Polish - English"}
+                            {getQuizTitle2()}
                         </Button>
                     </Link>
-                    <Link href={isFrench ? "/quiz/irregular-verbs-fr" : "/quiz/irregular-verbs"} passHref>
+                    <Link href={isFrench ? "/quiz/irregular-verbs-fr" : isGerman ? "/quiz/irregular-verbs-de" : "/quiz/irregular-verbs"} passHref>
                         <Button className="w-full h-12 text-lg" size="lg">
                             <Sparkles className="mr-2 h-5 w-5" />
-                            {isFrench ? "Verbes Irréguliers" : "Irregular Verbs"}
+                            {getQuizTitle3()}
                         </Button>
                     </Link>
-                    <Link href={isFrench ? "/quiz/phrasal-verbs-fr" : "/quiz/phrasal-verbs"} passHref>
+                    <Link href={isFrench ? "/quiz/phrasal-verbs-fr" : isGerman ? "/quiz/phrasal-verbs-de" : "/quiz/phrasal-verbs"} passHref>
                         <Button className="w-full h-12 text-lg" size="lg">
                             <Layers className="mr-2 h-5 w-5" />
-                            {isFrench ? "Verbes à Particule" : "Phrasal Verbs"}
+                            {getQuizTitle4()}
                         </Button>
                     </Link>
-                    <Link href={isFrench ? "/quiz/idioms-fr" : "/quiz/idioms"} passHref>
+                    <Link href={isFrench ? "/quiz/idioms-fr" : isGerman ? "/quiz/idioms-de" : "/quiz/idioms"} passHref>
                         <Button className="w-full h-12 text-lg" size="lg">
                             <MessageSquareQuote className="mr-2 h-5 w-5" />
-                            {isFrench ? "Idiomes" : "Idioms"}
+                            {getQuizTitle5()}
                         </Button>
                     </Link>
                 </CardContent>
@@ -74,7 +116,7 @@ export default function Home() {
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="outline" size="icon" title="Change language">
-                                <span className="text-2xl">{isFrench ? '🇫🇷' : '🇬🇧'}</span>
+                                <span className="text-2xl">{getFlag()}</span>
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="center">
@@ -83,6 +125,9 @@ export default function Home() {
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => handleLanguageChange('fr')}>
                                 <span className="mr-2 text-lg">🇫🇷</span> Français
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleLanguageChange('de')}>
+                                <span className="mr-2 text-lg">🇩🇪</span> Deutsch
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
