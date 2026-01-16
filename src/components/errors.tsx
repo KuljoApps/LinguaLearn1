@@ -28,6 +28,7 @@ import {
 interface AggregatedError {
     word: string;
     correctAnswer: string;
+    quiz: string;
     count: number;
     userAnswers: Set<string>;
 }
@@ -83,13 +84,14 @@ export default function ErrorsPage() {
         const errorCounts = new Map<string, AggregatedError>();
 
         for (const error of filteredErrors) {
-            const key = `${error.word}|${error.correctAnswer}`;
+            const key = `${error.quiz}|${error.word}|${error.correctAnswer}`;
             let entry = errorCounts.get(key);
 
             if (!entry) {
                 entry = {
                     word: error.word,
                     correctAnswer: error.correctAnswer,
+                    quiz: error.quiz,
                     count: 0,
                     userAnswers: new Set<string>(),
                 };
@@ -119,6 +121,7 @@ export default function ErrorsPage() {
                             <TableHead>Word</TableHead>
                             <TableHead>Correct Answer</TableHead>
                             <TableHead>Your Answers</TableHead>
+                            <TableHead>Quiz</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -133,6 +136,7 @@ export default function ErrorsPage() {
                                     <TableCell className="text-destructive whitespace-nowrap">
                                         {isExpanded ? userAnswersText : truncateText(userAnswersText)}
                                     </TableCell>
+                                    <TableCell className="whitespace-nowrap">{isExpanded ? error.quiz : truncateText(error.quiz)}</TableCell>
                                 </TableRow>
                             );
                         })}
@@ -148,6 +152,7 @@ export default function ErrorsPage() {
                         <TableHead>Word</TableHead>
                         <TableHead>Correct Answer</TableHead>
                         <TableHead>Your Answer</TableHead>
+                        <TableHead>Quiz</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -158,6 +163,7 @@ export default function ErrorsPage() {
                                 <TableCell className="font-medium whitespace-nowrap">{isExpanded ? error.word : truncateText(error.word)}</TableCell>
                                 <TableCell className="text-success whitespace-nowrap">{isExpanded ? error.correctAnswer : truncateText(error.correctAnswer)}</TableCell>
                                 <TableCell className="text-destructive whitespace-nowrap">{isExpanded ? error.userAnswer : truncateText(error.userAnswer)}</TableCell>
+                                <TableCell className="whitespace-nowrap">{isExpanded ? error.quiz : truncateText(error.quiz)}</TableCell>
                             </TableRow>
                         );
                     })}
