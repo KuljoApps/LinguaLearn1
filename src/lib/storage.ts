@@ -1,7 +1,10 @@
 'use client';
 
+import { allAchievements, type Achievement } from './achievements';
+
 export interface Stats {
     totalAnswers: number;
+    totalCorrectAnswers: number;
     totalErrors: number;
     longestStreak: number;
     currentStreak: number;
@@ -14,6 +17,10 @@ export interface Stats {
             totalErrors: number;
         };
     };
+    totalTimeSpent: number; // in seconds
+    lastPlayTimestamp: number | null;
+    uniqueDaysPlayed: number;
+    playedQuizzes: string[];
 }
 
 export interface ErrorRecord {
@@ -30,9 +37,116 @@ export interface Settings {
     volume: number;
 }
 
-const STATS_KEY = 'linguaLearnStats';
-const ERRORS_KEY = 'linguaLearnErrors';
-const SETTINGS_KEY = 'linguaLearnSettings';
+export interface AchievementStatus {
+    progress: number;
+    unlockedAt: number | null;
+}
+
+const STATS_KEY = 'linguaLearnStats_v2';
+const ERRORS_KEY = 'linguaLearnErrors_v2';
+const SETTINGS_KEY = 'linguaLearnSettings_v2';
+const ACHIEVEMENTS_KEY = 'linguaLearnAchievements_v2';
+
+
+// --- Achievement Functions ---
+
+export const getAchievements = (): Record<string, AchievementStatus> => {
+    if (typeof window === 'undefined') return {};
+    try {
+        const achievementsJson = localStorage.getItem(ACHIEVEMENTS_KEY);
+        return achievementsJson ? JSON.parse(achievementsJson) : {};
+    } catch (error) {
+        console.error("Failed to parse achievements from localStorage", error);
+        return {};
+    }
+}
+
+const saveAchievements = (achievements: Record<string, AchievementStatus>) => {
+    if (typeof window === 'undefined') return;
+    try {
+        localStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(achievements));
+    } catch (error) {
+        console.error("Failed to save achievements to localStorage", error);
+    }
+}
+
+const checkAndUnlockAchievements = (stats: Stats): Achievement[] => {
+    const achievements = getAchievements();
+    const newlyUnlocked: Achievement[] = [];
+
+    allAchievements.forEach(achievement => {
+        const status = achievements[achievement.id] || { progress: 0, unlockedAt: null };
+        if (status.unlockedAt) return; // Already unlocked
+
+        let currentProgress = 0;
+        switch (achievement.id) {
+            case 'novice':
+            case 'apprentice':
+            case 'master':
+                currentProgress = stats.totalCorrectAnswers;
+                break;
+            case 'streak20':
+            case 'streak50':
+                currentProgress = stats.longestStreak;
+                break;
+            case 'polyglot':
+                currentProgress = stats.playedQuizzes.length;
+                break;
+            case 'time_traveler':
+                currentProgress = stats.totalTimeSpent;
+                break;
+            case 'committed':
+                currentProgress = stats.uniqueDaysPlayed;
+                break;
+            // 'flawless' and 'error_eraser' are handled by specific events
+        }
+
+        status.progress = currentProgress;
+        if (currentProgress >= achievement.goal) {
+            status.unlockedAt = Date.now();
+            newlyUnlocked.push(achievement);
+        }
+        achievements[achievement.id] = status;
+    });
+
+    if (newlyUnlocked.length > 0) {
+        saveAchievements(achievements);
+    }
+    return newlyUnlocked;
+};
+
+export const checkSessionAchievements = (isPerfect: boolean): Achievement[] => {
+    const achievements = getAchievements();
+    const newlyUnlocked: Achievement[] = [];
+    const flawlessAchievement = allAchievements.find(a => a.id === 'flawless')!;
+    const status = achievements[flawlessAchievement.id] || { progress: 0, unlockedAt: null };
+
+    if (!status.unlockedAt && isPerfect) {
+        status.progress = 1;
+        status.unlockedAt = Date.now();
+        achievements[flawlessAchievement.id] = status;
+        newlyUnlocked.push(flawlessAchievement);
+        saveAchievements(achievements);
+    }
+    return newlyUnlocked;
+}
+
+export const checkClearErrorsAchievement = (): Achievement[] => {
+    const achievements = getAchievements();
+    const newlyUnlocked: Achievement[] = [];
+    const achievement = allAchievements.find(a => a.id === 'error_eraser')!;
+    const status = achievements[achievement.id] || { progress: 0, unlockedAt: null };
+
+    if (!status.unlockedAt) {
+        status.progress = 1;
+        status.unlockedAt = Date.now();
+        achievements[achievement.id] = status;
+        newlyUnlocked.push(achievement);
+        saveAchievements(achievements);
+    }
+    return newlyUnlocked;
+}
+
 
 // --- Settings Functions ---
 
@@ -75,7 +189,7 @@ export const clearSettings = () => {
 // --- Stats Functions ---
 
 export const getStats = (): Stats => {
-    const defaultStats: Stats = { totalAnswers: 0, totalErrors: 0, longestStreak: 0, currentStreak: 0, lastFiftyAnswers: [], longestStreakDate: null, longestStreakQuiz: null, perQuizStats: {} };
+    const defaultStats: Stats = { totalAnswers: 0, totalCorrectAnswers: 0, totalErrors: 0, longestStreak: 0, currentStreak: 0, lastFiftyAnswers: [], longestStreakDate: null, longestStreakQuiz: null, perQuizStats: {}, totalTimeSpent: 0, lastPlayTimestamp: null, uniqueDaysPlayed: 0, playedQuizzes: [] };
     if (typeof window === 'undefined') {
         return defaultStats;
     }
@@ -83,17 +197,7 @@ export const getStats = (): Stats => {
         const statsJson = localStorage.getItem(STATS_KEY);
         if (statsJson) {
             const stats = JSON.parse(statsJson);
-            // This ensures backward compatibility with old data format
-            return {
-                totalAnswers: Number(stats.totalAnswers) || 0,
-                totalErrors: Number(stats.totalErrors) || 0,
-                longestStreak: Number(stats.longestStreak) || 0,
-                currentStreak: Number(stats.currentStreak) || 0,
-                lastFiftyAnswers: Array.isArray(stats.lastFiftyAnswers) ? stats.lastFiftyAnswers : [],
-                longestStreakDate: stats.longestStreakDate || null,
-                longestStreakQuiz: stats.longestStreakQuiz || null,
-                perQuizStats: stats.perQuizStats || {},
-            };
+            return { ...defaultStats, ...stats };
         }
     } catch (error) {
         console.error("Failed to parse stats from localStorage", error);
@@ -101,10 +205,25 @@ export const getStats = (): Stats => {
     return defaultStats;
 };
 
-export const updateStats = (isCorrect: boolean, quizName: string) => {
-    if (typeof window === 'undefined') return;
+export const updateStats = (isCorrect: boolean, quizName: string): Achievement[] => {
+    if (typeof window === 'undefined') return [];
     const stats = getStats();
 
+    // Daily play tracking
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayTimestamp = today.getTime();
+
+    if (!stats.lastPlayTimestamp || stats.lastPlayTimestamp < todayTimestamp) {
+        stats.uniqueDaysPlayed += 1;
+    }
+    stats.lastPlayTimestamp = Date.now();
+
+    // Quiz variety tracking
+    if (!stats.playedQuizzes.includes(quizName)) {
+        stats.playedQuizzes.push(quizName);
+    }
+    
     // Global stats
     stats.totalAnswers += 1;
     stats.lastFiftyAnswers.unshift(isCorrect);
@@ -121,6 +240,7 @@ export const updateStats = (isCorrect: boolean, quizName: string) => {
     // Streak and error handling
     if (isCorrect) {
         stats.currentStreak += 1;
+        stats.totalCorrectAnswers += 1;
     } else {
         stats.totalErrors += 1;
         stats.perQuizStats[quizName].totalErrors += 1;
@@ -138,12 +258,30 @@ export const updateStats = (isCorrect: boolean, quizName: string) => {
     } catch (error) {
         console.error("Failed to save stats to localStorage", error);
     }
+
+    return checkAndUnlockAchievements(stats);
 };
+
+export const updateTimeSpent = (seconds: number): Achievement[] => {
+    if (typeof window === 'undefined') return [];
+    const stats = getStats();
+    stats.totalTimeSpent += seconds;
+
+    try {
+        localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+    } catch (error) {
+        console.error("Failed to save stats to localStorage", error);
+    }
+
+    return checkAndUnlockAchievements(stats);
+}
 
 export const clearStats = () => {
     if (typeof window === 'undefined') return;
-    const defaultStats: Stats = { totalAnswers: 0, totalErrors: 0, longestStreak: 0, currentStreak: 0, lastFiftyAnswers: [], longestStreakDate: null, longestStreakQuiz: null, perQuizStats: {} };
+    const defaultStats: Stats = { totalAnswers: 0, totalCorrectAnswers: 0, totalErrors: 0, longestStreak: 0, currentStreak: 0, lastFiftyAnswers: [], longestStreakDate: null, longestStreakQuiz: null, perQuizStats: {}, totalTimeSpent: 0, lastPlayTimestamp: null, uniqueDaysPlayed: 0, playedQuizzes: [] };
     localStorage.setItem(STATS_KEY, JSON.stringify(defaultStats));
+    localStorage.removeItem(ACHIEVEMENTS_KEY);
+    localStorage.removeItem(ERRORS_KEY);
 }
 
 
@@ -177,7 +315,8 @@ export const addError = (error: Omit<ErrorRecord, 'id'>) => {
     }
 };
 
-export const clearErrors = () => {
-    if (typeof window === 'undefined') return;
+export const clearErrors = (): Achievement[] => {
+    if (typeof window === 'undefined') return [];
     localStorage.removeItem(ERRORS_KEY);
+    return checkClearErrorsAchievement();
 }

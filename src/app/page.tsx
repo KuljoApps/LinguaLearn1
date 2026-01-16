@@ -1,4 +1,4 @@
-import { BookOpen, Dumbbell, Sparkles, Settings, BarChart, ShieldX, MessageSquareQuote, Layers } from 'lucide-react';
+import { BookOpen, Dumbbell, Sparkles, Settings, BarChart, ShieldX, MessageSquareQuote, Layers, Trophy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
@@ -64,6 +64,11 @@ export default function Home() {
                 <Link href="/errors" passHref>
                     <Button variant="outline" size="icon">
                         <ShieldX />
+                    </Button>
+                </Link>
+                <Link href="/achievements" passHref>
+                    <Button variant="outline" size="icon">
+                        <Trophy />
                     </Button>
                 </Link>
             </CardFooter>

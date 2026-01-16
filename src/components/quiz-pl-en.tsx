@@ -1,8 +1,8 @@
 
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
-import { Home, RefreshCw, Pause, Play, Clock } from "lucide-react";
+import { useState, useEffect, useMemo, useCallback } from "react";
+import { Home, RefreshCw, Pause, Play, Clock, Trophy } from "lucide-react";
 import { questions as initialQuestions, type Question } from "@/lib/questions-pl-en";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -20,10 +20,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { updateStats, addError } from "@/lib/storage";
+import { updateStats, addError, updateTimeSpent, checkSessionAchievements, type Achievement } from "@/lib/storage";
 import { playSound } from "@/lib/sounds";
 import LinguaLearnLogo from '@/components/LinguaLearnLogo';
 import { vibrate } from "@/lib/vibrations";
+import { useToast } from "@/hooks/use-toast";
 
 
 function shuffleArray<T>(array: T[]): T[] {
@@ -39,6 +40,7 @@ const QUESTION_TIME_LIMIT = 15;
 const PAUSE_PENALTY = 5;
 const MIN_TIME_FOR_PAUSE = 6;
 const QUIZ_NAME = 'Polish - English';
+const TIME_UPDATE_INTERVAL = 5; // seconds
 
 
 export default function QuizPlEn() {
@@ -55,11 +57,35 @@ export default function QuizPlEn() {
   const [showTimePenalty, setShowTimePenalty] = useState(false);
   
   const router = useRouter();
+  const { toast } = useToast();
+
+  const showAchievementToast = useCallback((achievement: Achievement) => {
+    playSound('achievement');
+    toast({
+        title: (
+            <div className="flex items-center gap-2">
+                <Trophy className="h-5 w-5 text-amber" />
+                <span className="font-bold">Achievement Unlocked!</span>
+            </div>
+        ),
+        description: `You've earned: "${achievement.name}"`,
+    });
+  }, [toast]);
   
   useEffect(() => {
     setQuestions(shuffleArray(initialQuestions));
   }, []);
 
+  // Finalize session achievements
+  useEffect(() => {
+      if (currentQuestionIndex >= questions.length && questions.length > 0) {
+          const isPerfect = score === questions.length;
+          const unlocked = checkSessionAchievements(isPerfect);
+          unlocked.forEach(showAchievementToast);
+      }
+  }, [currentQuestionIndex, questions.length, score, showAchievementToast]);
+
+  // Handle transitions between questions
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (answerStatus) {
@@ -73,6 +99,7 @@ export default function QuizPlEn() {
     return () => clearTimeout(timer);
   }, [answerStatus]);
 
+  // Per-question timer
   useEffect(() => {
     if (isPaused || !!answerStatus || currentQuestionIndex >= questions.length) {
       return;
@@ -87,7 +114,9 @@ export default function QuizPlEn() {
           playSound("incorrect");
           vibrate("incorrect");
 
-          updateStats(false, QUIZ_NAME);
+          const unlocked = updateStats(false, QUIZ_NAME);
+          unlocked.forEach(showAchievementToast);
+
           addError({
             word: questions[currentQuestionIndex].word,
             userAnswer: 'No answer',
@@ -102,8 +131,9 @@ export default function QuizPlEn() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [isPaused, answerStatus, currentQuestionIndex, questions.length]);
+  }, [isPaused, answerStatus, currentQuestionIndex, questions, showAchievementToast]);
 
+  // Total quiz time and periodic time-based achievement check
   useEffect(() => {
     if (currentQuestionIndex >= questions.length || isPaused) {
       return;
@@ -111,10 +141,14 @@ export default function QuizPlEn() {
 
     const interval = setInterval(() => {
       setTotalTime((prev) => prev + 1);
+      if ((totalTime + 1) % TIME_UPDATE_INTERVAL === 0) {
+          const unlocked = updateTimeSpent(TIME_UPDATE_INTERVAL);
+          unlocked.forEach(showAchievementToast);
+      }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [currentQuestionIndex, questions.length, isPaused]);
+  }, [currentQuestionIndex, questions.length, isPaused, totalTime, showAchievementToast]);
 
 
   const currentQuestion = useMemo(() => questions[currentQuestionIndex], [questions, currentQuestionIndex]);
@@ -124,7 +158,8 @@ export default function QuizPlEn() {
 
     setSelectedAnswer(answer);
     const isCorrect = answer === currentQuestion.correctAnswer;
-    updateStats(isCorrect, QUIZ_NAME);
+    const unlocked = updateStats(isCorrect, QUIZ_NAME);
+    unlocked.forEach(showAchievementToast);
 
     if (isCorrect) {
       setScore((prevScore) => prevScore + 1);
@@ -219,8 +254,11 @@ export default function QuizPlEn() {
             <CardContent>
                 <p className="text-center text-xl">Your final score is: {score} / {questions.length}</p>
             </CardContent>
-            <CardFooter className="flex justify-center">
+            <CardFooter className="flex justify-center gap-4">
                 <Button onClick={restartTest}>Play Again</Button>
+                <Link href="/" passHref>
+                    <Button variant="outline">Back to Home</Button>
+                </Link>
             </CardFooter>
         </Card>
     );

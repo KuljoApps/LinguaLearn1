@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowLeft, CheckCircle, Flame, Percent, ShieldX, Trash2, ArrowUpRight } from "lucide-react";
-import { getStats, clearStats, type Stats, getErrors, type ErrorRecord } from "@/lib/storage";
+import { getStats, clearStats, type Stats, getErrors, type ErrorRecord, type Achievement } from "@/lib/storage";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,7 +19,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
-const defaultStats: Stats = { totalAnswers: 0, totalErrors: 0, longestStreak: 0, currentStreak: 0, lastFiftyAnswers: [], longestStreakDate: null, longestStreakQuiz: null, perQuizStats: {} };
+const defaultStats: Stats = { totalAnswers: 0, totalCorrectAnswers: 0, totalErrors: 0, longestStreak: 0, currentStreak: 0, lastFiftyAnswers: [], longestStreakDate: null, longestStreakQuiz: null, perQuizStats: {}, totalTimeSpent: 0, lastPlayTimestamp: null, uniqueDaysPlayed: 0, playedQuizzes: [] };
 
 export default function StatisticsPage() {
     const [stats, setStats] = useState<Stats>(defaultStats);
@@ -143,7 +143,7 @@ export default function StatisticsPage() {
                                         quizNames.map((quizName) => (
                                             <div key={quizName} className="flex justify-between">
                                                 <span>{quizName}:</span>
-                                                <span className="font-bold">{stats.perQuizStats[quizName].totalAnswers}</span>
+                                                <span className="font-bold">{stats.perQuizStats[quizName]?.totalAnswers || 0}</span>
                                             </div>
                                         ))
                                     ) : (
@@ -172,7 +172,7 @@ export default function StatisticsPage() {
                                         quizNames.map((quizName) => (
                                             <div key={quizName} className="flex justify-between">
                                                 <span>{quizName}:</span>
-                                                <span className="font-bold">{stats.perQuizStats[quizName].totalErrors}</span>
+                                                <span className="font-bold">{stats.perQuizStats[quizName]?.totalErrors || 0}</span>
                                             </div>
                                         ))
                                     ) : (
@@ -200,7 +200,7 @@ export default function StatisticsPage() {
                                     {quizNames.length > 0 ? (
                                         quizNames.map((quizName) => {
                                             const quizStats = stats.perQuizStats[quizName];
-                                            const rate = quizStats.totalAnswers > 0
+                                            const rate = quizStats && quizStats.totalAnswers > 0
                                                 ? Math.round(((quizStats.totalAnswers - quizStats.totalErrors) / quizStats.totalAnswers) * 100)
                                                 : 0;
                                             return (
@@ -276,7 +276,7 @@ export default function StatisticsPage() {
                     <AlertDialogHeader>
                         <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                         <AlertDialogDescription>
-                            This will permanently delete all your statistics, including per-quiz data. This action cannot be undone.
+                            This will permanently delete all your statistics and achievements. This action cannot be undone.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>

@@ -6,8 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Link from "next/link";
-import { ArrowLeft, Trash2, ArrowUpDown } from "lucide-react";
-import { getErrors, clearErrors, type ErrorRecord } from '@/lib/storage';
+import { ArrowLeft, Trash2, ArrowUpDown, Trophy } from "lucide-react";
+import { getErrors, clearErrors, type ErrorRecord, type Achievement } from '@/lib/storage';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,6 +27,8 @@ import {
 } from "@/components/ui/select";
 import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
+import { useToast } from '@/hooks/use-toast';
+import { playSound } from '@/lib/sounds';
 
 interface AggregatedError {
     word: string;
@@ -46,10 +48,24 @@ export default function ErrorsPage() {
     const [quizFilter, setQuizFilter] = useState<QuizFilter>('all');
     const [expandedRows, setExpandedRows] = useState<Set<string | number>>(new Set());
     const [sortConfig, setSortConfig] = useState<{ key: SortableKey; direction: 'ascending' | 'descending' } | null>(null);
+    const { toast } = useToast();
 
     useEffect(() => {
         setErrors(getErrors());
     }, []);
+
+    const showAchievementToast = (achievement: Achievement) => {
+        playSound('achievement');
+        toast({
+            title: (
+                <div className="flex items-center gap-2">
+                    <Trophy className="h-5 w-5 text-amber" />
+                    <span className="font-bold">Achievement Unlocked!</span>
+                </div>
+            ),
+            description: `You've earned: "${achievement.name}"`,
+        });
+    };
 
     const requestSort = (key: SortableKey) => {
         let direction: 'ascending' | 'descending' = 'ascending';
@@ -96,7 +112,8 @@ export default function ErrorsPage() {
     }, [errors, quizFilter]);
 
     const handleClearErrors = () => {
-        clearErrors();
+        const unlockedAchievements = clearErrors();
+        unlockedAchievements.forEach(showAchievementToast);
         setErrors([]);
         setIsClearAlertOpen(false);
     }
