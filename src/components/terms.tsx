@@ -20,7 +20,7 @@ export default function TermsPage() {
                 </div>
             </CardHeader>
             <CardContent className="space-y-6 text-sm max-h-[60vh] overflow-y-auto p-6">
-                <p className="text-muted-foreground text-center">Last updated: {lastUpdatedDate}</p>
+                <p className="text-muted-foreground text-center -mt-4">Last updated: {lastUpdatedDate}</p>
 
                 <h3 className="text-lg font-semibold">1. Introduction</h3>
                 <p>
