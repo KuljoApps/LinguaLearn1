@@ -85,22 +85,23 @@ const checkAndUnlockAchievements = (stats: Stats): Achievement[] => {
             case 'master':
                 currentProgress = stats.totalCorrectAnswers;
                 break;
-            case 'streak20':
+            case 'streak25':
             case 'streak50':
+            case 'streak100':
                 currentProgress = stats.longestStreak;
                 break;
-            case 'polyglot':
-                currentProgress = new Set(stats.playedQuizzes).size;
-                break;
-            case 'time_traveler':
+            case 'time_1h':
+            case 'time_3h':
+            case 'time_6h':
                 currentProgress = stats.totalTimeSpent;
                 break;
-            case 'committed':
+            case 'daily_7':
+            case 'daily_14':
+            case 'daily_30':
                 currentProgress = stats.uniqueDaysPlayed;
                 break;
-            // 'flawless' and 'error_eraser' are handled by specific events
+            // 'flawless' is handled by a specific event
             default:
-                // For achievements like 'flawless', progress is not calculated here
                 break;
         }
 
@@ -132,22 +133,6 @@ export const checkSessionAchievements = (isPerfect: boolean): Achievement[] => {
         status.unlockedAt = Date.now();
         achievements[flawlessAchievement.id] = status;
         newlyUnlocked.push(flawlessAchievement);
-        saveAchievements(achievements);
-    }
-    return newlyUnlocked;
-}
-
-export const checkClearErrorsAchievement = (): Achievement[] => {
-    const achievements = getAchievements();
-    const newlyUnlocked: Achievement[] = [];
-    const achievement = allAchievements.find(a => a.id === 'error_eraser')!;
-    const status = achievements[achievement.id] || { progress: 0, unlockedAt: null };
-
-    if (!status.unlockedAt) {
-        status.progress = 1;
-        status.unlockedAt = Date.now();
-        achievements[achievement.id] = status;
-        newlyUnlocked.push(achievement);
         saveAchievements(achievements);
     }
     return newlyUnlocked;
@@ -324,5 +309,5 @@ export const addError = (error: Omit<ErrorRecord, 'id'>) => {
 export const clearErrors = (): Achievement[] => {
     if (typeof window === 'undefined') return [];
     localStorage.removeItem(ERRORS_KEY);
-    return checkClearErrorsAchievement();
+    return [];
 }
