@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, useMemo } from 'react';
@@ -203,7 +202,7 @@ export default function ErrorsPage() {
                 <CardContent className="h-96 w-full p-0">
                     {renderTable()}
                 </CardContent>
-                <CardFooter className="flex justify-center p-0 pt-6">
+                <CardFooter className="flex justify-center py-6">
                     <div className="flex flex-wrap justify-center gap-4">
                         <Link href="/" passHref>
                             <Button variant="outline">
