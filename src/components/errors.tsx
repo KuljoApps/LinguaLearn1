@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, useMemo } from 'react';
@@ -132,10 +131,18 @@ export default function ErrorsPage() {
         if (sortConfig) {
             sortableItems.sort((a, b) => {
                 const key = sortConfig.key as keyof AggregatedError;
-                if (a[key] < b[key]) {
+                let valA = a[key];
+                let valB = b[key];
+
+                if (typeof valA === 'string' && typeof valB === 'string') {
+                    valA = valA.toLowerCase();
+                    valB = valB.toLowerCase();
+                }
+
+                if (valA < valB) {
                     return sortConfig.direction === 'ascending' ? -1 : 1;
                 }
-                if (a[key] > b[key]) {
+                if (valA > valB) {
                     return sortConfig.direction === 'ascending' ? 1 : -1;
                 }
                 return 0;
@@ -154,10 +161,18 @@ export default function ErrorsPage() {
         if (sortConfig) {
             sortableItems.sort((a, b) => {
                 const key = sortConfig.key as keyof ErrorRecord;
-                if (a[key] < b[key]) {
+                let valA = a[key];
+                let valB = b[key];
+
+                if (typeof valA === 'string' && typeof valB === 'string') {
+                    valA = valA.toLowerCase();
+                    valB = valB.toLowerCase();
+                }
+                
+                if (valA < valB) {
                     return sortConfig.direction === 'ascending' ? -1 : 1;
                 }
-                if (a[key] > b[key]) {
+                if (valA > valB) {
                     return sortConfig.direction === 'ascending' ? 1 : -1;
                 }
                 return 0;
