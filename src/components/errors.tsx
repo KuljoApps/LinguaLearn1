@@ -36,6 +36,7 @@ interface AggregatedError {
 }
 
 type QuizFilter = 'all' | 'English - Polish' | 'Polish - English' | 'Irregular Verbs' | 'Phrasal Verbs' | 'Idioms';
+type SortableKey = keyof ErrorRecord | keyof AggregatedError;
 
 export default function ErrorsPage() {
     const [errors, setErrors] = useState<ErrorRecord[]>([]);
@@ -43,10 +44,29 @@ export default function ErrorsPage() {
     const [view, setView] = useState<'latest' | 'frequent'>('latest');
     const [quizFilter, setQuizFilter] = useState<QuizFilter>('all');
     const [expandedRows, setExpandedRows] = useState<Set<string | number>>(new Set());
+    const [sortConfig, setSortConfig] = useState<{ key: SortableKey; direction: 'ascending' | 'descending' } | null>(null);
 
     useEffect(() => {
         setErrors(getErrors());
     }, []);
+
+    const requestSort = (key: SortableKey) => {
+        let direction: 'ascending' | 'descending' = 'ascending';
+        if (sortConfig && sortConfig.key === key && sortConfig.direction === 'ascending') {
+            direction = 'descending';
+        }
+        setSortConfig({ key, direction });
+    };
+
+    const handleViewChange = () => {
+        setView(view === 'latest' ? 'frequent' : 'latest');
+        setSortConfig(null);
+    };
+
+    const handleFilterChange = (value: QuizFilter) => {
+        setQuizFilter(value);
+        setSortConfig(null);
+    };
 
     const handleRowClick = (id: string | number) => {
         setExpandedRows(prev => {
@@ -79,8 +99,8 @@ export default function ErrorsPage() {
         setErrors([]);
         setIsClearAlertOpen(false);
     }
-
-    const frequentErrors = useMemo((): AggregatedError[] => {
+    
+    const sortedFrequentErrors = useMemo((): AggregatedError[] => {
         if (view !== 'frequent') return [];
 
         const errorCounts = new Map<string, AggregatedError>();
@@ -106,8 +126,53 @@ export default function ErrorsPage() {
             }
         }
         
-        return Array.from(errorCounts.values()).sort((a, b) => b.count - a.count);
-    }, [filteredErrors, view]);
+        let sortableItems = Array.from(errorCounts.values());
+        
+        if (sortConfig) {
+            sortableItems.sort((a, b) => {
+                const key = sortConfig.key as keyof AggregatedError;
+                if (a[key] < b[key]) {
+                    return sortConfig.direction === 'ascending' ? -1 : 1;
+                }
+                if (a[key] > b[key]) {
+                    return sortConfig.direction === 'ascending' ? 1 : -1;
+                }
+                return 0;
+            });
+        } else {
+             sortableItems.sort((a, b) => b.count - a.count);
+        }
+
+        return sortableItems;
+    }, [filteredErrors, view, sortConfig]);
+
+    const sortedLatestErrors = useMemo(() => {
+        if (view !== 'latest') return [];
+        let sortableItems = [...filteredErrors];
+
+        if (sortConfig) {
+            sortableItems.sort((a, b) => {
+                const key = sortConfig.key as keyof ErrorRecord;
+                if (a[key] < b[key]) {
+                    return sortConfig.direction === 'ascending' ? -1 : 1;
+                }
+                if (a[key] > b[key]) {
+                    return sortConfig.direction === 'ascending' ? 1 : -1;
+                }
+                return 0;
+            });
+        }
+        return sortableItems;
+    }, [filteredErrors, view, sortConfig]);
+
+    const SortableHeader = ({ title, sortKey }: { title: string, sortKey: SortableKey }) => (
+        <TableHead>
+            <Button variant="ghost" onClick={() => requestSort(sortKey)}>
+                {title}
+                <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+        </TableHead>
+    );
 
     const renderTable = () => {
         if (filteredErrors.length === 0) {
@@ -119,15 +184,15 @@ export default function ErrorsPage() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead className="w-[80px] text-center">Count</TableHead>
-                            <TableHead>Word</TableHead>
-                            <TableHead>Correct Answer</TableHead>
+                            <SortableHeader title="Count" sortKey="count" />
+                            <SortableHeader title="Word" sortKey="word" />
+                            <SortableHeader title="Correct Answer" sortKey="correctAnswer" />
                             <TableHead>Your Answers</TableHead>
-                            <TableHead>Quiz</TableHead>
+                            <SortableHeader title="Quiz" sortKey="quiz" />
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {frequentErrors.map((error, index) => {
+                        {sortedFrequentErrors.map((error, index) => {
                             const isExpanded = expandedRows.has(index);
                             const userAnswersText = Array.from(error.userAnswers).join(', ');
                              const uniqueKey = `${error.quiz}|${error.word}-${error.correctAnswer}-${index}`;
@@ -152,15 +217,15 @@ export default function ErrorsPage() {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Word</TableHead>
-                        <TableHead>Correct Answer</TableHead>
-                        <TableHead>Your Answer</TableHead>
-                        <TableHead>Quiz</TableHead>
-                        <TableHead>Date</TableHead>
+                        <SortableHeader title="Word" sortKey="word" />
+                        <SortableHeader title="Correct Answer" sortKey="correctAnswer" />
+                        <SortableHeader title="Your Answer" sortKey="userAnswer" />
+                        <SortableHeader title="Quiz" sortKey="quiz" />
+                        <SortableHeader title="Date" sortKey="id" />
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {filteredErrors.map((error) => {
+                    {sortedLatestErrors.map((error) => {
                         const isExpanded = expandedRows.has(error.id);
                         return (
                             <TableRow key={error.id} onClick={() => handleRowClick(error.id)} className="cursor-pointer">
@@ -185,7 +250,7 @@ export default function ErrorsPage() {
                 <CardHeader className="flex flex-col items-center gap-4 p-6 sm:flex-row sm:justify-between">
                     <CardTitle className="text-3xl">Common Errors</CardTitle>
                     <div className="flex flex-col gap-2">
-                        <Select value={quizFilter} onValueChange={(value) => setQuizFilter(value as QuizFilter)}>
+                        <Select value={quizFilter} onValueChange={(value) => handleFilterChange(value as QuizFilter)}>
                             <SelectTrigger>
                                 <SelectValue placeholder="Filter by quiz" />
                             </SelectTrigger>
@@ -198,7 +263,7 @@ export default function ErrorsPage() {
                                 <SelectItem value="Idioms">Idioms</SelectItem>
                             </SelectContent>
                         </Select>
-                        <Button variant="outline" onClick={() => setView(view === 'latest' ? 'frequent' : 'latest')}>
+                        <Button variant="outline" onClick={handleViewChange}>
                             <ArrowUpDown className="mr-2 h-4 w-4" />
                             View {view === 'latest' ? 'Most Frequent' : 'Latest'}
                         </Button>
