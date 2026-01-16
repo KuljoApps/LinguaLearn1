@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowLeft, Mail, Phone, MapPin } from "lucide-react";
+import { ArrowLeft, Mail, Phone, MapPin, FileText, Gavel } from "lucide-react";
 import LinguaLearnLogo from "@/components/LinguaLearnLogo";
 import { Separator } from "@/components/ui/separator";
 import KuljoAppsLogo from "./KuljoAppsLogo";
@@ -39,6 +39,24 @@ export default function AboutPage() {
                                 <span>600-130-255</span>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <Separator />
+                <div className="flex flex-col items-center w-full">
+                    <h3 className="text-lg font-semibold mb-4">Terms and Licenses</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+                         <Link href="/settings/about/terms" passHref className="w-full">
+                            <Button variant="outline" className="w-full">
+                                <FileText className="mr-2 h-4 w-4" />
+                                Terms
+                            </Button>
+                        </Link>
+                        <Link href="/settings/about/licenses" passHref className="w-full">
+                            <Button variant="outline" className="w-full">
+                                <Gavel className="mr-2 h-4 w-4" />
+                                Licenses
+                            </Button>
+                        </Link>
                     </div>
                 </div>
             </CardContent>
