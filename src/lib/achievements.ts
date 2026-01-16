@@ -4,6 +4,12 @@ import { questions as plEnQuestions } from './questions-pl-en';
 import { questions as irregularVerbsQuestions } from './questions-irregular-verbs';
 import { questions as phrasalVerbsQuestions } from './questions-phrasal-verbs';
 import { questions as idiomsQuestions } from './questions-idioms';
+import { questions as frPlQuestions } from './questions-fr-pl';
+import { questions as plFrQuestions } from './questions-pl-fr';
+import { questions as irregularVerbsFrQuestions } from './questions-irregular-verbs-fr';
+import { questions as phrasalVerbsFrQuestions } from './questions-phrasal-verbs-fr';
+import { questions as idiomsFrQuestions } from './questions-idioms-fr';
+
 
 export interface Achievement {
   id: string;
@@ -39,10 +45,17 @@ export const allAchievements: Achievement[] = [
   { id: 'virtuoso', name: 'Virtuoso', description: 'Get a perfect score on 25 quizzes.', icon: Award, goal: 25 },
   { id: 'grandmaster', name: 'Grand Master', description: 'Get a perfect score on 50 quizzes.', icon: Award, goal: 50 },
   
-  // Mastery
+  // Mastery (English)
   { id: 'mastery_en_pl', name: 'English-Polish Scholar', description: 'Correctly answer every English-Polish question.', icon: BookMarked, goal: enPlQuestions.length },
   { id: 'mastery_pl_en', name: 'Polish-English Scholar', description: 'Correctly answer every Polish-English question.', icon: Globe, goal: plEnQuestions.length },
-  { id: 'mastery_irregular', name: 'Verb Virtuoso', description: 'Correctly answer every irregular verb question.', icon: Webhook, goal: irregularVerbsQuestions.length },
-  { id: 'mastery_phrasal', name: 'Phrasal Fanatic', description: 'Correctly answer every phrasal verb question.', icon: Brain, goal: phrasalVerbsQuestions.length },
-  { id: 'mastery_idioms', name: 'Idiom Idol', description: 'Correctly answer every idiom question.', icon: MessagesSquare, goal: idiomsQuestions.length },
+  { id: 'mastery_irregular', name: 'Verb Virtuoso (EN)', description: 'Correctly answer every irregular verb question.', icon: Webhook, goal: irregularVerbsQuestions.length },
+  { id: 'mastery_phrasal', name: 'Phrasal Fanatic (EN)', description: 'Correctly answer every phrasal verb question.', icon: Brain, goal: phrasalVerbsQuestions.length },
+  { id: 'mastery_idioms', name: 'Idiom Idol (EN)', description: 'Correctly answer every idiom question.', icon: MessagesSquare, goal: idiomsQuestions.length },
+
+  // Mastery (French)
+  { id: 'mastery_fr_pl', name: 'French-Polish Scholar', description: 'Correctly answer every French-Polish question.', icon: BookMarked, goal: frPlQuestions.length },
+  { id: 'mastery_pl_fr', name: 'Polish-French Scholar', description: 'Correctly answer every Polish-French question.', icon: Globe, goal: plFrQuestions.length },
+  { id: 'mastery_irregular_fr', name: 'Verb Virtuoso (FR)', description: 'Correctly answer every irregular verb question.', icon: Webhook, goal: irregularVerbsFrQuestions.length },
+  { id: 'mastery_phrasal_fr', name: 'Phrasal Fanatic (FR)', description: 'Correctly answer every phrasal verb question.', icon: Brain, goal: phrasalVerbsFrQuestions.length },
+  { id: 'mastery_idioms_fr', name: 'Idiom Idol (FR)', description: 'Correctly answer every idiom question.', icon: MessagesSquare, goal: idiomsFrQuestions.length },
 ];

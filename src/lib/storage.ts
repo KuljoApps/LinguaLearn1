@@ -48,11 +48,24 @@ export interface AchievementStatus {
     unlockedAt: number | null;
 }
 
-const STATS_KEY = 'linguaLearnStats_v2';
-const ERRORS_KEY = 'linguaLearnErrors_v2';
+const LANGUAGE_KEY = 'linguaLearnLanguage';
 const SETTINGS_KEY = 'linguaLearnSettings_v2';
-const ACHIEVEMENTS_KEY = 'linguaLearnAchievements_v2';
-const MASTERY_KEY = 'linguaLearnMastery_v1';
+
+const getKey = (baseKey: string): string => {
+    const lang = getLanguage();
+    return `${baseKey}_${lang}`;
+}
+
+// --- Language Functions ---
+export const getLanguage = (): 'en' | 'fr' => {
+    if (typeof window === 'undefined') return 'en';
+    return (localStorage.getItem(LANGUAGE_KEY) as 'en' | 'fr') || 'en';
+}
+
+export const setLanguage = (lang: 'en' | 'fr') => {
+    if (typeof window === 'undefined') return;
+    localStorage.setItem(LANGUAGE_KEY, lang);
+}
 
 
 // --- Mastery Functions ---
@@ -60,7 +73,7 @@ const MASTERY_KEY = 'linguaLearnMastery_v1';
 export const getMasteryProgress = (): MasteryProgress => {
     if (typeof window === 'undefined') return {};
     try {
-        const masteryJson = localStorage.getItem(MASTERY_KEY);
+        const masteryJson = localStorage.getItem(getKey('linguaLearnMastery_v1'));
         return masteryJson ? JSON.parse(masteryJson) : {};
     } catch (error) {
         console.error("Failed to parse mastery progress from localStorage", error);
@@ -71,7 +84,7 @@ export const getMasteryProgress = (): MasteryProgress => {
 const saveMasteryProgress = (progress: MasteryProgress) => {
     if (typeof window === 'undefined') return;
     try {
-        localStorage.setItem(MASTERY_KEY, JSON.stringify(progress));
+        localStorage.setItem(getKey('linguaLearnMastery_v1'), JSON.stringify(progress));
     } catch (error) {
         console.error("Failed to save mastery progress to localStorage", error);
     }
@@ -83,7 +96,7 @@ const saveMasteryProgress = (progress: MasteryProgress) => {
 export const getAchievements = (): Record<string, AchievementStatus> => {
     if (typeof window === 'undefined') return {};
     try {
-        const achievementsJson = localStorage.getItem(ACHIEVEMENTS_KEY);
+        const achievementsJson = localStorage.getItem(getKey('linguaLearnAchievements_v2'));
         return achievementsJson ? JSON.parse(achievementsJson) : {};
     } catch (error) {
         console.error("Failed to parse achievements from localStorage", error);
@@ -94,7 +107,7 @@ export const getAchievements = (): Record<string, AchievementStatus> => {
 const saveAchievements = (achievements: Record<string, AchievementStatus>) => {
     if (typeof window === 'undefined') return;
     try {
-        localStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(achievements));
+        localStorage.setItem(getKey('linguaLearnAchievements_v2'), JSON.stringify(achievements));
     } catch (error) {
         console.error("Failed to save achievements to localStorage", error);
     }
@@ -151,6 +164,22 @@ const checkAndUnlockAchievements = (stats: Stats): Achievement[] => {
             case 'mastery_idioms':
                 currentProgress = masteryProgress['Idioms']?.length || 0;
                 break;
+            // Add cases for French mastery
+            case 'mastery_fr_pl':
+                currentProgress = masteryProgress['French - Polish']?.length || 0;
+                break;
+            case 'mastery_pl_fr':
+                currentProgress = masteryProgress['Polish - French']?.length || 0;
+                break;
+            case 'mastery_irregular_fr':
+                currentProgress = masteryProgress['Irregular Verbs (FR)']?.length || 0;
+                break;
+            case 'mastery_phrasal_fr':
+                currentProgress = masteryProgress['Phrasal Verbs (FR)']?.length || 0;
+                break;
+            case 'mastery_idioms_fr':
+                currentProgress = masteryProgress['Idioms (FR)']?.length || 0;
+                break;
             default:
                 break;
         }
@@ -181,7 +210,7 @@ export const checkSessionAchievements = (isPerfect: boolean): Achievement[] => {
     stats.totalPerfectScores = (stats.totalPerfectScores || 0) + 1;
 
     try {
-        localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+        localStorage.setItem(getKey('linguaLearnStats_v2'), JSON.stringify(stats));
     } catch (error) {
         console.error("Failed to save stats to localStorage", error);
     }
@@ -239,7 +268,7 @@ export const getStats = (): Stats => {
         return defaultStats;
     }
     try {
-        const statsJson = localStorage.getItem(STATS_KEY);
+        const statsJson = localStorage.getItem(getKey('linguaLearnStats_v2'));
         if (statsJson) {
             const stats = JSON.parse(statsJson);
             return { ...defaultStats, ...stats };
@@ -313,7 +342,7 @@ export const updateStats = (isCorrect: boolean, quizName: string, questionId: nu
     }
 
     try {
-        localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+        localStorage.setItem(getKey('linguaLearnStats_v2'), JSON.stringify(stats));
     } catch (error) {
         console.error("Failed to save stats to localStorage", error);
     }
@@ -327,7 +356,7 @@ export const updateTimeSpent = (seconds: number): Achievement[] => {
     stats.totalTimeSpent += seconds;
 
     try {
-        localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+        localStorage.setItem(getKey('linguaLearnStats_v2'), JSON.stringify(stats));
     } catch (error) {
         console.error("Failed to save stats to localStorage", error);
     }
@@ -338,10 +367,10 @@ export const updateTimeSpent = (seconds: number): Achievement[] => {
 export const clearStats = () => {
     if (typeof window === 'undefined') return;
     const defaultStats: Stats = { totalAnswers: 0, totalCorrectAnswers: 0, totalErrors: 0, longestStreak: 0, currentStreak: 0, lastFiftyAnswers: [], longestStreakDate: null, longestStreakQuiz: null, perQuizStats: {}, totalTimeSpent: 0, lastPlayTimestamp: null, uniqueDaysPlayed: 0, playedQuizzes: [], totalPerfectScores: 0 };
-    localStorage.setItem(STATS_KEY, JSON.stringify(defaultStats));
-    localStorage.removeItem(ACHIEVEMENTS_KEY);
-    localStorage.removeItem(ERRORS_KEY);
-    localStorage.removeItem(MASTERY_KEY);
+    localStorage.setItem(getKey('linguaLearnStats_v2'), JSON.stringify(defaultStats));
+    localStorage.removeItem(getKey('linguaLearnAchievements_v2'));
+    localStorage.removeItem(getKey('linguaLearnErrors_v2'));
+    localStorage.removeItem(getKey('linguaLearnMastery_v1'));
 }
 
 
@@ -352,7 +381,7 @@ export const getErrors = (): ErrorRecord[] => {
         return [];
     }
     try {
-        const errorsJson = localStorage.getItem(ERRORS_KEY);
+        const errorsJson = localStorage.getItem(getKey('linguaLearnErrors_v2'));
         return errorsJson ? JSON.parse(errorsJson) : [];
     } catch (error) {
         console.error("Failed to parse errors from localStorage", error);
@@ -369,7 +398,7 @@ export const addError = (error: Omit<ErrorRecord, 'id'>) => {
             id: Date.now() + Math.random() // Simple unique ID
         };
         const updatedErrors = [newError, ...errors];
-        localStorage.setItem(ERRORS_KEY, JSON.stringify(updatedErrors));
+        localStorage.setItem(getKey('linguaLearnErrors_v2'), JSON.stringify(updatedErrors));
     } catch (error) {
         console.error("Failed to save error to localStorage", error);
     }
@@ -377,6 +406,6 @@ export const addError = (error: Omit<ErrorRecord, 'id'>) => {
 
 export const clearErrors = (): Achievement[] => {
     if (typeof window === 'undefined') return [];
-    localStorage.removeItem(ERRORS_KEY);
+    localStorage.removeItem(getKey('linguaLearnErrors_v2'));
     return [];
 }
