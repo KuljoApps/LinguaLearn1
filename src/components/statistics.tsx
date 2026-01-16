@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -85,7 +84,7 @@ export default function StatisticsPage() {
                         </PopoverTrigger>
                         <PopoverContent className="w-auto max-w-xs text-sm">
                             <div className="space-y-2">
-                                <h4 className="font-medium leading-none">Error Details</h4>
+                                <h4 className="font-medium leading-none text-center">Error Details</h4>
                                 <p className="text-muted-foreground">
                                     From quiz: <span className="font-semibold text-foreground">{currentError.quiz}</span>
                                 </p>
@@ -202,5 +201,3 @@ export default function StatisticsPage() {
         </>
     );
 }
-
-    
