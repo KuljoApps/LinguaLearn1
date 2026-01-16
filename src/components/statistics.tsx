@@ -19,7 +19,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
-const defaultStats: Stats = { totalAnswers: 0, totalErrors: 0, longestStreak: 0, currentStreak: 0, lastFiftyAnswers: [], longestStreakDate: null, perQuizStats: {} };
+const defaultStats: Stats = { totalAnswers: 0, totalErrors: 0, longestStreak: 0, currentStreak: 0, lastFiftyAnswers: [], longestStreakDate: null, longestStreakQuiz: null, perQuizStats: {} };
 
 export default function StatisticsPage() {
     const [stats, setStats] = useState<Stats>(defaultStats);
@@ -229,12 +229,19 @@ export default function StatisticsPage() {
                                         </button>
                                     </PopoverTrigger>
                                      <PopoverContent className="w-auto">
-                                        <h4 className="font-medium text-center mb-1">Longest Streak Achieved</h4>
-                                        <p className="text-center text-sm text-muted-foreground">
-                                            {stats.longestStreak > 0 && stats.longestStreakDate
-                                                ? new Date(stats.longestStreakDate).toLocaleString()
-                                                : 'Not yet achieved.'}
-                                        </p>
+                                        <div className="text-center space-y-1">
+                                            <h4 className="font-medium mb-1">Longest Streak Achieved</h4>
+                                            <p className="text-sm text-muted-foreground">
+                                                {stats.longestStreak > 0 && stats.longestStreakDate
+                                                    ? new Date(stats.longestStreakDate).toLocaleString()
+                                                    : 'Not yet achieved.'}
+                                            </p>
+                                            {stats.longestStreakQuiz && (
+                                                <p className="text-xs text-muted-foreground">
+                                                    in <span className="font-semibold text-foreground">{stats.longestStreakQuiz}</span>
+                                                </p>
+                                            )}
+                                        </div>
                                     </PopoverContent>
                                 </Popover>
                             </CardHeader>

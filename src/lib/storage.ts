@@ -7,6 +7,7 @@ export interface Stats {
     currentStreak: number;
     lastFiftyAnswers: boolean[];
     longestStreakDate: number | null;
+    longestStreakQuiz: string | null;
     perQuizStats: {
         [quizName: string]: {
             totalAnswers: number;
@@ -74,7 +75,7 @@ export const clearSettings = () => {
 // --- Stats Functions ---
 
 export const getStats = (): Stats => {
-    const defaultStats: Stats = { totalAnswers: 0, totalErrors: 0, longestStreak: 0, currentStreak: 0, lastFiftyAnswers: [], longestStreakDate: null, perQuizStats: {} };
+    const defaultStats: Stats = { totalAnswers: 0, totalErrors: 0, longestStreak: 0, currentStreak: 0, lastFiftyAnswers: [], longestStreakDate: null, longestStreakQuiz: null, perQuizStats: {} };
     if (typeof window === 'undefined') {
         return defaultStats;
     }
@@ -90,6 +91,7 @@ export const getStats = (): Stats => {
                 currentStreak: Number(stats.currentStreak) || 0,
                 lastFiftyAnswers: Array.isArray(stats.lastFiftyAnswers) ? stats.lastFiftyAnswers : [],
                 longestStreakDate: stats.longestStreakDate || null,
+                longestStreakQuiz: stats.longestStreakQuiz || null,
                 perQuizStats: stats.perQuizStats || {},
             };
         }
@@ -128,6 +130,7 @@ export const updateStats = (isCorrect: boolean, quizName: string) => {
     if (stats.currentStreak > stats.longestStreak) {
         stats.longestStreak = stats.currentStreak;
         stats.longestStreakDate = Date.now();
+        stats.longestStreakQuiz = quizName;
     }
 
     try {
@@ -139,7 +142,7 @@ export const updateStats = (isCorrect: boolean, quizName: string) => {
 
 export const clearStats = () => {
     if (typeof window === 'undefined') return;
-    const defaultStats: Stats = { totalAnswers: 0, totalErrors: 0, longestStreak: 0, currentStreak: 0, lastFiftyAnswers: [], longestStreakDate: null, perQuizStats: {} };
+    const defaultStats: Stats = { totalAnswers: 0, totalErrors: 0, longestStreak: 0, currentStreak: 0, lastFiftyAnswers: [], longestStreakDate: null, longestStreakQuiz: null, perQuizStats: {} };
     localStorage.setItem(STATS_KEY, JSON.stringify(defaultStats));
 }
 
