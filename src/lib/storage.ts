@@ -40,6 +40,7 @@ export interface Settings {
     soundsEnabled: boolean;
     vibrationsEnabled: boolean;
     volume: number;
+    eyeCareLevel: number;
 }
 
 export interface AchievementStatus {
@@ -193,7 +194,7 @@ export const checkSessionAchievements = (isPerfect: boolean): Achievement[] => {
 // --- Settings Functions ---
 
 export const getSettings = (): Settings => {
-    const defaultSettings = { soundsEnabled: true, vibrationsEnabled: true, volume: 50 };
+    const defaultSettings = { soundsEnabled: true, vibrationsEnabled: true, volume: 50, eyeCareLevel: 0 };
     if (typeof window === 'undefined') {
         return defaultSettings;
     }
@@ -202,9 +203,8 @@ export const getSettings = (): Settings => {
         if (settingsJson) {
             const settings = JSON.parse(settingsJson);
             return {
-                soundsEnabled: typeof settings.soundsEnabled === 'boolean' ? settings.soundsEnabled : defaultSettings.soundsEnabled,
-                vibrationsEnabled: typeof settings.vibrationsEnabled === 'boolean' ? settings.vibrationsEnabled : defaultSettings.vibrationsEnabled,
-                volume: typeof settings.volume === 'number' ? settings.volume : defaultSettings.volume,
+                ...defaultSettings,
+                ...settings
             };
         }
     } catch (error) {
@@ -217,6 +217,7 @@ export const saveSettings = (settings: Settings) => {
     if (typeof window === 'undefined') return;
     try {
         localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+        window.dispatchEvent(new CustomEvent('settings-changed', { detail: settings }));
     } catch (error) {
         console.error("Failed to save settings to localStorage", error);
     }
@@ -225,6 +226,8 @@ export const saveSettings = (settings: Settings) => {
 export const clearSettings = () => {
     if (typeof window === 'undefined') return;
     localStorage.removeItem(SETTINGS_KEY);
+    // After clearing, save default settings to trigger update
+    saveSettings(getSettings());
 };
 
 

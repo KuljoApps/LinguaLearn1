@@ -93,4 +93,16 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: hsl(50, 100%, 80%);
+    opacity: var(--eye-care-opacity, 0);
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 99999;
+    transition: opacity 0.2s ease-in-out;
+  }
 }
