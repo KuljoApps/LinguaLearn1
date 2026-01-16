@@ -38,6 +38,7 @@ function shuffleArray<T>(array: T[]): T[] {
 const QUESTION_TIME_LIMIT = 30;
 const PAUSE_PENALTY = 10;
 const MIN_TIME_FOR_PAUSE = 11;
+const QUIZ_NAME = 'Irregular Verbs';
 
 
 export default function QuizIrregularVerbs() {
@@ -93,12 +94,12 @@ export default function QuizIrregularVerbs() {
           setSelectedTranslation(null);
           playSound("incorrect");
           vibrate("incorrect");
-          updateStats(false);
+          updateStats(false, QUIZ_NAME);
           addError({
             word: questions[currentQuestionIndex].verb,
             userAnswer: 'No answer',
             correctAnswer: `${questions[currentQuestionIndex].correctTranslation}, ${questions[currentQuestionIndex].form2}, ${questions[currentQuestionIndex].form3}`,
-            quiz: 'Irregular Verbs',
+            quiz: QUIZ_NAME,
           });
           return 0;
         }
@@ -151,12 +152,12 @@ export default function QuizIrregularVerbs() {
       setAnswerStatus('incorrect');
       playSound('incorrect');
       vibrate('incorrect');
-      updateStats(false);
+      updateStats(false, QUIZ_NAME);
       addError({
         word: currentQuestion.verb,
         userAnswer: option,
         correctAnswer: currentQuestion.correctTranslation,
-        quiz: 'Irregular Verbs',
+        quiz: QUIZ_NAME,
       });
     }
   };
@@ -166,9 +167,9 @@ export default function QuizIrregularVerbs() {
 
     const isForm2Correct = currentQuestion.form2.toLowerCase().split('/').includes(form2Input.trim().toLowerCase());
     const isForm3Correct = currentQuestion.form3.toLowerCase().split('/').includes(form3Input.trim().toLowerCase());
-    const isCorrect = isForm2Correct && isForm3Correct;
+    const isCorrect = isForm2Correct && isForm3Correct && translationStatus === 'correct';
 
-    updateStats(isCorrect);
+    updateStats(isCorrect, QUIZ_NAME);
 
     if (isCorrect) {
       setScore((prevScore) => prevScore + 1);
@@ -183,7 +184,7 @@ export default function QuizIrregularVerbs() {
         word: currentQuestion.verb,
         userAnswer: `Forms: ${form2Input}, ${form3Input}`,
         correctAnswer: `Forms: ${currentQuestion.form2}, ${currentQuestion.form3}`,
-        quiz: 'Irregular Verbs',
+        quiz: QUIZ_NAME,
       });
     }
   };

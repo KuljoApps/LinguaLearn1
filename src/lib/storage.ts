@@ -6,6 +6,13 @@ export interface Stats {
     longestStreak: number;
     currentStreak: number;
     lastFiftyAnswers: boolean[];
+    longestStreakDate: number | null;
+    perQuizStats: {
+        [quizName: string]: {
+            totalAnswers: number;
+            totalErrors: number;
+        };
+    };
 }
 
 export interface ErrorRecord {
@@ -67,7 +74,7 @@ export const clearSettings = () => {
 // --- Stats Functions ---
 
 export const getStats = (): Stats => {
-    const defaultStats = { totalAnswers: 0, totalErrors: 0, longestStreak: 0, currentStreak: 0, lastFiftyAnswers: [] };
+    const defaultStats: Stats = { totalAnswers: 0, totalErrors: 0, longestStreak: 0, currentStreak: 0, lastFiftyAnswers: [], longestStreakDate: null, perQuizStats: {} };
     if (typeof window === 'undefined') {
         return defaultStats;
     }
@@ -75,12 +82,15 @@ export const getStats = (): Stats => {
         const statsJson = localStorage.getItem(STATS_KEY);
         if (statsJson) {
             const stats = JSON.parse(statsJson);
+            // This ensures backward compatibility with old data format
             return {
                 totalAnswers: Number(stats.totalAnswers) || 0,
                 totalErrors: Number(stats.totalErrors) || 0,
                 longestStreak: Number(stats.longestStreak) || 0,
                 currentStreak: Number(stats.currentStreak) || 0,
                 lastFiftyAnswers: Array.isArray(stats.lastFiftyAnswers) ? stats.lastFiftyAnswers : [],
+                longestStreakDate: stats.longestStreakDate || null,
+                perQuizStats: stats.perQuizStats || {},
             };
         }
     } catch (error) {
@@ -89,23 +99,35 @@ export const getStats = (): Stats => {
     return defaultStats;
 };
 
-export const updateStats = (isCorrect: boolean) => {
+export const updateStats = (isCorrect: boolean, quizName: string) => {
     if (typeof window === 'undefined') return;
     const stats = getStats();
-    stats.totalAnswers += 1;
 
+    // Global stats
+    stats.totalAnswers += 1;
+    stats.lastFiftyAnswers.unshift(isCorrect);
+    if (stats.lastFiftyAnswers.length > 50) {
+        stats.lastFiftyAnswers.pop();
+    }
+
+    // Per-quiz stats
+    if (!stats.perQuizStats[quizName]) {
+        stats.perQuizStats[quizName] = { totalAnswers: 0, totalErrors: 0 };
+    }
+    stats.perQuizStats[quizName].totalAnswers += 1;
+
+    // Streak and error handling
     if (isCorrect) {
         stats.currentStreak += 1;
     } else {
         stats.totalErrors += 1;
+        stats.perQuizStats[quizName].totalErrors += 1;
         stats.currentStreak = 0;
     }
     
-    stats.longestStreak = Math.max(stats.longestStreak, stats.currentStreak);
-    
-    stats.lastFiftyAnswers.unshift(isCorrect);
-    if (stats.lastFiftyAnswers.length > 50) {
-        stats.lastFiftyAnswers.pop();
+    if (stats.currentStreak > stats.longestStreak) {
+        stats.longestStreak = stats.currentStreak;
+        stats.longestStreakDate = Date.now();
     }
 
     try {
@@ -117,7 +139,8 @@ export const updateStats = (isCorrect: boolean) => {
 
 export const clearStats = () => {
     if (typeof window === 'undefined') return;
-    localStorage.removeItem(STATS_KEY);
+    const defaultStats: Stats = { totalAnswers: 0, totalErrors: 0, longestStreak: 0, currentStreak: 0, lastFiftyAnswers: [], longestStreakDate: null, perQuizStats: {} };
+    localStorage.setItem(STATS_KEY, JSON.stringify(defaultStats));
 }
 
 

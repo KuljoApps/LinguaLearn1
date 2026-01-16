@@ -36,6 +36,7 @@ function shuffleArray<T>(array: T[]): T[] {
 const QUESTION_TIME_LIMIT = 15;
 const PAUSE_PENALTY = 5;
 const MIN_TIME_FOR_PAUSE = 6;
+const QUIZ_NAME = 'Phrasal Verbs';
 
 
 export default function QuizPhrasalVerbs() {
@@ -84,12 +85,12 @@ export default function QuizPhrasalVerbs() {
           playSound("incorrect");
           vibrate("incorrect");
           
-          updateStats(false);
+          updateStats(false, QUIZ_NAME);
           addError({
             word: questions[currentQuestionIndex].word,
             userAnswer: 'No answer',
             correctAnswer: questions[currentQuestionIndex].correctAnswer,
-            quiz: 'Phrasal Verbs',
+            quiz: QUIZ_NAME,
           });
 
           return 0;
@@ -121,7 +122,7 @@ export default function QuizPhrasalVerbs() {
 
     setSelectedAnswer(answer);
     const isCorrect = answer === currentQuestion.correctAnswer;
-    updateStats(isCorrect);
+    updateStats(isCorrect, QUIZ_NAME);
     
     if (isCorrect) {
       setScore((prevScore) => prevScore + 1);
@@ -136,7 +137,7 @@ export default function QuizPhrasalVerbs() {
         word: currentQuestion.word,
         userAnswer: answer,
         correctAnswer: currentQuestion.correctAnswer,
-        quiz: 'Phrasal Verbs',
+        quiz: QUIZ_NAME,
       });
     }
   };

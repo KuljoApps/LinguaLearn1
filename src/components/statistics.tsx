@@ -19,7 +19,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
-const defaultStats: Stats = { totalAnswers: 0, totalErrors: 0, longestStreak: 0, currentStreak: 0, lastFiftyAnswers: [] };
+const defaultStats: Stats = { totalAnswers: 0, totalErrors: 0, longestStreak: 0, currentStreak: 0, lastFiftyAnswers: [], longestStreakDate: null, perQuizStats: {} };
 
 export default function StatisticsPage() {
     const [stats, setStats] = useState<Stats>(defaultStats);
@@ -34,12 +34,15 @@ export default function StatisticsPage() {
     const handleClearStats = () => {
         clearStats();
         setStats(getStats());
+        setErrors(getErrors());
         setIsClearAlertOpen(false);
     }
 
     const successRate = stats.totalAnswers > 0
         ? Math.round(((stats.totalAnswers - stats.totalErrors) / stats.totalAnswers) * 100)
         : 0;
+    
+    const quizNames = Object.keys(stats.perQuizStats);
 
     const renderLastFiftyAnswersGrid = () => {
         const gridItems = [];
@@ -123,7 +126,28 @@ export default function StatisticsPage() {
                         <Card>
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                 <CardTitle className="text-sm font-medium">Total Answers</CardTitle>
-                                <CheckCircle className="h-5 w-5 text-amber" />
+                                <Popover>
+                                    <PopoverTrigger asChild>
+                                        <button className="focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-full">
+                                            <CheckCircle className="h-5 w-5 text-amber cursor-pointer" />
+                                        </button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-56">
+                                        <h4 className="font-medium text-center mb-2">Answers per Quiz</h4>
+                                        <div className="space-y-1 text-sm">
+                                            {quizNames.length > 0 ? (
+                                                quizNames.map((quizName) => (
+                                                    <div key={quizName} className="flex justify-between">
+                                                        <span>{quizName}:</span>
+                                                        <span className="font-bold">{stats.perQuizStats[quizName].totalAnswers}</span>
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <p className="text-muted-foreground text-center">No data yet.</p>
+                                            )}
+                                        </div>
+                                    </PopoverContent>
+                                </Popover>
                             </CardHeader>
                             <CardContent>
                                 <div className="text-2xl font-bold">{stats.totalAnswers.toLocaleString()}</div>
@@ -132,7 +156,28 @@ export default function StatisticsPage() {
                         <Card>
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                 <CardTitle className="text-sm font-medium">Total Errors</CardTitle>
-                                <ShieldX className="h-5 w-5 text-amber" />
+                                <Popover>
+                                    <PopoverTrigger asChild>
+                                         <button className="focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-full">
+                                            <ShieldX className="h-5 w-5 text-amber cursor-pointer" />
+                                        </button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-56">
+                                        <h4 className="font-medium text-center mb-2">Errors per Quiz</h4>
+                                        <div className="space-y-1 text-sm">
+                                            {quizNames.length > 0 ? (
+                                                quizNames.map((quizName) => (
+                                                    <div key={quizName} className="flex justify-between">
+                                                        <span>{quizName}:</span>
+                                                        <span className="font-bold">{stats.perQuizStats[quizName].totalErrors}</span>
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <p className="text-muted-foreground text-center">No data yet.</p>
+                                            )}
+                                        </div>
+                                    </PopoverContent>
+                                </Popover>
                             </CardHeader>
                             <CardContent>
                                 <div className="text-2xl font-bold">{stats.totalErrors.toLocaleString()}</div>
@@ -141,7 +186,34 @@ export default function StatisticsPage() {
                         <Card>
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                 <CardTitle className="text-sm font-medium">Success Rate</CardTitle>
-                                <Percent className="h-5 w-5 text-amber" />
+                                <Popover>
+                                    <PopoverTrigger asChild>
+                                        <button className="focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-full">
+                                            <Percent className="h-5 w-5 text-amber cursor-pointer" />
+                                        </button>
+                                    </PopoverTrigger>
+                                     <PopoverContent className="w-56">
+                                        <h4 className="font-medium text-center mb-2">Success Rate per Quiz</h4>
+                                        <div className="space-y-1 text-sm">
+                                            {quizNames.length > 0 ? (
+                                                quizNames.map((quizName) => {
+                                                    const quizStats = stats.perQuizStats[quizName];
+                                                    const rate = quizStats.totalAnswers > 0
+                                                        ? Math.round(((quizStats.totalAnswers - quizStats.totalErrors) / quizStats.totalAnswers) * 100)
+                                                        : 0;
+                                                    return (
+                                                        <div key={quizName} className="flex justify-between">
+                                                            <span>{quizName}:</span>
+                                                            <span className="font-bold">{rate}%</span>
+                                                        </div>
+                                                    );
+                                                })
+                                            ) : (
+                                                <p className="text-muted-foreground text-center">No data yet.</p>
+                                            )}
+                                        </div>
+                                    </PopoverContent>
+                                </Popover>
                             </CardHeader>
                             <CardContent>
                                 <div className="text-2xl font-bold">{successRate}%</div>
@@ -150,7 +222,21 @@ export default function StatisticsPage() {
                         <Card>
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                 <CardTitle className="text-sm font-medium">Longest Streak</CardTitle>
-                                <Flame className="h-6 w-6 text-amber" />
+                                <Popover>
+                                    <PopoverTrigger asChild>
+                                        <button className="focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-full">
+                                            <Flame className="h-6 w-6 text-amber cursor-pointer" />
+                                        </button>
+                                    </PopoverTrigger>
+                                     <PopoverContent className="w-auto">
+                                        <h4 className="font-medium text-center mb-1">Longest Streak Achieved</h4>
+                                        <p className="text-center text-sm text-muted-foreground">
+                                            {stats.longestStreak > 0 && stats.longestStreakDate
+                                                ? new Date(stats.longestStreakDate).toLocaleString()
+                                                : 'Not yet achieved.'}
+                                        </p>
+                                    </PopoverContent>
+                                </Popover>
                             </CardHeader>
                             <CardContent>
                                 <div className="text-2xl font-bold">{stats.longestStreak.toLocaleString()}</div>
@@ -187,7 +273,7 @@ export default function StatisticsPage() {
                     <AlertDialogHeader>
                         <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                         <AlertDialogDescription>
-                            This will permanently delete all your statistics. This action cannot be undone.
+                            This will permanently delete all your statistics, including per-quiz data. This action cannot be undone.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
