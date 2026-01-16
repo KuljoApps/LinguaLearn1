@@ -20,11 +20,11 @@ export default function AboutPage() {
                     This application is a language learning tool designed to help you expand your vocabulary through interactive quizzes.
                 </p>
                 <Separator />
-                <div className="text-left">
-                    <h3 className="text-lg font-semibold text-center mb-4">Contact the Creator</h3>
+                <div className="flex flex-col items-center">
+                    <h3 className="text-lg font-semibold mb-4">Contact the Creator</h3>
                     <div className="flex items-center gap-4">
                         <KuljoAppsLogo width={85} height={85} />
-                        <div className="space-y-1 text-sm">
+                        <div className="space-y-1 text-sm text-left">
                             <p className="font-bold">Kuljo Apps, Damian Kuliś</p>
                             <div className="flex items-center gap-2 text-muted-foreground">
                                 <MapPin className="h-4 w-4" />
