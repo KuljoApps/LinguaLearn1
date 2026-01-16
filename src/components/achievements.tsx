@@ -28,6 +28,9 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
+const englishMasteryIds = new Set(['mastery_en_pl', 'mastery_pl_en', 'mastery_irregular', 'mastery_phrasal', 'mastery_idioms']);
+const frenchMasteryIds = new Set(['mastery_fr_pl', 'mastery_pl_fr', 'mastery_irregular_fr', 'mastery_phrasal_fr', 'mastery_idioms_fr']);
+
 export default function AchievementsPage() {
     const [achievements, setAchievements] = useState<Record<string, AchievementStatus>>({});
     const [isClearAlertOpen, setIsClearAlertOpen] = useState(false);
@@ -45,22 +48,23 @@ export default function AchievementsPage() {
         setIsClearAlertOpen(false);
     };
 
+    const isFrench = language === 'fr';
+
     const displayedAchievements = allAchievements.filter(achievement => {
-        const isEnglishMastery = achievement.id.startsWith('mastery_') && !achievement.id.endsWith('_fr');
-        const isFrenchMastery = achievement.id.startsWith('mastery_') && achievement.id.endsWith('_fr');
-    
-        if (language === 'fr') {
-            return !isEnglishMastery; // Show generic and French mastery
+        if (achievement.id.startsWith('mastery_')) {
+            if (isFrench) {
+                return frenchMasteryIds.has(achievement.id);
+            }
+            return englishMasteryIds.has(achievement.id);
         }
-        // language === 'en'
-        return !isFrenchMastery; // Show generic and English mastery
+        return true; // It's a generic achievement, show it always.
     });
 
     return (
         <>
             <Card className="w-full max-w-2xl shadow-2xl">
                 <CardHeader>
-                    <CardTitle className="text-center text-3xl">Achievements</CardTitle>
+                    <CardTitle className="text-center text-3xl">{isFrench ? 'Succès' : 'Achievements'}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4 max-h-[60vh] overflow-y-auto p-6">
                      <TooltipProvider>
@@ -70,6 +74,9 @@ export default function AchievementsPage() {
                                 const isUnlocked = !!status.unlockedAt;
                                 const progressPercentage = isUnlocked ? 100 : (status.progress / achievement.goal) * 100;
                                 const Icon = achievement.icon;
+                                
+                                const achievementName = isFrench && achievement.name_fr ? achievement.name_fr : achievement.name;
+                                const achievementDescription = isFrench && achievement.description_fr ? achievement.description_fr : achievement.description;
 
                                 return (
                                     <Tooltip key={achievement.id}>
@@ -84,8 +91,8 @@ export default function AchievementsPage() {
                                                         <CheckCircle className="absolute -bottom-1 -right-1 h-5 w-5 text-success bg-background rounded-full" />
                                                     )}
                                                 </div>
-                                                <h3 className="font-semibold">{achievement.name}</h3>
-                                                <p className="text-xs text-muted-foreground mt-1">{achievement.description}</p>
+                                                <h3 className="font-semibold">{achievementName}</h3>
+                                                <p className="text-xs text-muted-foreground mt-1">{achievementDescription}</p>
                                                 
                                                 {!isUnlocked && achievement.goal > 1 && (
                                                     <div className="w-full mt-2">
@@ -97,7 +104,7 @@ export default function AchievementsPage() {
                                         </TooltipTrigger>
                                         {isUnlocked && status.unlockedAt && (
                                             <TooltipContent>
-                                                <p>Unlocked: {format(new Date(status.unlockedAt), "PPP")}</p>
+                                                <p>{isFrench ? 'Débloqué le' : 'Unlocked'}: {format(new Date(status.unlockedAt), "PPP")}</p>
                                             </TooltipContent>
                                         )}
                                     </Tooltip>
@@ -110,7 +117,7 @@ export default function AchievementsPage() {
                      <div className="flex flex-wrap justify-center gap-4">
                         <Link href="/" passHref>
                             <Button variant="outline">
-                                <ArrowLeft className="mr-2 h-4 w-4" /> Back to Home
+                                <ArrowLeft className="mr-2 h-4 w-4" /> {isFrench ? "Retour à l'accueil" : "Back to Home"}
                             </Button>
                         </Link>
                         <Button 
@@ -118,7 +125,7 @@ export default function AchievementsPage() {
                             onClick={() => setIsClearAlertOpen(true)}
                             disabled={Object.keys(achievements).length === 0}
                         >
-                            <Trash2 className="mr-2 h-4 w-4" /> Reset Achievements
+                            <Trash2 className="mr-2 h-4 w-4" /> {isFrench ? 'Réinitialiser les succès' : 'Reset Achievements'}
                         </Button>
                     </div>
                 </CardFooter>
@@ -127,15 +134,17 @@ export default function AchievementsPage() {
             <AlertDialog open={isClearAlertOpen} onOpenChange={setIsClearAlertOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                        <AlertDialogTitle>{isFrench ? 'Êtes-vous sûr ?' : 'Are you sure?'}</AlertDialogTitle>
                         <AlertDialogDescription>
-                            This will permanently delete all your achievements and related progress data (including stats and errors) for the current language. This action cannot be undone.
+                            {isFrench
+                                ? 'Cela supprimera définitivement tous vos succès et les données de progression associées (y compris les statistiques et les erreurs) pour la langue actuelle. Cette action ne peut pas être annulée.'
+                                : 'This will permanently delete all your achievements and related progress data (including stats and errors) for the current language. This action cannot be undone.'}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogCancel>{isFrench ? 'Annuler' : 'Cancel'}</AlertDialogCancel>
                         <AlertDialogAction onClick={handleClearAchievements} className="bg-destructive hover:bg-destructive/90">
-                            Reset
+                            {isFrench ? 'Réinitialiser' : 'Reset'}
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
