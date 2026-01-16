@@ -86,11 +86,14 @@ export default function SettingsPage() {
                     <Separator />
                     <div>
                         <h3 className="text-lg font-semibold mb-2">About</h3>
-                        <p className="text-sm text-muted-foreground">
-                            LinguaLearn is an app designed to help you learn new languages in a fun and interactive way.
-                            <br />
-                            Version 1.0.0
-                        </p>
+                        <div className="flex items-center justify-between">
+                             <p className="text-sm text-muted-foreground pr-4">
+                                Version 1.0.0
+                            </p>
+                             <Link href="/settings/about" passHref>
+                                <Button variant="outline" size="sm">More...</Button>
+                            </Link>
+                        </div>
                     </div>
                 </CardContent>
                 <CardFooter className="flex justify-center p-6">
