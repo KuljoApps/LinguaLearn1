@@ -38,7 +38,7 @@ interface AggregatedError {
     userAnswers: Set<string>;
 }
 
-type QuizFilter = 'all' | 'English - Polish' | 'Polish - English' | 'Irregular Verbs' | 'Phrasal Verbs' | 'Idioms';
+type QuizFilter = 'all' | 'English - Polish' | 'Polish - English' | 'Irregular Verbs' | 'Phrasal Verbs' | 'Idioms' | 'French - Polish' | 'Polish - French' | 'Irregular Verbs (FR)' | 'Phrasal Verbs (FR)' | 'Idioms (FR)' | 'German - Polish' | 'Polish - German' | 'Irregular Verbs (DE)' | 'Separable Verbs (DE)' | 'Idioms (DE)' | 'Italiano - Polacco' | 'Polacco - Italiano' | 'Verbi Irregolari (IT)' | 'Verbi Frasali (IT)' | 'Modi di dire (IT)' | 'Español - Polaco' | 'Polaco - Español' | 'Verbos Irregulares (ES)' | 'Verbos con Preposición (ES)' | 'Modismos (ES)';
 type SortableKey = keyof ErrorRecord | keyof AggregatedError;
 
 export default function ErrorsPage() {
@@ -295,6 +295,26 @@ export default function ErrorsPage() {
                                 <SelectItem value="Irregular Verbs">Irregular Verbs</SelectItem>
                                 <SelectItem value="Phrasal Verbs">Phrasal Verbs</SelectItem>
                                 <SelectItem value="Idioms">Idioms</SelectItem>
+                                <SelectItem value="French - Polish">French - Polish</SelectItem>
+                                <SelectItem value="Polish - French">Polish - French</SelectItem>
+                                <SelectItem value="Irregular Verbs (FR)">Irregular Verbs (FR)</SelectItem>
+                                <SelectItem value="Phrasal Verbs (FR)">Phrasal Verbs (FR)</SelectItem>
+                                <SelectItem value="Idioms (FR)">Idioms (FR)</SelectItem>
+                                <SelectItem value="German - Polish">German - Polish</SelectItem>
+                                <SelectItem value="Polish - German">Polish - German</SelectItem>
+                                <SelectItem value="Irregular Verbs (DE)">Irregular Verbs (DE)</SelectItem>
+                                <SelectItem value="Separable Verbs (DE)">Separable Verbs (DE)</SelectItem>
+                                <SelectItem value="Idioms (DE)">Idioms (DE)</SelectItem>
+                                <SelectItem value="Italiano - Polacco">Italiano - Polacco</SelectItem>
+                                <SelectItem value="Polacco - Italiano">Polacco - Italiano</SelectItem>
+                                <SelectItem value="Verbi Irregolari (IT)">Verbi Irregolari (IT)</SelectItem>
+                                <SelectItem value="Verbi Frasali (IT)">Verbi Frasali (IT)</SelectItem>
+                                <SelectItem value="Modi di dire (IT)">Modi di dire (IT)</SelectItem>
+                                <SelectItem value="Español - Polaco">Español - Polaco</SelectItem>
+                                <SelectItem value="Polaco - Español">Polaco - Español</SelectItem>
+                                <SelectItem value="Verbos Irregulares (ES)">Verbos Irregulares (ES)</SelectItem>
+                                <SelectItem value="Verbos con Preposición (ES)">Verbos con Preposición (ES)</SelectItem>
+                                <SelectItem value="Modismos (ES)">Modismos (ES)</SelectItem>
                             </SelectContent>
                         </Select>
                         <Button variant="outline" onClick={handleViewChange}>

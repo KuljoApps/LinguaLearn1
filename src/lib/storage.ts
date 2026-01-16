@@ -49,7 +49,7 @@ export interface AchievementStatus {
     unlockedAt: number | null;
 }
 
-type Language = 'en' | 'fr' | 'de' | 'it';
+type Language = 'en' | 'fr' | 'de' | 'it' | 'es';
 
 const LANGUAGE_KEY = 'linguaLearnLanguage';
 const SETTINGS_KEY = 'linguaLearnSettings_v2';
@@ -265,6 +265,22 @@ const checkAndUnlockAchievements = (stats: Stats): Achievement[] => {
                 break;
             case 'mastery_idioms_it':
                 currentProgress = masteryProgress['Modi di dire (IT)']?.length || 0;
+                break;
+            // Spanish Mastery
+            case 'mastery_es_pl':
+                currentProgress = masteryProgress['Español - Polaco']?.length || 0;
+                break;
+            case 'mastery_pl_es':
+                currentProgress = masteryProgress['Polaco - Español']?.length || 0;
+                break;
+            case 'mastery_irregular_es':
+                currentProgress = masteryProgress['Verbos Irregulares (ES)']?.length || 0;
+                break;
+            case 'mastery_phrasal_es':
+                currentProgress = masteryProgress['Verbos con Preposición (ES)']?.length || 0;
+                break;
+            case 'mastery_idioms_es':
+                currentProgress = masteryProgress['Modismos (ES)']?.length || 0;
                 break;
             default:
                 break;
