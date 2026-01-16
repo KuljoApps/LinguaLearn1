@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/componen
 import LinguaLearnLogo from '@/components/LinguaLearnLogo';
 import { getLanguage, setLanguage } from '@/lib/storage';
 import { useState, useEffect } from 'react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 export default function Home() {
     const [language, setCurrentLanguage] = useState<'en' | 'fr'>('en');
@@ -16,11 +17,9 @@ export default function Home() {
         setCurrentLanguage(getLanguage());
     }, []);
 
-    const toggleLanguage = () => {
-        const newLang = language === 'en' ? 'fr' : 'en';
-        setLanguage(newLang);
-        setCurrentLanguage(newLang);
-        // We can reload or dynamically update content. For simplicity, we'll make links dynamic.
+    const handleLanguageChange = (lang: 'en' | 'fr') => {
+        setLanguage(lang);
+        setCurrentLanguage(lang);
     };
 
     const isFrench = language === 'fr';
@@ -72,9 +71,22 @@ export default function Home() {
                     </Link>
                 </CardContent>
                 <CardFooter className="flex justify-center gap-4 p-6 pt-0">
-                    <Button variant="outline" size="icon" onClick={toggleLanguage} title={isFrench ? "Switch to English" : "Switch to French"}>
-                        <span className="text-2xl">{isFrench ? '🇬🇧' : '🇫🇷'}</span>
-                    </Button>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="outline" size="icon" title="Change language">
+                                <span className="text-2xl">{isFrench ? '🇫🇷' : '🇬🇧'}</span>
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="center">
+                            <DropdownMenuItem onClick={() => handleLanguageChange('en')}>
+                                <span className="mr-2 text-lg">🇬🇧</span> English
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleLanguageChange('fr')}>
+                                <span className="mr-2 text-lg">🇫🇷</span> Français
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+
                     <Link href="/settings" passHref>
                         <Button variant="outline" size="icon">
                             <Settings />

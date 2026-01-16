@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -6,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import Link from "next/link";
 import { ArrowLeft, CheckCircle, Trash2 } from "lucide-react";
-import { getAchievements, clearStats, type AchievementStatus } from '@/lib/storage';
+import { getAchievements, clearStats, type AchievementStatus, getLanguage } from '@/lib/storage';
 import { allAchievements, type Achievement } from '@/lib/achievements';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
@@ -30,16 +31,30 @@ import {
 export default function AchievementsPage() {
     const [achievements, setAchievements] = useState<Record<string, AchievementStatus>>({});
     const [isClearAlertOpen, setIsClearAlertOpen] = useState(false);
+    const [language, setLanguageState] = useState<'en' | 'fr'>('en');
 
     useEffect(() => {
+        const currentLang = getLanguage();
+        setLanguageState(currentLang);
         setAchievements(getAchievements());
     }, []);
 
     const handleClearAchievements = () => {
-        clearStats(); // This clears all stats, errors, achievements, and mastery data.
+        clearStats(); // This clears all stats, errors, achievements, and mastery data for the current language.
         setAchievements(getAchievements()); // Re-fetch to update the UI to an empty state.
         setIsClearAlertOpen(false);
     };
+
+    const displayedAchievements = allAchievements.filter(achievement => {
+        const isEnglishMastery = achievement.id.startsWith('mastery_') && !achievement.id.endsWith('_fr');
+        const isFrenchMastery = achievement.id.startsWith('mastery_') && achievement.id.endsWith('_fr');
+    
+        if (language === 'fr') {
+            return !isEnglishMastery; // Show generic and French mastery
+        }
+        // language === 'en'
+        return !isFrenchMastery; // Show generic and English mastery
+    });
 
     return (
         <>
@@ -50,7 +65,7 @@ export default function AchievementsPage() {
                 <CardContent className="space-y-4 max-h-[60vh] overflow-y-auto p-6">
                      <TooltipProvider>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            {allAchievements.map((achievement: Achievement) => {
+                            {displayedAchievements.map((achievement: Achievement) => {
                                 const status = achievements[achievement.id] || { progress: 0, unlockedAt: null };
                                 const isUnlocked = !!status.unlockedAt;
                                 const progressPercentage = isUnlocked ? 100 : (status.progress / achievement.goal) * 100;
@@ -114,7 +129,7 @@ export default function AchievementsPage() {
                     <AlertDialogHeader>
                         <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                         <AlertDialogDescription>
-                            This will permanently delete all your achievements and related progress data (including stats and errors). This action cannot be undone.
+                            This will permanently delete all your achievements and related progress data (including stats and errors) for the current language. This action cannot be undone.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
