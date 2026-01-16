@@ -60,6 +60,7 @@ export default function SettingsPage() {
                             suppressHydrationWarning
                         />
                     </div>
+                    <Separator />
                     <div className="space-y-2">
                         <Label htmlFor="volume-slider" className="text-lg">Volume</Label>
                         <Slider
@@ -96,7 +97,7 @@ export default function SettingsPage() {
                         </div>
                     </div>
                 </CardContent>
-                <CardFooter className="flex justify-center p-6">
+                <CardFooter className="flex justify-center p-6 pt-2">
                     <div className="flex flex-wrap justify-center gap-4">
                         <Link href="/" passHref>
                             <Button variant="outline">
