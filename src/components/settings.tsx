@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -22,16 +22,8 @@ import {
 } from "@/components/ui/alert-dialog";
 
 export default function SettingsPage() {
-    const [settings, setSettings] = useState<AppSettings>({
-        soundsEnabled: true,
-        vibrationsEnabled: true,
-        volume: 50
-    });
+    const [settings, setSettings] = useState<AppSettings>(getSettings);
     const [isResetAlertOpen, setIsResetAlertOpen] = useState(false);
-
-    useEffect(() => {
-        setSettings(getSettings());
-    }, []);
 
     const handleSettingChange = (key: keyof AppSettings, value: any) => {
         const newSettings = { ...settings, [key]: value };
@@ -58,6 +50,7 @@ export default function SettingsPage() {
                             id="sounds-switch"
                             checked={settings.soundsEnabled}
                             onCheckedChange={(checked) => handleSettingChange('soundsEnabled', checked)}
+                            suppressHydrationWarning
                         />
                     </div>
                     <div className="space-y-4">
@@ -70,6 +63,7 @@ export default function SettingsPage() {
                             value={[settings.volume]}
                             onValueChange={(value) => handleSettingChange('volume', value[0])}
                             disabled={!settings.soundsEnabled}
+                            suppressHydrationWarning
                         />
                     </div>
                     <Separator />
@@ -79,6 +73,7 @@ export default function SettingsPage() {
                             id="vibrations-switch"
                             checked={settings.vibrationsEnabled}
                             onCheckedChange={(checked) => handleSettingChange('vibrationsEnabled', checked)}
+                            suppressHydrationWarning
                         />
                     </div>
                     <Separator />
