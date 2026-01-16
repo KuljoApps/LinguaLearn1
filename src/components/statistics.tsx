@@ -92,7 +92,7 @@ export default function StatisticsPage() {
                         <Card>
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                 <CardTitle className="text-sm font-medium">Longest Streak</CardTitle>
-                                <Flame className="h-5 w-5 text-amber" />
+                                <Flame className="h-6 w-6 text-amber" />
                             </CardHeader>
                             <CardContent>
                                 <div className="text-2xl font-bold">{stats.longestStreak.toLocaleString()}</div>
