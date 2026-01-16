@@ -6,7 +6,7 @@ import Link from "next/link";
 import { ArrowLeft, Mail, Phone, MapPin } from "lucide-react";
 import LinguaLearnLogo from "@/components/LinguaLearnLogo";
 import { Separator } from "@/components/ui/separator";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import KuljoAppsLogo from "./KuljoAppsLogo";
 
 export default function AboutPage() {
     return (
@@ -23,9 +23,7 @@ export default function AboutPage() {
                 <div className="text-left">
                     <h3 className="text-lg font-semibold text-center mb-4">Contact the Creator</h3>
                     <div className="flex items-center gap-4">
-                        <Avatar className="h-16 w-16">
-                            <AvatarFallback>KA</AvatarFallback>
-                        </Avatar>
+                        <KuljoAppsLogo width={64} height={64} />
                         <div className="space-y-1 text-sm">
                             <p className="font-bold">Kuljo Apps, Damian Kuliś</p>
                             <div className="flex items-center gap-2 text-muted-foreground">
