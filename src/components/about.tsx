@@ -23,7 +23,7 @@ export default function AboutPage() {
                 <div className="text-left">
                     <h3 className="text-lg font-semibold text-center mb-4">Contact the Creator</h3>
                     <div className="flex items-center gap-4">
-                        <KuljoAppsLogo width={77} height={77} />
+                        <KuljoAppsLogo width={85} height={85} />
                         <div className="space-y-1 text-sm">
                             <p className="font-bold">Kuljo Apps, Damian Kuliś</p>
                             <div className="flex items-center gap-2 text-muted-foreground">
