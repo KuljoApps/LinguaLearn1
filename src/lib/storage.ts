@@ -194,7 +194,7 @@ export const checkSessionAchievements = (isPerfect: boolean): Achievement[] => {
 // --- Settings Functions ---
 
 export const getSettings = (): Settings => {
-    const defaultSettings = { soundsEnabled: true, vibrationsEnabled: true, volume: 50, eyeCareLevel: 15 };
+    const defaultSettings = { soundsEnabled: true, vibrationsEnabled: true, volume: 50, eyeCareLevel: 20 };
     if (typeof window === 'undefined') {
         return defaultSettings;
     }
