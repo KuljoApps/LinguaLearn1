@@ -41,7 +41,7 @@ export default function TermsPage() {
                         The Application does not collect any personal data from its users.
                     </li>
                     <li>
-                        All usage data, which includes your quiz statistics, error history, and application settings, is stored exclusively on your local device using your web browser's `localStorage` functionality.
+                        All usage data, which includes your quiz statistics, error history, and application settings, is stored exclusively on your local device.
                     </li>
                     <li>
                         We do not collect, store, or transmit any of your data to any external servers. You have full control over your data and can clear it at any time from within the Application.
