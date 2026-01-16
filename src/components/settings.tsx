@@ -50,7 +50,7 @@ export default function SettingsPage() {
                 <CardHeader>
                     <CardTitle className="text-center text-3xl">Settings</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-6">
+                <CardContent className="space-y-4">
                     <div className="flex items-center justify-between">
                         <Label htmlFor="sounds-switch" className="text-lg">Sounds</Label>
                         <Switch
@@ -60,8 +60,8 @@ export default function SettingsPage() {
                             suppressHydrationWarning
                         />
                     </div>
-                    <div className="space-y-4">
-                        <Label htmlFor="volume-slider" className="text-base">Volume</Label>
+                    <div className="space-y-2">
+                        <Label htmlFor="volume-slider" className="text-lg">Volume</Label>
                         <Slider
                             id="volume-slider"
                             min={0}
@@ -86,7 +86,7 @@ export default function SettingsPage() {
                     <Separator />
                     <div>
                         <h3 className="text-lg font-semibold mb-2">About the app</h3>
-                        <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center justify-between">
                             <p className="text-sm text-muted-foreground pr-4">
                                 This application builds your language skills with quick fun quizzes.
                             </p>
