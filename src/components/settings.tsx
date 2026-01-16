@@ -87,7 +87,7 @@ export default function SettingsPage() {
                     <div>
                         <h3 className="text-lg font-semibold mb-2">About the app</h3>
                         <p className="text-sm text-muted-foreground mb-4">
-                            This application is a language learning tool designed to help you expand your vocabulary through interactive quizzes.
+                            This application builds your language skills with quick fun quizzes.
                         </p>
                         <div className="flex items-center justify-between">
                              <p className="text-sm text-muted-foreground pr-4">
