@@ -65,7 +65,7 @@ export default function StatisticsPage() {
                         <Card>
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                 <CardTitle className="text-sm font-medium">Total Answers</CardTitle>
-                                <CheckCircle className="h-4 w-4 text-muted-foreground" />
+                                <CheckCircle className="h-5 w-5 text-muted-foreground" />
                             </CardHeader>
                             <CardContent>
                                 <div className="text-2xl font-bold">{stats.totalAnswers.toLocaleString()}</div>
@@ -74,7 +74,7 @@ export default function StatisticsPage() {
                         <Card>
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                 <CardTitle className="text-sm font-medium">Total Errors</CardTitle>
-                                <ShieldX className="h-4 w-4 text-muted-foreground" />
+                                <ShieldX className="h-5 w-5 text-muted-foreground" />
                             </CardHeader>
                             <CardContent>
                                 <div className="text-2xl font-bold">{stats.totalErrors.toLocaleString()}</div>
@@ -83,7 +83,7 @@ export default function StatisticsPage() {
                         <Card>
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                 <CardTitle className="text-sm font-medium">Success Rate</CardTitle>
-                                <Percent className="h-4 w-4 text-muted-foreground" />
+                                <Percent className="h-5 w-5 text-muted-foreground" />
                             </CardHeader>
                             <CardContent>
                                 <div className="text-2xl font-bold">{successRate}%</div>
@@ -92,7 +92,7 @@ export default function StatisticsPage() {
                         <Card>
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                 <CardTitle className="text-sm font-medium">Longest Streak</CardTitle>
-                                <Flame className="h-4 w-4 text-muted-foreground" />
+                                <Flame className="h-5 w-5 text-muted-foreground" />
                             </CardHeader>
                             <CardContent>
                                 <div className="text-2xl font-bold">{stats.longestStreak.toLocaleString()}</div>
