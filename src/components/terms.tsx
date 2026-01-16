@@ -1,18 +1,26 @@
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Download } from "lucide-react";
 
 export default function TermsPage() {
     const lastUpdatedDate = "July 26, 2024";
 
     return (
         <Card className="w-full max-w-2xl shadow-2xl">
-            <CardHeader>
-                <CardTitle className="text-center text-3xl">Terms of Service</CardTitle>
+            <CardHeader className="items-center text-center">
+                <CardTitle className="text-3xl">Terms of Service</CardTitle>
+                <div className="pt-2">
+                    <a href="https://github.com" target="_blank" rel="noopener noreferrer" download>
+                        <Button variant="outline">
+                            <Download className="mr-2 h-4 w-4" />
+                            Download
+                        </Button>
+                    </a>
+                </div>
             </CardHeader>
             <CardContent className="space-y-6 text-sm max-h-[60vh] overflow-y-auto p-6">
-                <p className="text-muted-foreground">Last updated: {lastUpdatedDate}</p>
+                <p className="text-muted-foreground text-center">Last updated: {lastUpdatedDate}</p>
 
                 <h3 className="text-lg font-semibold">1. Introduction</h3>
                 <p>
