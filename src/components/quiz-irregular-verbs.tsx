@@ -25,27 +25,70 @@ import { updateStats, addError } from "@/lib/storage";
 import { playSound } from "@/lib/sounds";
 
 const LinguaLearnLogo = (props) => (
-    <svg width="48" height="48" viewBox="0 0 100 85" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-        {/* Book */}
-        <path d="M50 52C69.33 52 85 57.58 85 65.5V70.5C85 65.91 69.33 60.33 50 60.33C30.67 60.33 15 65.91 15 70.5V65.5C15 57.58 30.67 52 50 52Z" fill="#012169"/>
-        <path d="M95 65.5C95 57.58 79.33 52 60 52V77C79.33 77 95 71.42 95 63.5V65.5Z" fill="#012169"/>
-        <path d="M5 65.5C5 57.58 20.67 52 40 52V77C20.67 77 5 71.42 5 63.5V65.5Z" fill="#012169"/>
-        <path d="M90 65.5C90 57.58 74.33 52 55 52V73C74.33 73 90 67.42 90 59.5V65.5Z" fill="white"/>
-        <path d="M10 65.5C10 57.58 25.67 52 45 52V73C25.67 73 10 67.42 10 59.5V65.5Z" fill="white"/>
-        <path d="M50 53.5V73" stroke="#C8102E" strokeWidth="2"/>
-
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" {...props}>
         {/* Mortarboard */}
-        <path d="M50 5L10 25L50 45L90 25L50 5Z" fill="#C8102E"/>
-        {/* White lines (St. George's cross) */}
-        <path d="M10 25L90 25" stroke="white" strokeWidth="5"/>
-        <path d="M50 5V45" stroke="white" strokeWidth="5"/>
-        {/* Blue outline */}
-        <path d="M50 5L10 25L50 45L90 25L50 5Z" stroke="#012169" strokeWidth="3.5" strokeLinejoin="round"/>
-        
+        <polygon
+            points="256 40 460 120 256 200 52 120"
+            fill="#012169"/>
+
+        {/* Mortarboard base */}
+        <rect
+            x="176"
+            y="200"
+            width="160"
+            height="28"
+            rx="6"
+            fill="#C8102E"/>
+
         {/* Tassel */}
-        <path d="M88 25V31" stroke="#012169" strokeWidth="2"/>
-        <path d="M88 38C90.2091 38 92 36.2091 92 34C92 31.7909 90.2091 30 88 30C85.7909 30 84 31.7909 84 34C84 36.2091 85.7909 38 88 38Z" fill="#012169"/>
-        <path d="M88 31.5a2.5 2.5 0 0 0 0 5" stroke="white" strokeWidth="1.5"/>
+        <line
+            x1="460"
+            y1="120"
+            x2="460"
+            y2="260"
+            stroke="#FFFFFF"
+            strokeWidth="8"/>
+
+        <circle
+            cx="460"
+            cy="270"
+            r="10"
+            fill="#FFFFFF"/>
+
+        {/* Book: left page */}
+        <path
+            d="M96 280
+               Q176 250 256 280
+               V420
+               Q176 400 96 420 Z"
+            fill="#FFFFFF"
+            stroke="#012169"
+            strokeWidth="8"/>
+
+        {/* Book: right page */}
+        <path
+            d="M256 280
+               Q336 250 416 280
+               V420
+               Q336 400 256 420 Z"
+            fill="#FFFFFF"
+            stroke="#012169"
+            strokeWidth="8"/>
+
+        {/* Book spine */}
+        <line
+            x1="256"
+            y1="280"
+            x2="256"
+            y2="420"
+            stroke="#C8102E"
+            strokeWidth="6"/>
+
+        {/* Page details */}
+        <line x1="140" y1="320" x2="230" y2="330" stroke="#012169" strokeWidth="4"/>
+        <line x1="140" y1="350" x2="230" y2="360" stroke="#012169" strokeWidth="4"/>
+        <line x1="282" y1="330" x2="372" y2="320" stroke="#012169" strokeWidth="4"/>
+        <line x1="282" y1="360" x2="372" y2="350" stroke="#012169" strokeWidth="4"/>
     </svg>
 );
 
