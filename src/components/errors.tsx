@@ -29,7 +29,6 @@ import {
 interface AggregatedError {
     word: string;
     correctAnswer: string;
-    quiz: string;
     count: number;
     userAnswers: Set<string>;
 }
@@ -72,7 +71,6 @@ export default function ErrorsPage() {
                 entry = {
                     word: error.word,
                     correctAnswer: error.correctAnswer,
-                    quiz: error.quiz,
                     count: 0,
                     userAnswers: new Set<string>(),
                 };
@@ -100,9 +98,8 @@ export default function ErrorsPage() {
                         <TableRow>
                             <TableHead className="w-[80px] text-center">Count</TableHead>
                             <TableHead>Word</TableHead>
-                            <TableHead>Correct Answer</TableHead>
                             <TableHead>Your Answers</TableHead>
-                            <TableHead>Quiz</TableHead>
+                            <TableHead>Correct Answer</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -110,11 +107,10 @@ export default function ErrorsPage() {
                             <TableRow key={index}>
                                 <TableCell className="font-bold text-center">{error.count}</TableCell>
                                 <TableCell className="font-medium">{error.word}</TableCell>
-                                <TableCell className="text-success">{error.correctAnswer}</TableCell>
                                 <TableCell className="text-destructive max-w-xs break-words">
                                     {Array.from(error.userAnswers).join(', ')}
                                 </TableCell>
-                                <TableCell>{error.quiz}</TableCell>
+                                <TableCell className="text-success">{error.correctAnswer}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
@@ -127,18 +123,16 @@ export default function ErrorsPage() {
                 <TableHeader>
                     <TableRow>
                         <TableHead>Word</TableHead>
-                        <TableHead>Correct Answer</TableHead>
                         <TableHead>Your Answer</TableHead>
-                        <TableHead>Quiz</TableHead>
+                        <TableHead>Correct Answer</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {filteredErrors.map((error) => (
                         <TableRow key={error.id}>
                             <TableCell className="font-medium">{error.word}</TableCell>
-                            <TableCell className="text-success">{error.correctAnswer}</TableCell>
                             <TableCell className="text-destructive">{error.userAnswer}</TableCell>
-                            <TableCell>{error.quiz}</TableCell>
+                            <TableCell className="text-success">{error.correctAnswer}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
