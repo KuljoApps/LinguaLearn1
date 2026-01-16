@@ -41,6 +41,7 @@ const PAUSE_PENALTY = 10;
 const MIN_TIME_FOR_PAUSE = 11;
 const QUIZ_NAME = 'Irregular Verbs (FR)';
 const TIME_UPDATE_INTERVAL = 5; // seconds
+const QUIZ_LENGTH = 10;
 
 
 export default function QuizIrregularVerbsFr() {
@@ -79,7 +80,7 @@ export default function QuizIrregularVerbsFr() {
   }, [toast]);
   
   useEffect(() => {
-    setQuestions(shuffleArray(initialQuestions));
+    setQuestions(shuffleArray(initialQuestions).slice(0, QUIZ_LENGTH));
   }, []);
 
   // Finalize session achievements
@@ -263,7 +264,7 @@ export default function QuizIrregularVerbsFr() {
   }
 
   const restartTest = () => {
-    setQuestions(shuffleArray(initialQuestions));
+    setQuestions(shuffleArray(initialQuestions).slice(0, QUIZ_LENGTH));
     setCurrentQuestionIndex(0);
     setScore(0);
     setSelectedTranslation(null);

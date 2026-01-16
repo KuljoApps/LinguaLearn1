@@ -41,6 +41,7 @@ const PAUSE_PENALTY = 5;
 const MIN_TIME_FOR_PAUSE = 6;
 const QUIZ_NAME = 'Polish - English';
 const TIME_UPDATE_INTERVAL = 5; // seconds
+const QUIZ_LENGTH = 10;
 
 
 export default function QuizPlEn() {
@@ -74,7 +75,7 @@ export default function QuizPlEn() {
   }, [toast]);
   
   useEffect(() => {
-    setQuestions(shuffleArray(initialQuestions));
+    setQuestions(shuffleArray(initialQuestions).slice(0, QUIZ_LENGTH));
   }, []);
 
   // Finalize session achievements
@@ -214,7 +215,7 @@ export default function QuizPlEn() {
   }
 
   const restartTest = () => {
-    setQuestions(shuffleArray(initialQuestions));
+    setQuestions(shuffleArray(initialQuestions).slice(0, QUIZ_LENGTH));
     setCurrentQuestionIndex(0);
     setScore(0);
     setSelectedAnswer(null);

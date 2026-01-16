@@ -35,6 +35,7 @@ function shuffleArray<T>(array: T[]): T[] {
 const QUESTION_TIME_LIMIT = 15;
 const PAUSE_PENALTY = 5;
 const MIN_TIME_FOR_PAUSE = 6;
+const QUIZ_LENGTH = 10;
 
 
 export default function QuizEnPl() {
@@ -54,7 +55,7 @@ export default function QuizEnPl() {
   const router = useRouter();
   
   useEffect(() => {
-    setQuestions(shuffleArray(initialQuestions));
+    setQuestions(shuffleArray(initialQuestions).slice(0, QUIZ_LENGTH));
   }, []);
 
   useEffect(() => {
@@ -152,7 +153,7 @@ export default function QuizEnPl() {
   }
 
   const restartTest = () => {
-    setQuestions(shuffleArray(initialQuestions));
+    setQuestions(shuffleArray(initialQuestions).slice(0, QUIZ_LENGTH));
     setCurrentQuestionIndex(0);
     setScore(0);
     setSelectedAnswer(null);
