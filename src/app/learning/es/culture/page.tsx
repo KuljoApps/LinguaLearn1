@@ -16,7 +16,7 @@ export default function CultureEsPage() {
                 </CardHeader>
                 <CardContent className="flex flex-col space-y-4 px-6 pt-0 pb-4">
                     <Link href="/learning/es/culture/about" passHref>
-                         <Button className="w-full h-16 text-lg flex items-center justify-start px-4">
+                         <Button className="w-full h-16 text-lg flex items-center justify-center">
                             <span className="text-4xl mr-4">🇪🇸</span>
                             Sobre España
                         </Button>
@@ -25,25 +25,25 @@ export default function CultureEsPage() {
                          <Link href="/learning/es/culture/cities" passHref>
                             <Button variant="outline" className="w-full h-24 flex-col gap-2 text-lg border-2 border-primary whitespace-normal text-center">
                                 <Building2 className="h-12 w-12 text-deep-purple" />
-                                Ciudades más importantes
+                                Ciudades importantes
                             </Button>
                         </Link>
                         <Link href="/learning/es/culture/monuments" passHref>
                             <Button variant="outline" className="w-full h-24 flex-col gap-2 text-lg border-2 border-primary whitespace-normal text-center">
                                 <Landmark className="h-12 w-12 text-deep-purple" />
-                                Monumentos más importantes
+                                Monumentos importantes
                             </Button>
                         </Link>
                         <Link href="/learning/es/culture/traditions" passHref>
                             <Button variant="outline" className="w-full h-24 flex-col gap-2 text-lg border-2 border-primary whitespace-normal text-center">
                                 <Handshake className="h-12 w-12 text-deep-purple" />
-                                Tradiciones y costumbres
+                                Tradiciones
                             </Button>
                         </Link>
                         <Link href="/learning/es/culture/history" passHref>
                             <Button variant="outline" className="w-full h-24 flex-col gap-2 text-lg border-2 border-primary whitespace-normal text-center">
                                 <ScrollText className="h-12 w-12 text-deep-purple" />
-                                Historia en breve
+                                Historia
                             </Button>
                         </Link>
                     </div>

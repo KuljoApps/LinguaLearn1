@@ -16,7 +16,7 @@ export default function CultureDePage() {
                 </CardHeader>
                 <CardContent className="flex flex-col space-y-4 px-6 pt-0 pb-4">
                     <Link href="/learning/de/culture/about" passHref>
-                        <Button className="w-full h-16 text-lg flex items-center justify-start px-4">
+                        <Button className="w-full h-16 text-lg flex items-center justify-center">
                             <span className="text-4xl mr-4">🇩🇪</span>
                             Über Deutschland
                         </Button>
@@ -37,13 +37,13 @@ export default function CultureDePage() {
                         <Link href="/learning/de/culture/traditions" passHref>
                             <Button variant="outline" className="w-full h-24 flex-col gap-2 text-lg border-2 border-primary whitespace-normal text-center">
                                 <Handshake className="h-12 w-12 text-deep-purple" />
-                                Traditionen & Bräuche
+                                Traditionen
                             </Button>
                         </Link>
                         <Link href="/learning/de/culture/history" passHref>
                             <Button variant="outline" className="w-full h-24 flex-col gap-2 text-lg border-2 border-primary whitespace-normal text-center">
                                 <ScrollText className="h-12 w-12 text-deep-purple" />
-                                Geschichte in Kürze
+                                Geschichte
                             </Button>
                         </Link>
                     </div>

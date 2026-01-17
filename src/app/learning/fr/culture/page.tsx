@@ -16,7 +16,7 @@ export default function CultureFrPage() {
                 </CardHeader>
                 <CardContent className="flex flex-col space-y-4 px-6 pt-0 pb-4">
                     <Link href="/learning/fr/culture/about" passHref>
-                        <Button className="w-full h-16 text-lg flex items-center justify-start px-4">
+                        <Button className="w-full h-16 text-lg flex items-center justify-center">
                             <span className="text-4xl mr-4">🇫🇷</span>
                             À propos de la France
                         </Button>
@@ -25,25 +25,25 @@ export default function CultureFrPage() {
                          <Link href="/learning/fr/culture/cities" passHref>
                             <Button variant="outline" className="w-full h-24 flex-col gap-2 text-lg border-2 border-primary whitespace-normal text-center">
                                 <Building2 className="h-12 w-12 text-deep-purple" />
-                                Villes les plus importantes
+                                Villes importantes
                             </Button>
                         </Link>
                         <Link href="/learning/fr/culture/monuments" passHref>
                             <Button variant="outline" className="w-full h-24 flex-col gap-2 text-lg border-2 border-primary whitespace-normal text-center">
                                 <Landmark className="h-12 w-12 text-deep-purple" />
-                                Monuments les plus importants
+                                Monuments importants
                             </Button>
                         </Link>
                         <Link href="/learning/fr/culture/traditions" passHref>
                             <Button variant="outline" className="w-full h-24 flex-col gap-2 text-lg border-2 border-primary whitespace-normal text-center">
                                 <Handshake className="h-12 w-12 text-deep-purple" />
-                                Traditions et coutumes
+                                Traditions
                             </Button>
                         </Link>
                         <Link href="/learning/fr/culture/history" passHref>
                             <Button variant="outline" className="w-full h-24 flex-col gap-2 text-lg border-2 border-primary whitespace-normal text-center">
                                 <ScrollText className="h-12 w-12 text-deep-purple" />
-                                Histoire en bref
+                                Histoire
                             </Button>
                         </Link>
                     </div>
