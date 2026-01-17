@@ -56,7 +56,7 @@ export default function TensesPage({ title, backHref, tenses, language }: Tenses
              <div className="space-y-6">
                 {groups.map((group) => (
                     <div key={group.title}>
-                        <h3 className="text-xl font-bold tracking-tight mb-2 text-primary">{group.title}</h3>
+                        <h3 className="text-2xl font-bold italic tracking-tight mb-2 text-primary">{group.title}</h3>
                         <div className="pl-2 border-l-2 border-primary/20">
                             <TenseAccordion tenses={group.tenses} />
                         </div>
