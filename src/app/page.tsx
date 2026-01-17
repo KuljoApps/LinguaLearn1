@@ -1,7 +1,7 @@
 
 "use client";
 
-import { BookOpen, Dumbbell, Sparkles, Settings, BarChart, ShieldX, MessageSquareQuote, Layers, Trophy } from 'lucide-react';
+import { BookOpen, Dumbbell, Sparkles, Settings, BarChart, ShieldX, MessageSquareQuote, Layers, Trophy, GraduationCap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
@@ -9,6 +9,7 @@ import LinguaLearnLogo from '@/components/LinguaLearnLogo';
 import { getLanguage, setLanguage } from '@/lib/storage';
 import { useState, useEffect } from 'react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Separator } from '@/components/ui/separator';
 
 export default function Home() {
     const [language, setCurrentLanguage] = useState<'en' | 'fr' | 'de' | 'it' | 'es'>('en');
@@ -75,6 +76,14 @@ export default function Home() {
         return "Idioms";
     }
 
+    const getLearningButtonText = () => {
+        if (isFrench) return "Apprentissage";
+        if (isGerman) return "Lernen";
+        if (isItalian) return "Apprendimento";
+        if (isSpanish) return "Aprendizaje";
+        return "Learning";
+    };
+
     const getFlag = () => {
         if (isFrench) return '🇫🇷';
         if (isGerman) return '🇩🇪';
@@ -128,6 +137,13 @@ export default function Home() {
                         </Button>
                     </Link>
                 </CardContent>
+                <div className="px-6 pb-6">
+                    <Separator />
+                    <Button variant="outline" className="w-full h-12 text-lg mt-6 border-2 border-primary">
+                        <GraduationCap className="mr-2 h-5 w-5" />
+                        {getLearningButtonText()}
+                    </Button>
+                </div>
                 <CardFooter className="flex justify-center gap-4 p-6 pt-0">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
