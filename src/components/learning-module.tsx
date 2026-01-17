@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useMemo } from 'react';
@@ -9,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
-import { ArrowLeft, Search, GraduationCap } from 'lucide-react';
+import { ArrowLeft, Search, BookCopy } from 'lucide-react';
 import type { Language } from '@/lib/storage';
 
 // A union type for all possible question structures
@@ -18,7 +17,7 @@ type AnyQuestion = (
     { id: number; verb: string; form2: string; form3: string; correctTranslation: string; translationOptions?: string[] }
 );
 
-interface LearningModuleProps {
+interface QuestionBaseProps {
     language: Language;
     uiTexts: {
         title: string;
@@ -38,7 +37,7 @@ function isIrregularVerb(q: AnyQuestion): q is { id: number; verb: string; form2
     return 'verb' in q;
 }
 
-export default function LearningModule({ uiTexts, questionSets, backHref }: LearningModuleProps) {
+export default function QuestionBase({ uiTexts, questionSets, backHref }: QuestionBaseProps) {
     const [searchTerm, setSearchTerm] = useState('');
 
     const filteredSets = useMemo(() => {
@@ -74,7 +73,7 @@ export default function LearningModule({ uiTexts, questionSets, backHref }: Lear
         <Card className="w-full max-w-2xl shadow-2xl">
             <CardHeader className="text-center space-y-4">
                 <div className="flex items-center justify-center gap-4">
-                    <GraduationCap className="h-8 w-8" />
+                    <BookCopy className="h-8 w-8" />
                     <CardTitle className="text-3xl">{uiTexts.title}</CardTitle>
                 </div>
                 <div className="relative">

@@ -1,37 +1,35 @@
-
-import LearningModule from '@/components/learning-module';
-import { questions as dePlQuestions } from '@/lib/questions-de-pl';
-import { questions as plDeQuestions } from '@/lib/questions-pl-de';
-import { questions as irregularVerbsDeQuestions } from '@/lib/questions-irregular-verbs-de';
-import { questions as separableVerbsDeQuestions } from '@/lib/questions-phrasal-verbs-de';
-import { questions as idiomsDeQuestions } from '@/lib/questions-idioms-de';
-import type { Language } from '@/lib/storage';
+import { BookCopy, ArrowLeft, GraduationCap } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 
 export default function LearningDePage() {
-    const language: Language = 'de';
-    const uiTexts = {
-        title: "Lernen",
-        searchPlaceholder: "Fragen durchsuchen...",
-        noResults: "Keine Ergebnisse für Ihre Suche gefunden.",
-        back: "Zurück zur Startseite"
-    };
-
-    const questionSets = [
-        { title: 'Deutsch - Polnisch', questions: dePlQuestions },
-        { title: 'Polnisch - Deutsch', questions: plDeQuestions },
-        { title: 'Unregelmäßige Verben', questions: irregularVerbsDeQuestions },
-        { title: 'Trennbare Verben', questions: separableVerbsDeQuestions },
-        { title: 'Redewendungen', questions: idiomsDeQuestions },
-    ];
-
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
-            <LearningModule 
-                language={language}
-                uiTexts={uiTexts}
-                questionSets={questionSets}
-                backHref="/"
-            />
+            <Card className="w-full max-w-md shadow-2xl">
+                <CardHeader>
+                    <div className="flex items-center justify-center gap-4">
+                        <GraduationCap className="h-8 w-8" />
+                        <h1 className="text-3xl font-bold tracking-tight">Lernen</h1>
+                    </div>
+                </CardHeader>
+                <CardContent className="flex flex-col space-y-4 p-6">
+                    <Link href="/learning/de/questions" passHref>
+                        <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
+                            <BookCopy className="mr-2 h-5 w-5" />
+                            Fragendatenbank
+                        </Button>
+                    </Link>
+                    {/* Placeholder for future learning items */}
+                </CardContent>
+                <CardFooter className="flex justify-center p-6">
+                    <Link href="/" passHref>
+                        <Button variant="outline">
+                            <ArrowLeft className="mr-2 h-4 w-4" /> Zurück zur Startseite
+                        </Button>
+                    </Link>
+                </CardFooter>
+            </Card>
         </main>
     );
 }

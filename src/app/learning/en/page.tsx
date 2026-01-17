@@ -1,37 +1,35 @@
-
-import LearningModule from '@/components/learning-module';
-import { questions as enPlQuestions } from '@/lib/questions-en-pl';
-import { questions as plEnQuestions } from '@/lib/questions-pl-en';
-import { questions as irregularVerbsQuestions } from '@/lib/questions-irregular-verbs';
-import { questions as phrasalVerbsQuestions } from '@/lib/questions-phrasal-verbs';
-import { questions as idiomsQuestions } from '@/lib/questions-idioms';
-import type { Language } from '@/lib/storage';
+import { BookCopy, ArrowLeft, GraduationCap } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 
 export default function LearningEnPage() {
-    const language: Language = 'en';
-    const uiTexts = {
-        title: "Learning",
-        searchPlaceholder: "Search questions...",
-        noResults: "No results found for your search.",
-        back: "Back to Home"
-    };
-
-    const questionSets = [
-        { title: 'English - Polish', questions: enPlQuestions },
-        { title: 'Polish - English', questions: plEnQuestions },
-        { title: 'Irregular Verbs', questions: irregularVerbsQuestions },
-        { title: 'Phrasal Verbs', questions: phrasalVerbsQuestions },
-        { title: 'Idioms', questions: idiomsQuestions },
-    ];
-
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
-            <LearningModule 
-                language={language}
-                uiTexts={uiTexts}
-                questionSets={questionSets}
-                backHref="/"
-            />
+            <Card className="w-full max-w-md shadow-2xl">
+                <CardHeader>
+                    <div className="flex items-center justify-center gap-4">
+                        <GraduationCap className="h-8 w-8" />
+                        <h1 className="text-3xl font-bold tracking-tight">Learning</h1>
+                    </div>
+                </CardHeader>
+                <CardContent className="flex flex-col space-y-4 p-6">
+                    <Link href="/learning/en/questions" passHref>
+                        <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
+                            <BookCopy className="mr-2 h-5 w-5" />
+                            Question Base
+                        </Button>
+                    </Link>
+                    {/* Placeholder for future learning items */}
+                </CardContent>
+                <CardFooter className="flex justify-center p-6">
+                    <Link href="/" passHref>
+                        <Button variant="outline">
+                            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Home
+                        </Button>
+                    </Link>
+                </CardFooter>
+            </Card>
         </main>
     );
 }

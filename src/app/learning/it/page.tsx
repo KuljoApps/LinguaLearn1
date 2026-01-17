@@ -1,37 +1,35 @@
-
-import LearningModule from '@/components/learning-module';
-import { questions as itPlQuestions } from '@/lib/questions-it-pl';
-import { questions as plItQuestions } from '@/lib/questions-pl-it';
-import { questions as irregularVerbsItQuestions } from '@/lib/questions-irregular-verbs-it';
-import { questions as falsiAmiciItQuestions } from '@/lib/questions-phrasal-verbs-it';
-import { questions as idiomsItQuestions } from '@/lib/questions-idioms-it';
-import type { Language } from '@/lib/storage';
+import { BookCopy, ArrowLeft, GraduationCap } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 
 export default function LearningItPage() {
-    const language: Language = 'it';
-    const uiTexts = {
-        title: "Apprendimento",
-        searchPlaceholder: "Cerca domande...",
-        noResults: "Nessun risultato trovato per la tua ricerca.",
-        back: "Torna alla Home"
-    };
-
-    const questionSets = [
-        { title: 'Italiano - Polacco', questions: itPlQuestions },
-        { title: 'Polacco - Italiano', questions: plItQuestions },
-        { title: 'Verbi Irregolari', questions: irregularVerbsItQuestions },
-        { title: 'Falsi Amici', questions: falsiAmiciItQuestions },
-        { title: 'Modi di dire', questions: idiomsItQuestions },
-    ];
-
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
-            <LearningModule 
-                language={language}
-                uiTexts={uiTexts}
-                questionSets={questionSets}
-                backHref="/"
-            />
+            <Card className="w-full max-w-md shadow-2xl">
+                <CardHeader>
+                    <div className="flex items-center justify-center gap-4">
+                        <GraduationCap className="h-8 w-8" />
+                        <h1 className="text-3xl font-bold tracking-tight">Apprendimento</h1>
+                    </div>
+                </CardHeader>
+                <CardContent className="flex flex-col space-y-4 p-6">
+                    <Link href="/learning/it/questions" passHref>
+                        <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
+                            <BookCopy className="mr-2 h-5 w-5" />
+                            Base di Domande
+                        </Button>
+                    </Link>
+                    {/* Placeholder for future learning items */}
+                </CardContent>
+                <CardFooter className="flex justify-center p-6">
+                    <Link href="/" passHref>
+                        <Button variant="outline">
+                            <ArrowLeft className="mr-2 h-4 w-4" /> Torna alla Home
+                        </Button>
+                    </Link>
+                </CardFooter>
+            </Card>
         </main>
     );
 }
