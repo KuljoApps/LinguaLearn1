@@ -137,14 +137,16 @@ export default function Home() {
                         </Button>
                     </Link>
                 </CardContent>
-                <div className="px-6 pb-4">
-                    <Separator />
-                    <Button variant="outline" className="w-full h-12 text-lg mt-4 border-2 border-primary">
-                        <GraduationCap className="mr-2 h-5 w-5" />
-                        {getLearningButtonText()}
-                    </Button>
+                <div className="px-6 pb-2">
+                    <Separator className="mb-2"/>
+                    <Link href={isFrench ? "/learning/fr" : isGerman ? "/learning/de" : isItalian ? "/learning/it" : isSpanish ? "/learning/es" : "/learning/en"} passHref>
+                        <Button variant="outline" className="w-full h-12 text-lg mt-2 border-2 border-primary">
+                            <GraduationCap className="mr-2 h-5 w-5" />
+                            {getLearningButtonText()}
+                        </Button>
+                    </Link>
                 </div>
-                <CardFooter className="flex justify-center gap-4 p-6 pt-2">
+                <CardFooter className="flex justify-center gap-4 p-6 pt-4">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="outline" size="icon" title="Change language">
