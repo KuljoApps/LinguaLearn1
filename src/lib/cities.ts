@@ -1,0 +1,89 @@
+import type { Language } from './storage';
+
+export interface CityData {
+  name: { pl: string; native: string; };
+  imageHint: string;
+  description: { pl: string; native: string; };
+  facts: {
+    population: string;
+    area: { pl: string; native: string; };
+    landmark: { pl: string; native: string; };
+  };
+}
+
+export interface CitiesPageData {
+  lang: Language;
+  countryName: { pl: string; native: string; };
+  cities: CityData[];
+  ui: {
+    title: { pl: string; native: string; };
+    backButton: { pl: string; native: string; };
+    language: { pl: string; native: string; };
+    population: { pl: string; native: string; };
+    area: { pl: string; native: string; };
+    landmark: { pl: string; native: string; };
+  }
+}
+
+export const allCitiesData: Record<Language, CitiesPageData> = {
+  en: {
+    lang: 'en',
+    countryName: { pl: 'Anglia', native: 'England' },
+    cities: [
+      { name: { pl: 'Londyn', native: 'London' }, imageHint: 'london city', description: { pl: 'Stolica Anglii, globalne centrum finansów, kultury i mody. Pełne ikonicznych zabytków, światowej klasy muzeów i tętniących życiem teatrów.', native: 'The capital of England, a global hub for finance, culture, and fashion. Full of iconic landmarks, world-class museums, and vibrant theatres.' }, facts: { population: '~9.0 million', area: { pl: '1,572 km²', native: '607 sq mi' }, landmark: { pl: 'Pałac Buckingham', native: 'Buckingham Palace' } } },
+      { name: { pl: 'Manchester', native: 'Manchester' }, imageHint: 'manchester industrial', description: { pl: 'Serce rewolucji przemysłowej, znane z bogatej sceny muzycznej i dwóch potężnych klubów piłkarskich. Miasto łączy dziedzictwo industrialne z nowoczesną energią.', native: 'The heart of the Industrial Revolution, known for its rich music scene and two powerful football clubs. The city blends industrial heritage with modern energy.' }, facts: { population: '~550,000', area: { pl: '115 km²', native: '44.6 sq mi' }, landmark: { pl: 'Stadion Old Trafford', native: 'Old Trafford Stadium' } } },
+      { name: { pl: 'Birmingham', native: 'Birmingham' }, imageHint: 'birmingham canal', description: { pl: 'Kluczowe miasto przemysłowe z rozległą siecią kanałów, większą niż w Wenecji. Dziś to centrum handlu, kultury i międzynarodowych wydarzeń.', native: 'A key industrial city with an extensive canal network, larger than Venice\'s. Today, it is a center for commerce, culture, and international events.' }, facts: { population: '~1.1 million', area: { pl: '267 km²', native: '103.4 sq mi' }, landmark: { pl: 'Biblioteka w Birmingham', native: 'Library of Birmingham' } } },
+      { name: { pl: 'Liverpool', native: 'Liverpool' }, imageHint: 'liverpool dock', description: { pl: 'Miasto Beatlesów i morskiej historii. Jego nabrzeże, z historycznym Albert Dock, jest wpisane na listę UNESCO i tętni życiem.', native: 'The city of The Beatles and maritime history. Its waterfront, with the historic Albert Dock, is a UNESCO World Heritage site and buzzes with life.' }, facts: { population: '~500,000', area: { pl: '111 km²', native: '43.2 sq mi' }, landmark: { pl: 'Albert Dock', native: 'Albert Dock' } } },
+      { name: { pl: 'Bristol', native: 'Bristol' }, imageHint: 'bristol bridge', description: { pl: 'Znany z prężnej sceny kulturalnej, sztuki ulicznej (w tym Banksy\'ego) i ikonicznego mostu wiszącego Clifton. To miasto kreatywności i innowacji.', native: 'Known for its vibrant cultural scene, street art (including Banksy), and the iconic Clifton Suspension Bridge. It is a city of creativity and innovation.' }, facts: { population: '~470,000', area: { pl: '110 km²', native: '42 sq mi' }, landmark: { pl: 'Most Wiszący Clifton', native: 'Clifton Suspension Bridge' } } },
+    ],
+    ui: { title: { pl: 'Ważne Miasta Anglii', native: 'Important Cities of England' }, backButton: { pl: 'Powrót do Kultury', native: 'Back to Culture' }, language: { pl: 'Język', native: 'Language' }, population: { pl: 'Populacja', native: 'Population' }, area: { pl: 'Powierzchnia', native: 'Area' }, landmark: { pl: 'Główny zabytek', native: 'Key Landmark' } }
+  },
+  de: {
+    lang: 'de',
+    countryName: { pl: 'Niemcy', native: 'Deutschland' },
+    cities: [
+      { name: { pl: 'Berlin', native: 'Berlin' }, imageHint: 'berlin brandenburg gate', description: { pl: 'Stolica Niemiec, miasto historii, sztuki i nieskończonych możliwości. Symbolami są Brama Brandenburska i pozostałości Muru Berlińskiego.', native: 'The capital of Germany, a city of history, art, and endless possibilities. Its symbols are the Brandenburg Gate and the remnants of the Berlin Wall.' }, facts: { population: '~3.7 million', area: { pl: '891 km²', native: '344 sq mi' }, landmark: { pl: 'Brama Brandenburska', native: 'Brandenburger Tor' } } },
+      { name: { pl: 'Hamburg', native: 'Hamburg' }, imageHint: 'hamburg speicherstadt', description: { pl: 'Główne miasto portowe Niemiec z siecią kanałów i historycznym Speicherstadt. Słynie z Elbphilharmonie i tętniącego życiem portu.', native: 'Germany\'s main port city with a network of canals and the historic Speicherstadt. Famous for the Elbphilharmonie and its bustling harbor.' }, facts: { population: '~1.8 million', area: { pl: '755 km²', native: '292 sq mi' }, landmark: { pl: 'Speicherstadt', native: 'Speicherstadt' } } },
+      { name: { pl: 'Monachium', native: 'München' }, imageHint: 'munich marienplatz', description: { pl: 'Stolica Bawarii, znana z Oktoberfest, kultury piwnej i bliskości Alp. Serce miasta to tętniący życiem Marienplatz.', native: 'The capital of Bavaria, known for Oktoberfest, beer culture, and proximity to the Alps. The heart of the city is the vibrant Marienplatz.' }, facts: { population: '~1.5 million', area: { pl: '310 km²', native: '120 sq mi' }, landmark: { pl: 'Marienplatz', native: 'Marienplatz' } } },
+      { name: { pl: 'Frankfurt nad Menem', native: 'Frankfurt am Main' }, imageHint: 'frankfurt skyline', description: { pl: 'Finansowe centrum Niemiec i Europy, siedziba Europejskiego Banku Centralnego. Charakterystyczna panorama wieżowców nadaje mu przydomek "Mainhattan".', native: 'The financial center of Germany and Europe, home to the European Central Bank. Its characteristic skyline of skyscrapers gives it the nickname "Mainhattan".' }, facts: { population: '~770,000', area: { pl: '248 km²', native: '95.8 sq mi' }, landmark: { pl: 'Dzielnica bankowa', native: 'Bankenviertel' } } },
+      { name: { pl: 'Kolonia', native: 'Köln' }, imageHint: 'cologne cathedral', description: { pl: 'Miasto o ponad 2000-letniej historii z majestatyczną katedrą (Kölner Dom) wpisaną na listę UNESCO. Znane z radosnej atmosfery i karnawału.', native: 'A city with over 2000 years of history, featuring the majestic Cologne Cathedral (Kölner Dom), a UNESCO World Heritage site. Known for its cheerful atmosphere and carnival.' }, facts: { population: '~1.1 million', area: { pl: '405 km²', native: '156 sq mi' }, landmark: { pl: 'Katedra w Kolonii', native: 'Kölner Dom' } } },
+    ],
+    ui: { title: { pl: 'Ważne Miasta Niemiec', native: 'Wichtige Städte Deutschlands' }, backButton: { pl: 'Powrót do Kultury', native: 'Zurück zur Kultur' }, language: { pl: 'Język', native: 'Sprache' }, population: { pl: 'Populacja', native: 'Bevölkerung' }, area: { pl: 'Powierzchnia', native: 'Fläche' }, landmark: { pl: 'Główny zabytek', native: 'Hauptsehenswürdigkeit' } }
+  },
+  fr: {
+    lang: 'fr',
+    countryName: { pl: 'Francja', native: 'France' },
+    cities: [
+      { name: { pl: 'Paryż', native: 'Paris' }, imageHint: 'paris eiffel tower', description: { pl: 'Stolica Francji, miasto miłości, sztuki i świateł. Dom ikonicznej Wieży Eiffla, Luwru i katedry Notre-Dame.', native: 'The capital of France, the city of love, art, and lights. Home to the iconic Eiffel Tower, the Louvre, and Notre-Dame Cathedral.' }, facts: { population: '~2.1 million', area: { pl: '105 km²', native: '40.7 sq mi' }, landmark: { pl: 'Wieża Eiffla', native: 'Tour Eiffel' } } },
+      { name: { pl: 'Marsylia', native: 'Marseille' }, imageHint: 'marseille port', description: { pl: 'Najstarsze miasto Francji i największy port. Tętniący życiem Vieux-Port (Stary Port) jest sercem miasta, pełnym restauracji i łodzi.', native: 'The oldest city in France and its largest port. The bustling Vieux-Port (Old Port) is the heart of the city, filled with restaurants and boats.' }, facts: { population: '~870,000', area: { pl: '240 km²', native: '93 sq mi' }, landmark: { pl: 'Vieux-Port', native: 'Vieux-Port' } } },
+      { name: { pl: 'Lyon', native: 'Lyon' }, imageHint: 'lyon old town', description: { pl: 'Uważany za gastronomiczną stolicę Francji. Miasto posiada piękną starówkę (Vieux Lyon) i słynie z corocznego Festiwalu Świateł.', native: 'Considered the gastronomic capital of France. The city has a beautiful old town (Vieux Lyon) and is famous for its annual Festival of Lights.' }, facts: { population: '~520,000', area: { pl: '48 km²', native: '18.5 sq mi' }, landmark: { pl: 'Vieux Lyon', native: 'Vieux Lyon' } } },
+      { name: { pl: 'Nicea', native: 'Nice' }, imageHint: 'nice promenade', description: { pl: 'Perła Lazurowego Wybrzeża, słynąca ze słonecznych plaż, błękitnego morza i słynnej Promenade des Anglais.', native: 'The pearl of the French Riviera, famous for its sunny beaches, blue sea, and the famous Promenade des Anglais.' }, facts: { population: '~340,000', area: { pl: '72 km²', native: '27.8 sq mi' }, landmark: { pl: 'Promenada Anglików', native: 'Promenade des Anglais' } } },
+      { name: { pl: 'Strasburg', native: 'Strasbourg' }, imageHint: 'strasbourg petite france', description: { pl: 'Stolica Alzacji i siedziba Parlamentu Europejskiego. Urzeka malowniczą dzielnicą La Petite France z domami z muru pruskiego.', native: 'The capital of Alsace and home to the European Parliament. It charms with its picturesque La Petite France district with half-timbered houses.' }, facts: { population: '~290,000', area: { pl: '78 km²', native: '30 sq mi' }, landmark: { pl: 'La Petite France', native: 'La Petite France' } } },
+    ],
+    ui: { title: { pl: 'Ważne Miasta Francji', native: 'Villes Importantes de France' }, backButton: { pl: 'Powrót do Kultury', native: 'Retour à la Culture' }, language: { pl: 'Język', native: 'Langue' }, population: { pl: 'Populacja', native: 'Population' }, area: { pl: 'Powierzchnia', native: 'Superficie' }, landmark: { pl: 'Główny zabytek', native: 'Monument Principal' } }
+  },
+  it: {
+    lang: 'it',
+    countryName: { pl: 'Włochy', native: 'Italia' },
+    cities: [
+      { name: { pl: 'Rzym', native: 'Roma' }, imageHint: 'rome colosseum', description: { pl: 'Wieczne Miasto, stolica Włoch i kolebka cywilizacji zachodniej. Pełne antycznych ruin, jak Koloseum, oraz siedziba Watykanu.', native: 'The Eternal City, capital of Italy and cradle of Western civilization. Full of ancient ruins like the Colosseum, and home to the Vatican.' }, facts: { population: '~2.8 million', area: { pl: '1,285 km²', native: '496 sq mi' }, landmark: { pl: 'Koloseum', native: 'Colosseo' } } },
+      { name: { pl: 'Mediolan', native: 'Milano' }, imageHint: 'milan duomo', description: { pl: 'Światowa stolica mody i finansowe serce Włoch. Słynie z imponującej katedry Duomo i opery La Scala.', native: 'The world\'s fashion capital and the financial heart of Italy. Famous for its impressive Duomo cathedral and La Scala opera house.' }, facts: { population: '~1.4 million', area: { pl: '181 km²', native: '70 sq mi' }, landmark: { pl: 'Katedra w Mediolanie', native: 'Duomo di Milano' } } },
+      { name: { pl: 'Wenecja', native: 'Venezia' }, imageHint: 'venice canal', description: { pl: 'Unikalne miasto zbudowane na wodzie, słynące z kanałów, gondoli i romantycznej atmosfery. Plac Świętego Marka to jego serce.', native: 'A unique city built on water, famous for its canals, gondolas, and romantic atmosphere. St. Mark\'s Square is its heart.' }, facts: { population: '~260,000', area: { pl: '414 km²', native: '160 sq mi' }, landmark: { pl: 'Canal Grande', native: 'Canal Grande' } } },
+      { name: { pl: 'Florencja', native: 'Firenze' }, imageHint: 'florence cathedral', description: { pl: 'Kolebka renesansu, dom dzieł Michała Anioła i Leonarda da Vinci. Galeria Uffizi i katedra z kopułą Brunelleschiego to miejsca obowiązkowe.', native: 'The cradle of the Renaissance, home to the works of Michelangelo and Leonardo da Vinci. The Uffizi Gallery and the cathedral with Brunelleschi\'s dome are must-see sites.' }, facts: { population: '~380,000', area: { pl: '102 km²', native: '39 sq mi' }, landmark: { pl: 'Katedra we Florencji', native: 'Cattedrale di Firenze' } } },
+      { name: { pl: 'Neapol', native: 'Napoli' }, imageHint: 'naples pizza', description: { pl: 'Tętniące życiem miasto w cieniu Wezuwiusza, uważane za kolebkę pizzy. Brama do historycznych ruin Pompei i Herkulanum.', native: 'A vibrant city in the shadow of Vesuvius, considered the birthplace of pizza. The gateway to the historic ruins of Pompeii and Herculaneum.' }, facts: { population: '~960,000', area: { pl: '117 km²', native: '45 sq mi' }, landmark: { pl: 'Wezuwiusz', native: 'Vesuvio' } } },
+    ],
+    ui: { title: { pl: 'Ważne Miasta Włoch', native: 'Città Importanti d\'Italia' }, backButton: { pl: 'Powrót do Kultury', native: 'Torna a Cultura' }, language: { pl: 'Język', native: 'Lingua' }, population: { pl: 'Populacja', native: 'Popolazione' }, area: { pl: 'Powierzchnia', native: 'Superficie' }, landmark: { pl: 'Monumento principale', native: 'Monumento principale' } }
+  },
+  es: {
+    lang: 'es',
+    countryName: { pl: 'Hiszpania', native: 'España' },
+    cities: [
+      { name: { pl: 'Madryt', native: 'Madrid' }, imageHint: 'madrid palace', description: { pl: 'Tętniąca życiem stolica Hiszpanii, znana z bogatego życia nocnego, światowej klasy muzeów (Prado, Reina Sofía) i pięknych parków.', native: 'The vibrant capital of Spain, known for its rich nightlife, world-class museums (Prado, Reina Sofía), and beautiful parks.' }, facts: { population: '~3.3 million', area: { pl: '604 km²', native: '233 sq mi' }, landmark: { pl: 'Pałac Królewski', native: 'Palacio Real' } } },
+      { name: { pl: 'Barcelona', native: 'Barcelona' }, imageHint: 'barcelona sagrada familia', description: { pl: 'Miasto Gaudíego, słynące z unikalnej architektury modernistycznej, w tym nieukończonej Sagrada Família. Łączy kulturę, plaże i energię metropolii.', native: 'Gaudí\'s city, famous for its unique modernist architecture, including the unfinished Sagrada Família. It combines culture, beaches, and metropolitan energy.' }, facts: { population: '~1.6 million', area: { pl: '101 km²', native: '39 sq mi' }, landmark: { pl: 'Sagrada Família', native: 'Sagrada Família' } } },
+      { name: { pl: 'Sewilla', native: 'Sevilla' }, imageHint: 'seville plaza', description: { pl: 'Stolica Andaluzji i serce flamenco. Urzeka pałacem Alcázar, ogromną katedrą i klimatycznymi uliczkami dzielnicy Santa Cruz.', native: 'The capital of Andalusia and the heart of flamenco. It charms with the Alcázar palace, the huge cathedral, and the atmospheric streets of the Santa Cruz district.' }, facts: { population: '~680,000', area: { pl: '140 km²', native: '54 sq mi' }, landmark: { pl: 'Plac Hiszpański', native: 'Plaza de España' } } },
+      { name: { pl: 'Walencja', native: 'Valencia' }, imageHint: 'valencia science city', description: { pl: 'Miasto kontrastów, gdzie historyczne centrum spotyka się z futurystycznym Miastem Sztuki i Nauki. Słynie z paelli i festiwalu Las Fallas.', native: 'A city of contrasts, where the historic center meets the futuristic City of Arts and Sciences. Famous for paella and the Las Fallas festival.' }, facts: { population: '~800,000', area: { pl: '134 km²', native: '52 sq mi' }, landmark: { pl: 'Miasto Sztuki i Nauki', native: 'Ciudad de las Artes y las Ciencias' } } },
+      { name: { pl: 'Granada', native: 'Granada' }, imageHint: 'granada alhambra', description: { pl: 'Dom jednego z najwspanialszych zabytków świata, pałacu Alhambra, arcydzieła architektury mauretańskiej. Położone u podnóża gór Sierra Nevada.', native: 'Home to one of the world\'s most magnificent monuments, the Alhambra Palace, a masterpiece of Moorish architecture. Located at the foot of the Sierra Nevada mountains.' }, facts: { population: '~230,000', area: { pl: '88 km²', native: '34 sq mi' }, landmark: { pl: 'Alhambra', native: 'Alhambra' } } },
+    ],
+    ui: { title: { pl: 'Ważne Miasta Hiszpanii', native: 'Ciudades Importantes de España' }, backButton: { pl: 'Powrót do Kultury', native: 'Volver a Cultura' }, language: { pl: 'Język', native: 'Idioma' }, population: { pl: 'Populacja', native: 'Población' }, area: { pl: 'Powierzchnia', native: 'Superficie' }, landmark: { pl: 'Monumento principal', native: 'Monumento principal' } }
+  },
+};
