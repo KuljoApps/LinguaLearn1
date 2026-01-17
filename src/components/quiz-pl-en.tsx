@@ -20,11 +20,12 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { updateStats, addError, updateTimeSpent, checkSessionAchievements, type Achievement } from "@/lib/storage";
+import { updateStats, addError, updateTimeSpent, checkSessionAchievements, type Achievement, type ErrorRecord } from "@/lib/storage";
 import { playSound } from "@/lib/sounds";
 import LinguaLearnLogo from '@/components/LinguaLearnLogo';
 import { vibrate } from "@/lib/vibrations";
 import { useToast } from "@/hooks/use-toast";
+import QuizResults from "./quiz-results";
 
 
 function shuffleArray<T>(array: T[]): T[] {
@@ -57,6 +58,7 @@ export default function QuizPlEn() {
   const [isPaused, setIsPaused] = useState(false);
   const [showTimePenalty, setShowTimePenalty] = useState(false);
   const [shuffledOptions, setShuffledOptions] = useState<string[]>([]);
+  const [sessionErrors, setSessionErrors] = useState<Omit<ErrorRecord, 'id'>[]>([]);
   
   const router = useRouter();
   const { toast } = useToast();
@@ -119,12 +121,14 @@ export default function QuizPlEn() {
           const unlocked = updateStats(false, QUIZ_NAME, questions[currentQuestionIndex].id);
           unlocked.forEach(showAchievementToast);
 
-          addError({
+          const errorRecord = {
             word: questions[currentQuestionIndex].word,
             userAnswer: 'No answer',
             correctAnswer: questions[currentQuestionIndex].correctAnswer,
             quiz: QUIZ_NAME,
-          });
+          };
+          addError(errorRecord);
+          setSessionErrors(prev => [...prev, errorRecord]);
 
           return 0;
         }
@@ -178,12 +182,14 @@ export default function QuizPlEn() {
       setAnswerStatus("incorrect");
       playSound("incorrect");
       vibrate("incorrect");
-      addError({
+      const errorRecord = {
         word: currentQuestion.word,
         userAnswer: answer,
         correctAnswer: currentQuestion.correctAnswer,
         quiz: QUIZ_NAME,
-      });
+      };
+      addError(errorRecord);
+      setSessionErrors(prev => [...prev, errorRecord]);
     }
   };
 
@@ -223,6 +229,7 @@ export default function QuizPlEn() {
     setQuestionTimer(QUESTION_TIME_LIMIT);
     setTotalTime(0);
     setIsPaused(false);
+    setSessionErrors([]);
     setIsRestartAlertOpen(false);
   }
 
@@ -253,24 +260,23 @@ export default function QuizPlEn() {
     return "bg-muted text-muted-foreground opacity-70 cursor-not-allowed";
   };
   
-  if (questions.length === 0 || currentQuestionIndex >= questions.length) {
+  if (questions.length > 0 && currentQuestionIndex >= questions.length) {
     return (
-        <Card className="w-full max-w-lg shadow-2xl">
-            <CardHeader className="text-center">
-                <CardTitle className="text-3xl font-bold">Quiz Complete!</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <p className="text-center text-xl">Your final score is: {score} / {questions.length}</p>
-            </CardContent>
-            <CardFooter className="flex justify-center gap-4">
-                <Button onClick={restartTest}>Play Again</Button>
-                <Link href="/" passHref>
-                    <Button variant="outline">Back to Home</Button>
-                </Link>
-            </CardFooter>
-        </Card>
+        <QuizResults
+            score={score}
+            totalQuestions={questions.length}
+            totalTime={totalTime}
+            sessionErrors={sessionErrors}
+            quizName={QUIZ_NAME}
+            onRestart={restartTest}
+        />
     );
   }
+  
+  if (questions.length === 0) {
+    return null; // Loading or empty state
+  }
+
 
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);

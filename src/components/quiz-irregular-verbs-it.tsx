@@ -21,11 +21,12 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { updateStats, addError, updateTimeSpent, checkSessionAchievements, type Achievement } from "@/lib/storage";
+import { updateStats, addError, updateTimeSpent, checkSessionAchievements, type Achievement, type ErrorRecord } from "@/lib/storage";
 import { playSound } from "@/lib/sounds";
 import LinguaLearnLogo from '@/components/LinguaLearnLogo';
 import { vibrate } from "@/lib/vibrations";
 import { useToast } from "@/hooks/use-toast";
+import QuizResults from "./quiz-results";
 
 function shuffleArray<T>(array: T[]): T[] {
   const shuffled = [...array];
@@ -51,6 +52,7 @@ export default function QuizIrregularVerbsIt() {
   const [selectedTranslation, setSelectedTranslation] = useState<string | null>(null);
   const [form2Input, setForm2Input] = useState("");
   const [form3Input, setForm3Input] = useState("");
+  const [sessionErrors, setSessionErrors] = useState<Omit<ErrorRecord, 'id'>[]>([]);
 
   const [answerStatus, setAnswerStatus] = useState<"correct" | "incorrect" | "timeout" | null>(null);
   const [translationStatus, setTranslationStatus] = useState<"correct" | "incorrect" | null>(null);
@@ -127,12 +129,14 @@ export default function QuizIrregularVerbsIt() {
           const unlocked = updateStats(false, QUIZ_NAME, questions[currentQuestionIndex].id);
           unlocked.forEach(showAchievementToast);
           
-          addError({
+          const errorRecord = {
             word: questions[currentQuestionIndex].verb,
             userAnswer: 'No answer',
             correctAnswer: `${questions[currentQuestionIndex].correctTranslation}, ${questions[currentQuestionIndex].form2}, ${questions[currentQuestionIndex].form3}`,
             quiz: QUIZ_NAME,
-          });
+          };
+          addError(errorRecord);
+          setSessionErrors(prev => [...prev, errorRecord]);
           return 0;
         }
         return prev - 1;
@@ -199,12 +203,14 @@ export default function QuizIrregularVerbsIt() {
       const unlocked = updateStats(false, QUIZ_NAME, currentQuestion.id);
       unlocked.forEach(showAchievementToast);
 
-      addError({
+      const errorRecord = {
         word: currentQuestion.verb,
         userAnswer: option,
         correctAnswer: currentQuestion.correctTranslation,
         quiz: QUIZ_NAME,
-      });
+      };
+      addError(errorRecord);
+      setSessionErrors(prev => [...prev, errorRecord]);
     }
   };
   
@@ -227,12 +233,14 @@ export default function QuizIrregularVerbsIt() {
       setAnswerStatus("incorrect");
       playSound('incorrect');
       vibrate('incorrect');
-       addError({
+       const errorRecord = {
         word: currentQuestion.verb,
         userAnswer: `Forms: ${form2Input}, ${form3Input}`,
         correctAnswer: `Forms: ${currentQuestion.form2}, ${currentQuestion.form3}`,
         quiz: QUIZ_NAME,
-      });
+      };
+      addError(errorRecord);
+      setSessionErrors(prev => [...prev, errorRecord]);
     }
   };
 
@@ -275,6 +283,7 @@ export default function QuizIrregularVerbsIt() {
     setQuestionTimer(QUESTION_TIME_LIMIT);
     setTotalTime(0);
     setIsPaused(false);
+    setSessionErrors([]);
     setIsRestartAlertOpen(false);
   }
 
@@ -326,23 +335,21 @@ export default function QuizIrregularVerbsIt() {
     return isCorrect ? "bg-success text-success-foreground" : "bg-destructive text-destructive-foreground";
   }
   
-  if (questions.length === 0 || !currentQuestion) {
+  if (questions.length > 0 && currentQuestionIndex >= questions.length) {
     return (
-        <Card className="w-full max-w-lg shadow-2xl">
-            <CardHeader className="text-center">
-                <CardTitle className="text-3xl font-bold">Quiz Completato!</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <p className="text-center text-xl">Il tuo punteggio finale è: {score} / {questions.length}</p>
-            </CardContent>
-            <CardFooter className="flex justify-center gap-4">
-                <Button onClick={restartTest}>Gioca Ancora</Button>
-                <Link href="/" passHref>
-                    <Button variant="outline">Torna alla Home</Button>
-                </Link>
-            </CardFooter>
-        </Card>
+        <QuizResults
+            score={score}
+            totalQuestions={questions.length}
+            totalTime={totalTime}
+            sessionErrors={sessionErrors}
+            quizName={QUIZ_NAME}
+            onRestart={restartTest}
+        />
     );
+  }
+  
+  if (questions.length === 0 || !currentQuestion) {
+    return null;
   }
 
   const formatTime = (seconds: number) => {

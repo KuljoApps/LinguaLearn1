@@ -1,8 +1,8 @@
 
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
-import { Home, RefreshCw, Pause, Play, Clock } from "lucide-react";
+import { useState, useEffect, useMemo, useCallback } from "react";
+import { Home, RefreshCw, Pause, Play, Clock, Trophy } from "lucide-react";
 import { questions as initialQuestions, type Question } from "@/lib/questions-en-pl";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -20,7 +20,12 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { updateStats, addError, updateTimeSpent, checkSessionAchievements, type Achievement, type ErrorRecord } from "@/lib/storage";
 import LinguaLearnLogo from '@/components/LinguaLearnLogo';
+import { useToast } from "@/hooks/use-toast";
+import { playSound } from "@/lib/sounds";
+import { vibrate } from "@/lib/vibrations";
+import QuizResults from "./quiz-results";
 
 
 function shuffleArray<T>(array: T[]): T[] {
@@ -35,6 +40,8 @@ function shuffleArray<T>(array: T[]): T[] {
 const QUESTION_TIME_LIMIT = 15;
 const PAUSE_PENALTY = 5;
 const MIN_TIME_FOR_PAUSE = 6;
+const QUIZ_NAME = 'English - Polish';
+const TIME_UPDATE_INTERVAL = 5;
 const QUIZ_LENGTH = 10;
 
 
@@ -51,12 +58,36 @@ export default function QuizEnPl() {
   const [isPaused, setIsPaused] = useState(false);
   const [showTimePenalty, setShowTimePenalty] = useState(false);
   const [shuffledOptions, setShuffledOptions] = useState<string[]>([]);
+  const [sessionErrors, setSessionErrors] = useState<Omit<ErrorRecord, 'id'>[]>([]);
   
   const router = useRouter();
+  const { toast } = useToast();
+
+   const showAchievementToast = useCallback((achievement: Achievement) => {
+    playSound('achievement');
+    toast({
+        title: (
+            <div className="flex items-center gap-2">
+                <Trophy className="h-5 w-5 text-amber" />
+                <span className="font-bold">Achievement Unlocked!</span>
+            </div>
+        ),
+        description: `You've earned: "${achievement.name}"`,
+    });
+  }, [toast]);
   
   useEffect(() => {
     setQuestions(shuffleArray(initialQuestions).slice(0, QUIZ_LENGTH));
   }, []);
+
+  // Finalize session achievements
+  useEffect(() => {
+      if (currentQuestionIndex >= questions.length && questions.length > 0) {
+          const isPerfect = score === questions.length;
+          const unlocked = checkSessionAchievements(isPerfect);
+          unlocked.forEach(showAchievementToast);
+      }
+  }, [currentQuestionIndex, questions.length, score, showAchievementToast]);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -82,6 +113,19 @@ export default function QuizEnPl() {
           clearInterval(interval);
           setAnswerStatus("timeout");
           setSelectedAnswer(null);
+
+          const unlocked = updateStats(false, QUIZ_NAME, questions[currentQuestionIndex].id);
+          unlocked.forEach(showAchievementToast);
+
+          const errorRecord = {
+            word: questions[currentQuestionIndex].word,
+            userAnswer: 'No answer',
+            correctAnswer: questions[currentQuestionIndex].correctAnswer,
+            quiz: QUIZ_NAME,
+          };
+          addError(errorRecord);
+          setSessionErrors(prev => [...prev, errorRecord]);
+
           return 0;
         }
         return prev - 1;
@@ -89,7 +133,7 @@ export default function QuizEnPl() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [isPaused, answerStatus, currentQuestionIndex, questions.length]);
+  }, [isPaused, answerStatus, currentQuestionIndex, questions.length, questions, showAchievementToast]);
 
   useEffect(() => {
     if (currentQuestionIndex >= questions.length || isPaused) {
@@ -98,10 +142,14 @@ export default function QuizEnPl() {
 
     const interval = setInterval(() => {
       setTotalTime((prev) => prev + 1);
+       if ((totalTime + 1) % TIME_UPDATE_INTERVAL === 0) {
+          const unlocked = updateTimeSpent(TIME_UPDATE_INTERVAL);
+          unlocked.forEach(showAchievementToast);
+      }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [currentQuestionIndex, questions.length, isPaused]);
+  }, [currentQuestionIndex, questions.length, isPaused, totalTime, showAchievementToast]);
 
 
   const currentQuestion = useMemo(() => questions[currentQuestionIndex], [questions, currentQuestionIndex]);
@@ -117,11 +165,27 @@ export default function QuizEnPl() {
 
     setSelectedAnswer(answer);
     const isCorrect = answer === currentQuestion.correctAnswer;
+    
+    const unlocked = updateStats(isCorrect, QUIZ_NAME, currentQuestion.id);
+    unlocked.forEach(showAchievementToast);
+
     if (isCorrect) {
       setScore((prevScore) => prevScore + 1);
       setAnswerStatus("correct");
+      playSound("correct");
+      vibrate("correct");
     } else {
       setAnswerStatus("incorrect");
+      playSound("incorrect");
+      vibrate("incorrect");
+      const errorRecord = {
+        word: currentQuestion.word,
+        userAnswer: answer,
+        correctAnswer: currentQuestion.correctAnswer,
+        quiz: QUIZ_NAME,
+      };
+      addError(errorRecord);
+      setSessionErrors(prev => [...prev, errorRecord]);
     }
   };
 
@@ -161,6 +225,7 @@ export default function QuizEnPl() {
     setQuestionTimer(QUESTION_TIME_LIMIT);
     setTotalTime(0);
     setIsPaused(false);
+    setSessionErrors([]);
     setIsRestartAlertOpen(false);
   }
 
@@ -191,20 +256,21 @@ export default function QuizEnPl() {
     return "bg-muted text-muted-foreground opacity-70 cursor-not-allowed";
   };
   
-  if (questions.length === 0 || currentQuestionIndex >= questions.length) {
+  if (questions.length > 0 && currentQuestionIndex >= questions.length) {
     return (
-        <Card className="w-full max-w-lg shadow-2xl">
-            <CardHeader className="text-center">
-                <CardTitle className="text-3xl font-bold">Quiz Complete!</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <p className="text-center text-xl">Your final score is: {score} / {questions.length}</p>
-            </CardContent>
-            <CardFooter className="flex justify-center">
-                <Button onClick={restartTest}>Play Again</Button>
-            </CardFooter>
-        </Card>
+        <QuizResults
+            score={score}
+            totalQuestions={questions.length}
+            totalTime={totalTime}
+            sessionErrors={sessionErrors}
+            quizName={QUIZ_NAME}
+            onRestart={restartTest}
+        />
     );
+  }
+  
+  if (questions.length === 0) {
+    return null;
   }
 
   const formatTime = (seconds: number) => {
