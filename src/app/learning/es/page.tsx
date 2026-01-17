@@ -1,4 +1,3 @@
-
 "use client"
 
 import { BookCopy, ArrowLeft, GraduationCap, Clock, FilePenLine, MessageSquareText, BookText, Landmark, AudioLines, Languages, ChevronDown } from 'lucide-react';
@@ -67,7 +66,7 @@ export default function LearningEsPage() {
                         </Button>
                     </Link>
                     
-                    <Collapsible open={isExtrasOpen} onOpenChange={handleExtrasOpenChange} className="w-full pt-0">
+                    <Collapsible open={isExtrasOpen} onOpenChange={handleExtrasOpenChange} className="w-full">
                         <div className="flex items-center justify-center -mb-2">
                              <Separator className="flex-grow" />
                             <CollapsibleTrigger asChild>
@@ -78,22 +77,22 @@ export default function LearningEsPage() {
                             </CollapsibleTrigger>
                              <Separator className="flex-grow" />
                         </div>
-                        <CollapsibleContent className="pt-2 animate-in fade-in-0 zoom-in-95">
-                            <div className="space-y-4">
-                               <div className="grid grid-cols-2 gap-4">
-                                   <Link href="/learning/es/culture" passHref>
-                                        <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
-                                            <Landmark className="mr-2 h-5 w-5 text-deep-purple" />
-                                            Cultura
-                                        </Button>
-                                    </Link>
-                                    <Link href="/learning/es/phonetics" passHref>
-                                        <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
-                                            <AudioLines className="mr-2 h-5 w-5 text-deep-purple" />
-                                            Fonética
-                                        </Button>
-                                    </Link>
-                               </div>
+                        <CollapsibleContent className="pt-4">
+                            <div className="grid grid-cols-2 gap-4">
+                               <Link href="/learning/es/culture" passHref>
+                                    <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
+                                        <Landmark className="mr-2 h-5 w-5 text-deep-purple" />
+                                        Cultura
+                                    </Button>
+                                </Link>
+                                <Link href="/learning/es/phonetics" passHref>
+                                    <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
+                                        <AudioLines className="mr-2 h-5 w-5 text-deep-purple" />
+                                        Fonética
+                                    </Button>
+                                </Link>
+                           </div>
+                           <div className="mt-4">
                                <Link href="/learning/es/tongue-twisters" passHref>
                                     <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
                                         <Languages className="mr-2 h-5 w-5 text-deep-purple" />
