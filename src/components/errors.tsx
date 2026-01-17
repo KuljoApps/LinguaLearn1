@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Link from "next/link";
 import { ArrowLeft, Trash2, ArrowUpDown, Trophy } from "lucide-react";
-import { getErrors, clearErrors, type ErrorRecord, type Achievement } from '@/lib/storage';
+import { getErrors, clearErrors, type ErrorRecord, type Achievement, getLanguage, type Language } from '@/lib/storage';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -41,6 +41,27 @@ interface AggregatedError {
 type QuizFilter = 'all' | 'English - Polish' | 'Polish - English' | 'Irregular Verbs' | 'Phrasal Verbs' | 'Idioms' | 'French - Polish' | 'Polish - French' | 'Irregular Verbs (FR)' | 'Phrasal Verbs (FR)' | 'Idioms (FR)' | 'German - Polish' | 'Polish - German' | 'Irregular Verbs (DE)' | 'Separable Verbs (DE)' | 'Idioms (DE)' | 'Italiano - Polacco' | 'Polacco - Italiano' | 'Verbi Irregolari (IT)' | 'Verbi Frasali (IT)' | 'Modi di dire (IT)' | 'Español - Polaco' | 'Polaco - Español' | 'Verbos Irregulares (ES)' | 'Verbos con Preposición (ES)' | 'Modismos (ES)';
 type SortableKey = keyof ErrorRecord | keyof AggregatedError;
 
+const uiTexts = {
+    title: { en: 'Common Errors', fr: 'Erreurs Courantes', de: 'Häufige Fehler', it: 'Errori Comuni', es: 'Errores Comunes' },
+    filterPlaceholder: { en: 'Filter by quiz', fr: 'Filtrer par quiz', de: 'Nach Quiz filtern', it: 'Filtra per quiz', es: 'Filtrar por cuestionario' },
+    viewFrequent: { en: 'View Most Frequent', fr: 'Voir les plus fréquents', de: 'Häufigste anzeigen', it: 'Visualizza più frequenti', es: 'Ver más frecuentes' },
+    viewLatest: { en: 'View Latest', fr: 'Voir les derniers', de: 'Neueste anzeigen', it: 'Visualizza più recenti', es: 'Ver más recientes' },
+    noErrors: { en: 'No errors recorded for this filter.', fr: 'Aucune erreur enregistrée pour ce filtre.', de: 'Keine Fehler für diesen Filter aufgezeichnet.', it: 'Nessun errore registrato per questo filtro.', es: 'No hay errores registrados para este filtro.' },
+    count: { en: 'Count', fr: 'Total', de: 'Anzahl', it: 'Conteggio', es: 'Recuento' },
+    word: { en: 'Word', fr: 'Mot', de: 'Wort', it: 'Parola', es: 'Palabra' },
+    correctAnswer: { en: 'Correct Answer', fr: 'Bonne Réponse', de: 'Richtige Antwort', it: 'Risposta Corretta', es: 'Respuesta Correcta' },
+    yourAnswers: { en: 'Your Answers', fr: 'Vos Réponses', de: 'Deine Antworten', it: 'Tue Risposte', es: 'Tus Respuestas' },
+    yourAnswer: { en: 'Your Answer', fr: 'Votre Réponse', de: 'Deine Antwort', it: 'La Tua Risposta', es: 'Tu Respuesta' },
+    quiz: { en: 'Quiz', fr: 'Quiz', de: 'Quiz', it: 'Quiz', es: 'Cuestionario' },
+    date: { en: 'Date', fr: 'Date', de: 'Datum', it: 'Data', es: 'Fecha' },
+    backToHome: { en: 'Back to Home', fr: 'Retour à l\'accueil', de: 'Zurück zur Startseite', it: 'Torna alla Home', es: 'Volver al Inicio' },
+    clearErrors: { en: 'Clear Errors', fr: 'Effacer les Erreurs', de: 'Fehler löschen', it: 'Cancella Errori', es: 'Borrar Errores' },
+    alertTitle: { en: 'Are you sure?', fr: 'Êtes-vous sûr ?', de: 'Bist du sicher?', it: 'Sei sicuro?', es: '¿Estás seguro?' },
+    alertDescription: { en: 'This will permanently delete all your recorded errors. This action cannot be undone.', fr: 'Cela supprimera définitivement toutes vos erreurs enregistrées. Cette action ne peut pas être annulée.', de: 'Dadurch werden alle deine aufgezeichneten Fehler dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.', it: 'Questo eliminerà permanentemente tutti i tuoi errori registrati. Questa azione non può essere annullata.', es: 'Esto eliminará permanentemente todos tus errores registrados. Esta acción no se puede deshacer.' },
+    cancel: { en: 'Cancel', fr: 'Annuler', de: 'Abbrechen', it: 'Annulla', es: 'Cancelar' },
+    confirmClear: { en: 'Clear', fr: 'Effacer', de: 'Löschen', it: 'Cancella', es: 'Borrar' },
+};
+
 export default function ErrorsPage() {
     const [errors, setErrors] = useState<ErrorRecord[]>([]);
     const [isClearAlertOpen, setIsClearAlertOpen] = useState(false);
@@ -48,11 +69,23 @@ export default function ErrorsPage() {
     const [quizFilter, setQuizFilter] = useState<QuizFilter>('all');
     const [expandedRows, setExpandedRows] = useState<Set<string | number>>(new Set());
     const [sortConfig, setSortConfig] = useState<{ key: SortableKey; direction: 'ascending' | 'descending' } | null>(null);
+    const [language, setLanguageState] = useState<Language>('en');
     const { toast } = useToast();
 
     useEffect(() => {
-        setErrors(getErrors());
+        const handleLanguageChange = () => {
+            const currentLang = getLanguage();
+            setLanguageState(currentLang);
+            setErrors(getErrors()); // Reload errors for the current language
+        };
+        handleLanguageChange(); // Initial load
+        window.addEventListener('language-changed', handleLanguageChange);
+        return () => window.removeEventListener('language-changed', handleLanguageChange);
     }, []);
+
+    const getUIText = (key: keyof typeof uiTexts) => {
+        return uiTexts[key][language] || uiTexts[key]['en'];
+    };
 
     const showAchievementToast = (achievement: Achievement) => {
         playSound('achievement');
@@ -210,7 +243,7 @@ export default function ErrorsPage() {
 
     const renderTable = () => {
         if (filteredErrors.length === 0) {
-            return <p className="text-center text-muted-foreground pt-10">No errors recorded for this filter.</p>;
+            return <p className="text-center text-muted-foreground pt-10">{getUIText('noErrors')}</p>;
         }
 
         if (view === 'frequent') {
@@ -218,11 +251,11 @@ export default function ErrorsPage() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <SortableHeader title="Count" sortKey="count" />
-                            <SortableHeader title="Word" sortKey="word" />
-                            <SortableHeader title="Correct Answer" sortKey="correctAnswer" />
-                            <TableHead className="font-bold text-foreground">Your Answers</TableHead>
-                            <SortableHeader title="Quiz" sortKey="quiz" />
+                            <SortableHeader title={getUIText('count')} sortKey="count" />
+                            <SortableHeader title={getUIText('word')} sortKey="word" />
+                            <SortableHeader title={getUIText('correctAnswer')} sortKey="correctAnswer" />
+                            <TableHead className="font-bold text-foreground">{getUIText('yourAnswers')}</TableHead>
+                            <SortableHeader title={getUIText('quiz')} sortKey="quiz" />
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -251,11 +284,11 @@ export default function ErrorsPage() {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <SortableHeader title="Word" sortKey="word" />
-                        <SortableHeader title="Correct Answer" sortKey="correctAnswer" />
-                        <SortableHeader title="Your Answer" sortKey="userAnswer" />
-                        <SortableHeader title="Quiz" sortKey="quiz" />
-                        <SortableHeader title="Date" sortKey="id" />
+                        <SortableHeader title={getUIText('word')} sortKey="word" />
+                        <SortableHeader title={getUIText('correctAnswer')} sortKey="correctAnswer" />
+                        <SortableHeader title={getUIText('yourAnswer')} sortKey="userAnswer" />
+                        <SortableHeader title={getUIText('quiz')} sortKey="quiz" />
+                        <SortableHeader title={getUIText('date')} sortKey="id" />
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -282,11 +315,11 @@ export default function ErrorsPage() {
         <>
             <Card className="w-full max-w-4xl shadow-2xl">
                 <CardHeader className="flex flex-col items-center gap-4 p-6 sm:flex-row sm:justify-between">
-                    <CardTitle className="text-3xl">Common Errors</CardTitle>
+                    <CardTitle className="text-3xl">{getUIText('title')}</CardTitle>
                     <div className="flex flex-col gap-2">
                         <Select value={quizFilter} onValueChange={(value) => handleFilterChange(value as QuizFilter)}>
                             <SelectTrigger>
-                                <SelectValue placeholder="Filter by quiz" />
+                                <SelectValue placeholder={getUIText('filterPlaceholder')} />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="all">All Quizzes</SelectItem>
@@ -319,7 +352,7 @@ export default function ErrorsPage() {
                         </Select>
                         <Button variant="outline" onClick={handleViewChange}>
                             <ArrowUpDown className="mr-2 h-4 w-4" />
-                            View {view === 'latest' ? 'Most Frequent' : 'Latest'}
+                            {view === 'latest' ? getUIText('viewFrequent') : getUIText('viewLatest')}
                         </Button>
                     </div>
                 </CardHeader>
@@ -330,11 +363,11 @@ export default function ErrorsPage() {
                     <div className="flex flex-wrap justify-center gap-4">
                         <Link href="/" passHref>
                             <Button variant="outline">
-                                <ArrowLeft className="mr-2 h-4 w-4" /> Back to Home
+                                <ArrowLeft className="mr-2 h-4 w-4" /> {getUIText('backToHome')}
                             </Button>
                         </Link>
                         <Button variant="destructive" onClick={() => setIsClearAlertOpen(true)} disabled={errors.length === 0}>
-                            <Trash2 className="mr-2 h-4 w-4" /> Clear Errors
+                            <Trash2 className="mr-2 h-4 w-4" /> {getUIText('clearErrors')}
                         </Button>
                     </div>
                 </CardFooter>
@@ -343,15 +376,15 @@ export default function ErrorsPage() {
             <AlertDialog open={isClearAlertOpen} onOpenChange={setIsClearAlertOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                        <AlertDialogTitle>{getUIText('alertTitle')}</AlertDialogTitle>
                         <AlertDialogDescription>
-                            This will permanently delete all your recorded errors. This action cannot be undone.
+                            {getUIText('alertDescription')}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogCancel>{getUIText('cancel')}</AlertDialogCancel>
                         <AlertDialogAction onClick={handleClearErrors} className="bg-destructive hover:bg-destructive/90">
-                            Clear
+                            {getUIText('confirmClear')}
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
@@ -359,3 +392,5 @@ export default function ErrorsPage() {
         </>
     );
 }
+
+    
