@@ -36,6 +36,22 @@ export const pronounsContent: GrammarContent = {
                 { original: 'This is my favorite song.', translation: 'To jest moja ulubiona piosenka.' },
                 { original: 'Can you pass me those books?', translation: 'Czy możesz podać mi tamte książki?' }
               ]
+            },
+            {
+              heading: 'Zaimki względne (Relative Pronouns)',
+              text: 'Wprowadzają zdania podrzędne, które opisują rzeczownik. "Who" odnosi się do ludzi, "which" do rzeczy, a "that" można używać zamiennie, zwłaszcza w mowie potocznej.',
+              examples: [
+                { original: 'The woman who lives next door is a doctor.', translation: 'Kobieta, która mieszka obok, jest lekarką.' },
+                { original: 'This is the book which won the prize.', translation: 'To jest książka, która wygrała nagrodę.' }
+              ]
+            },
+            {
+              heading: 'Zaimki nieokreślone (Indefinite Pronouns)',
+              text: 'Odnoszą się do osób lub rzeczy w sposób ogólny, nieokreślony (np. someone, anything, nobody, everyone). W zdaniu traktowane są jak trzecia osoba liczby pojedynczej.',
+              examples: [
+                { original: 'Somebody has to clean this mess.', translation: 'Ktoś musi posprzątać ten bałagan.' },
+                { original: 'Is there anything I can do for you?', translation: 'Czy jest cokolwiek, co mogę dla ciebie zrobić?' }
+              ]
             }
           ]
         }
@@ -74,6 +90,22 @@ export const pronounsContent: GrammarContent = {
               examples: [
                 { original: 'Das ist der Mann, der mir geholfen hat.', translation: 'To jest mężczyzna, który mi pomógł.' },
                 { original: 'Das Buch, das ich lese, ist sehr interessant.', translation: 'Książka, którą czytam, jest bardzo interesująca.' }
+              ]
+            },
+            {
+              heading: 'Zaimki wskazujące (Demonstrativpronomen)',
+              text: 'Podkreślają lub wskazują na konkretną osobę lub rzecz. Najczęściej używane to "dieser" (ten) i "jener" (tamten). Rodzajnik określony (der, die, das) również może pełnić tę funkcję z mocniejszym akcentem.',
+              examples: [
+                { original: 'Dieses Kleid gefällt mir besser als jenes.', translation: 'Ta sukienka podoba mi się bardziej niż tamta.' },
+                { original: 'Den kenne ich nicht! (wskazując na kogoś)', translation: 'Tego nie znam!' }
+              ]
+            },
+            {
+              heading: 'Zaimek nieokreślony "man"',
+              text: 'Jest to bardzo ważny zaimek bezosobowy, odpowiadający polskim formom "się" (mówi się), "człowiek" lub "ludzie". W zdaniu zawsze łączy się z czasownikiem w 3. osobie liczby pojedynczej.',
+              examples: [
+                { original: 'In Deutschland trinkt man viel Bier.', translation: 'W Niemczech pije się dużo piwa.' },
+                { original: 'Man darf hier nicht rauchen.', translation: 'Nie wolno tu palić.' }
               ]
             }
           ]
@@ -114,6 +146,22 @@ export const pronounsContent: GrammarContent = {
                 { original: 'Yo me levanto a las siete.', translation: 'Wstaję o siódmej.' },
                 { original: 'Ella se peina el pelo.', translation: 'Ona czesze sobie włosy.' }
               ]
+            },
+            {
+              heading: 'Zaimki względne (Pronombres Relativos)',
+              text: 'Łączą zdania i odnoszą się do wcześniej wspomnianego rzeczownika. Najważniejsze z nich to "que" (który, co), "quien" (kto) i "cuyo" (którego).',
+              examples: [
+                { original: 'La casa que compramos es muy vieja.', translation: 'Dom, który kupiliśmy, jest bardzo stary.' },
+                { original: 'El hombre de quien te hablé es mi profesor.', translation: 'Mężczyzna, o którym ci mówiłem, jest moim profesorem.' }
+              ]
+            },
+            {
+              heading: 'Zaimki po przyimkach (Pronombres Preposicionales)',
+              text: 'Po przyimkach (np. para, con, sin) używa się specjalnych form zaimków (mí, ti, él, ella...). Istnieją specjalne formy "conmigo" (ze mną) i "contigo" (z tobą).',
+              examples: [
+                { original: 'Este regalo es para ti.', translation: 'Ten prezent jest dla ciebie.' },
+                { original: '¿Quieres venir conmigo al cine?', translation: 'Chcesz iść ze mną do kina?' }
+              ]
             }
           ]
         }
@@ -153,6 +201,22 @@ export const pronounsContent: GrammarContent = {
                 { original: 'Moi, je suis polonais. Et toi?', translation: 'Ja jestem Polakiem. A ty?' },
                 { original: 'Il vient avec nous.', translation: 'On idzie z nami.' }
               ]
+            },
+            {
+              heading: 'Zaimki względne (Pronoms Relatifs)',
+              text: 'Łączą zdania. "Qui" jest podmiotem, "que" jest dopełnieniem bliższym, "dont" zastępuje "de + rzeczownik", a "où" odnosi się do miejsca lub czasu.',
+              examples: [
+                { original: 'L\'homme qui parle est mon père.', translation: 'Mężczyzna, który mówi, jest moim ojcem.' },
+                { original: 'C\'est le film que je veux voir.', translation: 'To jest film, który chcę zobaczyć.' }
+              ]
+            },
+            {
+              heading: 'Zaimki wskazujące (Pronoms Démonstratifs)',
+              text: 'Zastępują konkretny, wskazany rzeczownik (celui, celle, ceux, celles). Często występują z dodatkiem "-ci" (ten tutaj) lub "-là" (ten tam).',
+              examples: [
+                { original: 'Quel pull préfères-tu? Celui-ci ou celui-là?', translation: 'Który sweter wolisz? Ten tutaj czy tamten?' },
+                { original: 'Je prends les pommes, mais pas celles-là.', translation: 'Biorę te jabłka, ale nie tamte.' }
+              ]
             }
           ]
         }
@@ -191,6 +255,22 @@ export const pronounsContent: GrammarContent = {
               examples: [
                 { original: 'Me lo puoi dare?', translation: 'Możesz mi to dać?' },
                 { original: 'Glielo dico domani.', translation: 'Powiem mu/jej to jutro.' }
+              ]
+            },
+            {
+              heading: 'Zaimki względne (Pronomi Relativi)',
+              text: 'Wprowadzają zdania podrzędne. Najważniejsze to "che" (który/która/co - jako podmiot lub dopełnienie bliższe) oraz "cui" (używane z przyimkami).',
+              examples: [
+                { original: 'Il ragazzo che parla è mio fratello.', translation: 'Chłopak, który mówi, jest moim bratem.' },
+                { original: 'La città in cui vivo è molto bella.', translation: 'Miasto, w którym mieszkam, jest bardzo piękne.' }
+              ]
+            },
+            {
+              heading: 'Zaimki wskazujące (Pronomi Dimostrativi)',
+              text: 'Wskazują na coś lub kogoś. "Questo" oznacza "ten" (blisko), a "quello" oznacza "tamten" (daleko). Odmieniają się przez rodzaj i liczbę.',
+              examples: [
+                { original: 'Preferisco questa maglia, non quella.', translation: 'Wolę tę koszulkę, nie tamtą.' },
+                { original: 'Questi sono i miei amici.', translation: 'To są moi przyjaciele.' }
               ]
             }
           ]
