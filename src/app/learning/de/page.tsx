@@ -1,4 +1,4 @@
-import { BookCopy, ArrowLeft, GraduationCap } from 'lucide-react';
+import { BookCopy, ArrowLeft, GraduationCap, BookMarked } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
@@ -20,7 +20,12 @@ export default function LearningDePage() {
                             Fragendatenbank
                         </Button>
                     </Link>
-                    {/* Placeholder for future learning items */}
+                    <Link href="/learning/de/tenses" passHref>
+                        <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
+                            <BookMarked className="mr-2 h-5 w-5" />
+                            Zeiten
+                        </Button>
+                    </Link>
                 </CardContent>
                 <CardFooter className="flex justify-center p-6">
                     <Link href="/" passHref>
