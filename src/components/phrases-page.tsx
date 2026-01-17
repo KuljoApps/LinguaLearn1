@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from 'react';
@@ -9,6 +8,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { ArrowLeft } from 'lucide-react';
 import type { Phrase } from '@/lib/phrases';
+import type { Language } from '@/lib/storage';
 
 interface PhrasesPageProps {
     title: string;
@@ -18,6 +18,29 @@ interface PhrasesPageProps {
 }
 
 export default function PhrasesPage({ title, backHref, phrases, children }: PhrasesPageProps) {
+    const lang = backHref.split('/')[2] as Language;
+    const isBackToLearning = backHref.split('/').length === 3;
+
+    const backButtonTextsLearning: Record<Language, string> = {
+        en: 'Back to Learning',
+        de: 'Zurück zum Lernen',
+        es: 'Volver a Aprendizaje',
+        fr: 'Retour à l\'Apprentissage',
+        it: 'Torna ad Apprendimento',
+    };
+
+    const backButtonTextsPhrases: Record<Language, string> = {
+        en: 'Back to Expressions',
+        de: 'Zurück zu den Ausdrücken',
+        es: 'Volver a Expresiones',
+        fr: 'Retour aux Expressions',
+        it: 'Torna a Espressioni',
+    };
+
+    const backText = isBackToLearning 
+        ? backButtonTextsLearning[lang] || backButtonTextsLearning['en']
+        : backButtonTextsPhrases[lang] || backButtonTextsPhrases['en'];
+
     return (
         <Card className="w-full max-w-2xl shadow-2xl">
             <CardHeader className="text-center">
@@ -44,7 +67,7 @@ export default function PhrasesPage({ title, backHref, phrases, children }: Phra
             <CardFooter className="flex justify-center p-6 border-t">
                 <Link href={backHref} passHref>
                     <Button variant="outline">
-                        <ArrowLeft className="mr-2 h-4 w-4" /> Powrót
+                        <ArrowLeft className="mr-2 h-4 w-4" /> {backText}
                     </Button>
                 </Link>
             </CardFooter>
