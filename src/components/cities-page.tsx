@@ -47,13 +47,13 @@ export default function CitiesPage({ data }: { data: CitiesPageData }) {
 
   const renderFactRow = (icon: React.ReactNode, label: string, value: string) => (
     <TableRow>
-      <TableCell className="font-medium p-2">
+      <TableCell className="font-medium p-1">
         <div className="flex items-center">
           {React.cloneElement(icon as React.ReactElement, { className: "h-4 w-4 text-deep-purple mr-2 shrink-0" })}
           <span>{label}</span>
         </div>
       </TableCell>
-      <TableCell className="text-right p-2">{value}</TableCell>
+      <TableCell className="text-right p-1">{value}</TableCell>
     </TableRow>
   );
 
@@ -70,7 +70,7 @@ export default function CitiesPage({ data }: { data: CitiesPageData }) {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4">
       <Card className="w-full max-w-xl shadow-2xl">
-        <CardHeader className="flex flex-row items-center justify-between p-6">
+        <CardHeader className="flex flex-row items-center justify-between p-4">
             <div className="flex items-center gap-4">
                 <Building2 className="h-8 w-8" />
                 <CardTitle className="text-3xl">{t('title')}</CardTitle>
@@ -109,8 +109,8 @@ export default function CitiesPage({ data }: { data: CitiesPageData }) {
                 <CarouselItem key={index}>
                   <div className="p-1">
                     <Card>
-                      <CardHeader className="p-4">
-                        <div className="flex items-center justify-between mb-4">
+                      <CardHeader className="p-4 pb-2">
+                        <div className="flex items-center justify-between mb-2">
                             <CarouselPrevious className="relative translate-x-0 translate-y-0 left-0 top-0 h-8 w-8" />
                             <div className="text-center text-sm text-muted-foreground">
                                 {current} / {count}
@@ -119,9 +119,9 @@ export default function CitiesPage({ data }: { data: CitiesPageData }) {
                         </div>
                         <CardTitle className="text-center">{city.name[displayLang]}</CardTitle>
                       </CardHeader>
-                      <CardContent className="flex flex-col items-center gap-4 pt-0 pb-4 px-0">
-                        <ScrollArea className="h-40 w-full">
-                           <p className="text-sm text-muted-foreground text-justify px-4 pr-6">
+                      <CardContent className="flex flex-col items-center gap-2 pt-0 pb-2 px-0">
+                        <ScrollArea className="h-40 w-full px-4">
+                           <p className="text-sm text-muted-foreground text-justify pr-2">
                             {city.description[displayLang].replace(/ ([a-zA-Z])\s/g, ' $1\u00A0')}
                           </p>
                         </ScrollArea>
@@ -144,7 +144,7 @@ export default function CitiesPage({ data }: { data: CitiesPageData }) {
             </CarouselContent>
           </Carousel>
         </CardContent>
-        <CardFooter className="flex justify-center p-4 pt-2">
+        <CardFooter className="flex justify-center p-4">
           <Link href={`/learning/${data.lang}/culture`} passHref>
             <Button variant="outline">
               <ArrowLeft className="mr-2 h-4 w-4" /> {t('backButton')}
