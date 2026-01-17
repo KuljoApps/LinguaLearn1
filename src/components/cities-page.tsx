@@ -47,13 +47,13 @@ export default function CitiesPage({ data }: { data: CitiesPageData }) {
 
   const renderFactRow = (icon: React.ReactNode, label: string, value: string) => (
     <TableRow>
-      <TableCell className="font-medium py-1.5 px-2">
+      <TableCell className="font-medium py-2 px-4">
         <div className="flex items-center">
           {React.cloneElement(icon as React.ReactElement, { className: "h-4 w-4 text-deep-purple mr-2 shrink-0" })}
           <span>{label}</span>
         </div>
       </TableCell>
-      <TableCell className="text-right py-1.5 px-2">{value}</TableCell>
+      <TableCell className="text-right py-2 px-4">{value}</TableCell>
     </TableRow>
   );
 
@@ -125,7 +125,7 @@ export default function CitiesPage({ data }: { data: CitiesPageData }) {
                             {city.description[displayLang].replace(/ ([a-zA-Z])\s/g, ' $1\u00A0')}
                           </p>
                         </ScrollArea>
-                        <div className="w-full pr-[calc(0.5rem+4px)]"> 
+                        <div className="w-full"> 
                           <Table>
                             <TableBody>
                               {renderFactRow(<Users />, t('population'), city.facts.population)}
