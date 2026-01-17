@@ -39,6 +39,8 @@ const spainData: AboutCountryData = {
       ]
     },
     backButton: { pl: 'Powrót do Kultury', native: 'Volver a Cultura' },
+    readMore: { pl: 'Czytaj więcej', native: 'Leer más' },
+    readLess: { pl: 'Zwiń', native: 'Leer menos' },
   },
   stats: {
     capital: { pl: 'Madryt', native: 'Madrid' },

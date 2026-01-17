@@ -39,6 +39,8 @@ const englandData: AboutCountryData = {
       ]
     },
     backButton: { pl: 'Powrót do Kultury', native: 'Back to Culture' },
+    readMore: { pl: 'Czytaj więcej', native: 'Read more' },
+    readLess: { pl: 'Zwiń', native: 'Read less' },
   },
   stats: {
     capital: { pl: 'Londyn', native: 'London' },

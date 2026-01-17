@@ -39,6 +39,8 @@ const germanyData: AboutCountryData = {
       ]
     },
     backButton: { pl: 'Powrót do Kultury', native: 'Zurück zur Kultur' },
+    readMore: { pl: 'Czytaj więcej', native: 'Mehr lesen' },
+    readLess: { pl: 'Zwiń', native: 'Weniger lesen' },
   },
   stats: {
     capital: { pl: 'Berlin', native: 'Berlin' },

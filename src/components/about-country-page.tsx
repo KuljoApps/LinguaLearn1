@@ -6,8 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/componen
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { ArrowLeft, Map, Users, Wallet, Landmark } from 'lucide-react';
+import { ArrowLeft, Map, Users, Wallet, Landmark, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
 export interface AboutCountryData {
   countryName: { pl: string; native: string; };
@@ -26,6 +27,8 @@ export interface AboutCountryData {
     funFactsTitle: { pl: string; native: string; };
     funFacts: { pl: string[]; native: string[]; };
     backButton: { pl: string; native: string; };
+    readMore: { pl: string; native: string; };
+    readLess: { pl: string; native: string; };
   };
   stats: {
     capital: { pl: string; native: string; };
@@ -41,6 +44,7 @@ interface AboutCountryPageProps {
 
 export default function AboutCountryPage({ data }: AboutCountryPageProps) {
   const [displayLang, setDisplayLang] = useState<'pl' | 'native'>('native');
+  const [isDescriptionOpen, setIsDescriptionOpen] = useState(false);
 
   const t = (key: keyof AboutCountryData['ui']) => {
     return data.ui[key][displayLang];
@@ -70,6 +74,12 @@ export default function AboutCountryPage({ data }: AboutCountryPageProps) {
     </TableRow>
   );
 
+  const description = t('description').replace(/ ([a-zA-Z]) /g, ' $1\u00A0');
+  const sentences = description.match(/[^.!?]+[.!?]+/g) || [description];
+  const previewText = sentences.slice(0, 2).join(' ');
+  const restOfText = sentences.length > 2 ? sentences.slice(2).join(' ') : null;
+
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4">
       <Card className="w-full max-w-2xl shadow-2xl">
@@ -87,7 +97,7 @@ export default function AboutCountryPage({ data }: AboutCountryPageProps) {
                   <span className="mr-2 text-lg">{data.flag.native}</span> {data.countryName.native}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setDisplayLang('pl')}>
-                  <span className="mr-2 text-lg">{data.flag.pl}</span> Polska
+                  <span className="mr-2 text-lg">{data.flag.pl}</span> Polski
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -105,9 +115,22 @@ export default function AboutCountryPage({ data }: AboutCountryPageProps) {
                 data-ai-hint={`map ${data.countryName.native.toLowerCase()}`}
               />
             </div>
-            <p className="text-sm text-muted-foreground md:text-base text-justify">
-              {t('description').replace(/ ([a-zA-Z]) /g, ' $1\u00A0')}
-            </p>
+             <div className="text-sm text-muted-foreground md:text-base text-justify">
+              <p>{previewText}</p>
+              {restOfText && (
+                <Collapsible open={isDescriptionOpen} onOpenChange={setIsDescriptionOpen} className="mt-2">
+                  <CollapsibleContent>
+                    <p>{restOfText}</p>
+                  </CollapsibleContent>
+                  <CollapsibleTrigger asChild>
+                    <Button variant="link" className="p-0 h-auto text-sm text-primary/80 hover:text-primary">
+                      {isDescriptionOpen ? t('readLess') : t('readMore')}
+                      <ChevronDown className={`ml-1 h-4 w-4 transition-transform duration-200 ${isDescriptionOpen ? 'rotate-180' : ''}`} />
+                    </Button>
+                  </CollapsibleTrigger>
+                </Collapsible>
+              )}
+            </div>
           </div>
 
           <div className="rounded-lg border p-4">

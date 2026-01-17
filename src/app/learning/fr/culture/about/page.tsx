@@ -39,6 +39,8 @@ const franceData: AboutCountryData = {
       ]
     },
     backButton: { pl: 'Powrót do Kultury', native: 'Retour à la Culture' },
+    readMore: { pl: 'Czytaj więcej', native: 'Lire la suite' },
+    readLess: { pl: 'Zwiń', native: 'Lire moins' },
   },
   stats: {
     capital: { pl: 'Paryż', native: 'Paris' },

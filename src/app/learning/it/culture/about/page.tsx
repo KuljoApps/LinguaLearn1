@@ -39,6 +39,8 @@ const italyData: AboutCountryData = {
       ]
     },
     backButton: { pl: 'Powrót do Kultury', native: 'Torna a Cultura' },
+    readMore: { pl: 'Czytaj więcej', native: 'Leggi di più' },
+    readLess: { pl: 'Zwiń', native: 'Leggi di meno' },
   },
   stats: {
     capital: { pl: 'Rzym', native: 'Roma' },
