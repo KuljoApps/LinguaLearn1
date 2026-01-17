@@ -9,7 +9,6 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { ArrowLeft, Map, Users, Wallet, Landmark, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 export interface AboutCountryData {
   countryName: { pl: string; native: string; };
@@ -47,10 +46,12 @@ export default function AboutCountryPage({ data }: AboutCountryPageProps) {
   const [displayLang, setDisplayLang] = React.useState<'pl' | 'native'>('native');
   const [isDescriptionOpen, setIsDescriptionOpen] = React.useState(false);
 
-  const placeholderImage = PlaceHolderImages.find(img => img.id === `${data.countryCode}-map`);
-
   const t = (key: keyof AboutCountryData['ui']) => {
-    return data.ui[key][displayLang];
+    const texts = data.ui[key];
+    if (displayLang === 'pl' && 'pl' in texts) {
+      return (texts as any).pl;
+    }
+    return (texts as any).native;
   };
 
   const getStat = (key: keyof AboutCountryData['stats']) => {
@@ -110,12 +111,11 @@ export default function AboutCountryPage({ data }: AboutCountryPageProps) {
           <div className="flex flex-col items-center gap-6 md:flex-row">
             <div className="flex-shrink-0">
               <Image
-                src={placeholderImage?.imageUrl || `https://picsum.photos/seed/${data.countryCode}/300/300`}
-                alt={placeholderImage?.description || `Map of ${data.countryName.native}`}
+                src={`/${data.nativeLangCode}-about.jpeg`}
+                alt={`Map of ${data.countryName.native}`}
                 width={250}
                 height={250}
                 className="rounded-full border-4 border-primary/20 object-cover shadow-lg"
-                data-ai-hint={placeholderImage?.imageHint || `map ${data.countryName.native.toLowerCase()}`}
               />
             </div>
              <div className="text-sm text-muted-foreground md:text-base text-justify">
