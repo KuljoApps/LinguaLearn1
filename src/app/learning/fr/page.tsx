@@ -1,4 +1,4 @@
-import { BookCopy, ArrowLeft, GraduationCap, Clock, FilePenLine, MessageSquareText } from 'lucide-react';
+import { BookCopy, ArrowLeft, GraduationCap, Clock, FilePenLine, MessageSquareText, BookText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card';
@@ -36,6 +36,12 @@ export default function LearningFrPage() {
                         <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
                             <MessageSquareText className="mr-2 h-5 w-5" />
                             Expressions & Phrases
+                        </Button>
+                    </Link>
+                     <Link href="/learning/fr/dictionary" passHref>
+                        <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
+                            <BookText className="mr-2 h-5 w-5" />
+                            Dictionnaire
                         </Button>
                     </Link>
                 </CardContent>
