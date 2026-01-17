@@ -84,6 +84,15 @@ export default function AboutCountryPage({ data }: AboutCountryPageProps) {
   const previewText = sentences.slice(0, 2).join(' ');
   const restOfText = sentences.length > 2 ? sentences.slice(2).join(' ') : null;
 
+  const getNativeLangName = (code: 'en' | 'de' | 'fr' | 'it' | 'es') => {
+    switch(code) {
+        case 'en': return 'English';
+        case 'de': return 'Deutsch';
+        case 'fr': return 'Français';
+        case 'it': return 'Italiano';
+        case 'es': return 'Español';
+    }
+  }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4">
@@ -120,24 +129,26 @@ export default function AboutCountryPage({ data }: AboutCountryPageProps) {
                         </Button>
                       </CollapsibleTrigger>
                     ) : <div />}
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm underline text-muted-foreground">{t('language')}</span>
-                       <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="outline" size="icon" className="h-8 w-8">
-                            <span className="text-xl">{displayLang === 'native' ? data.flag.native : data.flag.pl}</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={() => setDisplayLang('native')}>
-                            <span className="mr-2 text-lg">{data.flag.native}</span> {data.countryName.native}
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => setDisplayLang('pl')}>
-                            <span className="mr-2 text-lg">{data.flag.pl}</span> Polski
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-auto p-1 rounded-md">
+                          <div className="flex items-center gap-2">
+                              <span className="text-sm underline text-muted-foreground">{t('language')}</span>
+                              <div className="flex items-center justify-center h-8 w-8 rounded-md border border-input bg-background">
+                                  <span className="text-xl">{displayLang === 'native' ? data.flag.native : data.flag.pl}</span>
+                              </div>
+                          </div>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => setDisplayLang('native')}>
+                          <span className="mr-2 text-lg">{data.flag.native}</span> {getNativeLangName(data.nativeLangCode)}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setDisplayLang('pl')}>
+                          <span className="mr-2 text-lg">{data.flag.pl}</span> Polski
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
                 </Collapsible>
               </div>
