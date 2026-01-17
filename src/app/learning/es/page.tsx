@@ -1,7 +1,7 @@
-import { BookCopy, ArrowLeft, GraduationCap, BookMarked } from 'lucide-react';
+import { BookCopy, ArrowLeft, GraduationCap, BookMarked, BookText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card';
 
 export default function LearningEsPage() {
     return (
@@ -24,6 +24,12 @@ export default function LearningEsPage() {
                         <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
                             <BookMarked className="mr-2 h-5 w-5" />
                             Tiempos Verbales
+                        </Button>
+                    </Link>
+                    <Link href="/learning/es/grammar" passHref>
+                        <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
+                            <BookText className="mr-2 h-5 w-5" />
+                            Gramática General
                         </Button>
                     </Link>
                 </CardContent>
