@@ -44,6 +44,7 @@ type SortableKey = keyof ErrorRecord | keyof AggregatedError;
 const uiTexts = {
     title: { en: 'Common Errors', fr: 'Erreurs Courantes', de: 'Häufige Fehler', it: 'Errori Comuni', es: 'Errores Comunes' },
     filterPlaceholder: { en: 'Filter by quiz', fr: 'Filtrer par quiz', de: 'Nach Quiz filtern', it: 'Filtra per quiz', es: 'Filtrar por cuestionario' },
+    allQuizzes: { en: 'All Quizzes', fr: 'Tous les quiz', de: 'Alle Quizze', it: 'Tutti i quiz', es: 'Todos los cuestionarios' },
     viewFrequent: { en: 'View Most Frequent', fr: 'Voir les plus fréquents', de: 'Häufigste anzeigen', it: 'Visualizza più frequenti', es: 'Ver más frecuentes' },
     viewLatest: { en: 'View Latest', fr: 'Voir les derniers', de: 'Neueste anzeigen', it: 'Visualizza più recenti', es: 'Ver más recientes' },
     noErrors: { en: 'No errors recorded for this filter.', fr: 'Aucune erreur enregistrée pour ce filtre.', de: 'Keine Fehler für diesen Filter aufgezeichnet.', it: 'Nessun errore registrato per questo filtro.', es: 'No hay errores registrados para este filtro.' },
@@ -62,6 +63,45 @@ const uiTexts = {
     confirmClear: { en: 'Clear', fr: 'Effacer', de: 'Löschen', it: 'Cancella', es: 'Borrar' },
 };
 
+const quizOptionsByLanguage: Record<Language, { value: string; label: string }[]> = {
+    en: [
+        { value: 'English - Polish', label: 'English - Polish' },
+        { value: 'Polish - English', label: 'Polish - English' },
+        { value: 'Irregular Verbs', label: 'Irregular Verbs' },
+        { value: 'Phrasal Verbs', label: 'Phrasal Verbs' },
+        { value: 'Idioms', label: 'Idioms' },
+    ],
+    fr: [
+        { value: 'French - Polish', label: 'French - Polish' },
+        { value: 'Polish - French', label: 'Polish - French' },
+        { value: 'Irregular Verbs (FR)', label: 'Irregular Verbs (FR)' },
+        { value: 'Phrasal Verbs (FR)', label: 'Phrasal Verbs (FR)' },
+        { value: 'Idioms (FR)', label: 'Idioms (FR)' },
+    ],
+    de: [
+        { value: 'German - Polish', label: 'German - Polish' },
+        { value: 'Polish - German', label: 'Polish - German' },
+        { value: 'Irregular Verbs (DE)', label: 'Irregular Verbs (DE)' },
+        { value: 'Separable Verbs (DE)', label: 'Separable Verbs (DE)' },
+        { value: 'Idioms (DE)', label: 'Idioms (DE)' },
+    ],
+    it: [
+        { value: 'Italiano - Polacco', label: 'Italiano - Polacco' },
+        { value: 'Polacco - Italiano', label: 'Polacco - Italiano' },
+        { value: 'Verbi Irregolari (IT)', label: 'Verbi Irregolari (IT)' },
+        { value: 'Verbi Frasali (IT)', label: 'Verbi Frasali (IT)' },
+        { value: 'Modi di dire (IT)', label: 'Modi di dire (IT)' },
+    ],
+    es: [
+        { value: 'Español - Polaco', label: 'Español - Polaco' },
+        { value: 'Polaco - Español', label: 'Polaco - Español' },
+        { value: 'Verbos Irregulares (ES)', label: 'Verbos Irregulares (ES)' },
+        { value: 'Verbos con Preposición (ES)', label: 'Verbos con Preposición (ES)' },
+        { value: 'Modismos (ES)', label: 'Modismos (ES)' },
+    ],
+};
+
+
 export default function ErrorsPage() {
     const [errors, setErrors] = useState<ErrorRecord[]>([]);
     const [isClearAlertOpen, setIsClearAlertOpen] = useState(false);
@@ -77,6 +117,7 @@ export default function ErrorsPage() {
             const currentLang = getLanguage();
             setLanguageState(currentLang);
             setErrors(getErrors()); // Reload errors for the current language
+            setQuizFilter('all');
         };
         handleLanguageChange(); // Initial load
         window.addEventListener('language-changed', handleLanguageChange);
@@ -322,32 +363,10 @@ export default function ErrorsPage() {
                                 <SelectValue placeholder={getUIText('filterPlaceholder')} />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="all">All Quizzes</SelectItem>
-                                <SelectItem value="English - Polish">English - Polish</SelectItem>
-                                <SelectItem value="Polish - English">Polish - English</SelectItem>
-                                <SelectItem value="Irregular Verbs">Irregular Verbs</SelectItem>
-                                <SelectItem value="Phrasal Verbs">Phrasal Verbs</SelectItem>
-                                <SelectItem value="Idioms">Idioms</SelectItem>
-                                <SelectItem value="French - Polish">French - Polish</SelectItem>
-                                <SelectItem value="Polish - French">Polish - French</SelectItem>
-                                <SelectItem value="Irregular Verbs (FR)">Irregular Verbs (FR)</SelectItem>
-                                <SelectItem value="Phrasal Verbs (FR)">Phrasal Verbs (FR)</SelectItem>
-                                <SelectItem value="Idioms (FR)">Idioms (FR)</SelectItem>
-                                <SelectItem value="German - Polish">German - Polish</SelectItem>
-                                <SelectItem value="Polish - German">Polish - German</SelectItem>
-                                <SelectItem value="Irregular Verbs (DE)">Irregular Verbs (DE)</SelectItem>
-                                <SelectItem value="Separable Verbs (DE)">Separable Verbs (DE)</SelectItem>
-                                <SelectItem value="Idioms (DE)">Idioms (DE)</SelectItem>
-                                <SelectItem value="Italiano - Polacco">Italiano - Polacco</SelectItem>
-                                <SelectItem value="Polacco - Italiano">Polacco - Italiano</SelectItem>
-                                <SelectItem value="Verbi Irregolari (IT)">Verbi Irregolari (IT)</SelectItem>
-                                <SelectItem value="Verbi Frasali (IT)">Verbi Frasali (IT)</SelectItem>
-                                <SelectItem value="Modi di dire (IT)">Modi di dire (IT)</SelectItem>
-                                <SelectItem value="Español - Polaco">Español - Polaco</SelectItem>
-                                <SelectItem value="Polaco - Español">Polaco - Español</SelectItem>
-                                <SelectItem value="Verbos Irregulares (ES)">Verbos Irregulares (ES)</SelectItem>
-                                <SelectItem value="Verbos con Preposición (ES)">Verbos con Preposición (ES)</SelectItem>
-                                <SelectItem value="Modismos (ES)">Modismos (ES)</SelectItem>
+                                <SelectItem value="all">{getUIText('allQuizzes')}</SelectItem>
+                                {quizOptionsByLanguage[language].map(option => (
+                                    <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                                ))}
                             </SelectContent>
                         </Select>
                         <Button variant="outline" onClick={handleViewChange}>
@@ -392,5 +411,3 @@ export default function ErrorsPage() {
         </>
     );
 }
-
-    
