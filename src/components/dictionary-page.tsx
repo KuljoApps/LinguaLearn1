@@ -40,23 +40,35 @@ export default function DictionaryPage({ title, backHref, words, children }: Dic
             <CardContent>
                 <ScrollArea className="h-96 w-full pr-4">
                     <div className="flex flex-col gap-3">
-                        {words.map((w, index) => (
-                            <React.Fragment key={index}>
-                                <div className="text-sm">
-                                    <p className="font-bold">{w.word}</p>
-                                    <div className="flex items-center gap-2">
-                                        {w.colorCode && (
-                                            <div
-                                                className="h-4 w-4 shrink-0 rounded-full border"
-                                                style={{ backgroundColor: w.colorCode }}
-                                            />
-                                        )}
-                                        <p className="text-muted-foreground">{w.translation}</p>
+                        {words.map((w, index) => {
+                            if (w.isHeader) {
+                                return (
+                                    <div key={`header-${index}`} className="pt-6 pb-2 first:pt-0">
+                                        <h3 className="text-xl font-bold italic tracking-tight text-primary">{w.word}</h3>
                                     </div>
-                                </div>
-                                {index < words.length - 1 && <Separator />}
-                            </React.Fragment>
-                        ))}
+                                );
+                            }
+                            return (
+                                <React.Fragment key={index}>
+                                    <div className="text-sm">
+                                        <p className="font-bold">{w.word}</p>
+                                        <div className="flex items-center gap-2">
+                                            {w.colorCode && (
+                                                <div
+                                                    className="h-4 w-4 shrink-0 rounded-full border"
+                                                    style={{ backgroundColor: w.colorCode }}
+                                                />
+                                            )}
+                                            <p className="text-muted-foreground">
+                                                {w.translation}
+                                                {w.numeric && <span className="font-mono text-xs ml-2 tracking-tighter">({w.numeric})</span>}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    {index < words.length - 1 && !words[index + 1]?.isHeader && <Separator />}
+                                </React.Fragment>
+                            );
+                        })}
                     </div>
                 </ScrollArea>
             </CardContent>
