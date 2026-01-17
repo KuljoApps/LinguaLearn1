@@ -7,8 +7,8 @@ export default function GrammarItPage() {
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
             <Card className="w-full max-w-md shadow-2xl">
-                <CardHeader>
-                    <div className="flex items-center justify-center gap-4">
+                <CardHeader className="items-center">
+                    <div className="flex items-center gap-4">
                         <BookText className="h-8 w-8" />
                         <h1 className="text-3xl font-bold tracking-tight text-center">Grammatica Generale</h1>
                     </div>
