@@ -1,4 +1,4 @@
-import { ArrowLeft, BookText, Split, HelpCircle, Ban, Palette, Rabbit, UserSquare, Newspaper } from 'lucide-react';
+import { ArrowLeft, FilePenLine, Split, HelpCircle, Ban, Palette, Rabbit, UserSquare, Newspaper } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card';
@@ -7,10 +7,12 @@ export default function GrammarItPage() {
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
             <Card className="w-full max-w-md shadow-2xl">
-                <CardHeader className="text-center">
-                    <div className="flex items-center justify-center gap-4">
-                        <BookText className="h-8 w-8" />
-                        <h1 className="text-3xl font-bold tracking-tight">Grammatica Generale</h1>
+                <CardHeader className="text-center p-4">
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4">
+                        <FilePenLine className="h-8 w-8 flex-shrink-0" />
+                        <h1 className="text-3xl font-bold tracking-tight text-center sm:text-left break-words">
+                            Grammatica Generale
+                        </h1>
                     </div>
                 </CardHeader>
                 <CardContent className="flex flex-col space-y-4 p-4">
