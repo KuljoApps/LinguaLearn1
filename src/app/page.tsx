@@ -141,7 +141,7 @@ export default function Home() {
                     <Separator className="mb-2"/>
                     <Link href={isFrench ? "/learning/fr" : isGerman ? "/learning/de" : isItalian ? "/learning/it" : isSpanish ? "/learning/es" : "/learning/en"} passHref>
                         <Button variant="outline" className="w-full h-12 text-lg mt-2 border-2 border-primary">
-                            <GraduationCap className="mr-2 h-5 w-5" />
+                            <GraduationCap className="mr-2 h-5 w-5 text-deep-purple" />
                             {getLearningButtonText()}
                         </Button>
                     </Link>

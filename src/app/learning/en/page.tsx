@@ -22,25 +22,25 @@ export default function LearningEnPage() {
                     </Link>
                     <Link href="/learning/en/tenses" passHref>
                         <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
-                            <Clock className="mr-2 h-5 w-5" />
+                            <Clock className="mr-2 h-5 w-5 text-deep-purple" />
                             Tenses
                         </Button>
                     </Link>
                     <Link href="/learning/en/grammar" passHref>
                         <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
-                            <FilePenLine className="mr-2 h-5 w-5" />
+                            <FilePenLine className="mr-2 h-5 w-5 text-deep-purple" />
                             General Grammar
                         </Button>
                     </Link>
                     <Link href="/learning/en/phrases" passHref>
                         <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
-                            <MessageSquareText className="mr-2 h-5 w-5" />
+                            <MessageSquareText className="mr-2 h-5 w-5 text-deep-purple" />
                             Expressions & Phrases
                         </Button>
                     </Link>
                     <Link href="/learning/en/dictionary" passHref>
                         <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
-                            <BookText className="mr-2 h-5 w-5" />
+                            <BookText className="mr-2 h-5 w-5 text-deep-purple" />
                             Dictionary
                         </Button>
                     </Link>

@@ -22,25 +22,25 @@ export default function LearningItPage() {
                     </Link>
                     <Link href="/learning/it/tenses" passHref>
                         <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
-                            <Clock className="mr-2 h-5 w-5" />
+                            <Clock className="mr-2 h-5 w-5 text-deep-purple" />
                             Tempi Verbali
                         </Button>
                     </Link>
                     <Link href="/learning/it/grammar" passHref>
                         <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
-                            <FilePenLine className="mr-2 h-5 w-5" />
+                            <FilePenLine className="mr-2 h-5 w-5 text-deep-purple" />
                             Grammatica Generale
                         </Button>
                     </Link>
                     <Link href="/learning/it/phrases" passHref>
                         <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
-                            <MessageSquareText className="mr-2 h-5 w-5" />
+                            <MessageSquareText className="mr-2 h-5 w-5 text-deep-purple" />
                             Espressioni e Frasi
                         </Button>
                     </Link>
                     <Link href="/learning/it/dictionary" passHref>
                         <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
-                            <BookText className="mr-2 h-5 w-5" />
+                            <BookText className="mr-2 h-5 w-5 text-deep-purple" />
                             Dizionario
                         </Button>
                     </Link>

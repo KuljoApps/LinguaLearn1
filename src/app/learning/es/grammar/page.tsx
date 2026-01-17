@@ -16,43 +16,43 @@ export default function GrammarEsPage() {
                 <CardContent className="flex flex-col space-y-4 p-6">
                     <Link href="/learning/es/grammar/sentence-structure" passHref>
                         <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
-                            <Split className="mr-2 h-5 w-5" />
+                            <Split className="mr-2 h-5 w-5 text-deep-purple" />
                             Estructura de la Oración
                         </Button>
                     </Link>
                     <Link href="/learning/es/grammar/questions" passHref>
                         <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
-                            <HelpCircle className="mr-2 h-5 w-5" />
+                            <HelpCircle className="mr-2 h-5 w-5 text-deep-purple" />
                             Preguntas
                         </Button>
                     </Link>
                     <Link href="/learning/es/grammar/negations" passHref>
                         <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
-                            <Ban className="mr-2 h-5 w-5" />
+                            <Ban className="mr-2 h-5 w-5 text-deep-purple" />
                             Negaciones
                         </Button>
                     </Link>
                      <Link href="/learning/es/grammar/articles" passHref>
                         <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
-                            <Newspaper className="mr-2 h-5 w-5" />
+                            <Newspaper className="mr-2 h-5 w-5 text-deep-purple" />
                             Artículos
                         </Button>
                     </Link>
                     <Link href="/learning/es/grammar/adjectives" passHref>
                         <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
-                            <Palette className="mr-2 h-5 w-5" />
+                            <Palette className="mr-2 h-5 w-5 text-deep-purple" />
                             Adjetivos
                         </Button>
                     </Link>
                     <Link href="/learning/es/grammar/adverbs" passHref>
                         <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
-                            <Rabbit className="mr-2 h-5 w-5" />
+                            <Rabbit className="mr-2 h-5 w-5 text-deep-purple" />
                             Adverbios
                         </Button>
                     </Link>
                     <Link href="/learning/es/grammar/pronouns" passHref>
                         <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
-                            <UserSquare className="mr-2 h-5 w-5" />
+                            <UserSquare className="mr-2 h-5 w-5 text-deep-purple" />
                             Pronombres
                         </Button>
                     </Link>
