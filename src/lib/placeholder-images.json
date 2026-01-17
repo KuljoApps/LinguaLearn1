@@ -1,3 +1,34 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "england-map",
+      "description": "Map of England",
+      "imageUrl": "https://images.unsplash.com/photo-1640179862283-654fc4306c12?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxtYXAlMjBlbmdsYW5kfGVufDB8fHx8MTc2ODY4NDM5OHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "map england"
+    },
+    {
+      "id": "germany-map",
+      "description": "Map of Germany",
+      "imageUrl": "https://images.unsplash.com/photo-1756478054260-7d89a0098fd5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxtYXAlMjBnZXJtYW55fGVufDB8fHx8MTc2ODY4NDM5N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "map germany"
+    },
+    {
+      "id": "france-map",
+      "description": "Map of France",
+      "imageUrl": "https://images.unsplash.com/photo-1586448911804-9fc613f60e15?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bWFwJTIwZnJhbmNlfGVufDB8fHx8MTc2ODY4NDM5N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "map france"
+    },
+    {
+      "id": "italy-map",
+      "description": "Map of Italy",
+      "imageUrl": "https://images.unsplash.com/photo-1509576931792-214960705f8a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxtYXAlMjBpdGFseXxlbnwwfHx8fDE3Njg2ODQzOTl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "map italy"
+    },
+    {
+      "id": "spain-map",
+      "description": "Map of Spain",
+      "imageUrl": "https://images.unsplash.com/photo-1674484984708-5b7aca72eb54?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxtYXAlMjBzcGFpbnxlbnwwfHx8fDE3Njg2ODQzOTh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "map spain"
+    }
+  ]
 }
