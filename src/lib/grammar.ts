@@ -26,23 +26,23 @@ export const allGrammar: GrammarContent = {
       content: [
         { 
           heading: 'Zdanie oznajmujące (SVO)', 
-          text: 'Podstawowy szyk zdania w języku angielskim to SVO: Podmiot (Subject) + Orzeczenie (Verb) + Dopełnienie (Object). Ten porządek jest stosunkowo sztywny.',
+          text: 'Podstawowy szyk zdania w języku angielskim to SVO: Podmiot (Subject) + Orzeczenie (Verb) + Dopełnienie (Object). Ten porządek jest stosunkowo sztywny i jego zachowanie jest kluczowe dla zrozumiałości.',
           examples: [
             { original: 'She (S) reads (V) books (O).', translation: 'Ona czyta książki.' },
             { original: 'The students (S) finished (V) their homework (O).', translation: 'Uczniowie skończyli swoje zadanie domowe.' }
           ]
         },
         { 
-          heading: 'Pytania ogólne (Yes/No)', 
-          text: 'Podstawowe pytania tworzy się przez inwersję, czyli postawienie czasownika posiłkowego (do, does, is, are, have) przed podmiotem.',
+          heading: 'Pytania ogólne (Yes/No Questions) - Podstawy', 
+          text: 'Podstawowe pytania tworzy się przez inwersję, czyli postawienie czasownika posiłkowego (do, does, is, are, have) przed podmiotem. To jedna z fundamentalnych zasad tworzenia pytań.',
           examples: [
             { original: 'Do you like music?', translation: 'Czy lubisz muzykę?' },
             { original: 'Is he a doctor?', translation: 'Czy on jest lekarzem?' }
           ]
         },
         { 
-          heading: 'Przeczenia', 
-          text: 'Przeczenie tworzy się dodając "not" po czasowniku posiłkowym. W czasie Present Simple i Past Simple dodaje się "do not" (don\'t) / "does not" (doesn\'t) lub "did not" (didn\'t).',
+          heading: 'Przeczenia (z "not") - Podstawy', 
+          text: 'Przeczenie tworzy się, dodając "not" po pierwszym czasowniku posiłkowym. W czasie Present Simple i Past Simple, jeśli nie ma innego czasownika posiłkowego, dodaje się "do not" (don\'t) / "does not" (doesn\'t) lub "did not" (didn\'t).',
           examples: [
             { original: 'They are not from Canada.', translation: 'Oni nie są z Kanady.' },
             { original: 'I do not understand the question.', translation: 'Nie rozumiem tego pytania.' }
@@ -50,7 +50,7 @@ export const allGrammar: GrammarContent = {
         },
         { 
           heading: 'Zdania z dopełnieniem', 
-          text: 'Dopełnienie (kogo? co? komu? czemu?) zazwyczaj występuje po czasowniku. Jeśli używamy zaimków dopełnienia (me, you, him, her, it, us, them), również stoją one po czasowniku.',
+          text: 'Dopełnienie (kogo? co? komu? czemu?) zazwyczaj występuje po czasowniku. Jeśli używamy zaimków dopełnienia (me, you, him, her, it, us, them), również stoją one bezpośrednio po czasowniku.',
           examples: [
             { original: 'He called me yesterday.', translation: 'On zadzwonił do mnie wczoraj.' },
             { original: 'She gave them the keys.', translation: 'Ona dała im klucze.' }
@@ -58,10 +58,10 @@ export const allGrammar: GrammarContent = {
         },
         { 
           heading: 'Okoliczniki miejsca i czasu', 
-          text: 'Określenia miejsca i czasu zazwyczaj umieszcza się na końcu zdania. Standardowa kolejność to: miejsce, a następnie czas.',
+          text: 'Określenia miejsca i czasu zazwyczaj umieszcza się na końcu zdania. Standardowa kolejność to: sposób (how), miejsce (where), a następnie czas (when).',
           examples: [
-            { original: 'We went to the cinema yesterday.', translation: 'Poszliśmy wczoraj do kina.' },
-            { original: 'She will be here in an hour.', translation: 'Ona będzie tutaj za godzinę.' }
+            { original: 'We went to the cinema (miejsce) yesterday (czas).', translation: 'Poszliśmy wczoraj do kina.' },
+            { original: 'She drives her car carefully (sposób) in the city (miejsce).', translation: 'Ona ostrożnie prowadzi samochód w mieście.' }
           ]
         }
       ],
@@ -86,8 +86,16 @@ export const allGrammar: GrammarContent = {
           ]
         },
         {
+          heading: 'Pytania o podmiot vs. dopełnienie',
+          text: 'W pytaniach o podmiot (kto/co wykonuje czynność) nie używamy operatora "do/does/did". Czasownik występuje w formie twierdzącej. W pytaniach o dopełnienie (na kogo/co skierowana jest czynność) operator jest konieczny.',
+          examples: [
+            { original: 'Who called you? (podmiot) vs. Who did you call? (dopełnienie)', translation: 'Kto do ciebie dzwonił? vs. Do kogo dzwoniłeś?' },
+            { original: 'What happened? (podmiot) vs. What did you see? (dopełnienie)', translation: 'Co się stało? vs. Co zobaczyłeś?' }
+          ]
+        },
+        {
           heading: 'Pytania rozłączne (Question Tags)',
-          text: 'To krótkie pytania dodawane na końcu zdania twierdzącego lub przeczącego. Jeśli zdanie jest twierdzące, pytanie jest przeczące, i na odwrót.',
+          text: 'To krótkie pytania dodawane na końcu zdania twierdzącego lub przeczącego, aby poprosić o potwierdzenie. Jeśli zdanie jest twierdzące, pytanie jest przeczące, i na odwrót.',
           examples: [
             { original: 'It\'s a beautiful day, isn\'t it?', translation: 'To piękny dzień, prawda?' },
             { original: 'You haven\'t seen my keys, have you?', translation: 'Nie widziałeś moich kluczy, prawda?' }
@@ -95,7 +103,7 @@ export const allGrammar: GrammarContent = {
         },
         {
           heading: 'Pytania pośrednie (Indirect Questions)',
-          text: 'Są to bardziej uprzejme formy pytań, często zaczynające się od zwrotów takich jak "Could you tell me..." lub "I was wondering...". W pytaniach pośrednich szyk zdania jest taki jak w zdaniu twierdzącym.',
+          text: 'Są to bardziej uprzejme formy pytań, często zaczynające się od zwrotów takich jak "Could you tell me..." lub "I was wondering...". W pytaniach pośrednich szyk zdania jest taki jak w zdaniu twierdzącym (brak inwersji).',
           examples: [
             { original: 'Could you tell me where the station is?', translation: 'Czy mógłbyś mi powiedzieć, gdzie jest stacja?' },
             { original: 'I wonder if she will come to the party.', translation: 'Zastanawiam się, czy ona przyjdzie na imprezę.' }
@@ -153,7 +161,7 @@ export const allGrammar: GrammarContent = {
           ]
         },
         { 
-          heading: 'Pytania ogólne (Ja/Nein-Fragen)', 
+          heading: 'Pytania ogólne (Ja/Nein-Fragen) - Podstawy', 
           text: 'Podstawowe pytania, na które można odpowiedzieć "tak" lub "nie", tworzy się przez postawienie odmienionego czasownika na pierwszym miejscu.',
           examples: [
             { original: 'Lernst du Deutsch?', translation: 'Czy uczysz się niemieckiego?' },
@@ -161,7 +169,7 @@ export const allGrammar: GrammarContent = {
           ]
         },
         { 
-          heading: 'Przeczenia (nicht / kein)', 
+          heading: 'Przeczenia (nicht / kein) - Podstawy', 
           text: 'Przeczenie "nicht" neguje czasownik lub całe zdanie i zazwyczaj stoi na końcu. Przeczenie "kein" neguje rzeczownik i stoi przed nim, odmieniając się jak rodzajnik nieokreślony.',
           examples: [
             { original: 'Ich spiele nicht gern Tennis.', translation: 'Nie lubię grać w tenisa.' },
@@ -211,6 +219,14 @@ export const allGrammar: GrammarContent = {
             examples: [
               { original: 'Worüber sprecht ihr?', translation: 'O czym rozmawiacie?' },
               { original: 'Mit wem gehst du ins Kino?', translation: 'Z kim idziesz do kina?' }
+            ]
+          },
+           {
+            heading: 'Pytania rozłączne (Frageanhängsel)',
+            text: 'Są to krótkie zwroty dodawane na końcu zdania, aby poprosić o potwierdzenie, podobnie jak polskie "prawda?". Najczęstsze to "oder?", "nicht wahr?" lub "nicht?".',
+            examples: [
+              { original: 'Du kommst aus Polen, oder?', translation: 'Pochodzisz z Polski, prawda?' },
+              { original: 'Das Wetter ist schön, nicht wahr?', translation: 'Pogoda jest piękna, nieprawdaż?' }
             ]
           },
           {
@@ -340,6 +356,14 @@ export const allGrammar: GrammarContent = {
               { original: 'Hace buen tiempo, ¿verdad?', translation: 'Jest ładna pogoda, prawda?' },
               { original: 'No vas a salir, ¿no?', translation: 'Nie wychodzisz, prawda?' }
             ]
+          },
+          {
+            heading: 'Pytania alternatywne',
+            text: 'Używa się ich, aby dać rozmówcy wybór między dwiema lub więcej opcjami, używając spójnika "o" (lub).',
+            examples: [
+              { original: '¿Prefieres té o café?', translation: 'Wolisz herbatę czy kawę?' },
+              { original: '¿Vamos al cine o nos quedamos en casa?', translation: 'Idziemy do kina czy zostajemy w domu?' }
+            ]
           }
         ],
       },
@@ -460,6 +484,14 @@ export const allGrammar: GrammarContent = {
               { original: 'Où est-ce que tu habites?', translation: 'Gdzie mieszkasz?' },
               { original: 'Comment allez-vous?', translation: 'Jak się Pan/Pani miewa?' }
             ]
+          },
+          {
+            heading: 'Pytania o "co" (Que vs Qu\'est-ce que)',
+            text: 'Pytając o "co" (dopełnienie), można użyć "Qu\'est-ce que" (standard) lub "Que" z inwersją (formalnie). W mowie potocznej często używa się "quoi" na końcu zdania.',
+            examples: [
+              { original: 'Qu\'est-ce que tu fais?', translation: 'Co robisz?' },
+              { original: 'Tu fais quoi?', translation: '(potocznie) Co robisz?' }
+            ]
           }
         ],
       },
@@ -572,6 +604,14 @@ export const allGrammar: GrammarContent = {
               { original: 'Che cosa vuole la signora?', translation: 'Czego pani sobie życzy?' },
               { original: 'È arrivato Paolo?', translation: 'Czy Paweł przyjechał?' }
             ]
+          },
+          {
+            heading: 'Pytania rozłączne (vero? / no?)',
+            text: 'Aby poprosić o potwierdzenie, na końcu zdania dodaje się krótkie pytanie, takie jak "vero?" (prawda?) lub "no?".',
+            examples: [
+              { original: 'È una bella giornata, vero?', translation: 'To piękny dzień, prawda?' },
+              { original: 'Vieni con noi, no?', translation: 'Idziesz z nami, nie?' }
+            ]
           }
         ],
       },
@@ -612,5 +652,7 @@ export const allGrammar: GrammarContent = {
   },
   },
 };
+
+    
 
     
