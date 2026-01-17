@@ -119,21 +119,23 @@ export default function CitiesPage({ data }: { data: CitiesPageData }) {
                         </div>
                         <CardTitle className="text-center">{city.name[displayLang]}</CardTitle>
                       </CardHeader>
-                      <CardContent className="flex flex-col items-center gap-4 px-4 pt-0 pb-4">
-                        <ScrollArea className="h-40 w-full pr-4">
-                          <p className="text-sm text-muted-foreground text-justify">
+                      <CardContent className="flex flex-col items-center gap-4 pt-0 pb-4 px-0">
+                        <ScrollArea className="h-40 w-full">
+                           <p className="text-sm text-muted-foreground text-justify px-4 pr-6">
                             {city.description[displayLang].replace(/ ([a-zA-Z])\s/g, ' $1\u00A0')}
                           </p>
                         </ScrollArea>
-                        <Table>
-                          <TableBody>
-                            {renderFactRow(<Users />, t('population'), city.facts.population)}
-                            {renderFactRow(<Map />, t('area'), city.facts.area[displayLang])}
-                            {renderFactRow(<Sparkles />, t('landmark'), city.facts.landmark[displayLang])}
-                            {renderFactRow(<Calendar />, t('founded'), city.facts.founded[displayLang])}
-                            {renderFactRow(<Sparkles />, t('nickname'), city.facts.nickname[displayLang])}
-                          </TableBody>
-                        </Table>
+                        <div className="w-full px-4">
+                          <Table>
+                            <TableBody>
+                              {renderFactRow(<Users />, t('population'), city.facts.population)}
+                              {renderFactRow(<Map />, t('area'), city.facts.area[displayLang])}
+                              {renderFactRow(<Sparkles />, t('landmark'), city.facts.landmark[displayLang])}
+                              {renderFactRow(<Calendar />, t('founded'), city.facts.founded[displayLang])}
+                              {renderFactRow(<Sparkles />, t('nickname'), city.facts.nickname[displayLang])}
+                            </TableBody>
+                          </Table>
+                        </div>
                       </CardContent>
                     </Card>
                   </div>
@@ -142,7 +144,7 @@ export default function CitiesPage({ data }: { data: CitiesPageData }) {
             </CarouselContent>
           </Carousel>
         </CardContent>
-        <CardFooter className="flex justify-center p-4">
+        <CardFooter className="flex justify-center p-4 pt-2">
           <Link href={`/learning/${data.lang}/culture`} passHref>
             <Button variant="outline">
               <ArrowLeft className="mr-2 h-4 w-4" /> {t('backButton')}
