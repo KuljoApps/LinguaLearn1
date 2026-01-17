@@ -21,15 +21,19 @@ const TenseAccordion = ({ tenses }: { tenses: Tense[] }) => (
     <Accordion type="single" collapsible className="w-full">
         {tenses.map((tense) => (
             <AccordionItem value={tense.name} key={tense.name}>
-                <AccordionTrigger className="text-lg font-semibold hover:no-underline">
+                <AccordionTrigger className="text-lg font-semibold hover:no-underline text-left">
                     {tense.name}
                 </AccordionTrigger>
-                <AccordionContent className="space-y-3">
+                <AccordionContent className="space-y-4">
                     <p className="text-muted-foreground">{tense.usage}</p>
                     <div>
-                        <p className="font-semibold">Przykład:</p>
-                        <p className="italic">"{tense.example}"</p>
-                        <p className="text-sm text-muted-foreground">Tłumaczenie: "{tense.example_pl}"</p>
+                        <p className="font-semibold">Przykłady:</p>
+                        {tense.examples.map((example, index) => (
+                            <div key={index} className="mt-2 pl-3 border-l-2 border-muted-foreground/20 pt-1 pb-2">
+                                <p className="italic">"{example.original}"</p>
+                                <p className="text-sm text-muted-foreground">Tłumaczenie: "{example.translation}"</p>
+                            </div>
+                        ))}
                     </div>
                 </AccordionContent>
             </AccordionItem>
