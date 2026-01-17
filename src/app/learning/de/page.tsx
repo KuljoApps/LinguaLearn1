@@ -1,7 +1,8 @@
-import { BookCopy, ArrowLeft, GraduationCap, Clock, FilePenLine, MessageSquareText, BookText, Separator, Landmark } from 'lucide-react';
+import { BookCopy, ArrowLeft, GraduationCap, Clock, FilePenLine, MessageSquareText, BookText, Landmark } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 
 export default function LearningDePage() {
     return (
