@@ -1,13 +1,13 @@
 
 import type { Language } from './storage';
-import { bodyPartsDictionary } from './dictionary-body-parts.ts';
-import { colorsDictionary } from './dictionary-colors.ts';
-import { familyDictionary } from './dictionary-family.ts';
-import { foodDictionary } from './dictionary-food.ts';
-import { homeDictionary } from './dictionary-home.ts';
-import { numbersDictionary } from './dictionary-numbers.ts';
-import { timeDictionary } from './dictionary-time.ts';
-import { workDictionary } from './dictionary-work.ts';
+import { bodyPartsDictionary } from './dictionary-body-parts';
+import { colorsDictionary } from './dictionary-colors';
+import { familyDictionary } from './dictionary-family';
+import { foodDictionary } from './dictionary-food';
+import { homeDictionary } from './dictionary-home';
+import { numbersDictionary } from './dictionary-numbers';
+import { timeDictionary } from './dictionary-time';
+import { workDictionary } from './dictionary-work';
 
 export interface DictionaryWord {
   word: string;

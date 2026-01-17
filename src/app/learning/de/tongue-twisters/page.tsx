@@ -1,30 +1,22 @@
 
-import { ArrowLeft, Languages } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+"use client";
 
-export default function TongueTwistersDePage() {
+import PhrasesPage from '@/components/phrases-page';
+import { allPhrases } from '@/lib/phrases';
+import { Languages } from 'lucide-react';
+
+export default function GermanTongueTwisters() {
+    const phraseData = allPhrases.de['tongue-twisters'];
+
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
-            <Card className="w-full max-w-md shadow-2xl">
-                <CardHeader className="text-center">
-                    <div className="flex items-center justify-center gap-4">
-                        <Languages className="h-8 w-8" />
-                        <CardTitle className="text-3xl">Zungenbrecher</CardTitle>
-                    </div>
-                </CardHeader>
-                <CardContent className="p-6">
-                    <p className="text-center text-muted-foreground">Inhalt folgt in Kürze...</p>
-                </CardContent>
-                <CardFooter className="flex justify-center p-4">
-                    <Link href="/learning/de" passHref>
-                        <Button variant="outline">
-                            <ArrowLeft className="mr-2 h-4 w-4" /> Zurück zum Lernen
-                        </Button>
-                    </Link>
-                </CardFooter>
-            </Card>
+            <PhrasesPage 
+                title={phraseData.title} 
+                phrases={phraseData.phrases} 
+                backHref="/learning/de"
+            >
+                <Languages className="h-8 w-8" />
+            </PhrasesPage>
         </main>
     );
 }

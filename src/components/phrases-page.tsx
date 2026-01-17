@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from 'react';
@@ -32,7 +33,7 @@ export default function PhrasesPage({ title, backHref, phrases, children }: Phra
                             <React.Fragment key={index}>
                                 <div className="text-sm">
                                     <p className="font-bold">{p.phrase}</p>
-                                    <p className="text-muted-foreground">{p.translation}</p>
+                                    {p.translation && <p className="text-muted-foreground">{p.translation}</p>}
                                 </div>
                                 {index < phrases.length - 1 && <Separator />}
                             </React.Fragment>
