@@ -235,8 +235,8 @@ export default function QuizIrregularVerbsIt() {
       vibrate('incorrect');
        const errorRecord = {
         word: currentQuestion.verb,
-        userAnswer: `Forms: ${form2Input}, ${form3Input}`,
-        correctAnswer: `Forms: ${currentQuestion.form2}, ${currentQuestion.form3}`,
+        userAnswer: `${form2Input}, ${form3Input}`,
+        correctAnswer: `${currentQuestion.form2}, ${currentQuestion.form3}`,
         quiz: QUIZ_NAME,
       };
       addError(errorRecord);
@@ -391,7 +391,7 @@ export default function QuizIrregularVerbsIt() {
 
           <div className="text-center space-y-2">
               <p className="text-muted-foreground">Verbo irregolare:</p>
-              <p className="text-4xl font-headline font-bold text-card-foreground">"{currentQuestion.verb}"</p>
+              <p className="text-4xl font-headline font-bold text-card-foreground">"{currentQuestion.verb}"?</p>
           </div>
 
           <div className="w-full space-y-4">
