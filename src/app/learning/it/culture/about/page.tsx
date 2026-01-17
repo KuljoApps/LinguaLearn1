@@ -1,30 +1,47 @@
+import AboutCountryPage, { type AboutCountryData } from '@/components/about-country-page';
 
-import { ArrowLeft, Globe } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+const italyData: AboutCountryData = {
+  countryName: { pl: 'Włochy', native: 'Italia' },
+  countryCode: 'italy',
+  nativeLangCode: 'it',
+  flag: { pl: '🇵🇱', native: '🇮🇹' },
+  backLink: "/learning/it/culture",
+  ui: {
+    title: { pl: 'O Włoszech', native: 'Sull\'Italia' },
+    description: {
+      pl: 'Włochy, kolebka Cesarstwa Rzymskiego i renesansu, to kraj o nieporównywalnym wpływie na zachodnią cywilizację. Od starożytnych ruin Rzymu po romantyczne kanały Wenecji, historia jest tu żywa na każdym kroku. Włochy szczycą się największą liczbą obiektów na liście światowego dziedzictwa UNESCO. Kraj ten jest synonimem sztuki, z arcydziełami Michała Anioła, Leonarda da Vinci i Rafaela. Włoska kuchnia, celebrowana na całym świecie, opiera się na prostocie, jakości składników i regionalnej różnorodności. To ojczyzna pizzy, makaronu, espresso i gelato. Od ośnieżonych Alp na północy po słoneczne wybrzeża Sycylii, Włochy oferują spektakularne krajobrazy. "La dolce vita", czyli słodkie życie, to filozofia celebrowania piękna, jedzenia, rodziny i przyjaciół. Włochy są również światowym liderem w dziedzinie mody, z Mediolanem jako jedną z jej stolic. To kraj pełen pasji, co widać zarówno w operze, jak i w zapale kibiców piłkarskich. Każdy z 20 regionów ma swoją unikalną kulturę, dialekt i tradycje kulinarne, tworząc fascynującą mozaikę.',
+      native: 'L\'Italia, culla dell\'Impero Romano e del Rinascimento, è un paese con un\'influenza incomparabile sulla civiltà occidentale. Dalle antiche rovine di Roma ai romantici canali di Venezia, la storia è viva ad ogni angolo. L\'Italia vanta il maggior numero di siti del patrimonio mondiale dell\'UNESCO. Questo paese è sinonimo di arte, con i capolavori di Michelangelo, Leonardo da Vinci e Raffaello. La cucina italiana, celebrata in tutto il mondo, si basa sulla semplicità, la qualità degli ingredienti e la diversità regionale. È la patria della pizza, della pasta, dell\'espresso e del gelato. Dalle Alpi innevate a nord alle coste assolate della Sicilia, l\'Italia offre paesaggi spettacolari. "La dolce vita" è una filosofia che celebra la bellezza, il cibo, la famiglia e gli amici. L\'Italia è anche un leader mondiale nel campo della moda, con Milano come una delle sue capitali. È un paese pieno di passione, visibile sia nell\'opera lirica che nell\'entusiasmo dei tifosi di calcio. Ognuna delle 20 regioni ha la sua cultura, il suo dialetto e le sue tradizioni culinarie uniche, creando un affascinante mosaico.'
+    },
+    factsTitle: { pl: 'Kluczowe Fakty', native: 'Fatti Chiave' },
+    capital: { pl: 'Stolica', native: 'Capitale' },
+    population: { pl: 'Populacja', native: 'Popolazione' },
+    area: { pl: 'Powierzchnia', native: 'Superficie' },
+    currency: { pl: 'Waluta', native: 'Moneta' },
+    funFactsTitle: { pl: 'Ciekawostki', native: 'Curiosità' },
+    funFacts: {
+      pl: [
+        'We Włoszech znajduje się ponad 1500 jezior.',
+        'Włosi stworzyli termometr, fortepian i maszynę do pisania.',
+        'W całym kraju istnieje ponad 140 rodzajów makaronu.',
+        'Każdego dnia do Fontanny di Trevi w Rzymie wrzucanych jest około 3000 euro.'
+      ],
+      native: [
+        'In Italia ci sono più di 1.500 laghi.',
+        'Gli italiani hanno inventato il termometro, il pianoforte e la macchina da scrivere.',
+        'Esistono oltre 140 tipi di pasta in tutto il paese.',
+        'Ogni giorno vengono lanciati circa 3.000 euro nella Fontana di Trevi a Roma.'
+      ]
+    },
+    backButton: { pl: 'Powrót do Kultury', native: 'Torna a Cultura' },
+  },
+  stats: {
+    capital: { pl: 'Rzym', native: 'Roma' },
+    population: '~59.1 miliona',
+    area: '301,340 km²',
+    currency: { pl: 'Euro (EUR)', native: 'Euro (EUR)' },
+  },
+};
 
 export default function AboutItPage() {
-    return (
-        <main className="flex min-h-screen flex-col items-center justify-center p-4">
-            <Card className="w-full max-w-md shadow-2xl">
-                <CardHeader className="text-center">
-                    <div className="flex items-center justify-center gap-4">
-                        <Globe className="h-8 w-8" />
-                        <CardTitle className="text-3xl">Sull'Italia</CardTitle>
-                    </div>
-                </CardHeader>
-                <CardContent className="p-6">
-                    <p className="text-center text-muted-foreground">Contenuto in arrivo...</p>
-                </CardContent>
-                <CardFooter className="flex justify-center p-4">
-                    <Link href="/learning/it/culture" passHref>
-                        <Button variant="outline">
-                            <ArrowLeft className="mr-2 h-4 w-4" /> Torna a Cultura
-                        </Button>
-                    </Link>
-                </CardFooter>
-            </Card>
-        </main>
-    );
+    return <AboutCountryPage data={italyData} />;
 }
