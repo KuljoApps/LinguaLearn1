@@ -7,9 +7,11 @@ export default function GrammarDePage() {
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
             <Card className="w-full max-w-md shadow-2xl">
-                <CardHeader className="flex-row items-center justify-center gap-4">
-                    <BookText className="h-8 w-8" />
-                    <h1 className="text-3xl font-bold tracking-tight text-center">Allgemeine Grammatik</h1>
+                <CardHeader className="text-center">
+                    <div className="inline-flex items-center gap-4">
+                        <BookText className="h-8 w-8" />
+                        <h1 className="text-3xl font-bold tracking-tight text-center">Allgemeine Grammatik</h1>
+                    </div>
                 </CardHeader>
                 <CardContent className="flex flex-col space-y-4 p-6">
                     <Link href="/learning/de/grammar/sentence-structure" passHref>
