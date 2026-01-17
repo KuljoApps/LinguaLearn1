@@ -191,6 +191,15 @@ export default function TensesPage({ title, backHref, tenses, language }: Tenses
         }
     }
 
+    const backButtonTexts: Record<Language, string> = {
+        en: 'Back to Learning',
+        de: 'Zurück zum Lernen',
+        es: 'Volver a Aprendizaje',
+        fr: 'Retour à l\'Apprentissage',
+        it: 'Torna ad Apprendimento',
+    };
+    
+    const backText = backButtonTexts[language];
 
     return (
         <Card className="w-full max-w-2xl shadow-2xl">
@@ -208,7 +217,7 @@ export default function TensesPage({ title, backHref, tenses, language }: Tenses
             <CardFooter className="flex justify-center p-6 border-t">
                 <Link href={backHref} passHref>
                     <Button variant="outline">
-                        <ArrowLeft className="mr-2 h-4 w-4" /> Powrót do nauki
+                        <ArrowLeft className="mr-2 h-4 w-4" /> {backText}
                     </Button>
                 </Link>
             </CardFooter>
