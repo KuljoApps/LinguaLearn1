@@ -1,4 +1,4 @@
-import { ArrowLeft, Hash, Palette, Clock, Users, BookText } from 'lucide-react';
+import { ArrowLeft, Hash, Palette, Clock, Users, BookText, PersonStanding, Utensils, Home, Briefcase } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card';
@@ -36,6 +36,30 @@ export default function DictionaryDePage() {
                         <Button variant="outline" className="w-full h-24 flex-col gap-2 text-lg border-2 border-primary">
                             <Users className="h-12 w-12" />
                             Familie
+                        </Button>
+                    </Link>
+                     <Link href="/learning/de/dictionary/body-parts" passHref>
+                        <Button variant="outline" className="w-full h-24 flex-col gap-2 text-lg border-2 border-primary">
+                            <PersonStanding className="h-12 w-12" />
+                            Körperteile
+                        </Button>
+                    </Link>
+                    <Link href="/learning/de/dictionary/food" passHref>
+                        <Button variant="outline" className="w-full h-24 flex-col gap-2 text-lg border-2 border-primary">
+                            <Utensils className="h-12 w-12" />
+                            Essen
+                        </Button>
+                    </Link>
+                    <Link href="/learning/de/dictionary/home" passHref>
+                        <Button variant="outline" className="w-full h-24 flex-col gap-2 text-lg border-2 border-primary">
+                            <Home className="h-12 w-12" />
+                            Wohnung
+                        </Button>
+                    </Link>
+                    <Link href="/learning/de/dictionary/work" passHref>
+                        <Button variant="outline" className="w-full h-24 flex-col gap-2 text-lg border-2 border-primary">
+                            <Briefcase className="h-12 w-12" />
+                            Arbeit
                         </Button>
                     </Link>
                 </CardContent>
