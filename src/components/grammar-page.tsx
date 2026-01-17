@@ -21,7 +21,7 @@ export default function GrammarPage({ title, backHref, content }: GrammarPagePro
             <CardHeader className="text-center space-y-4">
                 <div className="flex items-center justify-center gap-4">
                     <BookText className="h-8 w-8" />
-                    <CardTitle className="text-3xl">{title}</CardTitle>
+                    <CardTitle className="text-3xl text-center">{title}</CardTitle>
                 </div>
             </CardHeader>
             <CardContent>
