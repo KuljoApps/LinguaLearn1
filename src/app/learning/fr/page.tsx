@@ -1,3 +1,4 @@
+
 "use client"
 
 import { BookCopy, ArrowLeft, GraduationCap, Clock, FilePenLine, MessageSquareText, BookText, Landmark, AudioLines, Languages, ChevronDown } from 'lucide-react';
@@ -34,7 +35,7 @@ export default function LearningFrPage() {
                         <h1 className="text-3xl font-bold tracking-tight">Apprentissage</h1>
                     </div>
                 </CardHeader>
-                <CardContent className="flex flex-col space-y-4 px-6 pt-4 pb-2">
+                <CardContent className="flex flex-col space-y-4 px-6 pt-2 pb-2">
                     <Link href="/learning/fr/questions" passHref>
                         <Button className="w-full h-12 text-lg">
                             <BookCopy className="mr-2 h-5 w-5" />
@@ -77,27 +78,29 @@ export default function LearningFrPage() {
                             </CollapsibleTrigger>
                              <Separator className="flex-grow" />
                         </div>
-                        <CollapsibleContent className="space-y-4 pt-2 animate-in fade-in-0 zoom-in-95">
-                           <div className="grid grid-cols-2 gap-4">
-                               <Link href="/learning/fr/culture" passHref>
+                        <CollapsibleContent className="pt-2 animate-in fade-in-0 zoom-in-95">
+                            <div className="space-y-4">
+                               <div className="grid grid-cols-2 gap-4">
+                                   <Link href="/learning/fr/culture" passHref>
+                                        <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
+                                            <Landmark className="mr-2 h-5 w-5 text-deep-purple" />
+                                            Culture
+                                        </Button>
+                                    </Link>
+                                    <Link href="/learning/fr/phonetics" passHref>
+                                        <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
+                                            <AudioLines className="mr-2 h-5 w-5 text-deep-purple" />
+                                            Phonétique
+                                        </Button>
+                                    </Link>
+                               </div>
+                               <Link href="/learning/fr/tongue-twisters" passHref>
                                     <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
-                                        <Landmark className="mr-2 h-5 w-5 text-deep-purple" />
-                                        Culture
+                                        <Languages className="mr-2 h-5 w-5 text-deep-purple" />
+                                        Virelangues
                                     </Button>
-                                </Link>
-                                <Link href="/learning/fr/phonetics" passHref>
-                                    <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
-                                        <AudioLines className="mr-2 h-5 w-5 text-deep-purple" />
-                                        Phonétique
-                                    </Button>
-                                </Link>
-                           </div>
-                           <Link href="/learning/fr/tongue-twisters" passHref>
-                                <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
-                                    <Languages className="mr-2 h-5 w-5 text-deep-purple" />
-                                    Virelangues
-                                </Button>
-                           </Link>
+                               </Link>
+                            </div>
                         </CollapsibleContent>
                     </Collapsible>
                 </CardContent>
