@@ -44,7 +44,15 @@ export default function DictionaryPage({ title, backHref, words, children }: Dic
                             <React.Fragment key={index}>
                                 <div className="text-sm">
                                     <p className="font-bold">{w.word}</p>
-                                    <p className="text-muted-foreground">{w.translation}</p>
+                                    <div className="flex items-center gap-2">
+                                        {w.colorCode && (
+                                            <div
+                                                className="h-4 w-4 shrink-0 rounded-full border"
+                                                style={{ backgroundColor: w.colorCode }}
+                                            />
+                                        )}
+                                        <p className="text-muted-foreground">{w.translation}</p>
+                                    </div>
                                 </div>
                                 {index < words.length - 1 && <Separator />}
                             </React.Fragment>

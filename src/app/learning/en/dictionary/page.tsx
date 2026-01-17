@@ -40,7 +40,7 @@ export default function DictionaryEnPage() {
                     </Link>
                     <Link href="/learning/en/dictionary/body-parts" passHref>
                         <Button variant="outline" className="w-full h-24 flex-col gap-2 text-lg border-2 border-primary">
-                            <PersonStanding className="h-12 w-12" />
+                            <PersonStanding className="h-16 w-16" />
                             Body Parts
                         </Button>
                     </Link>
@@ -58,7 +58,7 @@ export default function DictionaryEnPage() {
                     </Link>
                     <Link href="/learning/en/dictionary/work" passHref>
                         <Button variant="outline" className="w-full h-24 flex-col gap-2 text-lg border-2 border-primary">
-                            <Briefcase className="h-12 w-12" />
+                            <Briefcase className="h-14 w-14" />
                             Work
                         </Button>
                     </Link>
