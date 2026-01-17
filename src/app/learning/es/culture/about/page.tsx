@@ -23,13 +23,19 @@ const spainData: AboutCountryData = {
         'Hiszpania jest jedynym krajem w Europie, który ma fizyczną granicę z krajem afrykańskim (Marokiem).',
         'W Hiszpanii znajduje się najstarsza na świecie restauracja, Sobrino de Botín, działająca od 1725 roku.',
         'Hymn narodowy Hiszpanii, "Marcha Real", nie ma oficjalnych słów.',
-        'W kraju tym jest więcej barów na mieszkańca niż w jakimkolwiek innym kraju UE.'
+        'W kraju tym jest więcej barów na mieszkańca niż w jakimkolwiek innym kraju UE.',
+        'Hiszpania produkuje ponad połowę światowej oliwy z oliwek.',
+        'W Hiszpanii nie ma wróżki zębuszki; zamiast tego jest mysz o imieniu Ratoncito Pérez.',
+        'La Tomatina to coroczny festiwal w Buñol, podczas którego ludzie rzucają w siebie tonami pomidorów.'
       ],
       native: [
         'España es el único país de Europa que tiene una frontera física con un país africano (Marruecos).',
         'En España se encuentra el restaurante más antiguo del mundo, Sobrino de Botín, que opera desde 1725.',
         'El himno nacional de España, la "Marcha Real", no tiene letra oficial.',
-        'El país tiene más bares por habitante que cualquier otro país de la UE.'
+        'El país tiene más bares por habitante que cualquier otro país de la UE.',
+        'España produce más de la mitad del aceite de oliva del mundo.',
+        'En España no hay hada de los dientes; en su lugar hay un ratón llamado Ratoncito Pérez.',
+        'La Tomatina es un festival anual en Buñol donde la gente se lanza toneladas de tomates.'
       ]
     },
     backButton: { pl: 'Powrót do Kultury', native: 'Volver a Cultura' },

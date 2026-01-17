@@ -58,6 +58,18 @@ export default function AboutCountryPage({ data }: AboutCountryPageProps) {
     return data.ui.funFacts[displayLang];
   };
 
+  const renderTableCell = (icon: React.ReactNode, label: string, value: string) => (
+    <TableRow>
+      <TableCell className="font-medium">
+        <div className="flex items-center">
+          {React.cloneElement(icon as React.ReactElement, { className: "mr-2 inline h-4 w-4 text-deep-purple shrink-0" })}
+          <span>{label}</span>
+        </div>
+      </TableCell>
+      <TableCell className="text-right">{value}</TableCell>
+    </TableRow>
+  );
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4">
       <Card className="w-full max-w-2xl shadow-2xl">
@@ -75,7 +87,7 @@ export default function AboutCountryPage({ data }: AboutCountryPageProps) {
                   <span className="mr-2 text-lg">{data.flag.native}</span> {data.countryName.native}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setDisplayLang('pl')}>
-                  <span className="mr-2 text-lg">{data.flag.pl}</span> {data.countryName.pl}
+                  <span className="mr-2 text-lg">{data.flag.pl}</span> Polska
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -93,8 +105,8 @@ export default function AboutCountryPage({ data }: AboutCountryPageProps) {
                 data-ai-hint={`map ${data.countryName.native.toLowerCase()}`}
               />
             </div>
-            <p className="text-sm text-muted-foreground md:text-base">
-              {t('description')}
+            <p className="text-sm text-muted-foreground md:text-base text-justify">
+              {t('description').replace(/ ([a-zA-Z]) /g, ' $1&nbsp;')}
             </p>
           </div>
 
@@ -102,22 +114,10 @@ export default function AboutCountryPage({ data }: AboutCountryPageProps) {
             <h3 className="mb-4 text-center text-lg font-semibold">{t('factsTitle')}</h3>
             <Table>
               <TableBody>
-                <TableRow>
-                  <TableCell className="font-medium"><Landmark className="mr-2 inline h-4 w-4 text-deep-purple" />{t('capital')}</TableCell>
-                  <TableCell className="text-right">{getStat('capital')}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium"><Users className="mr-2 inline h-4 w-4 text-deep-purple" />{t('population')}</TableCell>
-                  <TableCell className="text-right">{getStat('population')}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium"><Map className="mr-2 inline h-4 w-4 text-deep-purple" />{t('area')}</TableCell>
-                  <TableCell className="text-right">{getStat('area')}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium"><Wallet className="mr-2 inline h-4 w-4 text-deep-purple" />{t('currency')}</TableCell>
-                  <TableCell className="text-right">{getStat('currency')}</TableCell>
-                </TableRow>
+                {renderTableCell(<Landmark />, t('capital'), getStat('capital'))}
+                {renderTableCell(<Users />, t('population'), getStat('population'))}
+                {renderTableCell(<Map />, t('area'), getStat('area'))}
+                {renderTableCell(<Wallet />, t('currency'), getStat('currency'))}
               </TableBody>
             </Table>
           </div>
@@ -126,7 +126,7 @@ export default function AboutCountryPage({ data }: AboutCountryPageProps) {
             <h3 className="text-center text-lg font-semibold">{t('funFactsTitle')}</h3>
             <ul className="list-inside list-disc space-y-1 pl-4 text-sm text-muted-foreground">
               {getFunFacts().map((fact, index) => (
-                <li key={index}>{fact}</li>
+                <li key={index}>{fact.replace(/ ([a-zA-Z]) /g, ' $1&nbsp;')}</li>
               ))}
             </ul>
           </div>

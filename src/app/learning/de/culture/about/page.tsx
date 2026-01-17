@@ -23,13 +23,19 @@ const germanyData: AboutCountryData = {
         'W Niemczech istnieje ponad 1500 rodzajów kiełbasy i 300 rodzajów chleba.',
         'Tradycja choinki bożonarodzeniowej pochodzi z Niemiec.',
         'W kraju znajduje się ponad 20 000 zamków.',
-        'Ucieczka z więzienia nie jest w Niemczech nielegalna, ponieważ uznaje się naturalne dążenie człowieka do wolności.'
+        'Ucieczka z więzienia nie jest w Niemczech nielegalna, ponieważ uznaje się naturalne dążenie człowieka do wolności.',
+        'Fanta została wynaleziona w Niemczech podczas II wojny światowej.',
+        'Pierwsza drukowana książka na świecie (Biblia Gutenberga) powstała w Niemczech.',
+        'Ponad 65% autostrad w Niemczech (Autobahn) nie ma oficjalnego ograniczenia prędkości.'
       ],
       native: [
         'In Deutschland gibt es über 1.500 Wurstsorten und 300 Brotsorten.',
         'Die Tradition des Weihnachtsbaums stammt aus Deutschland.',
         'Im Land gibt es über 20.000 Burgen und Schlösser.',
-        'Gefängnisausbruch ist in Deutschland nicht illegal, da das natürliche Streben des Menschen nach Freiheit anerkannt wird.'
+        'Gefängnisausbruch ist in Deutschland nicht illegal, da das natürliche Streben des Menschen nach Freiheit anerkannt wird.',
+        'Fanta wurde während des Zweiten Weltkriegs in Deutschland erfunden.',
+        'Das erste gedruckte Buch der Welt (die Gutenberg-Bibel) entstand in Deutschland.',
+        'Über 65% der Autobahnen in Deutschland haben keine offizielle Geschwindigkeitsbegrenzung.'
       ]
     },
     backButton: { pl: 'Powrót do Kultury', native: 'Zurück zur Kultur' },

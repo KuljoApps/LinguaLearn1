@@ -23,13 +23,19 @@ const englandData: AboutCountryData = {
         'W Windsorze znajduje się najstarszy i największy zamieszkany zamek na świecie.',
         'Anglicy wypijają około 100 milionów filiżanek herbaty dziennie.',
         'W Londynie mówi się w ponad 300 językach.',
-        'Francuski był oficjalnym językiem Anglii przez około 300 lat.'
+        'Francuski był oficjalnym językiem Anglii przez około 300 lat.',
+        'Królowa jest właścicielką wszystkich niemarkowanych łabędzi na otwartych wodach w kraju.',
+        'W Anglii wynaleziono wino musujące, na długo przed francuskim szampanem.',
+        'W Gloucestershire odbywają się coroczne zawody w toczeniu sera ze wzgórza.'
       ],
       native: [
         'Windsor is home to the oldest and largest inhabited castle in the world.',
         'The English drink about 100 million cups of tea daily.',
         'Over 300 languages are spoken in London.',
-        'French was the official language of England for about 300 years.'
+        'French was the official language of England for about 300 years.',
+        'The Queen owns all the unmarked swans in open water in the country.',
+        'Sparkling wine was invented in England, long before French champagne.',
+        'There is an annual cheese-rolling competition in Gloucestershire.'
       ]
     },
     backButton: { pl: 'Powrót do Kultury', native: 'Back to Culture' },

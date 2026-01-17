@@ -22,14 +22,20 @@ const italyData: AboutCountryData = {
       pl: [
         'We Włoszech znajduje się ponad 1500 jezior.',
         'Włosi stworzyli termometr, fortepian i maszynę do pisania.',
-        'W całym kraju istnieje ponad 140 rodzajów makaronu.',
-        'Każdego dnia do Fontanny di Trevi w Rzymie wrzucanych jest około 3000 euro.'
+        'Każdego dnia do Fontanny di Trevi w Rzymie wrzucanych jest około 3000 euro.',
+        'W całych Włoszech istnieje ponad 140 rodzajów makaronu.',
+        'Włochy otaczają dwa niezależne państwa: San Marino i Watykan.',
+        'Włosi jedzą ponad 23 kg makaronu na osobę rocznie.',
+        'Pizza, w swojej nowoczesnej formie, została wynaleziona w Neapolu.'
       ],
       native: [
         'In Italia ci sono più di 1.500 laghi.',
         'Gli italiani hanno inventato il termometro, il pianoforte e la macchina da scrivere.',
+        'Ogni giorno vengono lanciati circa 3.000 euro nella Fontana di Trevi a Roma.',
         'Esistono oltre 140 tipi di pasta in tutto il paese.',
-        'Ogni giorno vengono lanciati circa 3.000 euro nella Fontana di Trevi a Roma.'
+        'L\'Italia circonda due stati indipendenti: San Marino e Città del Vaticano.',
+        'Gli italiani mangiano oltre 23 kg di pasta a persona all\'anno.',
+        'La pizza, nella sua forma moderna, è stata inventata a Napoli.'
       ]
     },
     backButton: { pl: 'Powrót do Kultury', native: 'Torna a Cultura' },

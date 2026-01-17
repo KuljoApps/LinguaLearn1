@@ -23,13 +23,19 @@ const franceData: AboutCountryData = {
         'Francja jest najczęściej odwiedzanym krajem na świecie.',
         'W kraju tym produkuje się ponad 1600 rodzajów sera.',
         'Legalne jest poślubienie osoby zmarłej, pod pewnymi warunkami.',
-        'Louvre w Paryżu jest największym muzeum sztuki na świecie.'
+        'Louvre w Paryżu jest największym muzeum sztuki na świecie.',
+        'Nielegalne jest nazywanie świni imieniem Napoleon we Francji.',
+        'Croissant został w rzeczywistości wynaleziony w Wiedniu, w Austrii.',
+        'Francja jest największym krajem w Unii Europejskiej pod względem powierzchni.'
       ],
       native: [
         'La France est le pays le plus visité au monde.',
         'Le pays produit plus de 1 600 types de fromage.',
         'Il est légal d\'épouser une personne décédée, sous certaines conditions.',
-        'Le Louvre à Paris est le plus grand musée d\'art du monde.'
+        'Le Louvre à Paris est le plus grand musée d\'art du monde.',
+        'Il est illégal de nommer un cochon Napoléon en France.',
+        'Le croissant a en fait été inventé à Vienne, en Autriche.',
+        'La France est le plus grand pays de l\'Union européenne par sa superficie.'
       ]
     },
     backButton: { pl: 'Powrót do Kultury', native: 'Retour à la Culture' },
