@@ -47,13 +47,13 @@ export default function CitiesPage({ data }: { data: CitiesPageData }) {
 
   const renderFactRow = (icon: React.ReactNode, label: string, value: string) => (
     <TableRow>
-      <TableCell className="font-medium p-1">
+      <TableCell className="font-medium p-2">
         <div className="flex items-center">
           {React.cloneElement(icon as React.ReactElement, { className: "h-4 w-4 text-deep-purple mr-2 shrink-0" })}
           <span>{label}</span>
         </div>
       </TableCell>
-      <TableCell className="text-right p-1">{value}</TableCell>
+      <TableCell className="text-right p-2">{value}</TableCell>
     </TableRow>
   );
 
@@ -119,13 +119,13 @@ export default function CitiesPage({ data }: { data: CitiesPageData }) {
                         </div>
                         <CardTitle className="text-center">{city.name[displayLang]}</CardTitle>
                       </CardHeader>
-                      <CardContent className="flex flex-col items-center gap-2 pt-0 pb-2 px-0">
-                        <ScrollArea className="h-40 w-full px-4">
-                           <p className="text-sm text-muted-foreground text-justify pr-2">
+                      <CardContent className="flex flex-col items-center gap-2 pt-0 pb-2 px-4">
+                        <ScrollArea className="h-40 w-full">
+                           <p className="text-sm text-muted-foreground text-justify pr-4">
                             {city.description[displayLang].replace(/ ([a-zA-Z])\s/g, ' $1\u00A0')}
                           </p>
                         </ScrollArea>
-                        <div className="w-full px-4">
+                        <div className="w-full pr-4">
                           <Table>
                             <TableBody>
                               {renderFactRow(<Users />, t('population'), city.facts.population)}
