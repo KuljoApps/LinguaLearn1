@@ -1,4 +1,4 @@
-import { ArrowLeft, FilePenLine, Split, HelpCircle, Ban, Palette, ChevronsRight, UserSquare, BookType } from 'lucide-react';
+import { ArrowLeft, FilePenLine, Split, HelpCircle, Ban, Palette, Newspaper, UserSquare, BookType } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card';
@@ -48,7 +48,7 @@ export default function GrammarEsPage() {
                     </Link>
                     <Link href="/learning/es/grammar/adverbs" passHref>
                         <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
-                            <ChevronsRight className="mr-2 h-5 w-5 text-deep-purple" />
+                            <Newspaper className="mr-2 h-5 w-5 text-deep-purple" />
                             Adverbios
                         </Button>
                     </Link>
