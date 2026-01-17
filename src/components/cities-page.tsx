@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/componen
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { ArrowLeft, Building2, Users, Map, Landmark, Globe, Sparkles } from 'lucide-react';
+import { ArrowLeft, Building2, Users, Map, Landmark, Sparkles, Calendar } from 'lucide-react';
 import { Carousel, type CarouselApi, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import type { CitiesPageData } from '@/lib/cities';
 
@@ -83,14 +83,14 @@ export default function CitiesPage({ data }: { data: CitiesPageData }) {
                 </DropdownMenu>
             </div>
         </CardHeader>
-        <CardContent className="px-4">
+        <CardContent className="px-0 sm:px-4">
           <Carousel
             setApi={setApi}
             opts={{
               align: "start",
               loop: true,
             }}
-            className="w-full max-w-lg mx-auto relative"
+            className="w-full max-w-lg mx-auto"
           >
             <CarouselContent>
               {data.cities.map((city, index) => (
@@ -98,19 +98,26 @@ export default function CitiesPage({ data }: { data: CitiesPageData }) {
                   <div className="p-1">
                     <Card>
                       <CardHeader className="p-4">
+                        <div className="flex items-center justify-between mb-4">
+                            <CarouselPrevious className="relative translate-x-0 translate-y-0 left-0 top-0 h-8 w-8" />
+                            <div className="text-center text-sm text-muted-foreground">
+                                {current} / {count}
+                            </div>
+                            <CarouselNext className="relative translate-x-0 translate-y-0 right-0 top-0 h-8 w-8" />
+                        </div>
                         <CardTitle className="text-center">{city.name[displayLang]}</CardTitle>
                       </CardHeader>
                       <CardContent className="flex flex-col items-center gap-4 p-4 pt-0">
-                        <p className="text-sm text-muted-foreground text-justify h-24 overflow-y-auto">
+                        <p className="text-sm text-muted-foreground text-justify h-32 overflow-y-auto">
                           {city.description[displayLang]}
                         </p>
                         <Table>
                           <TableBody>
-                            {renderFactRow(<Users className="h-4 w-4 text-deep-purple"/>, t('population'), city.facts.population)}
-                            {renderFactRow(<Map className="h-4 w-4 text-deep-purple"/>, t('area'), city.facts.area[displayLang])}
-                            {renderFactRow(<Landmark className="h-4 w-4 text-deep-purple"/>, t('landmark'), city.facts.landmark[displayLang])}
-                            {renderFactRow(<Globe className="h-4 w-4 text-deep-purple"/>, t('region'), city.facts.region[displayLang])}
-                            {renderFactRow(<Sparkles className="h-4 w-4 text-deep-purple"/>, t('nickname'), city.facts.nickname[displayLang])}
+                            {renderFactRow(<Users />, t('population'), city.facts.population)}
+                            {renderFactRow(<Map />, t('area'), city.facts.area[displayLang])}
+                            {renderFactRow(<Landmark />, t('landmark'), city.facts.landmark[displayLang])}
+                            {renderFactRow(<Calendar />, t('founded'), city.facts.founded[displayLang])}
+                            {renderFactRow(<Sparkles />, t('nickname'), city.facts.nickname[displayLang])}
                           </TableBody>
                         </Table>
                       </CardContent>
@@ -119,14 +126,9 @@ export default function CitiesPage({ data }: { data: CitiesPageData }) {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2 z-10" />
-            <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2 z-10" />
           </Carousel>
-           <div className="py-2 text-center text-sm text-muted-foreground">
-             {current} / {count}
-          </div>
         </CardContent>
-        <CardFooter className="flex justify-center p-4">
+        <CardFooter className="flex justify-center p-4 pt-0">
           <Link href={`/learning/${data.lang}/culture`} passHref>
             <Button variant="outline">
               <ArrowLeft className="mr-2 h-4 w-4" /> {t('backButton')}
