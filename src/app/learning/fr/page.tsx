@@ -14,7 +14,7 @@ export default function LearningFrPage() {
                         <h1 className="text-3xl font-bold tracking-tight">Apprentissage</h1>
                     </div>
                 </CardHeader>
-                <CardContent className="flex flex-col space-y-4 p-6">
+                <CardContent className="flex flex-col space-y-4 px-6 pt-4 pb-4">
                     <Link href="/learning/fr/questions" passHref>
                         <Button className="w-full h-12 text-lg">
                             <BookCopy className="mr-2 h-5 w-5" />
@@ -56,7 +56,7 @@ export default function LearningFrPage() {
                         </Link>
                     </div>
                 </CardContent>
-                <CardFooter className="flex justify-center p-6">
+                <CardFooter className="flex justify-center p-6 pt-2">
                     <Link href="/" passHref>
                         <Button variant="outline">
                             <ArrowLeft className="mr-2 h-4 w-4" /> Retour à l'accueil
