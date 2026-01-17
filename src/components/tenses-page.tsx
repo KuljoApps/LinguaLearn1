@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { ArrowLeft, BookMarked } from 'lucide-react';
+import { ArrowLeft, Clock } from 'lucide-react';
 import type { Tense } from '@/lib/tenses';
 
 interface TensesPageProps {
@@ -20,7 +20,7 @@ export default function TensesPage({ title, backHref, tenses }: TensesPageProps)
         <Card className="w-full max-w-2xl shadow-2xl">
             <CardHeader className="text-center space-y-4">
                 <div className="flex items-center justify-center gap-4">
-                    <BookMarked className="h-8 w-8" />
+                    <Clock className="h-8 w-8" />
                     <CardTitle className="text-3xl">{title}</CardTitle>
                 </div>
             </CardHeader>

@@ -1,4 +1,4 @@
-import { BookCopy, ArrowLeft, GraduationCap, BookMarked, BookText, MessageSquareText } from 'lucide-react';
+import { BookCopy, ArrowLeft, GraduationCap, Clock, BookText, MessageSquareText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card';
@@ -22,7 +22,7 @@ export default function LearningItPage() {
                     </Link>
                     <Link href="/learning/it/tenses" passHref>
                         <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
-                            <BookMarked className="mr-2 h-5 w-5" />
+                            <Clock className="mr-2 h-5 w-5" />
                             Tempi Verbali
                         </Button>
                     </Link>
