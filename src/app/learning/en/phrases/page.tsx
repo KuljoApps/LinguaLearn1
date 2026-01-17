@@ -16,49 +16,49 @@ export default function PhrasesEnPage() {
                 <CardContent className="grid grid-cols-2 gap-4 p-4">
                     <Link href="/learning/en/phrases/restaurant" passHref>
                         <Button variant="outline" className="w-full h-24 flex-col gap-2 text-lg border-2 border-primary">
-                            <Utensils className="h-12 w-12" />
+                            <Utensils className="h-12 w-12 text-deep-purple" />
                             Restaurant
                         </Button>
                     </Link>
                     <Link href="/learning/en/phrases/airport" passHref>
                         <Button variant="outline" className="w-full h-24 flex-col gap-2 text-lg border-2 border-primary">
-                            <Plane className="h-12 w-12" />
+                            <Plane className="h-12 w-12 text-deep-purple" />
                             Airport
                         </Button>
                     </Link>
                     <Link href="/learning/en/phrases/shop" passHref>
                         <Button variant="outline" className="w-full h-24 flex-col gap-2 text-lg border-2 border-primary">
-                            <ShoppingCart className="h-12 w-12" />
+                            <ShoppingCart className="h-12 w-12 text-deep-purple" />
                             Shop
                         </Button>
                     </Link>
                     <Link href="/learning/en/phrases/station" passHref>
                         <Button variant="outline" className="w-full h-24 flex-col gap-2 text-lg border-2 border-primary">
-                            <Train className="h-12 w-12" />
+                            <Train className="h-12 w-12 text-deep-purple" />
                             Station
                         </Button>
                     </Link>
                     <Link href="/learning/en/phrases/party" passHref>
                         <Button variant="outline" className="w-full h-24 flex-col gap-2 text-lg border-2 border-primary">
-                            <PartyPopper className="h-12 w-12" />
+                            <PartyPopper className="h-12 w-12 text-deep-purple" />
                             Party
                         </Button>
                     </Link>
                     <Link href="/learning/en/phrases/emergency" passHref>
                         <Button variant="outline" className="w-full h-24 flex-col gap-2 text-lg border-2 border-primary">
-                            <Siren className="h-12 w-12" />
+                            <Siren className="h-12 w-12 text-deep-purple" />
                             Emergency
                         </Button>
                     </Link>
                     <Link href="/learning/en/phrases/hotel" passHref>
                         <Button variant="outline" className="w-full h-24 flex-col gap-2 text-lg border-2 border-primary">
-                            <Hotel className="h-12 w-12" />
+                            <Hotel className="h-12 w-12 text-deep-purple" />
                             Hotel
                         </Button>
                     </Link>
                     <Link href="/learning/en/phrases/weather" passHref>
                         <Button variant="outline" className="w-full h-24 flex-col gap-2 text-lg border-2 border-primary">
-                            <CloudSun className="h-12 w-12" />
+                            <CloudSun className="h-12 w-12 text-deep-purple" />
                             Weather
                         </Button>
                     </Link>
