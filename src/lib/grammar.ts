@@ -21,8 +21,10 @@ export const allGrammar: GrammarContent = {
     'sentence-structure': {
       title: 'Sentence Structure',
       content: [
-        { heading: 'Podstawowy szyk zdania (SVO)', text: 'W języku angielskim domyślnym szykiem zdania oznajmującego jest SVO: Podmiot (Subject) + Orzeczenie (Verb) + Dopełnienie (Object).', example: 'The cat (S) sat (V) on the mat (O).', example_pl: 'Kot usiadł na macie.' },
-        { heading: 'Przysłówki', text: 'Przysłówki miejsca i czasu zazwyczaj umieszcza się na końcu zdania.', example: 'He reads a book in the library every week.', example_pl: 'On co tydzień czyta książkę w bibliotece.' },
+        { heading: 'Podstawowy szyk zdania (SVO)', text: 'W języku angielskim domyślnym szykiem zdania oznajmującego jest Podmiot (Subject) + Orzeczenie (Verb) + Dopełnienie (Object).', example: 'She (S) loves (V) pizza (O).', example_pl: 'Ona kocha pizzę.' },
+        { heading: 'Przysłówki miejsca i czasu', text: 'Określenia miejsca i czasu zazwyczaj umieszcza się na końcu zdania, w kolejności: sposób, miejsce, czas (Manner, Place, Time).', example: 'He read the book quietly in the library yesterday.', example_pl: 'On wczoraj w ciszy czytał książkę w bibliotece.' },
+        { heading: 'Inwersja w pytaniach', text: 'Pytania tworzy się przez inwersję, czyli zamianę miejscami podmiotu i czasownika posiłkowego (do, be, have).', example: 'Do you like coffee?', example_pl: 'Czy lubisz kawę?' },
+        { heading: 'Szyk zdania przeczącego', text: 'Przeczenie "not" umieszcza się po czasowniku posiłkowym.', example: 'They have not finished their homework.', example_pl: 'Oni nie skończyli swojego zadania domowego.' },
       ],
     },
     questions: {
@@ -73,9 +75,10 @@ export const allGrammar: GrammarContent = {
     'sentence-structure': {
         title: 'Satzbau',
         content: [
-          { heading: 'Szyk prosty (V2)', text: 'W niemieckim zdaniu oznajmującym orzeczenie (czasownik odmieniony) zawsze znajduje się na drugiej pozycji.', example: 'Ich (1) lerne (2) heute Deutsch.', example_pl: 'Ja uczę się dzisiaj niemieckiego.' },
-          { heading: 'Szyk przestawny', text: 'Jeśli na pierwszym miejscu w zdaniu stanie inny element niż podmiot, podmiot przesuwa się za orzeczenie, które pozostaje na drugim miejscu.', example: 'Heute (1) lerne (2) ich Deutsch.', example_pl: 'Dzisiaj uczę się ja niemieckiego.' },
-          { heading: 'Szyk końcowy', text: 'W zdaniach podrzędnych (np. po "dass", "weil", "wenn") orzeczenie wędruje na sam koniec zdania.', example: '..., weil ich Deutsch lerne.', example_pl: '...ponieważ uczę się niemieckiego.' },
+          { heading: 'Szyk prosty (V2)', text: 'W niemieckim zdaniu oznajmującym odmieniony czasownik (orzeczenie) zawsze zajmuje drugą pozycję.', example: 'Ich lerne heute Deutsch.', example_pl: 'Uczę się dzisiaj niemieckiego.' },
+          { heading: 'Szyk przestawny (Inwersja)', text: 'Jeśli na pierwszej pozycji w zdaniu umieścimy inny element niż podmiot (np. przysłówek czasu), podmiot przesuwa się za orzeczenie.', example: 'Heute lerne ich Deutsch.', example_pl: 'Dzisiaj uczę się niemieckiego.' },
+          { heading: 'Ramowa konstrukcja zdania (Satzklammer)', text: 'W czasach złożonych (np. Perfekt) lub z czasownikami modalnymi, druga część orzeczenia (Partizip II lub bezokolicznik) wędruje na sam koniec zdania.', example: 'Ich habe das Buch gelesen. / Ich will Deutsch lernen.', example_pl: 'Przeczytałem tę książkę. / Chcę uczyć się niemieckiego.' },
+          { heading: 'Szyk końcowy w zdaniach podrzędnych', text: 'W zdaniach podrzędnych, wprowadzanych przez spójniki takie jak "weil" (ponieważ), "dass" (że), "wenn" (kiedy, jeśli), odmieniony czasownik przenosi się na koniec zdania.', example: 'Ich bleibe zu Hause, weil es regnet.', example_pl: 'Zostaję w domu, ponieważ pada deszcz.' },
         ],
       },
       questions: {
@@ -126,7 +129,10 @@ export const allGrammar: GrammarContent = {
     'sentence-structure': {
         title: 'Estructura de la Oración',
         content: [
-          { heading: 'Elastyczny szyk SVO', text: 'Podstawowy szyk to Podmiot-Orzeczenie-Dopełnienie (SVO), ale jest on bardzo elastyczny. Często pomija się zaimek osobowy (ja, ty, on...), ponieważ forma czasownika go wskazuje.', example: '(Yo) hablo español. / Español hablo (yo).', example_pl: '(Ja) mówię po hiszpańsku.' },
+          { heading: 'Elastyczny szyk SVO', text: 'Podstawowy szyk to Podmiot-Orzeczenie-Dopełnienie (SVO), ale jest on bardzo elastyczny. Często pomija się zaimek osobowy, ponieważ forma czasownika go wskazuje.', example: '(Yo) como una manzana.', example_pl: '(Ja) jem jabłko.' },
+          { heading: 'Pozycja przymiotnika', text: 'W przeciwieństwie do polskiego, przymiotniki zazwyczaj umieszcza się PO rzeczowniku.', example: 'Tengo un coche rojo.', example_pl: 'Mam czerwony samochód.' },
+          { heading: 'Szyk zdania przeczącego', text: 'Przeczenie "no" zawsze stawia się bezpośrednio PRZED odmienionym czasownikiem.', example: 'Ella no habla inglés.', example_pl: 'Ona nie mówi po angielsku.' },
+          { heading: 'Szyk w pytaniach', text: 'Pytania najczęściej tworzy się przez inwersję (zamianę miejscami czasownika i podmiotu) lub po prostu przez zmianę intonacji.', example: '¿Vives tú en Madrid? / ¿Tú vives en Madrid?', example_pl: 'Czy mieszkasz w Madrycie?' },
         ],
       },
       questions: {
@@ -178,7 +184,10 @@ export const allGrammar: GrammarContent = {
     'sentence-structure': {
         title: 'Structure de la Phrase',
         content: [
-          { heading: 'Podstawowy szyk zdania (SVO)', text: 'W języku francuskim, podobnie jak w angielskim, standardowy szyk zdania to Podmiot (Sujet) + Orzeczenie (Verbe) + Dopełnienie (Objet).', example: 'Le chat (S) mange (V) la souris (O).', example_pl: 'Kot je mysz.' },
+          { heading: 'Podstawowy szyk zdania (SVO)', text: 'Standardowy szyk zdania to Podmiot (Sujet) + Orzeczenie (Verbe) + Dopełnienie (Objet).', example: 'Le chat mange la souris.', example_pl: 'Kot je mysz.' },
+          { heading: 'Szyk przeczenia "ne...pas"', text: 'Cząstki przeczące "ne" i "pas" otaczają odmieniony czasownik w czasach prostych. W potocznej mowie "ne" jest często pomijane.', example: 'Je ne comprends pas. / Je comprends pas.', example_pl: 'Nie rozumiem.' },
+          { heading: 'Pozycja zaimków dopełnienia', text: 'Zaimki dopełnienia (np. le, la, lui, leur) zawsze stoją PRZED czasownikiem, którego dotyczą.', example: 'Je le vois. (Widzę go) / Elle lui parle. (Ona do niego/niej mówi).', example_pl: 'Widzę go. / Ona do niego/niej mówi.' },
+          { heading: 'Inwersja w pytaniach (formalna)', text: 'W formalnych pytaniach następuje inwersja podmiotu z orzeczeniem, połączona myślnikiem.', example: 'Parlez-vous français?', example_pl: 'Czy mówi Pan/Pani po francusku?' },
         ],
       },
       questions: {
@@ -230,7 +239,10 @@ export const allGrammar: GrammarContent = {
     'sentence-structure': {
         title: 'Struttura della Frase',
         content: [
-          { heading: 'Elastyczny szyk SVO', text: 'Podstawowy szyk zdania to Podmiot-Orzeczenie-Dopełnienie (SVO), ale jest on bardzo elastyczny. Często pomija się podmiot, ponieważ forma czasownika jest wystarczająca.', example: '(Io) parlo italiano.', example_pl: '(Ja) mówię po włosku.' },
+          { heading: 'Elastyczny szyk SVO', text: 'Podstawowy szyk to Podmiot-Orzeczenie-Dopełnienie (SVO), ale jest bardzo elastyczny. Podmiot jest często pomijany, gdyż forma czasownika go wskazuje.', example: '(Io) mangio la pasta.', example_pl: '(Ja) jem makaron.' },
+          { heading: 'Pozycja przymiotnika', text: 'Przymiotniki zazwyczaj umieszcza się PO rzeczowniku, który opisują. Umieszczenie ich przed rzeczownikiem często zmienia znaczenie lub dodaje emfazę.', example: 'una casa grande (duży dom) vs una grande casa (wspaniały dom).', example_pl: 'duży dom vs wspaniały dom.' },
+          { heading: 'Szyk zdania przeczącego', text: 'Przeczenie "non" umieszcza się zawsze bezpośrednio PRZED odmienionym czasownikiem.', example: 'Lui non capisce la domanda.', example_pl: 'On nie rozumie pytania.' },
+          { heading: 'Pozycja przysłówka', text: 'Przysłówki zazwyczaj stoją po czasowniku, który modyfikują. Mogą też stać na początku lub końcu zdania dla emfazy.', example: 'Parla lentamente. / Lentamente, lui parla.', example_pl: 'On mówi powoli. / Powoli, on mówi.' },
         ],
       },
       questions: {
