@@ -106,7 +106,7 @@ export default function AboutCountryPage({ data }: AboutCountryPageProps) {
               />
             </div>
             <p className="text-sm text-muted-foreground md:text-base text-justify">
-              {t('description').replace(/ ([a-zA-Z]) /g, ' $1&nbsp;')}
+              {t('description').replace(/ ([a-zA-Z]) /g, ' $1\u00A0')}
             </p>
           </div>
 
@@ -126,7 +126,7 @@ export default function AboutCountryPage({ data }: AboutCountryPageProps) {
             <h3 className="text-center text-lg font-semibold">{t('funFactsTitle')}</h3>
             <ul className="list-inside list-disc space-y-1 pl-4 text-sm text-muted-foreground">
               {getFunFacts().map((fact, index) => (
-                <li key={index}>{fact.replace(/ ([a-zA-Z]) /g, ' $1&nbsp;')}</li>
+                <li key={index}>{fact.replace(/ ([a-zA-Z]) /g, ' $1\u00A0')}</li>
               ))}
             </ul>
           </div>
