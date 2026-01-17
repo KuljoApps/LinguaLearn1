@@ -1,3 +1,5 @@
+"use client";
+
 import PhrasesPage from '@/components/phrases-page';
 import { allPhrases } from '@/lib/phrases';
 import { Utensils } from 'lucide-react';
@@ -11,8 +13,9 @@ export default function GermanRestaurantPhrases() {
                 title={phraseData.title} 
                 phrases={phraseData.phrases} 
                 backHref="/learning/de/phrases"
-                Icon={Utensils}
-            />
+            >
+                <Utensils className="h-8 w-8" />
+            </PhrasesPage>
         </main>
     );
 }

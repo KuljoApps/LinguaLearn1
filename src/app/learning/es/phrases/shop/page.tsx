@@ -1,3 +1,5 @@
+"use client";
+
 import PhrasesPage from '@/components/phrases-page';
 import { allPhrases } from '@/lib/phrases';
 import { ShoppingCart } from 'lucide-react';
@@ -11,8 +13,9 @@ export default function SpanishShopPhrases() {
                 title={phraseData.title} 
                 phrases={phraseData.phrases} 
                 backHref="/learning/es/phrases"
-                Icon={ShoppingCart}
-            />
+            >
+                <ShoppingCart className="h-8 w-8" />
+            </PhrasesPage>
         </main>
     );
 }

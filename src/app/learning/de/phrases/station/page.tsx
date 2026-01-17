@@ -1,3 +1,5 @@
+"use client";
+
 import PhrasesPage from '@/components/phrases-page';
 import { allPhrases } from '@/lib/phrases';
 import { Train } from 'lucide-react';
@@ -11,8 +13,9 @@ export default function GermanStationPhrases() {
                 title={phraseData.title} 
                 phrases={phraseData.phrases} 
                 backHref="/learning/de/phrases"
-                Icon={Train}
-            />
+            >
+                <Train className="h-8 w-8" />
+            </PhrasesPage>
         </main>
     );
 }

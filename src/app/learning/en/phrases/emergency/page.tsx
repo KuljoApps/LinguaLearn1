@@ -1,3 +1,5 @@
+"use client";
+
 import PhrasesPage from '@/components/phrases-page';
 import { allPhrases } from '@/lib/phrases';
 import { Siren } from 'lucide-react';
@@ -11,8 +13,9 @@ export default function EnglishEmergencyPhrases() {
                 title={phraseData.title} 
                 phrases={phraseData.phrases} 
                 backHref="/learning/en/phrases"
-                Icon={Siren}
-            />
+            >
+                <Siren className="h-8 w-8" />
+            </PhrasesPage>
         </main>
     );
 }

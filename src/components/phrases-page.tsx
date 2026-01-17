@@ -6,22 +6,22 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
-import { ArrowLeft, type LucideIcon } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import type { Phrase } from '@/lib/phrases';
 
 interface PhrasesPageProps {
     title: string;
     backHref: string;
     phrases: Phrase[];
-    Icon: LucideIcon;
+    children: React.ReactNode;
 }
 
-export default function PhrasesPage({ title, backHref, phrases, Icon }: PhrasesPageProps) {
+export default function PhrasesPage({ title, backHref, phrases, children }: PhrasesPageProps) {
     return (
         <Card className="w-full max-w-2xl shadow-2xl">
             <CardHeader className="text-center">
                 <div className="flex items-center justify-center gap-4">
-                    <Icon className="h-8 w-8" />
+                    {children}
                     <CardTitle className="text-3xl">{title}</CardTitle>
                 </div>
             </CardHeader>

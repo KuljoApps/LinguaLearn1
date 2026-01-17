@@ -1,3 +1,5 @@
+"use client";
+
 import PhrasesPage from '@/components/phrases-page';
 import { allPhrases } from '@/lib/phrases';
 import { Plane } from 'lucide-react';
@@ -11,8 +13,9 @@ export default function EnglishAirportPhrases() {
                 title={phraseData.title} 
                 phrases={phraseData.phrases} 
                 backHref="/learning/en/phrases"
-                Icon={Plane}
-            />
+            >
+                <Plane className="h-8 w-8" />
+            </PhrasesPage>
         </main>
     );
 }
