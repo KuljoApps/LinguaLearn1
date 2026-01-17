@@ -1,18 +1,31 @@
 "use client";
 
 import React from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { ArrowLeft, Building2, Users, Map, Landmark } from 'lucide-react';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import type { CitiesPageData, CityData } from '@/lib/cities';
+import { ArrowLeft, Building2, Users, Map, Landmark, Globe, Sparkles } from 'lucide-react';
+import { Carousel, type CarouselApi, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import type { CitiesPageData } from '@/lib/cities';
 
 export default function CitiesPage({ data }: { data: CitiesPageData }) {
   const [displayLang, setDisplayLang] = React.useState<'pl' | 'native'>('native');
+  const [api, setApi] = React.useState<CarouselApi>()
+  const [current, setCurrent] = React.useState(0)
+  const [count, setCount] = React.useState(0)
+
+  React.useEffect(() => {
+    if (!api) {
+      return
+    }
+    setCount(api.scrollSnapList().length)
+    setCurrent(api.selectedScrollSnap() + 1)
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap() + 1)
+    })
+  }, [api])
 
   const t = (key: keyof CitiesPageData['ui']) => {
     const texts = data.ui[key];
@@ -34,8 +47,8 @@ export default function CitiesPage({ data }: { data: CitiesPageData }) {
     <TableRow>
       <TableCell className="font-medium p-2">
         <div className="flex items-center">
-          {icon}
-          <span className="ml-2">{label}</span>
+          {React.cloneElement(icon as React.ReactElement, { className: "h-4 w-4 text-deep-purple mr-2 shrink-0" })}
+          <span>{label}</span>
         </div>
       </TableCell>
       <TableCell className="text-right p-2">{value}</TableCell>
@@ -44,7 +57,7 @@ export default function CitiesPage({ data }: { data: CitiesPageData }) {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4">
-      <Card className="w-full max-w-2xl shadow-2xl">
+      <Card className="w-full max-w-xl shadow-2xl">
         <CardHeader className="text-center">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
@@ -54,11 +67,8 @@ export default function CitiesPage({ data }: { data: CitiesPageData }) {
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="h-auto p-1 rounded-md">
-                        <div className="flex items-center gap-2">
-                            <span className="text-sm underline text-primary/80">{t('language')}</span>
-                            <div className="flex items-center justify-center h-8 w-8 rounded-md border border-input bg-background">
-                                <span className="text-xl">{displayLang === 'native' ? {en: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', de: '🇩🇪', fr: '🇫🇷', it: '🇮🇹', es: '🇪🇸'}[data.lang] : '🇵🇱'}</span>
-                            </div>
+                        <div className="flex items-center justify-center h-8 w-8 rounded-md border border-input bg-background">
+                            <span className="text-xl">{displayLang === 'native' ? {en: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', de: '🇩🇪', fr: '🇫🇷', it: '🇮🇹', es: '🇪🇸'}[data.lang] : '🇵🇱'}</span>
                         </div>
                     </Button>
                     </DropdownMenuTrigger>
@@ -73,31 +83,24 @@ export default function CitiesPage({ data }: { data: CitiesPageData }) {
                 </DropdownMenu>
             </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-4">
           <Carousel
+            setApi={setApi}
             opts={{
               align: "start",
               loop: true,
             }}
-            className="w-full max-w-xl mx-auto"
+            className="w-full max-w-lg mx-auto relative"
           >
             <CarouselContent>
               {data.cities.map((city, index) => (
-                <CarouselItem key={index} className="md:basis-1/1 lg:basis-1/1">
+                <CarouselItem key={index}>
                   <div className="p-1">
                     <Card>
                       <CardHeader className="p-4">
                         <CardTitle className="text-center">{city.name[displayLang]}</CardTitle>
                       </CardHeader>
                       <CardContent className="flex flex-col items-center gap-4 p-4 pt-0">
-                        <Image
-                          src={`https://picsum.photos/seed/${city.imageHint.replace(/\s/g, '')}/600/400`}
-                          alt={`Image of ${city.name.native}`}
-                          width={600}
-                          height={400}
-                          className="rounded-lg object-cover aspect-[3/2] w-full"
-                          data-ai-hint={city.imageHint}
-                        />
                         <p className="text-sm text-muted-foreground text-justify h-24 overflow-y-auto">
                           {city.description[displayLang]}
                         </p>
@@ -106,6 +109,8 @@ export default function CitiesPage({ data }: { data: CitiesPageData }) {
                             {renderFactRow(<Users className="h-4 w-4 text-deep-purple"/>, t('population'), city.facts.population)}
                             {renderFactRow(<Map className="h-4 w-4 text-deep-purple"/>, t('area'), city.facts.area[displayLang])}
                             {renderFactRow(<Landmark className="h-4 w-4 text-deep-purple"/>, t('landmark'), city.facts.landmark[displayLang])}
+                            {renderFactRow(<Globe className="h-4 w-4 text-deep-purple"/>, t('region'), city.facts.region[displayLang])}
+                            {renderFactRow(<Sparkles className="h-4 w-4 text-deep-purple"/>, t('nickname'), city.facts.nickname[displayLang])}
                           </TableBody>
                         </Table>
                       </CardContent>
@@ -114,9 +119,12 @@ export default function CitiesPage({ data }: { data: CitiesPageData }) {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
+            <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2 z-10" />
+            <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2 z-10" />
           </Carousel>
+           <div className="py-2 text-center text-sm text-muted-foreground">
+             {current} / {count}
+          </div>
         </CardContent>
         <CardFooter className="flex justify-center p-4">
           <Link href={`/learning/${data.lang}/culture`} passHref>
