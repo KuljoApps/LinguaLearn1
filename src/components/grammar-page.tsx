@@ -18,11 +18,9 @@ interface GrammarPageProps {
 export default function GrammarPage({ title, backHref, content }: GrammarPageProps) {
     return (
         <Card className="w-full max-w-2xl shadow-2xl">
-            <CardHeader className="items-center text-center space-y-4">
-                <div className="flex items-center gap-4">
-                    <BookText className="h-8 w-8" />
-                    <CardTitle className="text-3xl text-center">{title}</CardTitle>
-                </div>
+            <CardHeader className="flex-row items-center justify-center gap-4">
+                <BookText className="h-8 w-8" />
+                <CardTitle className="text-3xl text-center">{title}</CardTitle>
             </CardHeader>
             <CardContent>
                 <ScrollArea className="h-96 w-full pr-4">

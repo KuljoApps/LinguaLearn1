@@ -7,11 +7,9 @@ export default function GrammarItPage() {
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
             <Card className="w-full max-w-md shadow-2xl">
-                <CardHeader className="items-center">
-                    <div className="flex items-center gap-4">
-                        <BookText className="h-8 w-8" />
-                        <h1 className="text-3xl font-bold tracking-tight text-center">Grammatica Generale</h1>
-                    </div>
+                <CardHeader className="flex-row items-center justify-center gap-4">
+                    <BookText className="h-8 w-8" />
+                    <h1 className="text-3xl font-bold tracking-tight text-center">Grammatica Generale</h1>
                 </CardHeader>
                 <CardContent className="flex flex-col space-y-4 p-6">
                     <Link href="/learning/it/grammar/sentence-structure" passHref>
