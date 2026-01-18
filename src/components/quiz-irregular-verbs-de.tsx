@@ -422,7 +422,7 @@ export default function QuizIrregularVerbsDe() {
           <div className="w-full space-y-4">
             <p className="text-center text-muted-foreground">1. Wähle die richtige Übersetzung</p>
             <div className={cn(
-                "grid gap-4 w-full",
+                "grid gap-2 w-full",
                 isLongText ? "grid-cols-2" : "grid-cols-3"
             )}>
                 {shuffledTranslationOptions.map((option, index) => {
@@ -467,7 +467,7 @@ export default function QuizIrregularVerbsDe() {
                         ref={form2InputRef}
                         value={form2Input}
                         onChange={(e) => setForm2Input(e.target.value)}
-                        placeholder={currentQuestion.verb}
+                        placeholder=""
                         disabled={!!answerStatus || isPaused || translationStatus !== 'correct'}
                         className={cn("text-center transition-colors duration-300 mt-1", getInputClass(form2Input, currentQuestion.form2))}
                     />
@@ -478,7 +478,7 @@ export default function QuizIrregularVerbsDe() {
                         id="form3"
                         value={form3Input}
                         onChange={(e) => setForm3Input(e.target.value)}
-                        placeholder="ge..."
+                        placeholder=""
                         disabled={!!answerStatus || isPaused || translationStatus !== 'correct'}
                         className={cn(
                             "text-center transition-colors duration-300 mt-1",
@@ -576,3 +576,5 @@ export default function QuizIrregularVerbsDe() {
     </>
   );
 }
+
+    
