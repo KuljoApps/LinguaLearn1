@@ -43,7 +43,7 @@ export default function AlphabetPage({ data }: AlphabetPageProps) {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4">
-      <Card className="w-full max-w-2xl shadow-2xl">
+      <Card className="w-full max-w-xl shadow-2xl">
         <CardHeader className="text-center">
             <div className="flex items-center justify-center gap-4">
                 <AudioLines className="h-8 w-8" />
@@ -57,7 +57,7 @@ export default function AlphabetPage({ data }: AlphabetPageProps) {
                 <Button
                   key={`${item.letter}-${index}`}
                   variant="outline"
-                  className="h-28 w-28 mx-auto flex flex-col p-2 text-lg border-2 border-primary"
+                  className="h-28 w-full max-w-[7rem] mx-auto flex flex-col p-2 text-lg border-2 border-primary"
                   onClick={() => handlePlaySound(item.letter)}
                 >
                   <div className="flex-grow flex items-center justify-center">
