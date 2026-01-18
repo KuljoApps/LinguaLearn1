@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { Home, RefreshCw, Pause, Play, Clock, Trophy } from "lucide-react";
 import { questions as initialQuestions, type Question } from "@/lib/questions-pl-en";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -58,6 +58,7 @@ export default function QuizPlEn() {
   const [showTimePenalty, setShowTimePenalty] = useState(false);
   const [shuffledOptions, setShuffledOptions] = useState<string[]>([]);
   const [sessionErrors, setSessionErrors] = useState<Omit<ErrorRecord, 'id'>[]>([]);
+  const timeoutFiredRef = useRef(false);
   
   const router = useRouter();
   const { toast } = useToast();
@@ -76,8 +77,14 @@ export default function QuizPlEn() {
   }, [toast]);
   
   useEffect(() => {
-    setQuestions(shuffleArray(initialQuestions).slice(0, QUIZ_LENGTH));
+    const newQuestions = shuffleArray(initialQuestions).slice(0, QUIZ_LENGTH);
+    setQuestions(newQuestions);
+    timeoutFiredRef.current = false;
   }, []);
+
+  useEffect(() => {
+      timeoutFiredRef.current = false;
+  }, [currentQuestionIndex]);
 
   // Finalize session achievements
   useEffect(() => {
@@ -112,23 +119,25 @@ export default function QuizPlEn() {
       setQuestionTimer((prev) => {
         if (prev <= 1) {
           clearInterval(interval);
-          setAnswerStatus("timeout");
-          setSelectedAnswer(null);
-          playSound("incorrect");
-          vibrate("incorrect");
+          if (!timeoutFiredRef.current) {
+            timeoutFiredRef.current = true;
+            setAnswerStatus("timeout");
+            setSelectedAnswer(null);
+            playSound("incorrect");
+            vibrate("incorrect");
 
-          const unlocked = updateStats(false, QUIZ_NAME, questions[currentQuestionIndex].id);
-          unlocked.forEach(showAchievementToast);
+            const unlocked = updateStats(false, QUIZ_NAME, questions[currentQuestionIndex].id);
+            unlocked.forEach(showAchievementToast);
 
-          const errorRecord = {
-            word: questions[currentQuestionIndex].word,
-            userAnswer: 'No answer',
-            correctAnswer: questions[currentQuestionIndex].correctAnswer,
-            quiz: QUIZ_NAME,
-          };
-          addError(errorRecord);
-          setSessionErrors(prev => [...prev, errorRecord]);
-
+            const errorRecord = {
+              word: questions[currentQuestionIndex].word,
+              userAnswer: 'No answer',
+              correctAnswer: questions[currentQuestionIndex].correctAnswer,
+              quiz: QUIZ_NAME,
+            };
+            addError(errorRecord);
+            setSessionErrors(prev => [...prev, errorRecord]);
+          }
           return 0;
         }
         return prev - 1;
@@ -229,6 +238,7 @@ export default function QuizPlEn() {
     setTotalTime(0);
     setIsPaused(false);
     setSessionErrors([]);
+    timeoutFiredRef.current = false;
     setIsRestartAlertOpen(false);
   }
 
@@ -294,7 +304,7 @@ export default function QuizPlEn() {
               <LinguaLearnLogo className="h-8 w-8" />
               <CardTitle className="text-3xl font-bold tracking-tight">LinguaLearn</CardTitle>
           </div>
-          <CardDescription>Select the correct translation</CardDescription>
+          <CardDescription className="pt-2">Select the correct translation</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col items-center justify-center p-6 space-y-8">
             <div className="w-full flex justify-around gap-4 text-center">

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
@@ -63,6 +62,7 @@ export default function QuizIrregularVerbsFr() {
   const [isPaused, setIsPaused] = useState(false);
   const [showTimePenalty, setShowTimePenalty] = useState(false);
   const [shuffledTranslationOptions, setShuffledTranslationOptions] = useState<string[]>([]);
+  const timeoutFiredRef = useRef(false);
   
   const router = useRouter();
   const form2InputRef = useRef<HTMLInputElement>(null);
@@ -82,8 +82,14 @@ export default function QuizIrregularVerbsFr() {
   }, [toast]);
   
   useEffect(() => {
-    setQuestions(shuffleArray(initialQuestions).slice(0, QUIZ_LENGTH));
+    const newQuestions = shuffleArray(initialQuestions).slice(0, QUIZ_LENGTH);
+    setQuestions(newQuestions);
+    timeoutFiredRef.current = false;
   }, []);
+
+  useEffect(() => {
+      timeoutFiredRef.current = false;
+  }, [currentQuestionIndex]);
 
   // Finalize session achievements
   useEffect(() => {
@@ -121,22 +127,25 @@ export default function QuizIrregularVerbsFr() {
       setQuestionTimer((prev) => {
         if (prev <= 1) {
           clearInterval(interval);
-          setAnswerStatus("timeout");
-          setSelectedTranslation(null);
-          playSound("incorrect");
-          vibrate("incorrect");
+          if (!timeoutFiredRef.current) {
+            timeoutFiredRef.current = true;
+            setAnswerStatus("timeout");
+            setSelectedTranslation(null);
+            playSound("incorrect");
+            vibrate("incorrect");
+            
+            const unlocked = updateStats(false, QUIZ_NAME, questions[currentQuestionIndex].id);
+            unlocked.forEach(showAchievementToast);
 
-          const unlocked = updateStats(false, QUIZ_NAME, questions[currentQuestionIndex].id);
-          unlocked.forEach(showAchievementToast);
-          
-          const errorRecord = {
-            word: questions[currentQuestionIndex].verb,
-            userAnswer: 'No answer',
-            correctAnswer: `${questions[currentQuestionIndex].correctTranslation}, ${questions[currentQuestionIndex].form2}, ${questions[currentQuestionIndex].form3}`,
-            quiz: QUIZ_NAME,
-          };
-          addError(errorRecord);
-          setSessionErrors(prev => [...prev, errorRecord]);
+            const errorRecord = {
+              word: questions[currentQuestionIndex].verb,
+              userAnswer: 'No answer',
+              correctAnswer: `${questions[currentQuestionIndex].correctTranslation}, ${questions[currentQuestionIndex].form2}, ${questions[currentQuestionIndex].form3}`,
+              quiz: QUIZ_NAME,
+            };
+            addError(errorRecord);
+            setSessionErrors(prev => [...prev, errorRecord]);
+          }
           return 0;
         }
         return prev - 1;
@@ -284,6 +293,7 @@ export default function QuizIrregularVerbsFr() {
     setTotalTime(0);
     setIsPaused(false);
     setSessionErrors([]);
+    timeoutFiredRef.current = false;
     setIsRestartAlertOpen(false);
   }
 
@@ -369,7 +379,7 @@ export default function QuizIrregularVerbsFr() {
               <LinguaLearnLogo className="h-8 w-8" />
               <CardTitle className="text-3xl font-bold tracking-tight">LinguaLearn</CardTitle>
           </div>
-          <CardDescription>Sélectionnez la traduction et remplissez les formes du verbe</CardDescription>
+          <CardDescription className="pt-2">Sélectionnez la traduction et remplissez les formes du verbe</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col items-center justify-center p-6 space-y-6">
             <div className="w-full flex justify-around gap-4 text-center">
