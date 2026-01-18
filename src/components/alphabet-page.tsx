@@ -54,17 +54,17 @@ export default function AlphabetPage({ data }: AlphabetPageProps) {
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
               {data.alphabet.map((item) => (
                 <Button
-                  key={item.letter}
+                  key={`${item.letter}-${item.phonetic}`}
                   variant="outline"
-                  className="h-32 flex-col gap-1 text-lg border-2 border-primary"
+                  className="h-28 flex flex-col p-2 text-lg border-2 border-primary"
                   onClick={() => handlePlaySound(item.letter)}
                 >
                   <div className="flex-grow flex items-center justify-center">
                     <span className="text-5xl font-bold">{item.letter}</span>
                   </div>
-                  <div className="flex items-center justify-between w-full px-2 pb-1">
+                  <div className="flex flex-col items-center">
                       <span className="text-xs text-muted-foreground">{item.phonetic}</span>
-                      <Volume2 className="h-5 w-5" />
+                      <Volume2 className="h-5 w-5 mt-1" />
                   </div>
                 </Button>
               ))}
