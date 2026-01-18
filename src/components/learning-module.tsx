@@ -59,8 +59,7 @@ export default function QuestionBase({ uiTexts, questionSets, backHref }: Questi
                 } else {
                     return (
                         q.word.toLowerCase().includes(lowerCaseSearch) ||
-                        q.correctAnswer.toLowerCase().includes(lowerCaseSearch) ||
-                        (q.options && q.options.some(opt => opt.toLowerCase().includes(lowerCaseSearch)))
+                        q.correctAnswer.toLowerCase().includes(lowerCaseSearch)
                     );
                 }
             });
@@ -71,7 +70,7 @@ export default function QuestionBase({ uiTexts, questionSets, backHref }: Questi
 
     return (
         <Card className="w-full max-w-2xl shadow-2xl">
-            <CardHeader className="text-center space-y-4">
+            <CardHeader className="text-center space-y-6">
                 <div className="flex items-center justify-center gap-4">
                     <BookCopy className="h-8 w-8" />
                     <CardTitle className="text-3xl">{uiTexts.title}</CardTitle>
