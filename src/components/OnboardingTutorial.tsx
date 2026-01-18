@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
 import { Language, getLanguage, setTutorialCompleted } from '@/lib/storage';
+import LinguaLearnLogo from './LinguaLearnLogo';
 
 interface OnboardingTutorialProps {
     open: boolean;
@@ -99,7 +100,7 @@ export default function OnboardingTutorial({ open, onOpenChange }: OnboardingTut
     };
 
     const handleFinish = () => {
-        setTutorialCompleted();
+        // setTutorialCompleted(); // For production, uncomment this.
         onOpenChange(false);
     };
 
@@ -121,33 +122,43 @@ export default function OnboardingTutorial({ open, onOpenChange }: OnboardingTut
             )}
             
             {/* Content */}
-            <div className="absolute z-50">
-                {currentStep === -1 ? (
-                    <div className="fixed inset-0 flex items-center justify-center p-4">
-                        <div className="bg-background p-6 rounded-lg shadow-xl text-center max-w-sm w-full">
-                            <h2 className="text-2xl font-bold mb-2">{uiTexts.welcomeTitle}</h2>
-                            <p className="text-muted-foreground mb-4">{uiTexts.welcomeDesc}</p>
-                            <Button onClick={handleNext}>{uiTexts.next}</Button>
+            {currentStep === -1 ? (
+                <div className="fixed inset-0 flex items-center justify-center p-4">
+                    <div className="bg-background p-6 rounded-lg shadow-xl text-center max-w-sm w-full">
+                        <div className="flex items-center justify-center gap-4 mb-4">
+                            <LinguaLearnLogo width="48" height="48" />
+                            <h1 className="text-4xl font-bold tracking-tight whitespace-nowrap">
+                                Lingua
+                                <span className="relative inline-block">
+                                    Learn
+                                    <span className="absolute -right-1 -bottom-4 text-lg font-semibold tracking-normal text-amber">
+                                    Lite
+                                    </span>
+                                </span>
+                            </h1>
+                        </div>
+                        <h2 className="text-2xl font-bold mt-4 mb-2">{uiTexts.welcomeTitle}</h2>
+                        <p className="text-muted-foreground mb-4">{uiTexts.welcomeDesc}</p>
+                        <Button onClick={handleNext}>{uiTexts.next}</Button>
+                    </div>
+                </div>
+            ) : (
+                currentStepData && (
+                    <div
+                        className="fixed bg-background p-4 rounded-lg shadow-xl w-64 transition-all duration-300 z-50"
+                        style={bubbleStyle}
+                    >
+                        <h3 className="font-bold mb-1 text-lg">{currentStepData.title}</h3>
+                        <p className="text-sm text-muted-foreground mb-4">{currentStepData.description}</p>
+                        <div className="flex justify-between items-center">
+                            <span className="text-xs text-muted-foreground">{currentStep + 1} / {steps.length}</span>
+                            <Button onClick={isLastStep ? handleFinish : handleNext} size="sm">
+                                {isLastStep ? uiTexts.finish : uiTexts.next}
+                            </Button>
                         </div>
                     </div>
-                ) : (
-                    currentStepData && (
-                        <div
-                            className="absolute bg-background p-4 rounded-lg shadow-xl w-64 transition-all duration-300"
-                            style={bubbleStyle}
-                        >
-                            <h3 className="font-bold mb-1 text-lg">{currentStepData.title}</h3>
-                            <p className="text-sm text-muted-foreground mb-4">{currentStepData.description}</p>
-                            <div className="flex justify-between items-center">
-                                <span className="text-xs text-muted-foreground">{currentStep + 1} / {steps.length}</span>
-                                <Button onClick={isLastStep ? handleFinish : handleNext} size="sm">
-                                    {isLastStep ? uiTexts.finish : uiTexts.next}
-                                </Button>
-                            </div>
-                        </div>
-                    )
-                )}
-            </div>
+                )
+            )}
         </div>
     );
 }
