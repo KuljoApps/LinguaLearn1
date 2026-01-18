@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -289,7 +288,7 @@ export default function QuizIdioms() {
   return (
     <>
       <Card className="w-full max-w-lg shadow-2xl">
-        <CardHeader className="text-center pb-4">
+        <CardHeader className="text-center pb-2">
           <div className="flex items-center justify-center gap-2">
               <LinguaLearnLogo className="h-8 w-8" />
               <CardTitle className="text-3xl font-bold tracking-tight">LinguaLearn</CardTitle>
@@ -316,7 +315,10 @@ export default function QuizIdioms() {
 
           <div className="text-center space-y-2">
               <p className="text-muted-foreground">What is the Polish meaning of the idiom</p>
-              <p className="text-4xl font-headline font-bold text-card-foreground">"{currentQuestion.word}"?</p>
+              <p className={cn(
+                  "font-headline font-bold text-card-foreground",
+                  currentQuestion.word.length > 20 ? "text-3xl" : "text-4xl"
+              )}>"{currentQuestion.word}"?</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">

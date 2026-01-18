@@ -74,25 +74,25 @@ export default function QuizResults({ score, totalQuestions, totalTime, quizName
                             <span className="text-xs text-muted-foreground">Skuteczność</span>
                         </div>
                         <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-background">
-                             <div className="flex items-center gap-2">
-                                <Clock className="h-4 w-4 text-muted-foreground"/>
-                                <span className="text-2xl font-bold">{formatTime(totalTime)}</span>
-                            </div>
-                            <span className="text-xs text-muted-foreground">Całkowity czas</span>
-                        </div>
-                        <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-background">
                             <div className="flex items-center gap-2">
                                 <CheckCircle className="h-4 w-4 text-success"/>
                                 <span className="text-2xl font-bold">{score}</span>
                             </div>
                             <span className="text-xs text-muted-foreground">Poprawne</span>
                         </div>
-                         <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-background col-span-2">
+                        <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-background">
                             <div className="flex items-center gap-2">
                                 <ShieldX className="h-4 w-4 text-destructive"/>
                                 <span className="text-2xl font-bold">{sessionErrors.length}</span>
                             </div>
                             <span className="text-xs text-muted-foreground">Błędne</span>
+                        </div>
+                        <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-background col-span-2">
+                             <div className="flex items-center gap-2">
+                                <Clock className="h-4 w-4 text-muted-foreground"/>
+                                <span className="text-2xl font-bold">{formatTime(totalTime)}</span>
+                            </div>
+                            <span className="text-xs text-muted-foreground">Całkowity czas</span>
                         </div>
                     </CardContent>
                 </Card>
