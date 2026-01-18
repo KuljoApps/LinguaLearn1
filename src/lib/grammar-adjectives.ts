@@ -1,6 +1,4 @@
-import type { GrammarContent } from './grammar';
-
-export const adjectivesContent: GrammarContent = {
+export const adjectivesContent = {
     en: {
         'adjectives': {
           title: 'Adjectives',

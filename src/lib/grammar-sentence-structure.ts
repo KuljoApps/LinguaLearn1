@@ -1,6 +1,4 @@
-import type { GrammarContent } from './grammar';
-
-export const sentenceStructureContent: GrammarContent = {
+export const sentenceStructureContent = {
     en: {
       'sentence-structure': {
         title: 'Sentence Structure',

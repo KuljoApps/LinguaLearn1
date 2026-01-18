@@ -1,6 +1,4 @@
-import type { GrammarContent } from './grammar';
-
-export const negationsContent: GrammarContent = {
+export const negationsContent = {
     en: {
         negations: {
           title: 'Negations',
@@ -134,7 +132,7 @@ export const negationsContent: GrammarContent = {
                 heading: 'Przeczenia w czasach złożonych', 
                 text: 'W czasach złożonych, takich jak Passé Composé, "ne" i "pas" otaczają czasownik posiłkowy ("avoir" lub "être"), a nie imiesłów.',
                 examples: [
-                  { original: 'Je n\'ai pas mangé.', translation: 'Nie jadłem/am.' },
+                  { original: 'J\'ai pas mangé.', translation: 'Nie jadłem/am.' },
                   { original: 'Nous ne sommes pas allés au cinéma.', translation: 'Nie poszliśmy do kina.' }
                 ]
               },

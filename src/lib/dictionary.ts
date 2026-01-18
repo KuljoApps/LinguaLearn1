@@ -7,9 +7,25 @@ import { homeDictionary } from './dictionary-home';
 import { numbersDictionary } from './dictionary-numbers';
 import { timeDictionary } from './dictionary-time';
 import { workDictionary } from './dictionary-work';
-import type { DictionaryContent } from './types';
 
-export type { DictionaryWord, DictionaryCategory } from './types';
+export interface DictionaryWord {
+  word: string;
+  translation: string;
+  colorCode?: string;
+  numeric?: string;
+  isHeader?: boolean;
+}
+
+export interface DictionaryCategory {
+  [category: string]: {
+    title: string;
+    words: DictionaryWord[];
+  };
+}
+
+export interface DictionaryContent {
+  [lang: string]: DictionaryCategory;
+}
 
 const languages: Language[] = ['en', 'de', 'es', 'fr', 'it'];
 export const allDictionaries: DictionaryContent = {};
