@@ -18,7 +18,7 @@ export default function LearningFrQuestionsPage() {
     const questionSets = [
         { title: 'Français - Polonais', questions: frPlQuestions },
         { title: 'Polonais - Français', questions: plFrQuestions },
-        { title: 'Verbes Irréguliers', questions: irregularVerbsFrQuestions },
+        { title: 'Verbes Irréguliers & Auxiliaires', questions: irregularVerbsFrQuestions },
         { title: 'Faux Amis', questions: fauxAmisFrQuestions },
         { title: 'Idiomes', questions: idiomsFrQuestions },
     ];

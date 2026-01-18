@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
@@ -5,7 +6,6 @@ import { Home, RefreshCw, Pause, Play, Clock, Trophy } from "lucide-react";
 import { questions as initialQuestions, type IrregularVerbQuestion } from "@/lib/questions-irregular-verbs-fr";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import Link from 'next/link';
@@ -36,25 +36,26 @@ function shuffleArray<T>(array: T[]): T[] {
   return shuffled;
 }
 
-const QUESTION_TIME_LIMIT = 30;
-const PAUSE_PENALTY = 10;
-const MIN_TIME_FOR_PAUSE = 11;
-const QUIZ_NAME = 'Irregular Verbs (FR)';
-const TIME_UPDATE_INTERVAL = 5; // seconds
+const QUESTION_TIME_LIMIT = 20;
+const PAUSE_PENALTY = 5;
+const MIN_TIME_FOR_PAUSE = 6;
+const QUIZ_NAME = 'Verbes Irréguliers & Auxiliaires';
+const TIME_UPDATE_INTERVAL = 5;
 const QUIZ_LENGTH = 10;
-
 
 export default function QuizIrregularVerbsFr() {
   const [questions, setQuestions] = useState<IrregularVerbQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
-  const [selectedTranslation, setSelectedTranslation] = useState<string | null>(null);
-  const [form2Input, setForm2Input] = useState("");
-  const [form3Input, setForm3Input] = useState("");
   const [sessionErrors, setSessionErrors] = useState<Omit<ErrorRecord, 'id'>[]>([]);
 
-  const [answerStatus, setAnswerStatus] = useState<"correct" | "incorrect" | "timeout" | null>(null);
+  const [stage, setStage] = useState<'translation' | 'auxiliary'>('translation');
+  const [selectedTranslation, setSelectedTranslation] = useState<string | null>(null);
   const [translationStatus, setTranslationStatus] = useState<"correct" | "incorrect" | null>(null);
+  const [auxiliaryStatus, setAuxiliaryStatus] = useState<"correct" | "incorrect" | null>(null);
+  const [selectedAuxiliary, setSelectedAuxiliary] = useState<'avoir' | 'être' | null>(null);
+  const [answerStatus, setAnswerStatus] = useState<"correct" | "incorrect" | "timeout" | null>(null);
+  
   const [isRestartAlertOpen, setIsRestartAlertOpen] = useState(false);
   const [isHomeAlertOpen, setIsHomeAlertOpen] = useState(false);
   const [questionTimer, setQuestionTimer] = useState(QUESTION_TIME_LIMIT);
@@ -65,7 +66,6 @@ export default function QuizIrregularVerbsFr() {
   const timeoutFiredRef = useRef(false);
   
   const router = useRouter();
-  const form2InputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
   const showAchievementToast = useCallback((achievement: Achievement) => {
@@ -74,50 +74,58 @@ export default function QuizIrregularVerbsFr() {
         title: (
             <div className="flex items-center gap-2">
                 <Trophy className="h-5 w-5 text-amber" />
-                <span className="font-bold">Achievement Unlocked!</span>
+                <span className="font-bold">Succès débloqué !</span>
             </div>
         ),
-        description: `You've earned: "${achievement.name}"`,
+        description: `Vous avez gagné : "${achievement.name_fr || achievement.name}"`,
     });
   }, [toast]);
   
-  useEffect(() => {
-    const newQuestions = shuffleArray(initialQuestions).slice(0, QUIZ_LENGTH);
-    setQuestions(newQuestions);
+  const resetQuestionState = () => {
+    setStage('translation');
+    setAnswerStatus(null);
+    setSelectedTranslation(null);
+    setTranslationStatus(null);
+    setSelectedAuxiliary(null);
+    setAuxiliaryStatus(null);
+    setQuestionTimer(QUESTION_TIME_LIMIT);
     timeoutFiredRef.current = false;
+  };
+
+  const restartTest = () => {
+    setQuestions(shuffleArray(initialQuestions).slice(0, QUIZ_LENGTH));
+    setCurrentQuestionIndex(0);
+    setScore(0);
+    setTotalTime(0);
+    setIsPaused(false);
+    setSessionErrors([]);
+    setIsRestartAlertOpen(false);
+    resetQuestionState();
+  };
+
+  useEffect(() => {
+    restartTest();
   }, []);
 
-  useEffect(() => {
-      timeoutFiredRef.current = false;
-  }, [currentQuestionIndex]);
-
-  // Finalize session achievements
-  useEffect(() => {
-      if (currentQuestionIndex >= questions.length && questions.length > 0) {
-          const isPerfect = score === questions.length;
-          const unlocked = checkSessionAchievements(isPerfect);
-          unlocked.forEach(showAchievementToast);
-      }
-  }, [currentQuestionIndex, questions.length, score, showAchievementToast]);
-
-  // Handle transitions between questions
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (answerStatus) {
       timer = setTimeout(() => {
-        setAnswerStatus(null);
-        setSelectedTranslation(null);
-        setForm2Input("");
-        setForm3Input("");
-        setTranslationStatus(null);
         setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
-        setQuestionTimer(QUESTION_TIME_LIMIT);
-      }, 3000);
+        resetQuestionState();
+      }, 2500);
     }
     return () => clearTimeout(timer);
   }, [answerStatus]);
 
-  // Per-question timer
+  useEffect(() => {
+    if (currentQuestionIndex >= questions.length && questions.length > 0) {
+      const isPerfect = score === questions.length;
+      const unlocked = checkSessionAchievements(isPerfect);
+      unlocked.forEach(showAchievementToast);
+    }
+  }, [currentQuestionIndex, questions.length, score, showAchievementToast]);
+
   useEffect(() => {
     if (isPaused || !!answerStatus || currentQuestionIndex >= questions.length) {
       return;
@@ -130,7 +138,6 @@ export default function QuizIrregularVerbsFr() {
           if (!timeoutFiredRef.current) {
             timeoutFiredRef.current = true;
             setAnswerStatus("timeout");
-            setSelectedTranslation(null);
             playSound("incorrect");
             vibrate("incorrect");
             
@@ -140,7 +147,7 @@ export default function QuizIrregularVerbsFr() {
             const errorRecord = {
               word: questions[currentQuestionIndex].verb,
               userAnswer: 'No answer',
-              correctAnswer: `${questions[currentQuestionIndex].correctTranslation}, ${questions[currentQuestionIndex].form2}, ${questions[currentQuestionIndex].form3}`,
+              correctAnswer: `Tłumaczenie: ${questions[currentQuestionIndex].correctTranslation}, Czasownik posiłkowy: ${questions[currentQuestionIndex].auxiliary}`,
               quiz: QUIZ_NAME,
             };
             addError(errorRecord);
@@ -155,23 +162,20 @@ export default function QuizIrregularVerbsFr() {
     return () => clearInterval(interval);
   }, [isPaused, answerStatus, currentQuestionIndex, questions, showAchievementToast]);
 
-  // Total quiz time and periodic time-based achievement check
   useEffect(() => {
     if (currentQuestionIndex >= questions.length || isPaused) {
       return;
     }
-
     const interval = setInterval(() => {
       setTotalTime((prev) => prev + 1);
       if ((totalTime + 1) % TIME_UPDATE_INTERVAL === 0) {
-          const unlocked = updateTimeSpent(TIME_UPDATE_INTERVAL);
-          unlocked.forEach(showAchievementToast);
+        const unlocked = updateTimeSpent(TIME_UPDATE_INTERVAL);
+        unlocked.forEach(showAchievementToast);
       }
     }, 1000);
-
     return () => clearInterval(interval);
   }, [currentQuestionIndex, questions.length, isPaused, totalTime, showAchievementToast]);
-  
+
   const currentQuestion = useMemo(() => questions[currentQuestionIndex], [questions, currentQuestionIndex]);
 
   useEffect(() => {
@@ -179,23 +183,10 @@ export default function QuizIrregularVerbsFr() {
       setShuffledTranslationOptions(shuffleArray(currentQuestion.translationOptions));
     }
   }, [currentQuestion]);
-
-  useEffect(() => {
-    if (answerStatus === 'timeout' && currentQuestion) {
-      setForm2Input(currentQuestion.form2);
-      setForm3Input(currentQuestion.form3);
-    }
-  }, [answerStatus, currentQuestion]);
-
-  useEffect(() => {
-    if (translationStatus === 'correct') {
-      form2InputRef.current?.focus();
-    }
-  }, [translationStatus]);
   
   const handleTranslationClick = (option: string) => {
-    if (answerStatus || isPaused || translationStatus) return;
-
+    if (translationStatus || answerStatus) return;
+    
     setSelectedTranslation(option);
     const isCorrect = option === currentQuestion.correctTranslation;
 
@@ -203,6 +194,7 @@ export default function QuizIrregularVerbsFr() {
       setTranslationStatus('correct');
       playSound('correct');
       vibrate('correct');
+      setTimeout(() => setStage('auxiliary'), 500);
     } else {
       setTranslationStatus('incorrect');
       setAnswerStatus('incorrect');
@@ -214,160 +206,96 @@ export default function QuizIrregularVerbsFr() {
 
       const errorRecord = {
         word: currentQuestion.verb,
-        userAnswer: option,
-        correctAnswer: currentQuestion.correctTranslation,
+        userAnswer: `Tłumaczenie: ${option}`,
+        correctAnswer: `Tłumaczenie: ${currentQuestion.correctTranslation}`,
         quiz: QUIZ_NAME,
       };
       addError(errorRecord);
       setSessionErrors(prev => [...prev, errorRecord]);
     }
   };
-  
-  const handleConfirmClick = () => {
-    if (answerStatus || isPaused) return;
 
-    const isForm2Correct = form2Input.trim().toLowerCase() === currentQuestion.form2.toLowerCase();
-    const isForm3Correct = form3Input.trim().toLowerCase() === currentQuestion.form3.toLowerCase();
-    const isCorrect = isForm2Correct && isForm3Correct && translationStatus === 'correct';
+  const handleAuxiliaryClick = (choice: 'avoir' | 'être') => {
+    if (answerStatus) return;
+
+    setSelectedAuxiliary(choice);
+    const isCorrect = choice === currentQuestion.auxiliary;
+    setAuxiliaryStatus(isCorrect ? 'correct' : 'incorrect');
+    setAnswerStatus(isCorrect ? 'correct' : 'incorrect');
 
     const unlocked = updateStats(isCorrect, QUIZ_NAME, currentQuestion.id);
     unlocked.forEach(showAchievementToast);
+    playSound(isCorrect ? 'correct' : 'incorrect');
+    vibrate(isCorrect ? 'correct' : 'incorrect');
 
-    if (isCorrect) {
-      setScore((prevScore) => prevScore + 1);
-      setAnswerStatus("correct");
-      playSound('correct');
-      vibrate('correct');
-    } else {
-      setAnswerStatus("incorrect");
-      playSound('incorrect');
-      vibrate('incorrect');
-       const errorRecord = {
+    if (!isCorrect) {
+      const errorRecord = {
         word: currentQuestion.verb,
-        userAnswer: `${form2Input}, ${form3Input}`,
-        correctAnswer: `${currentQuestion.form2}, ${currentQuestion.form3}`,
+        userAnswer: `Czasownik posiłkowy: ${choice}`,
+        correctAnswer: `Czasownik posiłkowy: ${currentQuestion.auxiliary}`,
         quiz: QUIZ_NAME,
       };
       addError(errorRecord);
       setSessionErrors(prev => [...prev, errorRecord]);
+    } else {
+        setScore(prev => prev + 1);
     }
   };
 
   const handleRestartClick = () => {
-    if (currentQuestionIndex > 0 || form2Input || form3Input || selectedTranslation) {
-      setIsRestartAlertOpen(true);
-    } else {
-      restartTest();
-    }
+    if (currentQuestionIndex > 0) setIsRestartAlertOpen(true);
+    else restartTest();
   };
   
   const handleHomeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (currentQuestionIndex > 0 || form2Input || form3Input || selectedTranslation) {
+    if (currentQuestionIndex > 0) {
       e.preventDefault();
       setIsHomeAlertOpen(true);
     }
   };
 
-  const handlePauseClick = () => {
-    if (!isPaused) {
-      setIsPaused(true);
-    } else {
-      const newTime = Math.max(0, questionTimer - PAUSE_PENALTY);
-      setShowTimePenalty(true);
-      setTimeout(() => setShowTimePenalty(false), 500);
-      setQuestionTimer(newTime);
-      setIsPaused(false);
-    }
-  }
-
-  const restartTest = () => {
-    setQuestions(shuffleArray(initialQuestions).slice(0, QUIZ_LENGTH));
-    setCurrentQuestionIndex(0);
-    setScore(0);
-    setSelectedTranslation(null);
-    setForm2Input("");
-    setForm3Input("");
-    setAnswerStatus(null);
-    setTranslationStatus(null);
-    setQuestionTimer(QUESTION_TIME_LIMIT);
-    setTotalTime(0);
-    setIsPaused(false);
-    setSessionErrors([]);
-    timeoutFiredRef.current = false;
-    setIsRestartAlertOpen(false);
-  }
-
+  const handlePauseClick = () => setIsPaused(prev => !prev);
+  
   const goHome = () => {
     setIsHomeAlertOpen(false);
     router.push('/');
   }
 
   const getTranslationButtonClass = (option: string) => {
-    const isCorrectAnswer = option === currentQuestion.correctTranslation;
-    const isSelectedAnswer = option === selectedTranslation;
-
-    if (answerStatus) {
-        if (answerStatus === 'timeout') {
-            if(isCorrectAnswer) return "bg-success text-success-foreground hover:bg-success/90";
-            return "bg-muted text-muted-foreground opacity-70 cursor-not-allowed";
-        }
-
-        if (isCorrectAnswer) {
-          return "bg-success text-success-foreground hover:bg-success/90";
-        }
-        if (isSelectedAnswer && !isCorrectAnswer) {
-          return "bg-destructive text-destructive-foreground hover:bg-destructive/90";
-        }
-        return "bg-muted text-muted-foreground opacity-70 cursor-not-allowed";
-    }
-
-    if (translationStatus && isSelectedAnswer) {
-      return translationStatus === 'correct' 
-          ? "bg-success text-success-foreground" 
-          : "bg-destructive text-destructive-foreground";
-    }
-    if (translationStatus && !isSelectedAnswer) {
-      return "bg-muted text-muted-foreground opacity-70 cursor-not-allowed";
-    }
-
-    return "bg-primary text-primary-foreground hover:bg-primary/90";
+    if (!translationStatus) return "bg-primary text-primary-foreground hover:bg-primary/90";
+    const isCorrect = option === currentQuestion.correctTranslation;
+    const isSelected = option === selectedTranslation;
+    if (isCorrect) return "bg-success text-success-foreground";
+    if (isSelected && !isCorrect) return "bg-destructive text-destructive-foreground";
+    return "bg-muted text-muted-foreground opacity-70 cursor-not-allowed";
   };
-
-  const getInputClass = (inputValue: string, correctValue: string) => {
-    if (!answerStatus) return "";
-    
-    if (answerStatus === 'timeout') {
-      return "bg-success text-success-foreground";
+  
+  const getAuxiliaryButtonClass = (choice: 'avoir' | 'être') => {
+    if (!auxiliaryStatus) return "bg-primary text-primary-foreground hover:bg-primary/90";
+    const isCorrect = choice === currentQuestion.auxiliary;
+    const isSelected = choice === selectedAuxiliary;
+    if (isCorrect) return "bg-success text-success-foreground";
+    if (isSelected && !isCorrect) return "bg-destructive text-destructive-foreground";
+    return "bg-muted text-muted-foreground opacity-70 cursor-not-allowed";
+  }
+  
+  if (!currentQuestion) {
+    if (questions.length > 0) {
+      return (
+          <QuizResults
+              score={score}
+              totalQuestions={questions.length}
+              totalTime={totalTime}
+              sessionErrors={sessionErrors}
+              quizName={QUIZ_NAME}
+              onRestart={restartTest}
+          />
+      );
     }
-
-    const isCorrect = inputValue.trim().toLowerCase() === correctValue.toLowerCase();
-
-    return isCorrect ? "bg-success text-success-foreground" : "bg-destructive text-destructive-foreground";
-  }
-  
-  if (questions.length > 0 && currentQuestionIndex >= questions.length) {
-    return (
-        <QuizResults
-            score={score}
-            totalQuestions={questions.length}
-            totalTime={totalTime}
-            sessionErrors={sessionErrors}
-            quizName={QUIZ_NAME}
-            onRestart={restartTest}
-        />
-    );
-  }
-  
-  if (questions.length === 0 || !currentQuestion) {
     return null;
   }
-
-  const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
-  };
-
+  
+  const formatTime = (seconds: number) => `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
   const progressValue = ((currentQuestionIndex + 1) / questions.length) * 100;
   const questionTimeProgress = (questionTimer / QUESTION_TIME_LIMIT) * 100;
 
@@ -377,122 +305,95 @@ export default function QuizIrregularVerbsFr() {
         <CardHeader className="text-center pb-4">
           <div className="flex items-center justify-center gap-2">
               <LinguaLearnLogo className="h-8 w-8" />
-              <CardTitle className="text-3xl font-bold tracking-tight">
-                  Lingua
-                  <span className="relative inline-block">
-                      Learn
-                      <span className="absolute -right-0.5 -bottom-3 text-sm font-semibold tracking-normal text-amber">
-                      Lite
-                      </span>
-                  </span>
-              </CardTitle>
+              <CardTitle className="text-3xl font-bold tracking-tight">LinguaLearn Lite</CardTitle>
           </div>
-          <CardDescription className="pt-2">Sélectionnez la traduction et remplissez les formes du verbe</CardDescription>
+          <CardDescription className="pt-2">Wybierz tłumaczenie i poprawny czasownik posiłkowy</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col items-center justify-center p-6 space-y-6">
-            <div className="w-full flex justify-around gap-4 text-center">
-                <div className="flex items-center gap-2">
-                    <Clock className="h-6 w-6" />
-                    <span className={cn(
-                        "text-2xl font-bold transition-colors duration-300 text-card-foreground",
-                        showTimePenalty && "text-destructive animate-in fade-in-0 shake-sm"
-                    )}>
-                        {questionTimer}s
-                    </span>
-                </div>
-                <div className="flex items-center gap-2">
-                    <Clock className="h-6 w-6" />
-                    <span className="text-2xl font-bold text-card-foreground">{formatTime(totalTime)}</span>
-                </div>
+          <div className="w-full flex justify-around gap-4 text-center">
+            <div className="flex items-center gap-2">
+              <Clock className="h-6 w-6" />
+              <span className={cn("text-2xl font-bold", showTimePenalty && "text-destructive")}>{questionTimer}s</span>
             </div>
-            <Progress value={questionTimeProgress} className="w-full h-2" />
+            <div className="flex items-center gap-2">
+              <Clock className="h-6 w-6" />
+              <span className="text-2xl font-bold">{formatTime(totalTime)}</span>
+            </div>
+          </div>
+          <Progress value={questionTimeProgress} className="w-full h-2" />
 
           <div className="text-center space-y-2">
               <p className="text-muted-foreground">Verbe irrégulier:</p>
-              <p className="text-4xl font-headline font-bold text-card-foreground">"{currentQuestion.verb}"?</p>
+              <p className="text-4xl font-headline font-bold">"{currentQuestion.verb}"</p>
           </div>
 
           <div className="w-full space-y-4">
-            <p className="text-center text-muted-foreground">1. Sélectionnez la bonne traduction</p>
-            <div className="grid grid-cols-3 gap-2 w-full">
-              {shuffledTranslationOptions.map((option) => (
-                <Button
-                  key={option}
-                  onClick={() => handleTranslationClick(option)}
-                  disabled={!!answerStatus || isPaused || translationStatus !== null}
-                  className={cn("h-auto text-base p-2 whitespace-normal transition-all duration-300", getTranslationButtonClass(option))}
-                >
-                  {option}
-                </Button>
-              ))}
-            </div>
+            {stage === 'translation' && (
+              <>
+                <p className="text-center text-muted-foreground">1. Wybierz poprawne tłumaczenie</p>
+                <div className="grid grid-cols-3 gap-2 w-full">
+                  {shuffledTranslationOptions.map((option) => (
+                    <Button
+                      key={option}
+                      onClick={() => handleTranslationClick(option)}
+                      disabled={!!answerStatus || isPaused}
+                      className={cn("h-auto text-base p-2", getTranslationButtonClass(option))}
+                    >
+                      {option}
+                    </Button>
+                  ))}
+                </div>
+              </>
+            )}
 
-            <p className="text-center text-muted-foreground pt-4">2. Tapez le Passé Composé & le Participe Passé</p>
-            <div className="grid grid-cols-3 gap-2 w-full items-center text-center">
-              <Input value={currentQuestion.verb} readOnly className="text-center font-bold bg-muted" />
-              <Input
-                ref={form2InputRef}
-                value={form2Input}
-                onChange={(e) => setForm2Input(e.target.value)}
-                placeholder="Passé Composé"
-                disabled={!!answerStatus || isPaused || translationStatus !== 'correct'}
-                className={cn("text-center transition-colors duration-300", getInputClass(form2Input, currentQuestion.form2))}
-              />
-              <Input
-                value={form3Input}
-                onChange={(e) => setForm3Input(e.target.value)}
-                placeholder="Participe Passé"
-                disabled={!!answerStatus || isPaused || translationStatus !== 'correct'}
-                className={cn("text-center transition-colors duration-300", getInputClass(form3Input, currentQuestion.form3))}
-              />
-            </div>
-            {(answerStatus === 'incorrect' || (answerStatus === 'timeout' && (!form2Input || !form3Input))) && (
+            {stage === 'auxiliary' && (
+              <>
+                <p className="text-center text-muted-foreground">2. Wybierz poprawny czasownik posiłkowy dla Passé Composé</p>
+                <div className="grid grid-cols-2 gap-4 w-full">
+                  <Button
+                    onClick={() => handleAuxiliaryClick('avoir')}
+                    disabled={!!answerStatus}
+                    className={cn("h-16 text-lg", getAuxiliaryButtonClass('avoir'))}
+                  >
+                    Avoir
+                  </Button>
+                  <Button
+                    onClick={() => handleAuxiliaryClick('être')}
+                    disabled={!!answerStatus}
+                    className={cn("h-16 text-lg", getAuxiliaryButtonClass('être'))}
+                  >
+                    Être
+                  </Button>
+                </div>
+              </>
+            )}
+
+            {answerStatus === 'incorrect' && (
               <div className="text-center text-success font-medium animate-in fade-in">
-                  Formes correctes: {currentQuestion.form2}, {currentQuestion.form3}
+                Poprawnie: {currentQuestion.correctTranslation}, {currentQuestion.auxiliary}
               </div>
             )}
-            
-            {translationStatus === 'correct' && (
-              <Button 
-                  className="w-full mt-4 h-12 text-lg"
-                  onClick={handleConfirmClick}
-                  disabled={!!answerStatus || isPaused || !form2Input || !form3Input}
-              >
-                  Confirmer la réponse
-              </Button>
+            {answerStatus === 'timeout' && (
+              <div className="text-center text-destructive font-medium animate-in fade-in">
+                Czas minął! Poprawna odpowiedź: {currentQuestion.correctTranslation}, {currentQuestion.auxiliary}
+              </div>
             )}
           </div>
 
           <div className="flex justify-center gap-4 w-full pt-4 border-t">
-            <Link href="/" passHref>
-              <Button variant="outline" size="icon" onClick={handleHomeClick}>
-                <Home />
-              </Button>
-            </Link>
-            <Button variant="outline" size="icon" onClick={handleRestartClick}>
-              <RefreshCw />
-            </Button>
-            <Button 
-                variant="outline" 
-                size="icon" 
-                onClick={handlePauseClick}
-                disabled={!isPaused && questionTimer < MIN_TIME_FOR_PAUSE}
-            >
+            <Link href="/" passHref><Button variant="outline" size="icon" onClick={handleHomeClick}><Home /></Button></Link>
+            <Button variant="outline" size="icon" onClick={handleRestartClick}><RefreshCw /></Button>
+            <Button variant="outline" size="icon" onClick={handlePauseClick} disabled={!isPaused && questionTimer < MIN_TIME_FOR_PAUSE}>
               {isPaused ? <Play /> : <Pause />}
             </Button>
           </div>
         </CardContent>
         <CardFooter className="flex-col gap-4 p-6 pt-0">
           <div className="flex justify-between w-full items-center">
-              <div className="text-sm text-muted-foreground">
-                  Question {currentQuestionIndex + 1} de {questions.length}
-              </div>
+              <div className="text-sm text-muted-foreground">Pytanie {currentQuestionIndex + 1} z {questions.length}</div>
               <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium">Score:</span>
-                  <div
-                      key={score}
-                      className="text-2xl font-bold text-primary animate-in fade-in zoom-in-125 duration-300"
-                  >
+                  <span className="text-sm font-medium">Wynik:</span>
+                  <div key={score} className="text-2xl font-bold text-primary animate-in fade-in zoom-in-125 duration-300">
                       {score}
                   </div>
               </div>
@@ -505,9 +406,7 @@ export default function QuizIrregularVerbsFr() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Êtes-vous sûr de vouloir recommencer ?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Cela redémarrera le quiz et toute votre progression actuelle sera perdue.
-            </AlertDialogDescription>
+            <AlertDialogDescription>Cela redémarrera le quiz et toute votre progression actuelle sera perdue.</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Annuler</AlertDialogCancel>
@@ -520,9 +419,7 @@ export default function QuizIrregularVerbsFr() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Êtes-vous sûr de vouloir retourner à l'accueil ?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Cela mettra fin au quiz en cours et toute votre progression sera perdue.
-            </AlertDialogDescription>
+            <AlertDialogDescription>Cela mettra fin au quiz en cours et toute votre progression sera perdue.</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Annuler</AlertDialogCancel>
