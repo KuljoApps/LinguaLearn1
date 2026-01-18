@@ -78,16 +78,16 @@ export default function LearningDePage() {
                              <Separator className="flex-grow" />
                         </div>
                         <CollapsibleContent className="pt-4">
-                           <div className="grid grid-cols-2 gap-4">
+                           <div className="grid grid-cols-2 gap-2">
                                <Link href="/learning/de/culture" passHref>
                                     <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
-                                        <Landmark className="mr-2 h-5 w-5 text-deep-purple" />
+                                        <Landmark className="mr-1 h-5 w-5 text-deep-purple" />
                                         Kultur
                                     </Button>
                                 </Link>
                                 <Link href="/learning/de/phonetics" passHref>
                                     <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
-                                        <AudioLines className="mr-2 h-5 w-5 text-deep-purple" />
+                                        <AudioLines className="mr-1 h-5 w-5 text-deep-purple" />
                                         Phonetik
                                     </Button>
                                 </Link>
