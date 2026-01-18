@@ -6,24 +6,9 @@ import { articlesContent } from './grammar-articles';
 import { adjectivesContent } from './grammar-adjectives';
 import { adverbsContent } from './grammar-adverbs';
 import { pronounsContent } from './grammar-pronouns';
+import type { GrammarContent, GrammarRule } from './types';
 
-export interface GrammarRule {
-  heading: string;
-  text: string;
-  examples?: {
-    original: string;
-    translation: string;
-  }[];
-}
-
-export interface GrammarContent {
-  [lang: string]: {
-    [topic: string]: {
-      title: string;
-      content: GrammarRule[];
-    };
-  };
-}
+export type { GrammarRule };
 
 const languages: Language[] = ['en', 'de', 'es', 'fr', 'it'];
 export const allGrammar: GrammarContent = {};
