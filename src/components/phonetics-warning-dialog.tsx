@@ -5,7 +5,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import { Speaker } from 'lucide-react';
 import type { Language } from '@/lib/storage';
 
 const PHONETICS_WARNING_DISMISSED_KEY = 'phoneticsWarningDismissed_v1';
@@ -87,21 +86,18 @@ export default function PhoneticsWarningDialog({ lang }: PhoneticsWarningDialogP
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <div className="flex justify-between items-start">
-             <div className="flex items-center gap-4">
-                 <Speaker className="h-6 w-6" />
-                <DialogTitle className="text-2xl">{t('title')}</DialogTitle>
-             </div>
-             <Button 
-                variant="ghost" 
-                className="h-auto p-1 rounded-md" 
-                onClick={() => setDisplayLang(prev => prev === 'native' ? 'pl' : 'native')}
-             >
-                <div className="flex items-center justify-center h-8 w-8 rounded-md border border-input bg-background">
-                    <span className="text-xl">{displayedFlag}</span>
-                </div>
-            </Button>
-          </div>
+            <div className="flex justify-end -mt-2 -mr-2">
+                <Button 
+                    variant="ghost" 
+                    className="h-auto p-1 rounded-md" 
+                    onClick={() => setDisplayLang(prev => prev === 'native' ? 'pl' : 'native')}
+                >
+                    <div className="flex items-center justify-center h-8 w-8 rounded-md border border-input bg-background">
+                        <span className="text-xl">{displayedFlag}</span>
+                    </div>
+                </Button>
+            </div>
+            <DialogTitle className="text-2xl text-center sm:text-left max-w-[220px]">{t('title')}</DialogTitle>
         </DialogHeader>
         <div className="py-4">
           <p className="text-sm text-muted-foreground">{t('description')}</p>
