@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
@@ -52,6 +53,7 @@ export default function QuizIrregularVerbsFr() {
   const [translationStatus, setTranslationStatus] = useState<"correct" | "incorrect" | null>(null);
   const [selectedAuxiliary, setSelectedAuxiliary] = useState<'avoir' | 'être' | null>(null);
   const [auxiliaryStatus, setAuxiliaryStatus] = useState<"correct" | "incorrect" | null>(null);
+  const [isLongText, setIsLongText] = useState(false);
   
   const [answerStatus, setAnswerStatus] = useState<"correct" | "incorrect" | "timeout" | null>(null);
   
@@ -178,7 +180,11 @@ export default function QuizIrregularVerbsFr() {
 
   useEffect(() => {
     if (currentQuestion) {
-      setShuffledTranslationOptions(shuffleArray(currentQuestion.translationOptions));
+      const options = shuffleArray(currentQuestion.translationOptions);
+      setShuffledTranslationOptions(options);
+
+      const hasLongOption = options.some(option => option.length > 15);
+      setIsLongText(hasLongOption);
     }
   }, [currentQuestion]);
   
@@ -358,13 +364,13 @@ export default function QuizIrregularVerbsFr() {
 
           <div className="w-full space-y-4">
             <p className="text-center text-muted-foreground">1. Choisissez la bonne traduction</p>
-            <div className="grid grid-cols-3 gap-2 w-full">
+            <div className={cn("grid gap-2 w-full", isLongText ? "grid-cols-2" : "grid-cols-3")}>
               {shuffledTranslationOptions.map((option) => (
                 <Button
                   key={option}
                   onClick={() => handleTranslationClick(option)}
                   disabled={!!translationStatus || !!answerStatus || isPaused}
-                  className={cn("h-auto text-base p-2", getTranslationButtonClass(option))}
+                  className={cn("h-auto text-base p-2 whitespace-normal", getTranslationButtonClass(option))}
                 >
                   {option}
                 </Button>
