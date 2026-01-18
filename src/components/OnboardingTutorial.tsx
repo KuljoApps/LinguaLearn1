@@ -20,22 +20,22 @@ const steps: Step[] = [
     {
         elementId: 'language-switcher',
         title: 'Zmiana języka',
-        description: 'Najpierw wybierz język, którego chcesz się uczyć. Możesz to zmienić w każdej chwili.',
+        description: 'Najpierw wybierz język, którego chcesz się uczyć. Możesz to zmienić w\u00A0każdej chwili.',
     },
     {
         elementId: 'quiz-buttons',
         title: 'Główne quizy',
-        description: 'To serce aplikacji! Wybierz jeden z pięciu trybów, aby sprawdzić swoją wiedzę w różnych kategoriach.',
+        description: 'To serce aplikacji! Wybierz jeden z\u00A0pięciu trybów, aby sprawdzić swoją wiedzę w\u00A0różnych kategoriach.',
     },
     {
         elementId: 'learning-button',
         title: 'Baza wiedzy',
-        description: 'Potrzebujesz powtórki? Tutaj znajdziesz moduły do nauki, w tym gramatykę, słownictwo i wiele więcej.',
+        description: 'Potrzebujesz powtórki? Tutaj znajdziesz moduły do nauki, w\u00A0tym gramatykę, słownictwo i\u00A0wiele więcej.',
     },
     {
         elementId: 'toolbar',
         title: 'Narzędzia i postępy',
-        description: 'Tutaj możesz dostosować ustawienia, śledzić swoje statystyki, przeglądać błędy i sprawdzać swoje osiągnięcia.',
+        description: 'Tutaj możesz dostosować ustawienia, śledzić swoje statystyki, przeglądać błędy i\u00A0sprawdzać swoje osiągnięcia.',
     },
 ];
 
@@ -43,7 +43,7 @@ const uiTexts = {
     next: 'Dalej',
     finish: 'Zakończ',
     welcomeTitle: 'Witaj w',
-    welcomeDesc: 'Pozwól, że w kilku krokach pokażę Ci najważniejsze funkcje.'
+    welcomeDesc: 'Pozwól, że w\u00A0kilku krokach pokażę Ci najważniejsze funkcje.'
 }
 
 export default function OnboardingTutorial({ open, onOpenChange }: OnboardingTutorialProps) {
