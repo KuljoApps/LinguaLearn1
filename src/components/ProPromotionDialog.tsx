@@ -24,7 +24,7 @@ export default function ProPromotionDialog({ open, onOpenChange }: ProPromotionD
         <div className="space-y-4 py-4">
           <div className="flex items-center gap-4">
             <div className="bg-primary/10 p-3 rounded-full">
-              <BookOpen className="h-6 w-6 text-primary" />
+              <BookOpen className="h-6 w-6 text-deep-purple" />
             </div>
             <div>
               <h4 className="font-semibold">Wszystkie przyszłe języki</h4>
@@ -33,20 +33,20 @@ export default function ProPromotionDialog({ open, onOpenChange }: ProPromotionD
           </div>
           <div className="flex items-center gap-4">
             <div className="bg-primary/10 p-3 rounded-full">
-              <Zap className="h-6 w-6 text-primary" />
+              <Zap className="h-6 w-6 text-deep-purple" />
             </div>
             <div>
-              <h4 className="font-semibold">Zaawansowane statystyki i misje</h4>
-              <p className="text-sm text-muted-foreground">Śledź swoje postępy dzięki szczegółowym analizom, wykresom i codziennym misjom.</p>
+              <h4 className="font-semibold">Śledzenie postępów i codzienne wyzwania</h4>
+              <p className="text-sm text-muted-foreground">Monitoruj swoje wyniki dzięki zaawansowanym statystykom i realizuj codzienne misje, aby zdobywać nagrody.</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
              <div className="bg-primary/10 p-3 rounded-full">
-              <Crown className="h-6 w-6 text-primary" />
+              <Crown className="h-6 w-6 text-deep-purple" />
             </div>
             <div>
               <h4 className="font-semibold">Dożywotnia licencja</h4>
-              <p className="text-sm text-muted-foreground">Jedna, niska opłata za dostęp do wszystkich funkcji PRO na zawsze.</p>
+              <p className="text-sm text-muted-foreground">Jedna, niska opłata za dostęp do wszystkich funkcji <span className="font-semibold text-deep-purple">PRO</span> na zawsze.</p>
             </div>
           </div>
         </div>
