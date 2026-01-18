@@ -20,7 +20,7 @@ interface DictionaryPageProps {
 }
 
 const WordItem = ({ word, isFavorite, onToggleFavorite }: { word: DictionaryWord, isFavorite: boolean, onToggleFavorite: (word: string) => void }) => (
-    <div className="flex items-center justify-between text-sm py-1">
+    <div className="flex items-center justify-between text-sm">
         <div>
             <p className="font-bold">{word.word}</p>
             <div className="flex items-center gap-2">
@@ -46,7 +46,7 @@ const WordItem = ({ word, isFavorite, onToggleFavorite }: { word: DictionaryWord
         >
             <Star
                 className={cn(
-                    "h-5 w-5 transition-colors",
+                    "h-[1.125rem] w-[1.125rem] transition-colors", // 18px (~10% smaller than 20px)
                     isFavorite
                         ? "fill-amber text-amber"
                         : "text-muted-foreground hover:fill-amber/50 hover:text-amber/80"
@@ -62,7 +62,7 @@ export default function DictionaryPage({ title, backHref, words, children }: Dic
     const { lang, category, backText } = useMemo(() => {
         const pathParts = backHref.split('/');
         const lang = pathParts[2] as Language;
-        const category = pathParts[4];
+        const categoryFromFile = pathParts[pathParts.length - 1]; 
         
         const backButtonTexts = {
             en: 'Back to Dictionary',
@@ -73,7 +73,7 @@ export default function DictionaryPage({ title, backHref, words, children }: Dic
         };
         const backText = backButtonTexts[lang] || 'Back to Dictionary';
 
-        return { lang, category, backText };
+        return { lang, category: categoryFromFile, backText };
     }, [backHref]);
 
     const [favorites, setFavorites] = useState<string[]>([]);
@@ -122,39 +122,34 @@ export default function DictionaryPage({ title, backHref, words, children }: Dic
                 <ScrollArea className="h-96 w-full pr-4">
                     <div className="flex flex-col">
                         {favoriteWords.length > 0 && (
-                            <>
-                                <div className="pt-2 pb-2">
-                                    <h3 className="text-xl font-bold italic tracking-tight text-amber">Ulubione</h3>
-                                </div>
-                                <div className="flex flex-col gap-1">
-                                    {favoriteWords.map((word) => (
+                            <div className="mb-4">
+                                <h3 className="text-xl font-bold italic tracking-tight text-amber mb-2">Ulubione</h3>
+                                {favoriteWords.map((word, index) => (
+                                    <React.Fragment key={`fav-${word.word}`}>
                                         <WordItem 
-                                            key={`fav-${word.word}`}
                                             word={word} 
                                             isFavorite={true} 
                                             onToggleFavorite={handleToggleFavorite} 
                                         />
-                                    ))}
-                                </div>
-                                <Separator className="my-4" />
-                            </>
+                                        {index < favoriteWords.length - 1 && <Separator className="my-2" />}
+                                    </React.Fragment>
+                                ))}
+                            </div>
                         )}
                         
                         {wordGroups.map((group) => (
-                            <div key={group.header} className="mb-4">
-                                <div className="pt-2 pb-2">
-                                    <h3 className="text-xl font-bold italic tracking-tight text-primary">{group.header}</h3>
-                                </div>
-                                <div className="flex flex-col gap-1">
-                                    {group.words.map((word) => (
-                                         <WordItem 
-                                            key={word.word}
+                             <div key={group.header} className="mb-4">
+                                <h3 className="text-xl font-bold italic tracking-tight text-primary mb-2">{group.header}</h3>
+                                {group.words.map((word, wordIndex) => (
+                                    <React.Fragment key={word.word}>
+                                        <WordItem 
                                             word={word} 
-                                            isFavorite={false} 
+                                            isFavorite={favorites.includes(word.word)}
                                             onToggleFavorite={handleToggleFavorite} 
                                         />
-                                    ))}
-                                </div>
+                                        {wordIndex < group.words.length - 1 && <Separator className="my-2" />}
+                                    </React.Fragment>
+                                ))}
                             </div>
                         ))}
                     </div>
