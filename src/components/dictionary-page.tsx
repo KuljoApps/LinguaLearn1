@@ -50,12 +50,12 @@ export default function DictionaryPage({ title, backHref, words, children }: Dic
         it: 'Preferiti',
     };
 
-    const sortedWords: DictionaryWord[] = useMemo(() => {
+    const sortedWords = useMemo(() => {
         const favoriteWords = words.filter(w => !w.isHeader && favorites.includes(w.word));
         const nonFavoritedWords = words.filter(w => w.isHeader || !favorites.includes(w.word));
 
         if (favoriteWords.length > 0) {
-            const favoritesHeader: DictionaryWord = { word: favoritesTitle[lang], translation: '', isHeader: true };
+            const favoritesHeader: DictionaryWord = { word: favoritesTitle[lang], translation: '', isHeader: true, special: 'favorites-header' };
             return [
                 favoritesHeader,
                 ...favoriteWords,
@@ -81,13 +81,13 @@ export default function DictionaryPage({ title, backHref, words, children }: Dic
                             if (w.isHeader) {
                                 const isFavoritesHeader = w.word === favoritesTitle[lang];
                                 return (
-                                    <div key={`header-${index}`} className={cn("pb-2", isFavoritesHeader ? "pt-0" : "pt-6")}>
+                                    <div key={`header-${index}`} className={cn("pt-6 pb-2", isFavoritesHeader && "pt-0")}>
                                         <h3 className="text-xl font-bold italic tracking-tight text-primary">{w.word}</h3>
                                     </div>
                                 );
                             }
                             return (
-                                <React.Fragment key={w.word}>
+                                <React.Fragment key={`${w.word}-${index}`}>
                                     <div className="flex items-center justify-between text-sm py-1.5">
                                         <div className="flex items-center gap-2">
                                             {w.colorCode && (
@@ -106,7 +106,7 @@ export default function DictionaryPage({ title, backHref, words, children }: Dic
                                         </div>
                                          <button onClick={() => handleFavoriteToggle(w.word)} className="p-2 -m-2 rounded-full hover:bg-accent transition-colors">
                                             <Star className={cn(
-                                                "h-4 w-4 transition-all",
+                                                "h-3.5 w-3.5 transition-all",
                                                 favorites.includes(w.word)
                                                     ? "text-amber fill-amber"
                                                     : "text-muted-foreground/40 hover:text-muted-foreground/80"
