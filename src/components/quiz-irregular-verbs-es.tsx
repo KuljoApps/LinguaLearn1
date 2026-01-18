@@ -364,12 +364,12 @@ export default function QuizIrregularVerbsEs() {
   return (
     <>
       <Card className="w-full max-w-lg shadow-2xl">
-        <CardHeader className="text-center">
+        <CardHeader className="text-center pb-4">
           <div className="flex items-center justify-center gap-2">
               <LinguaLearnLogo className="h-8 w-8" />
               <CardTitle className="text-3xl font-bold tracking-tight">LinguaLearn</CardTitle>
           </div>
-          <CardDescription>Selecciona la traducción y completa las formas verbales.</CardDescription>
+          <CardDescription>Selecciona la traducción y completa las formas verbales</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col items-center justify-center p-6 space-y-6">
             <div className="w-full flex justify-around gap-4 text-center">

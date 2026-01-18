@@ -289,12 +289,12 @@ export default function QuizPlFr() {
   return (
     <>
       <Card className="w-full max-w-lg shadow-2xl">
-        <CardHeader className="text-center">
+        <CardHeader className="text-center pb-4">
           <div className="flex items-center justify-center gap-2">
               <LinguaLearnLogo className="h-8 w-8" />
               <CardTitle className="text-3xl font-bold tracking-tight">LinguaLearn</CardTitle>
           </div>
-          <CardDescription>Sélectionnez la bonne traduction.</CardDescription>
+          <CardDescription>Sélectionnez la bonne traduction</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col items-center justify-center p-6 space-y-8">
             <div className="w-full flex justify-around gap-4 text-center">
@@ -353,7 +353,7 @@ export default function QuizPlFr() {
         <CardFooter className="flex-col gap-4 p-6 pt-0">
           <div className="flex justify-between w-full items-center">
               <div className="text-sm text-muted-foreground">
-                  Question {currentQuestionIndex + 1} of {questions.length}
+                  Question {currentQuestionIndex + 1} de {questions.length}
               </div>
               <div className="flex items-center gap-2">
                   <span className="text-sm font-medium">Score:</span>
