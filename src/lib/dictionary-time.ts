@@ -1,7 +1,4 @@
-
-import type { DictionaryContent } from './dictionary';
-
-export const timeDictionary: DictionaryContent = {
+export const timeDictionary = {
   en: {
     time: {
       title: 'Time',

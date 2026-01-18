@@ -1,7 +1,4 @@
-
-import type { DictionaryContent } from './dictionary';
-
-export const familyDictionary: DictionaryContent = {
+export const familyDictionary = {
   en: {
     family: {
       title: 'Family',

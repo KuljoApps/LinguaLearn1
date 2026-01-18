@@ -1,7 +1,4 @@
-
-import type { DictionaryContent } from './dictionary';
-
-export const colorsDictionary: DictionaryContent = {
+export const colorsDictionary = {
   en: {
     colors: {
       title: 'Colors',

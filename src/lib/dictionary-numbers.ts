@@ -1,7 +1,4 @@
-
-import type { DictionaryContent } from './dictionary';
-
-export const numbersDictionary: DictionaryContent = {
+export const numbersDictionary = {
   en: {
     numbers: {
       title: 'Numbers',

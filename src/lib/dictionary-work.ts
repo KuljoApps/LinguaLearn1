@@ -1,7 +1,4 @@
-
-import type { DictionaryContent } from './dictionary';
-
-export const workDictionary: DictionaryContent = {
+export const workDictionary = {
   en: {
     work: {
       title: 'Work',

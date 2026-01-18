@@ -1,7 +1,4 @@
-
-import type { DictionaryContent } from './dictionary';
-
-export const foodDictionary: DictionaryContent = {
+export const foodDictionary = {
   en: {
     food: {
       title: 'Food',

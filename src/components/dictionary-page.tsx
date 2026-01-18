@@ -122,7 +122,7 @@ export default function DictionaryPage({ title, backHref, words, children }: Dic
                 <ScrollArea className="h-96 w-full pr-4">
                     <div className="flex flex-col">
                         {favoriteWords.length > 0 && (
-                            <div className="mb-4">
+                            <div className="mb-8">
                                 <h3 className="text-xl font-bold italic tracking-tight text-amber mb-2">Ulubione</h3>
                                 {favoriteWords.map((word, index) => (
                                     <React.Fragment key={`fav-${word.word}`}>
@@ -138,7 +138,7 @@ export default function DictionaryPage({ title, backHref, words, children }: Dic
                         )}
                         
                         {wordGroups.map((group) => (
-                             <div key={group.header} className="mb-4">
+                             <div key={group.header} className="mb-8">
                                 <h3 className="text-xl font-bold italic tracking-tight text-primary mb-2">{group.header}</h3>
                                 {group.words.map((word, wordIndex) => (
                                     <React.Fragment key={word.word}>

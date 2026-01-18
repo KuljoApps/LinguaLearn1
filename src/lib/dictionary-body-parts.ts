@@ -1,7 +1,4 @@
-
-import type { DictionaryContent } from './dictionary';
-
-export const bodyPartsDictionary: DictionaryContent = {
+export const bodyPartsDictionary = {
   en: {
     "body-parts": {
       title: 'Body Parts',
