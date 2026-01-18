@@ -56,23 +56,21 @@ export default function MonumentsPage({ data }: { data: MonumentsPageData }) {
     icon: React.ReactElement<{ className?: string }>,
     label: string,
     value: string
-  ) => {
-    return (
-      <TableRow>
-        <TableCell className="font-medium py-2 pr-2 pl-0">
-          <div className="flex items-center">
-            {React.cloneElement(icon, {
-              className: "h-4 w-4 text-deep-purple mr-2 shrink-0",
-            })}
-            <span>{label}</span>
-          </div>
-        </TableCell>
-        <TableCell className="text-right py-2 pr-0.5 pl-0">
-          {value}
-        </TableCell>
-      </TableRow>
-    );
-  };
+  ) => (
+    <TableRow>
+      <TableCell className="font-medium py-2 pr-2 pl-0">
+        <div className="flex items-center">
+          {React.cloneElement(icon, {
+            className: "h-4 w-4 text-deep-purple mr-2 shrink-0",
+          })}
+          <span>{label}</span>
+        </div>
+      </TableCell>
+      <TableCell className="text-right py-2 pr-0.5 pl-0">
+        {value}
+      </TableCell>
+    </TableRow>
+  );
 
   const flagMap: Record<Language, string> = {
     en: '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
@@ -117,13 +115,13 @@ export default function MonumentsPage({ data }: { data: MonumentsPageData }) {
         <Carousel
           setApi={setApi}
           opts={{ align: "start", loop: true }}
-          className="w-full px-4"
+          className="w-full px-3"
         >
           <CarouselContent className="-ml-1">
             {data.monuments.map((monument, index) => (
               <CarouselItem key={index} className="pl-1">
-                <div className="p-1 pb-0">
-                  <Card className="h-[430px]">
+                <div className="p-1">
+                  <Card className="overflow-hidden">
                     <CardHeader className="p-4 pb-2">
                       <div className="flex items-center justify-between mb-2">
                         <CarouselPrevious className="relative translate-x-0 translate-y-0 left-0 top-0 h-8 w-8" />
@@ -132,13 +130,11 @@ export default function MonumentsPage({ data }: { data: MonumentsPageData }) {
                         </div>
                         <CarouselNext className="relative translate-x-0 translate-y-0 right-0 top-0 h-8 w-8" />
                       </div>
-                      <CardTitle className="text-center">
-                        {monument.name[displayLang]}
-                      </CardTitle>
+                      <CardTitle className="text-center">{monument.name[displayLang]}</CardTitle>
                     </CardHeader>
 
-                    <CardContent className="flex flex-col items-center gap-4 pt-0 pb-4 px-4">
-                       <ScrollArea className="h-40 w-full pr-1">
+                    <CardContent className="p-4 pt-2 pb-3 flex flex-col">
+                      <ScrollArea className="flex-grow w-full pr-1 mb-3">
                         <p className="text-sm text-muted-foreground text-justify">
                           {monument.description[displayLang].replace(
                             / ([a-zA-Z])\s/g,
@@ -147,7 +143,7 @@ export default function MonumentsPage({ data }: { data: MonumentsPageData }) {
                         </p>
                       </ScrollArea>
 
-                      <div className="w-full px-1">
+                      <div className="mt-0">
                         <Table>
                           <TableBody>
                             {renderFactRow(<MapPin />, t('location'), monument.facts.location[displayLang])}
@@ -165,7 +161,7 @@ export default function MonumentsPage({ data }: { data: MonumentsPageData }) {
           </CarouselContent>
         </Carousel>
 
-        <CardFooter className="flex justify-center p-4">
+        <CardFooter className="flex justify-center p-4 pt-3">
           <Link href={`/learning/${data.lang}/culture`} passHref>
             <Button variant="outline">
               <ArrowLeft className="mr-2 h-4 w-4" />
