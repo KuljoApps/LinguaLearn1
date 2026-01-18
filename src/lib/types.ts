@@ -27,6 +27,7 @@ export interface DictionaryWord {
   colorCode?: string;
   numeric?: string;
   isHeader?: boolean;
+  special?: string;
 }
 
 export interface DictionaryCategory {
