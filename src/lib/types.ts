@@ -1,4 +1,3 @@
-
 // --- Dictionary Types ---
 export interface DictionaryWord {
   word: string;
