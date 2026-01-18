@@ -50,7 +50,7 @@ export default function ProPromotionDialog({ open, onOpenChange }: ProPromotionD
             </div>
           </div>
         </div>
-        <DialogFooter className="flex-col sm:flex-row sm:justify-center gap-2">
+        <DialogFooter className="flex-col sm:flex-row sm:justify-center gap-2 mt-4">
             <Button type="button" size="lg" onClick={() => onOpenChange(false)}>
               Dowiedz się więcej
             </Button>

@@ -40,7 +40,7 @@ export default function RateAppDialog({ open, onOpenChange }: RateAppDialogProps
             <Star
               key={starIndex}
               className={cn(
-                "h-8 w-8 cursor-pointer transition-colors",
+                "h-10 w-10 cursor-pointer transition-colors",
                 hoveredStars >= starIndex 
                   ? "text-amber fill-amber" 
                   : "text-muted-foreground/30"

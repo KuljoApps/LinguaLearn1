@@ -26,7 +26,7 @@ export default function Home() {
         try {
             const devPromoCounter = parseInt(sessionStorage.getItem('dev_promo_counter') || '0');
             const newPromoCount = devPromoCounter + 1;
-            if (newPromoCount >= 5) {
+            if (newPromoCount >= 15) {
                 setShowPromo(true);
                 sessionStorage.setItem('dev_promo_counter', '0');
             } else {
