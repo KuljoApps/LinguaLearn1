@@ -84,8 +84,8 @@ export default function SettingsPage() {
                 <CardHeader>
                     <CardTitle className="text-center text-3xl">{getUIText('title')}</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                    <div data-tutorial-id="settings-switches" className="space-y-4">
+                <CardContent className="space-y-6">
+                    <div className="space-y-4" data-tutorial-id="settings-switches">
                         <div className="flex items-center justify-between">
                             <Label htmlFor="sounds-switch" className="text-lg">{getUIText('sounds')}</Label>
                             <Switch
@@ -95,8 +95,8 @@ export default function SettingsPage() {
                                 suppressHydrationWarning
                             />
                         </div>
-                         <div className="space-y-2">
-                            <Label htmlFor="volume-slider" className="text-lg">{getUIText('volume')}</Label>
+                        <div className="space-y-2">
+                            <Label htmlFor="volume-slider">{getUIText('volume')}</Label>
                             <Slider
                                 id="volume-slider"
                                 min={0}
