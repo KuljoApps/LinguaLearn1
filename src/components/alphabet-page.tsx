@@ -36,8 +36,6 @@ export default function AlphabetPage({ data }: AlphabetPageProps) {
     
     newAudio.play().catch(error => {
       console.error(`Error playing audio for letter "${letter}":`, error);
-      // Optionally, you can add a toast notification here to inform the user
-      // that the audio file is missing.
     });
 
     setActiveAudio(newAudio);
@@ -45,7 +43,7 @@ export default function AlphabetPage({ data }: AlphabetPageProps) {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4">
-      <Card className="w-full max-w-3xl shadow-2xl">
+      <Card className="w-full max-w-2xl shadow-2xl">
         <CardHeader className="text-center">
             <div className="flex items-center justify-center gap-4">
                 <AudioLines className="h-8 w-8" />
@@ -54,12 +52,12 @@ export default function AlphabetPage({ data }: AlphabetPageProps) {
         </CardHeader>
         <CardContent>
           <ScrollArea className="h-96 w-full pr-4">
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
+            <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-4">
               {data.alphabet.map((item, index) => (
                 <Button
                   key={`${item.letter}-${index}`}
                   variant="outline"
-                  className="h-28 flex flex-col p-2 text-lg border-2 border-primary"
+                  className="h-28 w-28 mx-auto flex flex-col p-2 text-lg border-2 border-primary"
                   onClick={() => handlePlaySound(item.letter)}
                 >
                   <div className="flex-grow flex items-center justify-center">
