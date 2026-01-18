@@ -45,7 +45,7 @@ export default function AlphabetPage({ data }: AlphabetPageProps) {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4">
-      <Card className="w-full max-w-2xl shadow-2xl">
+      <Card className="w-full max-w-xl shadow-2xl">
         <CardHeader className="text-center">
             <div className="flex items-center justify-center gap-4">
                 <AudioLines className="h-8 w-8" />
@@ -54,7 +54,7 @@ export default function AlphabetPage({ data }: AlphabetPageProps) {
         </CardHeader>
         <CardContent>
           <ScrollArea className="h-96 w-full pr-4">
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(6rem,1fr))] gap-4">
               {data.alphabet.map((item, index) => (
                 <Button
                   key={`${item.letter}-${index}`}
