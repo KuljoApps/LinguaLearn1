@@ -6,17 +6,31 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import LinguaLearnLogo from '@/components/LinguaLearnLogo';
-import { getLanguage, setLanguage } from '@/lib/storage';
+import { getLanguage, setLanguage, shouldShowProPromo, recordProPromoShown } from '@/lib/storage';
 import { useState, useEffect } from 'react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Separator } from '@/components/ui/separator';
+import ProPromotionDialog from '@/components/ProPromotionDialog';
+
 
 export default function Home() {
     const [language, setCurrentLanguage] = useState<'en' | 'fr' | 'de' | 'it' | 'es'>('en');
+    const [showPromo, setShowPromo] = useState(false);
 
     useEffect(() => {
         setCurrentLanguage(getLanguage());
+        if (shouldShowProPromo()) {
+            setShowPromo(true);
+        }
     }, []);
+
+    const handlePromoClose = (open: boolean) => {
+        if (!open) {
+            recordProPromoShown();
+            setShowPromo(false);
+        }
+    };
+
 
     const handleLanguageChange = (lang: 'en' | 'fr' | 'de' | 'it' | 'es') => {
         setLanguage(lang);
@@ -95,6 +109,7 @@ export default function Home() {
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
+            <ProPromotionDialog open={showPromo} onOpenChange={handlePromoClose} />
             <Card className="w-full max-w-md shadow-2xl text-center">
                 <CardHeader>
                     <div className="flex items-center justify-center gap-4 mb-4">

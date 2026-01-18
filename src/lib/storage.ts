@@ -53,12 +53,15 @@ export type Language = 'en' | 'fr' | 'de' | 'it' | 'es';
 
 const LANGUAGE_KEY = 'linguaLearnLanguage';
 const SETTINGS_KEY = 'linguaLearnSettings_v2';
-const GLOBAL_STATS_KEY = 'linguaLearnGlobalStats_v1';
+const GLOBAL_STATS_KEY = 'linguaLearnGlobalStats_v2';
 
-interface GlobalStats {
+export interface GlobalStats {
     uniqueDaysPlayed: number;
     lastPlayTimestamp: number | null;
+    quizCompletionCountForPromo?: number;
+    lastPromoShownDate?: string | null;
 }
+
 
 const getKey = (baseKey: string): string => {
     const lang = getLanguage();
@@ -123,37 +126,23 @@ export const toggleFavorite = (category: string, word: string): string[] => {
 
 // --- Global Stats Functions ---
 const getGlobalStats = (): GlobalStats => {
-    const defaultGlobalStats: GlobalStats = { uniqueDaysPlayed: 0, lastPlayTimestamp: null };
+    const defaultGlobalStats: GlobalStats = { 
+        uniqueDaysPlayed: 0, 
+        lastPlayTimestamp: null,
+        quizCompletionCountForPromo: 0,
+        lastPromoShownDate: null,
+    };
     if (typeof window === 'undefined') return defaultGlobalStats;
 
     try {
-        const globalStatsJson = localStorage.getItem(GLOBAL_STATS_KEY);
-        if (globalStatsJson) {
-            return JSON.parse(globalStatsJson);
-        } else {
-            // Migration logic for existing users
-            const statsEnJson = localStorage.getItem('linguaLearnStats_v2_en');
-            const statsFrJson = localStorage.getItem('linguaLearnStats_v2_fr');
-            const statsEn = statsEnJson ? JSON.parse(statsEnJson) : null;
-            const statsFr = statsFrJson ? JSON.parse(statsFrJson) : null;
-
-            const uniqueDaysEn = statsEn?.uniqueDaysPlayed || 0;
-            const uniqueDaysFr = statsFr?.uniqueDaysPlayed || 0;
-            const lastPlayEn = statsEn?.lastPlayTimestamp || 0;
-            const lastPlayFr = statsFr?.lastPlayTimestamp || 0;
-
-            const migratedStats: GlobalStats = {
-                uniqueDaysPlayed: Math.max(uniqueDaysEn, uniqueDaysFr),
-                lastPlayTimestamp: Math.max(lastPlayEn, lastPlayFr) || null,
-            };
-            
-            saveGlobalStats(migratedStats);
-            return migratedStats;
+        const statsJson = localStorage.getItem(GLOBAL_STATS_KEY);
+        if (statsJson) {
+            return { ...defaultGlobalStats, ...JSON.parse(statsJson) };
         }
     } catch (error) {
         console.error("Failed to parse global stats", error);
-        return defaultGlobalStats;
     }
+    return defaultGlobalStats;
 }
 
 const saveGlobalStats = (globalStats: GlobalStats) => {
@@ -349,21 +338,51 @@ const checkAndUnlockAchievements = (stats: Stats): Achievement[] => {
 };
 
 export const checkSessionAchievements = (isPerfect: boolean): Achievement[] => {
-    if (!isPerfect || typeof window === 'undefined') {
-        return [];
-    }
+    if (typeof window === 'undefined') return [];
+
+    const globalStats = getGlobalStats();
+    globalStats.quizCompletionCountForPromo = (globalStats.quizCompletionCountForPromo || 0) + 1;
+    saveGlobalStats(globalStats);
 
     const stats = getStats();
-    stats.totalPerfectScores = (stats.totalPerfectScores || 0) + 1;
-
+    if (isPerfect) {
+        stats.totalPerfectScores = (stats.totalPerfectScores || 0) + 1;
+    }
+    
     try {
         localStorage.setItem(getKey('linguaLearnStats_v2'), JSON.stringify(stats));
     } catch (error) {
         console.error("Failed to save stats to localStorage", error);
     }
 
-    // Now, check if this new count unlocks any achievements
     return checkAndUnlockAchievements(stats);
+}
+
+// --- Promo Functions ---
+export const shouldShowProPromo = (): boolean => {
+    if (typeof window === 'undefined') return false;
+
+    const globalStats = getGlobalStats();
+    
+    if ((globalStats.quizCompletionCountForPromo || 0) >= 15) {
+        return true;
+    }
+
+    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+    if (globalStats.lastPromoShownDate !== today) {
+        return true;
+    }
+    
+    return false;
+}
+
+export const recordProPromoShown = () => {
+    if (typeof window === 'undefined') return;
+
+    const globalStats = getGlobalStats();
+    globalStats.quizCompletionCountForPromo = 0;
+    globalStats.lastPromoShownDate = new Date().toISOString().split('T')[0];
+    saveGlobalStats(globalStats);
 }
 
 
