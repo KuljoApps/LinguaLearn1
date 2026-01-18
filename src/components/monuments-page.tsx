@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/componen
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { ArrowLeft, Landmark, MapPin, Calendar, Palette, Sparkles } from 'lucide-react';
+import { ArrowLeft, Landmark, MapPin, Calendar, Palette, Users } from 'lucide-react';
 import {
   Carousel,
   type CarouselApi,
@@ -59,7 +59,7 @@ export default function MonumentsPage({ data }: { data: MonumentsPageData }) {
   ) => {
     return (
       <TableRow>
-        <TableCell className="font-medium py-1.5 pr-2 pl-0">
+        <TableCell className="font-medium py-2 pr-2 pl-0">
           <div className="flex items-center">
             {React.cloneElement(icon, {
               className: "h-4 w-4 text-deep-purple mr-2 shrink-0",
@@ -67,7 +67,7 @@ export default function MonumentsPage({ data }: { data: MonumentsPageData }) {
             <span>{label}</span>
           </div>
         </TableCell>
-        <TableCell className="text-right py-1.5 pr-0.5 pl-0">
+        <TableCell className="text-right py-2 pr-0.5 pl-0">
           {value}
         </TableCell>
       </TableRow>
@@ -137,25 +137,23 @@ export default function MonumentsPage({ data }: { data: MonumentsPageData }) {
                       </CardTitle>
                     </CardHeader>
 
-                    <CardContent className="flex flex-col items-center gap-4 pt-0 pb-4 px-0">
-                       <div className="w-full px-4">
-                           <ScrollArea className="h-40 w-full pr-3">
-                            <p className="text-sm text-muted-foreground text-justify">
-                              {monument.description[displayLang].replace(
-                                / ([a-zA-Z])\s/g,
-                                ' $1\u00A0'
-                              )}
-                            </p>
-                          </ScrollArea>
-                       </div>
+                    <CardContent className="flex flex-col items-center gap-4 pt-0 pb-4 px-4">
+                       <ScrollArea className="h-40 w-full pr-1">
+                        <p className="text-sm text-muted-foreground text-justify">
+                          {monument.description[displayLang].replace(
+                            / ([a-zA-Z])\s/g,
+                            ' $1\u00A0'
+                          )}
+                        </p>
+                      </ScrollArea>
 
-                      <div className="w-full px-5 pr-6">
+                      <div className="w-full px-1">
                         <Table>
                           <TableBody>
                             {renderFactRow(<MapPin />, t('location'), monument.facts.location[displayLang])}
                             {renderFactRow(<Calendar />, t('year'), monument.facts.year[displayLang])}
                             {renderFactRow(<Palette />, t('style'), monument.facts.style[displayLang])}
-                            {renderFactRow(<Sparkles />, t('funFact'), monument.facts.funFact[displayLang])}
+                            {renderFactRow(<Users />, t('annualVisitors'), monument.facts.annualVisitors[displayLang])}
                           </TableBody>
                         </Table>
                       </div>
