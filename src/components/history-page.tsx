@@ -18,10 +18,10 @@ export default function HistoryPage({ data }: { data: HistoryPageData }) {
     <main className="flex min-h-screen flex-col items-center justify-center p-4">
       <Card className="w-full max-w-2xl shadow-2xl">
         <CardHeader className="text-center p-4 pb-2">
-          <div className="flex items-center justify-center gap-4">
-            <ScrollText className="h-8 w-8" />
-            <CardTitle className="text-3xl">{t('title')}</CardTitle>
-          </div>
+            <div className="flex items-center justify-center gap-4">
+                <ScrollText className="h-8 w-8" />
+                <CardTitle className="text-3xl">{t('title')}</CardTitle>
+            </div>
         </CardHeader>
         <CardContent className="p-4 pt-2">
           <ScrollArea className="h-[70vh] w-full pr-1">
@@ -34,10 +34,10 @@ export default function HistoryPage({ data }: { data: HistoryPageData }) {
                         <span className="flex-1 text-center">{event.name.native}</span>
                     </div>
                   </AccordionTrigger>
-                  <AccordionContent className="space-y-3 px-2 pt-2">
-                    <p className="text-muted-foreground text-justify">{event.description.native}</p>
+                  <AccordionContent className="space-y-3 pt-2">
+                    <p className="text-muted-foreground text-justify">{event.description.native.replace(/ ([a-zA-Z])\s/g, ' $1\u00A0')}</p>
                     <hr className="my-2 border-border" />
-                    <p className="text-sm text-justify">{event.description.pl}</p>
+                    <p className="text-sm text-justify">{event.description.pl.replace(/ ([a-zA-Z])\s/g, ' $1\u00A0')}</p>
                   </AccordionContent>
                 </AccordionItem>
               ))}

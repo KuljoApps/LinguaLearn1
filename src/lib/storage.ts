@@ -1,7 +1,7 @@
-
 'use client';
 
-import { allAchievements, type Achievement } from './achievements';
+import { allAchievements } from './achievements';
+import type { Achievement } from './types';
 
 export interface MasteryProgress {
     [quizName: string]: number[]; // Array of unique question IDs
@@ -76,6 +76,50 @@ export const setLanguage = (lang: Language) => {
     localStorage.setItem(LANGUAGE_KEY, lang);
     window.dispatchEvent(new CustomEvent('language-changed'));
 }
+
+// --- Favorites Functions ---
+
+export const getFavorites = (category: string): string[] => {
+    if (typeof window === 'undefined') return [];
+    try {
+        const lang = getLanguage();
+        const allFavoritesJson = localStorage.getItem(`linguaLearnFavorites_v1_${lang}`);
+        const allFavorites = allFavoritesJson ? JSON.parse(allFavoritesJson) : {};
+        return allFavorites[category] || [];
+    } catch (error) {
+        console.error("Failed to get favorites", error);
+        return [];
+    }
+};
+
+export const toggleFavorite = (category: string, word: string): string[] => {
+    if (typeof window === 'undefined') return [];
+    try {
+        const lang = getLanguage();
+        const key = `linguaLearnFavorites_v1_${lang}`;
+        const allFavoritesJson = localStorage.getItem(key);
+        const allFavorites = allFavoritesJson ? JSON.parse(allFavoritesJson) : {};
+        
+        const categoryFavorites: string[] = allFavorites[category] || [];
+        const wordIndex = categoryFavorites.indexOf(word);
+
+        if (wordIndex > -1) {
+            // Remove from favorites
+            categoryFavorites.splice(wordIndex, 1);
+        } else {
+            // Add to favorites
+            categoryFavorites.push(word);
+        }
+
+        allFavorites[category] = categoryFavorites;
+        localStorage.setItem(key, JSON.stringify(allFavorites));
+        return categoryFavorites;
+    } catch (error) {
+        console.error("Failed to toggle favorite", error);
+        return getFavorites(category);
+    }
+};
+
 
 // --- Global Stats Functions ---
 const getGlobalStats = (): GlobalStats => {
@@ -262,7 +306,7 @@ const checkAndUnlockAchievements = (stats: Stats): Achievement[] => {
                 currentProgress = masteryProgress['Verbi Irregolari (IT)']?.length || 0;
                 break;
             case 'mastery_phrasal_it':
-                currentProgress = masteryProgress['Verbi Frasali (IT)']?.length || 0;
+                currentProgress = masteryProgress['Falsi Amici (IT)']?.length || 0;
                 break;
             case 'mastery_idioms_it':
                 currentProgress = masteryProgress['Modi di dire (IT)']?.length || 0;
@@ -278,7 +322,7 @@ const checkAndUnlockAchievements = (stats: Stats): Achievement[] => {
                 currentProgress = masteryProgress['Verbos Irregulares (ES)']?.length || 0;
                 break;
             case 'mastery_phrasal_es':
-                currentProgress = masteryProgress['Verbos con Preposición (ES)']?.length || 0;
+                currentProgress = masteryProgress['Falsos Amigos (ES)']?.length || 0;
                 break;
             case 'mastery_idioms_es':
                 currentProgress = masteryProgress['Modismos (ES)']?.length || 0;
@@ -521,4 +565,4 @@ export const clearErrors = (): Achievement[] => {
     return [];
 }
 
-export { Achievement };
+export type { Achievement };
