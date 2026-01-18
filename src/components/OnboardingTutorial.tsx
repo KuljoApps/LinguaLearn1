@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { Button } from './ui/button';
 import { saveTutorialState, clearTutorialState, getTutorialState } from '@/lib/storage';
+import LinguaLearnLogo from './LinguaLearnLogo';
 
 interface Step {
     elementId?: string;
@@ -92,8 +93,8 @@ export default function OnboardingTutorial() {
     const pathname = usePathname();
     const tutorialState = getTutorialState();
     
-    const [spotlightStyle, setSpotlightStyle] = useState({});
-    const [bubbleStyle, setBubbleStyle] = useState({});
+    const [spotlightStyle, setSpotlightStyle] = useState<React.CSSProperties>({});
+    const [bubbleStyle, setBubbleStyle] = useState<React.CSSProperties>({});
 
     const stage = tutorialState?.stage || 'initial';
     const currentStepIndex = tutorialState?.step || 0;
@@ -102,18 +103,22 @@ export default function OnboardingTutorial() {
     const currentStep = steps[currentStepIndex];
 
     useEffect(() => {
-        if (!currentStep || currentStep.isModal || stage === 'decision') {
+        if (!currentStep || currentStep.isModal || stage === 'decision' || !currentStep.elementId) {
             setSpotlightStyle({ opacity: 0 });
+            setBubbleStyle({ opacity: 0 });
             return;
         }
 
-        const updatePosition = () => {
-            if (!currentStep.elementId) return;
-            const element = document.querySelector(`[data-tutorial-id="${currentStep.elementId}"]`);
-            
+        let attempts = 0;
+        const maxAttempts = 20; // Try for 2 seconds
+
+        const findAndPosition = () => {
+            const element = document.querySelector<HTMLElement>(`[data-tutorial-id="${currentStep.elementId}"]`);
+
             if (element) {
                 const rect = element.getBoundingClientRect();
                 const padding = 10;
+                
                 setSpotlightStyle({
                     width: `${rect.width + padding}px`,
                     height: `${rect.height + padding}px`,
@@ -122,27 +127,47 @@ export default function OnboardingTutorial() {
                     opacity: 1,
                 });
 
-                const bubbleHeight = 150;
-                const spaceBelow = window.innerHeight - rect.bottom;
-                if (spaceBelow > bubbleHeight + 20) {
-                    setBubbleStyle({ top: `${rect.bottom + 15}px`, left: `${rect.left}px`, right: 'auto', bottom: 'auto' });
+                const bubbleHeight = 150; // Estimation
+                const bubbleWidth = 256; // w-64
+                let bubbleTop;
+                let bubbleLeft = rect.left + rect.width / 2 - bubbleWidth / 2;
+
+                if (window.innerHeight - rect.bottom > bubbleHeight + 40) {
+                    bubbleTop = rect.bottom + 15;
                 } else {
-                    setBubbleStyle({ bottom: `${window.innerHeight - rect.top + 15}px`, left: `${rect.left}px`, right: 'auto', top: 'auto' });
+                    bubbleTop = rect.top - bubbleHeight - 25;
                 }
+                
+                if (bubbleLeft < 16) bubbleLeft = 16;
+                if (bubbleLeft + bubbleWidth > window.innerWidth - 16) {
+                    bubbleLeft = window.innerWidth - bubbleWidth - 16;
+                }
+
+                setBubbleStyle({
+                    top: `${bubbleTop}px`,
+                    left: `${bubbleLeft}px`,
+                    opacity: 1,
+                });
+
             } else {
-                // Retry if element not found yet
-                setTimeout(updatePosition, 100);
+                attempts++;
+                if (attempts < maxAttempts) {
+                    setTimeout(findAndPosition, 100);
+                }
             }
         };
 
-        // Delay to allow layout to settle after navigation
-        const timeoutId = setTimeout(updatePosition, 50);
-        window.addEventListener('resize', updatePosition);
+        setSpotlightStyle({ opacity: 0, transition: 'none' });
+        setBubbleStyle({ opacity: 0, transition: 'none' });
         
+        const timeoutId = setTimeout(findAndPosition, 150);
+
+        window.addEventListener('resize', findAndPosition);
+
         return () => {
             clearTimeout(timeoutId);
-            window.removeEventListener('resize', updatePosition);
-        }
+            window.removeEventListener('resize', findAndPosition);
+        };
     }, [currentStep, pathname]);
 
 
@@ -239,25 +264,27 @@ export default function OnboardingTutorial() {
 
     // Step-by-step overlay
     return (
-        <div className="fixed inset-0 z-50 animate-in fade-in-50">
+        <div className="fixed inset-0 z-50">
             <div className="absolute inset-0 bg-black/70" onClick={handleFinish} />
             
             {currentStep && !currentStep.isModal && (
                 <>
                     <div 
-                        className="tutorial-spotlight absolute rounded-lg transition-all duration-300 pointer-events-none" 
+                        className="tutorial-spotlight fixed rounded-lg pointer-events-none transition-all duration-300" 
                         style={spotlightStyle}
                     />
                     <div
-                        className="fixed bg-background p-4 rounded-lg shadow-xl w-64 transition-all duration-300 z-50"
+                        className="fixed bg-background p-4 rounded-lg shadow-xl w-64 z-50 transition-all duration-300"
                         style={bubbleStyle}
                     >
                         <h3 className="font-bold mb-1 text-lg">{currentStep.title}</h3>
                         <p className="text-sm text-muted-foreground mb-4">{currentStep.description}</p>
                         <div className="flex justify-between items-center">
-                            <span className="text-xs text-muted-foreground">{currentStepIndex + 1} / {steps.length}</span>
-                            <Button onClick={handleNext} size="sm">
-                                {isLastStep ? uiTexts.finish : uiTexts.next}
+                            <span className="text-xs text-muted-foreground">
+                                {stage === 'initial' ? currentStepIndex : initialSteps.length - 1 + currentStepIndex} / {initialSteps.length - 1 + extendedSteps.length}
+                            </span>
+                             <Button onClick={stage === 'extended' && isLastStep ? handleFinish : handleNext} size="sm">
+                                {stage === 'extended' && isLastStep ? uiTexts.finish : uiTexts.next}
                             </Button>
                         </div>
                     </div>
