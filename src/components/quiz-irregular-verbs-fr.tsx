@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
@@ -375,8 +376,8 @@ export default function QuizIrregularVerbsFr() {
           <Progress value={questionTimeProgress} className="w-full h-2" />
 
           <div className="text-center space-y-2">
-              <p className="text-muted-foreground">Verbe irrégulier</p>
-              <p className="text-4xl font-headline font-bold">{currentQuestion.verb}</p>
+              <p className="text-muted-foreground">Verbe irrégulier:</p>
+              <p className="text-4xl font-headline font-bold">"{currentQuestion.verb}"</p>
           </div>
 
           <div className="w-full space-y-4">
@@ -408,8 +409,8 @@ export default function QuizIrregularVerbsFr() {
                 })}
             </div>
             
-            <div className={cn("transition-opacity duration-300", translationStatus === null && "opacity-50 pointer-events-none")}>
-              <p className="text-center text-muted-foreground pt-2">2. Choisissez l'auxiliaire correct pour le Passé Composé</p>
+            <div className={cn("transition-opacity duration-300 pt-2", translationStatus === null && "opacity-50 pointer-events-none")}>
+              <p className="text-center text-muted-foreground">2. Choisissez l'auxiliaire correct pour le Passé Composé</p>
               <div className="grid grid-cols-2 gap-4 w-full mt-4">
                 <Button
                   onClick={() => handleAuxiliaryClick('avoir')}
