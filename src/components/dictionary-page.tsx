@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { ArrowLeft, Star } from 'lucide-react';
-import type { DictionaryWord } from '@/lib/dictionary';
+import type { DictionaryWord } from '@/lib/types';
 import { getFavorites, toggleFavorite } from '@/lib/storage';
 import { cn } from '@/lib/utils';
 
@@ -50,13 +50,14 @@ export default function DictionaryPage({ title, backHref, words, children }: Dic
         it: 'Preferiti',
     };
 
-    const sortedWords = useMemo(() => {
+    const sortedWords: DictionaryWord[] = useMemo(() => {
         const favoriteWords = words.filter(w => !w.isHeader && favorites.includes(w.word));
         const nonFavoritedWords = words.filter(w => w.isHeader || !favorites.includes(w.word));
 
         if (favoriteWords.length > 0) {
+            const favoritesHeader: DictionaryWord = { word: favoritesTitle[lang], translation: '', isHeader: true };
             return [
-                { word: favoritesTitle[lang], translation: '', isHeader: true, special: 'favorites-header' },
+                favoritesHeader,
                 ...favoriteWords,
                 ...nonFavoritedWords
             ];
@@ -78,7 +79,7 @@ export default function DictionaryPage({ title, backHref, words, children }: Dic
                     <div className="flex flex-col">
                         {sortedWords.map((w, index) => {
                             if (w.isHeader) {
-                                const isFavoritesHeader = (w as any).special === 'favorites-header';
+                                const isFavoritesHeader = w.word === favoritesTitle[lang];
                                 return (
                                     <div key={`header-${index}`} className={cn("pb-2", isFavoritesHeader ? "pt-0" : "pt-6")}>
                                         <h3 className="text-xl font-bold italic tracking-tight text-primary">{w.word}</h3>
