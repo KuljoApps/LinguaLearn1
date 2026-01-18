@@ -58,6 +58,78 @@ const extendedSteps: Step[] = [
         title: 'Ochrona Wzroku',
         description: 'Uczysz się wieczorem? Użyj tego suwaka, aby nałożyć na aplikację ciepły filtr, który zmniejszy zmęczenie oczu.',
     },
+    {
+        path: '/stats',
+        elementId: 'stats-main-cards',
+        title: 'Główne statystyki',
+        description: 'Tutaj znajdziesz podsumowanie swoich postępów, w\u00A0tym ogólną skuteczność i\u00A0najdłuższą serię poprawnych odpowiedzi.',
+    },
+    {
+        path: '/stats',
+        elementId: 'stats-last-50',
+        title: 'Historia odpowiedzi',
+        description: 'Ta siatka pokazuje Twoje ostatnie 50 odpowiedzi. Zielony to sukces, a\u00A0czerwony to błąd. Najedź na czerwone pole, aby zobaczyć szczegóły.',
+    },
+    {
+        path: '/stats',
+        elementId: 'stats-streak',
+        title: 'Najdłuższa seria',
+        description: 'Kliknij tutaj, aby zobaczyć, kiedy i\u00A0w\u00A0którym quizie udało Ci się osiągnąć najdłuższą passę bezbłędnych odpowiedzi. Powodzenia!',
+    },
+    {
+        path: '/errors',
+        elementId: 'errors-filters',
+        title: 'Filtrowanie błędów',
+        description: 'Możesz przeglądać swoje błędy z\u00A0konkretnych quizów lub przełączać się między widokiem najczęstszych i\u00A0najnowszych pomyłek.',
+    },
+    {
+        path: '/errors',
+        elementId: 'errors-table',
+        title: 'Analiza błędów',
+        description: 'Kliknij na dowolny wiersz w\u00A0tabeli, aby rozwinąć szczegóły i\u00A0sprawdzić, gdzie popełniłeś/aś błąd. To świetny sposób na naukę!',
+    },
+    {
+        path: '/achievements',
+        elementId: 'achievements-grid',
+        title: 'Osiągnięcia',
+        description: 'Tutaj znajdziesz wszystkie zdobyte i\u00A0dostępne osiągnięcia. Każde z\u00A0nich to dowód Twoich postępów w\u00A0nauce!',
+    },
+    {
+        path: '/achievements',
+        elementId: 'achievements-reset',
+        title: 'Resetowanie postępów',
+        description: 'Jeśli chcesz zacząć od nowa w\u00A0danym języku, możesz tutaj zresetować swoje osiągnięcia, statystyki i\u00A0błędy.',
+    },
+    {
+        path: '/learning/en',
+        elementId: 'learning-top-buttons',
+        title: 'Główne moduły nauki',
+        description: 'Te moduły to podstawa wiedzy. Znajdziesz tu bazę pytań, wyjaśnienie czasów gramatycznych oraz ogólne zasady gramatyki.',
+    },
+    {
+        path: '/learning/en',
+        elementId: 'learning-bottom-buttons',
+        title: 'Słownictwo i\u00A0frazy',
+        description: 'W tych sekcjach możesz przeglądać przydatne zwroty z\u00A0codziennych sytuacji oraz tematyczne słownictwo, aby poszerzyć zasób słów.',
+    },
+    {
+        path: '/learning/en/dictionary',
+        elementId: 'dictionary-categories',
+        title: 'Kategorie słownictwa',
+        description: 'Słownictwo jest podzielone na kategorie, aby ułatwić naukę. Wybierz interesujący Cię temat, np. jedzenie.',
+    },
+    {
+        path: '/learning/en/dictionary/food',
+        elementId: 'dictionary-word-list',
+        title: 'Lista słówek',
+        description: 'Przeglądaj słówka i\u00A0ich tłumaczenia. Listę możesz przewijać, aby zobaczyć wszystkie pozycje w\u00A0danej kategorii.',
+    },
+    {
+        path: '/learning/en/dictionary/food',
+        elementId: 'dictionary-favorites-star',
+        title: 'Ulubione słówka',
+        description: 'Kliknij gwiazdkę, aby dodać słówko do ulubionych. Zostanie ono przypięte na górze listy, co ułatwi szybkie powtórki.',
+    }
 ];
 
 const uiTexts = {
@@ -199,7 +271,7 @@ export default function OnboardingTutorial() {
             <div className="fixed inset-0 z-50 animate-in fade-in-50 flex items-center justify-center p-4">
                 <div className="absolute inset-0 bg-black/70" />
                 <div className="relative bg-background p-6 rounded-lg shadow-xl text-center max-w-sm w-full">
-                    <h2 className="text-2xl font-bold">{currentStep.title}</h2>
+                     <h2 className="text-2xl font-bold">{currentStep.title}</h2>
                     <h1 className="text-4xl font-bold tracking-tight whitespace-nowrap mt-2">
                         Lingua
                         <span className="relative inline-block">
@@ -266,7 +338,7 @@ export default function OnboardingTutorial() {
                         <p className="text-sm text-muted-foreground mb-4">{currentStep.description}</p>
                         <div className="flex justify-between items-center">
                             <span className="text-xs text-muted-foreground">
-                                {stage === 'initial' ? currentStepIndex + 1 : initialSteps.length + currentStepIndex} / {initialSteps.length + extendedSteps.length}
+                                {stage === 'initial' ? currentStepIndex + 1 : initialSteps.length + currentStepIndex + 1} / {initialSteps.length + extendedSteps.length}
                             </span>
                              <Button onClick={handleNext} size="sm">
                                 {stage === 'extended' && isLastStep ? uiTexts.finish : uiTexts.next}
