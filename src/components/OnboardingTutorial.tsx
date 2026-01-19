@@ -13,7 +13,7 @@ interface Step {
     path?: string;
     isModal?: boolean;
     bubblePosition?: 'top' | 'bottom';
-    action?: 'open-extras';
+    action?: 'open-extras' | 'expand-first-item';
 }
 
 const initialSteps: Step[] = [
@@ -183,6 +183,14 @@ const extendedSteps: Step[] = [
         title: 'Trudne Dźwięki',
         description: 'Tutaj znajdziesz przykłady słów i zwrotów, które często sprawiają trudność. Ćwicz je, aby brzmieć jak native speaker!',
         bubblePosition: 'top'
+    },
+    {
+        path: '/learning/en/phonetics/basic-expressions',
+        elementId: 'phonetics-first-item',
+        title: 'Ćwicz wymowę',
+        description: 'Posłuchaj, jak lektor wymawia każdy zwrot, klikając ikonę głośnika. Możesz odtwarzać nagranie tyle razy, ile potrzebujesz, aby doskonalić swój akcent!',
+        bubblePosition: 'bottom',
+        action: 'expand-first-item'
     },
 ];
 

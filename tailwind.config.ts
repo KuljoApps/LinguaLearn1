@@ -1,3 +1,4 @@
+
 import type {Config} from 'tailwindcss';
 
 export default {
@@ -104,6 +105,10 @@ export default {
           '20%, 80%': { transform: 'rotate(3deg)' },
           '30%, 50%, 70%': { transform: 'rotate(-3deg)' },
           '40%, 60%': { transform: 'rotate(3deg)' },
+        },
+        'pulse-strong': {
+            '0%, 100%': { transform: 'scale(1)', opacity: '1' },
+            '50%': { transform: 'scale(1.25)', opacity: '0.75' },
         }
       },
       animation: {
@@ -111,6 +116,7 @@ export default {
         'accordion-up': 'accordion-up 0.2s ease-out',
         'shake-sm': 'shake-sm 0.2s ease-in-out',
         'shake': 'shake 0.5s ease-in-out',
+        'pulse-strong': 'pulse-strong 1.5s ease-in-out infinite',
       },
     },
   },

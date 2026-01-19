@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -8,7 +9,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ArrowLeft, Volume2 } from 'lucide-react';
 import type { PhoneticsPageData } from '@/lib/phonetics';
-import { getSettings } from '@/lib/storage';
+import { cn } from '@/lib/utils';
+import { getSettings, getTutorialState } from '@/lib/storage';
 
 interface PhoneticsCategoryPageProps {
   data: PhoneticsPageData;
@@ -17,6 +19,36 @@ interface PhoneticsCategoryPageProps {
 
 export default function PhoneticsCategoryPage({ data, children }: PhoneticsCategoryPageProps) {
   const [activeAudio, setActiveAudio] = useState<HTMLAudioElement | null>(null);
+  const [openAccordionItem, setOpenAccordionItem] = useState<string | undefined>(undefined);
+  const [isTutorialActive, setIsTutorialActive] = useState(false);
+
+  useEffect(() => {
+    const handleStateUpdate = () => {
+        const tutorialState = getTutorialState();
+        // The new step for 'basic-expressions' is at index 20
+        const isOnThisStep = tutorialState?.isActive &&
+                              tutorialState.stage === 'extended' &&
+                              tutorialState.step === 20;
+
+        if (isOnThisStep) {
+            setIsTutorialActive(true);
+            setOpenAccordionItem('item-0'); // Expand the first item
+        } else {
+            setIsTutorialActive(false);
+            if (openAccordionItem === 'item-0') {
+              setOpenAccordionItem(undefined);
+            }
+        }
+    };
+
+    handleStateUpdate(); // Initial check
+    window.addEventListener('tutorial-state-changed', handleStateUpdate);
+
+    return () => {
+        window.removeEventListener('tutorial-state-changed', handleStateUpdate);
+    };
+  }, [openAccordionItem]);
+
 
   useEffect(() => {
     return () => {
@@ -58,9 +90,15 @@ export default function PhoneticsCategoryPage({ data, children }: PhoneticsCateg
         </CardHeader>
         <CardContent>
             <ScrollArea className="h-96 w-full pr-4">
-                <Accordion type="single" collapsible className="w-full">
+                <Accordion 
+                    type="single" 
+                    collapsible 
+                    className="w-full"
+                    value={openAccordionItem}
+                    onValueChange={setOpenAccordionItem}
+                >
                     {data.phrases.map((item, index) => (
-                        <AccordionItem value={`item-${index}`} key={index}>
+                        <AccordionItem value={`item-${index}`} key={index} data-tutorial-id={index === 0 ? 'phonetics-first-item' : undefined}>
                             <AccordionTrigger className="text-lg font-semibold hover:no-underline text-left">
                                 {item.phrase}
                             </AccordionTrigger>
@@ -71,7 +109,10 @@ export default function PhoneticsCategoryPage({ data, children }: PhoneticsCateg
                                         <p className="text-sm">{item.translation}</p>
                                     </div>
                                     <Button variant="ghost" size="icon" onClick={() => handlePlaySound(item.audioId)}>
-                                        <Volume2 className="h-6 w-6 text-deep-purple" />
+                                        <Volume2 className={cn(
+                                          "h-6 w-6 text-deep-purple",
+                                          isTutorialActive && index === 0 && "animate-pulse-strong"
+                                        )} />
                                     </Button>
                                 </div>
                             </AccordionContent>
