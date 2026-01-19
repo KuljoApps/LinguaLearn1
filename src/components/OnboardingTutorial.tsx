@@ -275,7 +275,7 @@ export default function OnboardingTutorial() {
                 <div className="absolute inset-0 bg-black/70" />
                 <div className="relative bg-background p-6 rounded-lg shadow-xl text-center max-w-sm w-full">
                     <div className="flex items-center justify-center gap-2">
-                        <h2 className="text-3xl font-bold tracking-tight">{currentStep.title}</h2>
+                        <h2 className="text-[28px] font-bold tracking-tight">{currentStep.title}</h2>
                         <h1 className="text-3xl font-bold tracking-tight whitespace-nowrap">
                             Lingua
                             <span className="relative inline-block">
