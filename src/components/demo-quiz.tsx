@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { getTutorialState, type ErrorRecord } from '@/lib/storage';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -18,120 +18,109 @@ const demoQuestions = [
 ];
 
 export default function DemoQuiz() {
-    const [step, setStep] = useState(0);
+    const [tutorialStep, setTutorialStep] = useState(0);
 
-    useEffect(() => {
-        const updateStep = () => {
-            const tutorialState = getTutorialState();
-            if (tutorialState?.stage === 'quiz') {
-                setStep(tutorialState.step);
-            }
-        };
-        updateStep();
-        window.addEventListener('tutorial-state-changed', updateStep);
-        return () => window.removeEventListener('tutorial-state-changed', updateStep);
-    }, []);
-
-    const getCurrentState = () => {
-        let questionIndex = 0;
-        let score = 0;
-        let selectedAnswer: string | null = null;
-        let answerStatus: 'correct' | 'incorrect' | null = null;
-        let sessionErrors: Omit<ErrorRecord, 'id'>[] = [];
-        let questionTimer = 12;
-        let totalTime = 4;
-
-        if (step >= 2) { 
-            score = 1;
-        }
-        if (step >= 5) { 
-             sessionErrors.push({
-                word: demoQuestions[1].word,
-                userAnswer: 'Smutny',
-                correctAnswer: demoQuestions[1].correctAnswer,
-                quiz: 'Demo Quiz'
-            });
-        }
-        
-        if (step >= 0 && step <=1) {
-            questionIndex = 0;
-            questionTimer = 12;
-            totalTime = 4;
-        } else if (step === 2) { // Slajd 28
-             questionIndex = 0;
-             selectedAnswer = demoQuestions[0].correctAnswer;
-             answerStatus = 'correct';
-             questionTimer = 10;
-             totalTime = 6;
-        } else if (step === 3 || step === 4) { // Slajd 29
-            questionIndex = 1;
-            questionTimer = 15;
-            totalTime = 8;
-             if (step === 4) {
-                selectedAnswer = 'Smutny';
-                answerStatus = 'incorrect';
-                questionTimer = 11;
-                totalTime = 12;
-            }
-        } else if (step === 5) {
-            questionIndex = 2;
-            selectedAnswer = 'Wewnątrz';
-            answerStatus = 'incorrect';
-            questionTimer = 8;
-            totalTime = 16;
-            sessionErrors.push({
-                word: demoQuestions[2].word,
-                userAnswer: 'Wewnątrz',
-                correctAnswer: demoQuestions[2].correctAnswer,
-                quiz: 'Demo Quiz'
-            });
-        } else if (step >= 6) {
-            return { isResults: true, score: 1, totalTime: 20, sessionErrors };
-        }
-
-        return {
-            isResults: false,
-            question: demoQuestions[questionIndex],
-            questionIndex,
-            score,
-            selectedAnswer,
-            answerStatus,
-            sessionErrors,
-            questionTimer,
-            totalTime
-        };
-    };
+    // Local state for interactivity
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const [score, setScore] = useState(0);
+    const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
+    const [answerStatus, setAnswerStatus] = useState<"correct" | "incorrect" | null>(null);
+    const [sessionErrors, setSessionErrors] = useState<Omit<ErrorRecord, 'id'>[]>([]);
     
-    const state = getCurrentState();
+    // Static timers for demo purposes
+    const [totalTime, setTotalTime] = useState(0);
+    const [questionTimer, setQuestionTimer] = useState(15);
 
-    if (state.isResults) {
+    // This effect SYNC-s the local state with the tutorial step
+    useEffect(() => {
+        const updateStateForTutorial = () => {
+            const state = getTutorialState();
+            if (state?.stage === 'quiz') {
+                const step = state.step;
+                setTutorialStep(step);
+
+                // This logic sets up the "scene" for each step of the tutorial's quiz part.
+                if (step <= 27) { // Scene 1: Answer Q1 (Hello)
+                    setCurrentQuestionIndex(0);
+                    setScore(0);
+                    setSessionErrors([]);
+                    setSelectedAnswer(null);
+                    setAnswerStatus(null);
+                    setQuestionTimer(12);
+                    setTotalTime(4);
+                } else if (step === 28) { // Scene 2: Show result of Q1
+                    setCurrentQuestionIndex(0);
+                    setScore(1);
+                    setSelectedAnswer('Cześć');
+                    setAnswerStatus('correct');
+                    setQuestionTimer(10);
+                    setTotalTime(6);
+                } else if (step === 29) { // Scene 3: Show incorrect answer for Q2
+                    setCurrentQuestionIndex(1);
+                    setScore(1); // From previous question
+                    // A wrong answer for 'Throughout'
+                    const wrongAnswer = demoQuestions[1].options.find(o => o !== demoQuestions[1].correctAnswer)!;
+                    setSelectedAnswer(wrongAnswer); 
+                    setAnswerStatus('incorrect');
+                    setSessionErrors([{
+                        word: demoQuestions[1].word,
+                        userAnswer: wrongAnswer,
+                        correctAnswer: demoQuestions[1].correctAnswer,
+                        quiz: "Demo Quiz"
+                    }]);
+                    setQuestionTimer(11);
+                    setTotalTime(12);
+                }
+            }
+        };
+
+        updateStateForTutorial();
+        window.addEventListener('tutorial-state-changed', updateStateForTutorial);
+        return () => window.removeEventListener('tutorial-state-changed', updateStateForTutorial);
+    }, []);
+    
+    const handleAnswerClick = (answer: string) => {
+        // This handler only provides local visual feedback. It does not advance the quiz.
+        if (answerStatus || tutorialStep >= 28) return; 
+
+        const currentQuestion = demoQuestions[currentQuestionIndex];
+        setSelectedAnswer(answer);
+        const isCorrect = answer === currentQuestion.correctAnswer;
+
+        if (isCorrect) {
+            setAnswerStatus('correct');
+        } else {
+            setAnswerStatus('incorrect');
+        }
+    };
+
+    const currentQuestion = demoQuestions[currentQuestionIndex];
+    const isResults = tutorialStep >= 30;
+
+    if (isResults) {
         return (
-             <DemoQuizResults 
-                 score={state.score!}
-                 totalQuestions={demoQuestions.length}
-                 totalTime={state.totalTime!}
-                 sessionErrors={state.sessionErrors}
-                 quizName="Demo Quiz"
-                 onRestart={() => {}}
-             />
+            <DemoQuizResults 
+                score={score}
+                totalQuestions={demoQuestions.length}
+                totalTime={20}
+                sessionErrors={sessionErrors}
+                quizName="Demo Quiz"
+                onRestart={() => {}}
+            />
         );
     }
     
-    const { question, questionIndex, score, selectedAnswer, answerStatus, questionTimer, totalTime } = state;
+    if (!currentQuestion) return null; // Should not happen
 
     const getButtonClass = (option: string) => {
         if (!answerStatus) {
-          return "bg-primary text-primary-foreground hover:bg-primary/90";
+            return "bg-primary text-primary-foreground hover:bg-primary/90";
         }
-        const isCorrectAnswer = option === question!.correctAnswer;
+        const isCorrectAnswer = option === currentQuestion.correctAnswer;
         const isSelectedAnswer = option === selectedAnswer;
     
-        if (isCorrectAnswer) {
-          return "bg-success text-success-foreground";
-        }
-        if (isSelectedAnswer && !isCorrectAnswer) {
-          return "bg-destructive text-destructive-foreground";
-        }
+        if (isCorrectAnswer) return "bg-success text-success-foreground";
+        if (isSelectedAnswer && !isCorrectAnswer) return "bg-destructive text-destructive-foreground";
         return "bg-muted text-muted-foreground opacity-70";
     };
 
@@ -140,9 +129,12 @@ export default function DemoQuiz() {
         const remainingSeconds = seconds % 60;
         return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
     };
+    
+    // Logic for button interactivity based on tutorial step
+    const isQ1PreAnswer = currentQuestionIndex === 0 && tutorialStep <= 27;
 
-    const overallProgress = ((questionIndex + 1) / demoQuestions.length) * 100;
-    const questionTimeProgress = (questionTimer! / 15) * 100;
+    const overallProgress = ((currentQuestionIndex + 1) / demoQuestions.length) * 100;
+    const questionTimeProgress = (questionTimer / 15) * 100;
 
     return (
         <Card className="w-full max-w-lg shadow-2xl">
@@ -180,15 +172,19 @@ export default function DemoQuiz() {
                     <p className="text-muted-foreground">What is the Polish meaning of</p>
                     <p className={cn(
                         "font-headline font-bold",
-                        question!.word.length > 15 ? "text-3xl" : "text-4xl"
-                    )}>"{question!.word}"?</p>
+                        currentQuestion.word.length > 15 ? "text-3xl" : "text-4xl"
+                    )}>"{currentQuestion.word}"?</p>
                 </div>
                 
-                <div data-tutorial-id={step === 2 ? "quiz-correct-answer" : (step === 4 ? "quiz-incorrect-answer" : undefined)} className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
-                    {question!.options.map((option) => (
+                <div data-tutorial-id={tutorialStep === 28 ? "quiz-correct-answer" : (tutorialStep === 29 ? "quiz-incorrect-answer" : undefined)} className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+                    {currentQuestion.options.map((option) => (
                         <Button
                             key={option}
-                            disabled={step === 2 && option !== question!.correctAnswer}
+                            onClick={() => handleAnswerClick(option)}
+                            disabled={
+                                !!answerStatus || 
+                                (isQ1PreAnswer && option !== currentQuestion.correctAnswer)
+                            }
                             className={cn("h-auto text-lg p-4 whitespace-normal", getButtonClass(option))}
                         >
                             {option}
@@ -206,7 +202,7 @@ export default function DemoQuiz() {
             <CardFooter className="flex-col gap-4 p-6 pt-0">
                 <div className="flex justify-between w-full items-center">
                     <div className="text-sm text-muted-foreground">
-                        Pytanie {questionIndex + 1} z {demoQuestions.length}
+                        Pytanie {currentQuestionIndex + 1} z {demoQuestions.length}
                     </div>
                     <div className="flex items-center gap-2">
                         <span className="text-sm font-medium">Punkty:</span>

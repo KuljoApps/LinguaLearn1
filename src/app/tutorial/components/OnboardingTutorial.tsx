@@ -540,24 +540,27 @@ export default function OnboardingTutorial() {
 
     const isFinalStep = stage === 'quiz' && currentStepIndex === steps.length - 1;
 
-    const totalInitialBubbleSteps = initialSteps.length - 1;
-    const totalExtendedSteps = extendedSteps.length;
-    const totalQuizSteps = quizSteps.length;
-    const totalOverallBubbleSteps = totalInitialBubbleSteps + totalExtendedSteps + totalQuizSteps;
-
     let currentStepDisplay;
     let totalStepsDisplay;
 
     if (stage === 'initial') {
+        const totalInitialSteps = initialSteps.length;
         currentStepDisplay = currentStepIndex;
-        totalStepsDisplay = initialSteps.length;
-    } else if (stage === 'extended') {
-        currentStepDisplay = totalInitialBubbleSteps + currentStepIndex + 1;
+        totalStepsDisplay = totalInitialSteps;
+    } else {
+        const totalInitialBubbleSteps = initialSteps.length - 1;
+        const totalExtendedSteps = extendedSteps.length;
+        const totalQuizSteps = quizSteps.length;
+        const totalOverallBubbleSteps = totalInitialBubbleSteps + totalExtendedSteps + totalQuizSteps;
+
         totalStepsDisplay = totalOverallBubbleSteps;
-    } else { // stage === 'quiz'
-        currentStepDisplay = totalInitialBubbleSteps + totalExtendedSteps + currentStepIndex + 1;
-        totalStepsDisplay = totalOverallBubbleSteps;
+        if (stage === 'extended') {
+            currentStepDisplay = totalInitialBubbleSteps + currentStepIndex;
+        } else { // stage === 'quiz'
+            currentStepDisplay = totalInitialBubbleSteps + totalExtendedSteps + currentStepIndex;
+        }
     }
+
 
     return (
         <div className="fixed inset-0 z-[100]">
@@ -583,7 +586,7 @@ export default function OnboardingTutorial() {
                             <ArrowLeft className="h-4 w-4" />
                         </Button>
                         <span className="text-xs text-muted-foreground">
-                            {currentStepDisplay} / {totalStepsDisplay}
+                            {stage === 'initial' ? `${currentStepIndex}/${initialSteps.length -1}` : `${currentStepDisplay}/${totalStepsDisplay}`}
                         </span>
                     </div>
                     <Button onClick={handleNext} size="sm">
@@ -594,4 +597,5 @@ export default function OnboardingTutorial() {
         </div>
     );
 }
+
 
