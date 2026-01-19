@@ -12,13 +12,14 @@ export default function FakeStatisticsPage() {
 
     const renderLastFiftyAnswersGrid = () => {
         const gridItems = [];
-        const fakeAnswers = Array.from({ length: 50 }, (_, i) => i < 38 ? Math.random() > 0.2 : null).sort(() => 0.5 - Math.random());
+        const fakeAnswers = React.useMemo(() => {
+            const answers = Array(40).fill(true).concat(Array(10).fill(false));
+            return answers.sort(() => 0.5 - Math.random());
+        }, []);
 
         for (let i = 0; i < 50; i++) {
             const answer = fakeAnswers[i];
-            if (answer === null) {
-                gridItems.push(<div key={`empty-${i}`} className="h-4 w-4 rounded-sm bg-muted/20" />);
-            } else if (answer) {
+            if (answer) {
                  gridItems.push(<div key={`correct-${i}`} className="h-4 w-4 rounded-sm bg-success" />);
             } else {
                  gridItems.push(

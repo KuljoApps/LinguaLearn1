@@ -35,7 +35,7 @@ export default function FakeSettingsPage() {
                         </div>
                     </div>
                     <Separator />
-                    <div className="space-y-2" data-tutorial-id="settings-eyecare">
+                    <div className="space-y-2 py-2" data-tutorial-id="settings-eyecare">
                         <Label htmlFor="eyecare-slider" className="text-lg">Eye Care</Label>
                         <Slider id="eyecare-slider" defaultValue={[20]} disabled />
                     </div>

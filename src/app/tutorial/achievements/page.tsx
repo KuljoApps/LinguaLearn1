@@ -1,3 +1,5 @@
+"use client";
+
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -12,6 +14,7 @@ import {
 // This is a static, non-interactive "fake" page for the tutorial.
 
 export default function FakeAchievementsPage() {
+    const apprenticeProgress = (159 / 250) * 100;
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
             <Card className="w-full max-w-2xl shadow-2xl">
@@ -23,37 +26,39 @@ export default function FakeAchievementsPage() {
                 </CardHeader>
                 <CardContent className="space-y-4 max-h-[60vh] overflow-y-auto p-6">
                      <TooltipProvider>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" data-tutorial-id="achievements-grid">
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <Card className="flex flex-col items-center justify-center p-4 text-center transition-all bg-muted/50 opacity-60">
-                                        <div className="relative">
-                                            <Sparkles className="h-12 w-12 mb-2 text-muted-foreground" />
-                                        </div>
-                                        <h3 className="font-semibold">Novice</h3>
-                                        <p className="text-xs text-muted-foreground mt-1">Answer 50 questions correctly.</p>
-                                        <div className="w-full mt-2">
-                                            <Progress value={25} className="h-2" />
-                                            <p className="text-xs font-mono mt-1">25 / 50</p>
-                                        </div>
-                                    </Card>
-                                </TooltipTrigger>
-                            </Tooltip>
-                             <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <Card className="flex flex-col items-center justify-center p-4 text-center transition-all">
-                                        <div className="relative">
-                                            <Star className="h-12 w-12 mb-2 text-amber" />
-                                            <CheckCircle className="absolute -bottom-1 -right-1 h-5 w-5 text-success bg-background rounded-full" />
-                                        </div>
-                                        <h3 className="font-semibold">Apprentice</h3>
-                                        <p className="text-xs text-muted-foreground mt-1">Answer 250 questions correctly.</p>
-                                    </Card>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    <p>Unlocked: Jul 24, 2024</p>
-                                </TooltipContent>
-                            </Tooltip>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div data-tutorial-id="achievements-grid" className="col-span-1 sm:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <Card className="flex flex-col items-center justify-center p-4 text-center transition-all">
+                                            <div className="relative">
+                                                <Sparkles className="h-12 w-12 mb-2 text-amber" />
+                                                <CheckCircle className="absolute -bottom-1 -right-1 h-5 w-5 text-success bg-background rounded-full" />
+                                            </div>
+                                            <h3 className="font-semibold">Novice</h3>
+                                            <p className="text-xs text-muted-foreground mt-1">Answer 50 questions correctly.</p>
+                                        </Card>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>Unlocked: Jul 24, 2024</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                                 <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <Card className="flex flex-col items-center justify-center p-4 text-center transition-all bg-muted/50 opacity-60">
+                                            <div className="relative">
+                                                <Star className="h-12 w-12 mb-2 text-muted-foreground" />
+                                            </div>
+                                            <h3 className="font-semibold">Apprentice</h3>
+                                            <p className="text-xs text-muted-foreground mt-1">Answer 250 questions correctly.</p>
+                                            <div className="w-full mt-2">
+                                                <Progress value={apprenticeProgress} className="h-2" />
+                                                <p className="text-xs font-mono mt-1">159 / 250</p>
+                                            </div>
+                                        </Card>
+                                    </TooltipTrigger>
+                                </Tooltip>
+                            </div>
                              <Tooltip>
                                 <TooltipTrigger asChild>
                                     <Card className="flex flex-col items-center justify-center p-4 text-center transition-all bg-muted/50 opacity-60">

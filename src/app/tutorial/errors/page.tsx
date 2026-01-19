@@ -64,6 +64,27 @@ export default function FakeErrorsPage() {
                                     3 days ago
                                 </TableCell>
                             </TableRow>
+                             <TableRow>
+                                <TableCell className="font-medium whitespace-nowrap">Conscious</TableCell>
+                                <TableCell className="text-success whitespace-nowrap">Świadomy</TableCell>
+                                <TableCell className="text-destructive whitespace-nowrap">Sumienny</TableCell>
+                                <TableCell className="whitespace-nowrap">English - Polish</TableCell>
+                                <TableCell className="whitespace-nowrap text-muted-foreground">4 days ago</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell className="font-medium whitespace-nowrap">Osiągnąć</TableCell>
+                                <TableCell className="text-success whitespace-nowrap">Achieve</TableCell>
+                                <TableCell className="text-destructive whitespace-nowrap">Reach</TableCell>
+                                <TableCell className="whitespace-nowrap">Polish - English</TableCell>
+                                <TableCell className="whitespace-nowrap text-muted-foreground">5 days ago</TableCell>
+                            </TableRow>
+                             <TableRow>
+                                <TableCell className="font-medium whitespace-nowrap">go</TableCell>
+                                <TableCell className="text-success whitespace-nowrap">went, gone</TableCell>
+                                <TableCell className="text-destructive whitespace-nowrap">goed, gone</TableCell>
+                                <TableCell className="whitespace-nowrap">Irregular Verbs</TableCell>
+                                <TableCell className="whitespace-nowrap text-muted-foreground">1 week ago</TableCell>
+                            </TableRow>
                         </TableBody>
                     </Table>
                 </CardContent>
