@@ -17,9 +17,6 @@ interface Step {
     action?: 'open-extras' | 'expand-first-item';
 }
 
-// Ten obiekt centralnie zarządza pionowym przesunięciem dymków samouczka.
-// Klucze to `elementId` zdefiniowane w krokach poniżej.
-// Wartości to przesunięcie w pikselach (wartość ujemna przesuwa w górę).
 const tutorialBubbleOffsets: { [key: string]: number } = {
     'language-switcher': 14,      // Slajd 1
     'quiz-buttons': 10,           // Slajd 2
@@ -44,7 +41,7 @@ const tutorialBubbleOffsets: { [key: string]: number } = {
     'culture-history': 36,        // Slajd 21
     'tongue-twisters-first-two': 0, // Slajd 22
     'phonetics-alphabet': 0,      // Slajd 23
-    'phonetics-difficult': 30,    // Slajd 24
+    'phonetics-difficult': 36,    // Slajd 24
     'phonetics-first-item': 0,    // Slajd 25
     'quiz-timer': 0,              // Slajd 26
     'quiz-pause-button': 0,       // Slajd 27
@@ -543,6 +540,25 @@ export default function OnboardingTutorial() {
 
     const isFinalStep = stage === 'quiz' && currentStepIndex === steps.length - 1;
 
+    const totalInitialBubbleSteps = initialSteps.length - 1;
+    const totalExtendedSteps = extendedSteps.length;
+    const totalQuizSteps = quizSteps.length;
+    const totalOverallBubbleSteps = totalInitialBubbleSteps + totalExtendedSteps + totalQuizSteps;
+
+    let currentStepDisplay;
+    let totalStepsDisplay;
+
+    if (stage === 'initial') {
+        currentStepDisplay = currentStepIndex;
+        totalStepsDisplay = initialSteps.length;
+    } else if (stage === 'extended') {
+        currentStepDisplay = totalInitialBubbleSteps + currentStepIndex + 1;
+        totalStepsDisplay = totalOverallBubbleSteps;
+    } else { // stage === 'quiz'
+        currentStepDisplay = totalInitialBubbleSteps + totalExtendedSteps + currentStepIndex + 1;
+        totalStepsDisplay = totalOverallBubbleSteps;
+    }
+
     return (
         <div className="fixed inset-0 z-[100]">
             <div
@@ -567,7 +583,7 @@ export default function OnboardingTutorial() {
                             <ArrowLeft className="h-4 w-4" />
                         </Button>
                         <span className="text-xs text-muted-foreground">
-                            {stage === 'initial' ? currentStepIndex : (stage === 'extended' ? initialSteps.length -1 + currentStepIndex + 1 : initialSteps.length - 1 + extendedSteps.length + currentStepIndex + 1)} / {initialSteps.length -1 + extendedSteps.length + quizSteps.length}
+                            {currentStepDisplay} / {totalStepsDisplay}
                         </span>
                     </div>
                     <Button onClick={handleNext} size="sm">
@@ -578,3 +594,4 @@ export default function OnboardingTutorial() {
         </div>
     );
 }
+
