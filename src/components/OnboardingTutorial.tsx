@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -74,7 +75,7 @@ const extendedSteps: Step[] = [
     {
         path: '/errors',
         elementId: 'errors-controls',
-        title: 'Filtrowanie i\u00A0widoki',
+        title: 'Filtrowanie i widoki',
         description: 'Możesz filtrować błędy według quizu lub przełączać się między widokiem najnowszych i\u00A0najczęściej popełnianych błędów.',
         bubblePosition: 'bottom',
     },
@@ -82,7 +83,13 @@ const extendedSteps: Step[] = [
         path: '/errors',
         elementId: 'errors-table',
         title: 'Interaktywna tabela',
-        description: 'Klikaj nagłówki, aby sortować błędy. Jeśli tabela jest za szeroka, możesz ją przewijać w\u00A0poziomie. Kliknij wiersz, by rozwinąć pełną treść.',
+        description: 'Klikaj nagłówki, aby sortować błędy. Jeśli tabela jest za szeroka, możesz ją przewijać w\u00A0poziomie.',
+    },
+    {
+        path: '/achievements',
+        elementId: 'achievements-grid',
+        title: 'Twoje osiągnięcia',
+        description: 'Tutaj znajdziesz wszystkie swoje odznaki. Zdobywaj je za postępy w\u00A0nauce, regularność i\u00A0perfekcyjne wyniki w\u00A0quizach!',
     },
     {
         path: '/learning/en/dictionary',
@@ -236,7 +243,7 @@ export default function OnboardingTutorial() {
     
     if (stage === 'initial' && currentStep?.isModal) {
         return (
-            <div className="fixed inset-0 z-50 animate-in fade-in-50 flex items-center justify-center p-4">
+            <div className="fixed inset-0 z-[100] animate-in fade-in-50 flex items-center justify-center p-4">
                 <div className="absolute inset-0 bg-black/70" />
                 <div className="relative bg-background p-6 rounded-lg shadow-xl text-center max-w-sm w-full">
                     <h2 className="text-2xl font-bold tracking-tight">{currentStep.title}</h2>
@@ -258,7 +265,7 @@ export default function OnboardingTutorial() {
     
     if (stage === 'decision' && currentStepIndex === 0) {
         return (
-             <div className="fixed inset-0 z-50 animate-in fade-in-50 flex items-center justify-center p-4">
+             <div className="fixed inset-0 z-[100] animate-in fade-in-50 flex items-center justify-center p-4">
                 <div className="absolute inset-0 bg-black/70" />
                 <div className="relative bg-background p-6 rounded-lg shadow-xl text-center max-w-sm w-full">
                     <h2 className="text-2xl font-bold">Podstawy za nami!</h2>
@@ -274,7 +281,7 @@ export default function OnboardingTutorial() {
     
     if (stage === 'decision' && currentStepIndex === -1) {
         return (
-            <div className="fixed inset-0 z-50 animate-in fade-in-50 flex items-center justify-center p-4">
+            <div className="fixed inset-0 z-[100] animate-in fade-in-50 flex items-center justify-center p-4">
                 <div className="absolute inset-0 bg-black/70" />
                 <div className="relative bg-background p-6 rounded-lg shadow-xl text-center max-w-sm w-full">
                     <h2 className="text-2xl font-bold">{uiTexts.finalTitle}</h2>
@@ -286,16 +293,12 @@ export default function OnboardingTutorial() {
     }
 
     return (
-        <div className="fixed inset-0 z-50">
+        <div className="fixed inset-0 z-[100] pointer-events-none">
             {currentStep && !currentStep.isModal && (
                 <>
-                    <div 
-                        className="fixed rounded-lg transition-all duration-300 tutorial-spotlight"
-                        style={spotlightStyle}
-                        onClick={handleFinish}
-                    />
+                    <div className="absolute inset-0 tutorial-spotlight" style={{...spotlightStyle, boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.7)'}}></div>
                     <div
-                        className="fixed bg-background p-4 rounded-lg shadow-xl w-64 z-50 transition-all duration-300"
+                        className="fixed bg-background p-4 rounded-lg shadow-xl w-64 z-50 transition-all duration-300 pointer-events-auto"
                         style={bubbleStyle}
                     >
                         <h3 className="font-bold mb-1 text-lg">{currentStep.title}</h3>
@@ -314,3 +317,4 @@ export default function OnboardingTutorial() {
         </div>
     );
 }
+

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import Link from "next/link";
 import { ArrowLeft, CheckCircle, Trash2 } from "lucide-react";
-import { getAchievements, clearStats, type AchievementStatus, getLanguage } from '@/lib/storage';
+import { getAchievements, clearStats, type AchievementStatus, getLanguage, getTutorialState } from '@/lib/storage';
 import { allAchievements, type Achievement } from '@/lib/achievements';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
@@ -39,11 +39,30 @@ export default function AchievementsPage() {
     const [achievements, setAchievements] = useState<Record<string, AchievementStatus>>({});
     const [isClearAlertOpen, setIsClearAlertOpen] = useState(false);
     const [language, setLanguageState] = useState<'en' | 'fr' | 'de' | 'it' | 'es'>('en');
+    const [isTutorialActive, setIsTutorialActive] = useState(false);
 
     useEffect(() => {
-        const currentLang = getLanguage();
-        setLanguageState(currentLang);
-        setAchievements(getAchievements());
+        const handleStateUpdate = () => {
+            const currentLang = getLanguage();
+            setLanguageState(currentLang);
+            const currentAchievements = getAchievements();
+            setAchievements(currentAchievements);
+
+            const tutorialState = getTutorialState();
+            const isOnAchievementsStep = tutorialState?.isActive &&
+                                      tutorialState.stage === 'extended' &&
+                                      tutorialState.step === 6;
+            setIsTutorialActive(isOnAchievementsStep && Object.keys(currentAchievements).length === 0);
+        };
+
+        handleStateUpdate();
+        window.addEventListener('language-changed', handleStateUpdate);
+        window.addEventListener('tutorial-state-changed', handleStateUpdate);
+
+        return () => {
+            window.removeEventListener('language-changed', handleStateUpdate);
+            window.removeEventListener('tutorial-state-changed', handleStateUpdate);
+        };
     }, []);
 
     const handleClearAchievements = () => {
@@ -81,6 +100,14 @@ export default function AchievementsPage() {
         };
         return texts[key][language];
     }
+    
+    const fakeAchievements: Record<string, AchievementStatus> = {
+      'novice': { progress: 50, unlockedAt: Date.now() - 86400000 * 2 },
+      'apprentice': { progress: 150, unlockedAt: null },
+      'streak25': { progress: 25, unlockedAt: Date.now() - 86400000 },
+    };
+
+    const displayAchievementsData = isTutorialActive ? fakeAchievements : achievements;
 
     return (
         <>
@@ -88,11 +115,11 @@ export default function AchievementsPage() {
                 <CardHeader>
                     <CardTitle className="text-center text-3xl">{getUIText('title')}</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4 max-h-[60vh] overflow-y-auto p-6">
+                <CardContent className="space-y-4 max-h-[60vh] overflow-y-auto p-6" data-tutorial-id="achievements-grid">
                      <TooltipProvider>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             {displayedAchievements.map((achievement: Achievement) => {
-                                const status = achievements[achievement.id] || { progress: 0, unlockedAt: null };
+                                const status = displayAchievementsData[achievement.id] || { progress: 0, unlockedAt: null };
                                 const isUnlocked = !!status.unlockedAt;
                                 const progressPercentage = isUnlocked ? 100 : (status.progress / achievement.goal) * 100;
                                 const Icon = achievement.icon;
@@ -146,7 +173,7 @@ export default function AchievementsPage() {
                         <Button 
                             variant="destructive" 
                             onClick={() => setIsClearAlertOpen(true)}
-                            disabled={Object.keys(achievements).length === 0}
+                            disabled={Object.keys(achievements).length === 0 || isTutorialActive}
                         >
                             <Trash2 className="mr-2 h-4 w-4" /> {getUIText('reset')}
                         </Button>
@@ -173,3 +200,4 @@ export default function AchievementsPage() {
         </>
     );
 }
+
