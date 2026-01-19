@@ -133,7 +133,7 @@ const extendedSteps: Step[] = [
         elementId: 'dictionary-colors',
         title: 'Słownik tematyczny',
         description: 'Działa podobnie do zwrotów, ale ma więcej funkcji — o tym opowiemy sobie za chwilę. Kliknij kategorię, aby wejść do środka.',
-        bubblePosition: 'top',
+        bubblePosition: 'bottom',
     },
     {
         path: '/learning/en/dictionary/colors',

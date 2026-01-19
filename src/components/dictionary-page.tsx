@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect, useMemo } from 'react';
@@ -8,7 +9,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { ArrowLeft, Star } from 'lucide-react';
 import type { DictionaryWord } from '@/lib/types';
-import { getFavorites, toggleFavorite } from '@/lib/storage';
+import { getFavorites, toggleFavorite, getTutorialState } from '@/lib/storage';
 import { cn } from '@/lib/utils';
 
 interface DictionaryPageProps {
@@ -23,9 +24,34 @@ export default function DictionaryPage({ title, backHref, words, children }: Dic
     const categorySlug = title.replace(/\s+/g, '-').toLowerCase();
 
     const [favorites, setFavorites] = useState<string[]>([]);
-
+    
     useEffect(() => {
-        setFavorites(getFavorites(categorySlug));
+        const handleStateUpdate = () => {
+            const tutorialState = getTutorialState();
+            const isWordListTutorialActive =
+                tutorialState?.isActive &&
+                tutorialState.stage === 'extended' &&
+                tutorialState.step === 18;
+
+            const realFavorites = getFavorites(categorySlug);
+            if (isWordListTutorialActive) {
+                const fakeFavoriteWord = 'khaki';
+                const favoriteSet = new Set([fakeFavoriteWord, ...realFavorites]);
+                setFavorites(Array.from(favoriteSet));
+            } else {
+                setFavorites(realFavorites);
+            }
+        };
+
+        handleStateUpdate();
+
+        window.addEventListener('tutorial-state-changed', handleStateUpdate);
+        window.addEventListener('language-changed', handleStateUpdate);
+
+        return () => {
+            window.removeEventListener('tutorial-state-changed', handleStateUpdate);
+            window.removeEventListener('language-changed', handleStateUpdate);
+        };
     }, [categorySlug]);
 
     const handleFavoriteToggle = (word: string) => {
@@ -59,10 +85,8 @@ export default function DictionaryPage({ title, backHref, words, children }: Dic
 
         if (favoriteWords.length > 0) {
             if (isColorsPage) {
-                // For the colors page, just reorder: favorites first, then the rest. No headers.
                 return [...favoriteWords, ...nonFavoritedWords];
             } else {
-                // For other pages, create the "Favorites" section at the top.
                 const favoritesHeader: DictionaryWord = { word: favoritesTitle[lang], translation: '', isHeader: true, special: 'favorites-header' };
                 return [
                     favoritesHeader,
@@ -72,7 +96,7 @@ export default function DictionaryPage({ title, backHref, words, children }: Dic
             }
         }
         
-        return words; // Return original if no favorites
+        return words;
     }, [words, favorites, lang, favoritesTitle, title]);
 
 
