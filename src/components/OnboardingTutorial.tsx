@@ -287,13 +287,12 @@ export default function OnboardingTutorial() {
 
     return (
         <div className="fixed inset-0 z-50">
-            <div className="absolute inset-0 bg-black/70 tutorial-spotlight" onClick={handleFinish} />
-            
             {currentStep && !currentStep.isModal && (
                 <>
                     <div 
-                        className="fixed rounded-lg pointer-events-none transition-all duration-300" 
+                        className="fixed rounded-lg transition-all duration-300 tutorial-spotlight"
                         style={spotlightStyle}
+                        onClick={handleFinish}
                     />
                     <div
                         className="fixed bg-background p-4 rounded-lg shadow-xl w-64 z-50 transition-all duration-300"
