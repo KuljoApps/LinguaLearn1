@@ -53,9 +53,8 @@ const tutorialQuestions: Question[] = [
 
 export default function QuizEnPl() {
   const searchParams = useSearchParams();
-  const [isTutorialMode, setIsTutorialMode] = useState(false);
-  const [isTutorialPaused, setIsTutorialPaused] = useState(false);
-
+  const isTutorialMode = useMemo(() => searchParams.get('tutorial') === 'true', [searchParams]);
+  
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -73,28 +72,19 @@ export default function QuizEnPl() {
   
   const router = useRouter();
   const { toast } = useToast();
-  
-  useEffect(() => {
-    setIsTutorialMode(searchParams.get('tutorial') === 'true');
-  }, [searchParams]);
 
-  useEffect(() => {
-    const handleTutorialState = () => {
-      const tutorialState = getTutorialState();
-      if (tutorialState?.stage === 'quiz') {
-          if (tutorialState.step === 0 || tutorialState.step === 1) {
-              setIsTutorialPaused(true);
-          } else {
-              setIsTutorialPaused(false);
-          }
-      } else {
-          setIsTutorialPaused(false);
-      }
-    };
-    handleTutorialState();
-    window.addEventListener('tutorial-state-changed', handleTutorialState);
-    return () => window.removeEventListener('tutorial-state-changed', handleTutorialState);
-  }, []);
+  const [tutorialStep, setTutorialStep] = useState<number | null>(null);
+
+    useEffect(() => {
+        if (!isTutorialMode) return;
+        const handleStateUpdate = () => {
+            const state = getTutorialState();
+            setTutorialStep(state?.stage === 'quiz' ? state.step : null);
+        };
+        window.addEventListener('tutorial-state-changed', handleStateUpdate);
+        handleStateUpdate();
+        return () => window.removeEventListener('tutorial-state-changed', handleStateUpdate);
+    }, [isTutorialMode]);
 
   const showAchievementToast = useCallback((achievement: Achievement) => {
     playSound('achievement');
@@ -123,7 +113,6 @@ export default function QuizEnPl() {
       timeoutFiredRef.current = false;
   }, [currentQuestionIndex]);
 
-  // Finalize session achievements
   useEffect(() => {
       if (!isTutorialMode && currentQuestionIndex >= questions.length && questions.length > 0) {
           const isPerfect = score === questions.length;
@@ -132,8 +121,8 @@ export default function QuizEnPl() {
       }
   }, [isTutorialMode, currentQuestionIndex, questions.length, score, showAchievementToast]);
 
-  // Handle transitions between questions
   useEffect(() => {
+    if (isTutorialMode) return;
     let timer: NodeJS.Timeout;
     if (answerStatus) {
       timer = setTimeout(() => {
@@ -144,11 +133,10 @@ export default function QuizEnPl() {
       }, 1500);
     }
     return () => clearTimeout(timer);
-  }, [answerStatus]);
+  }, [answerStatus, isTutorialMode]);
 
-  // Per-question timer
   useEffect(() => {
-    if (isPaused || !!answerStatus || currentQuestionIndex >= questions.length || isTutorialPaused) {
+    if (isTutorialMode || isPaused || !!answerStatus || currentQuestionIndex >= questions.length) {
       return;
     }
 
@@ -160,13 +148,10 @@ export default function QuizEnPl() {
             timeoutFiredRef.current = true;
             setAnswerStatus("timeout");
             setSelectedAnswer(null);
-            
-            if (!isTutorialMode) {
-              playSound("incorrect");
-              vibrate("incorrect");
-              const unlocked = updateStats(false, QUIZ_NAME, questions[currentQuestionIndex].id);
-              unlocked.forEach(showAchievementToast);
-            }
+            playSound("incorrect");
+            vibrate("incorrect");
+            const unlocked = updateStats(false, QUIZ_NAME, questions[currentQuestionIndex].id);
+            unlocked.forEach(showAchievementToast);
             
             const errorRecord = {
               word: questions[currentQuestionIndex].word,
@@ -174,7 +159,7 @@ export default function QuizEnPl() {
               correctAnswer: questions[currentQuestionIndex].correctAnswer,
               quiz: QUIZ_NAME,
             };
-            if (!isTutorialMode) addError(errorRecord);
+            addError(errorRecord);
             setSessionErrors(prev => [...prev, errorRecord]);
           }
           return 0;
@@ -184,9 +169,8 @@ export default function QuizEnPl() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [isPaused, answerStatus, currentQuestionIndex, questions, showAchievementToast, isTutorialMode, isTutorialPaused]);
+  }, [isTutorialMode, isPaused, answerStatus, currentQuestionIndex, questions, showAchievementToast]);
 
-  // Total quiz time and periodic time-based achievement check
   useEffect(() => {
     if (isTutorialMode || currentQuestionIndex >= questions.length || isPaused) {
       return;
@@ -204,49 +188,69 @@ export default function QuizEnPl() {
   }, [isTutorialMode, currentQuestionIndex, questions.length, isPaused, totalTime, showAchievementToast]);
 
 
-  const currentQuestion = useMemo(() => questions[currentQuestionIndex], [questions, currentQuestionIndex]);
+  const {
+    question: displayQuestion,
+    answerStatus: displayAnswerStatus,
+    selectedAnswer: displaySelectedAnswer,
+    isFinished: isTutorialFinished
+  } = useMemo(() => {
+      if (!isTutorialMode || tutorialStep === null || questions.length === 0) {
+          return { question: questions[currentQuestionIndex], answerStatus, selectedAnswer, isFinished: false };
+      }
+  
+      if (tutorialStep >= 4) {
+          return { question: questions[2], answerStatus: null, selectedAnswer: null, isFinished: true };
+      }
+      
+      const questionIndex = tutorialStep < 2 ? 0 : tutorialStep === 2 ? 0 : 1;
+      const question = questions[questionIndex];
+  
+      let status: typeof answerStatus = null;
+      let selAnswer: string | null = null;
+      
+      if (tutorialStep === 2) {
+          status = 'correct';
+          selAnswer = question.correctAnswer;
+      } else if (tutorialStep === 3) {
+          status = 'incorrect';
+          selAnswer = question.options.find(o => o !== question.correctAnswer)!;
+      }
+  
+      return { question, answerStatus: status, selectedAnswer: selAnswer, isFinished: false };
+  
+  }, [isTutorialMode, tutorialStep, questions, currentQuestionIndex, answerStatus, selectedAnswer]);
 
   useEffect(() => {
-    if (currentQuestion) {
-      if(isTutorialMode) {
-        setShuffledOptions(currentQuestion.options);
-      } else {
-        setShuffledOptions(shuffleArray(currentQuestion.options));
-      }
+    if (displayQuestion) {
+      setShuffledOptions(shuffleArray(displayQuestion.options));
     }
-  }, [currentQuestion, isTutorialMode]);
+  }, [displayQuestion]);
   
   const handleAnswerClick = (answer: string) => {
-    if (answerStatus || isPaused) return;
+    if (displayAnswerStatus || isPaused || isTutorialMode) return;
 
     setSelectedAnswer(answer);
     const isCorrect = answer === currentQuestion.correctAnswer;
     
-    if (!isTutorialMode) {
-        const unlocked = updateStats(isCorrect, QUIZ_NAME, currentQuestion.id);
-        unlocked.forEach(showAchievementToast);
-    }
+    const unlocked = updateStats(isCorrect, QUIZ_NAME, currentQuestion.id);
+    unlocked.forEach(showAchievementToast);
     
     if (isCorrect) {
       setScore((prevScore) => prevScore + 1);
       setAnswerStatus("correct");
-      if(!isTutorialMode) {
-        playSound("correct");
-        vibrate("correct");
-      }
+      playSound("correct");
+      vibrate("correct");
     } else {
       setAnswerStatus("incorrect");
-      if(!isTutorialMode) {
-        playSound("incorrect");
-        vibrate("incorrect");
-      }
+      playSound("incorrect");
+      vibrate("incorrect");
       const errorRecord = {
         word: currentQuestion.word,
         userAnswer: answer,
         correctAnswer: currentQuestion.correctAnswer,
         quiz: QUIZ_NAME,
       };
-      if (!isTutorialMode) addError(errorRecord);
+      addError(errorRecord);
       setSessionErrors(prev => [...prev, errorRecord]);
     }
   };
@@ -298,14 +302,14 @@ export default function QuizEnPl() {
   }
 
   const getButtonClass = (option: string) => {
-    if (!answerStatus) {
+    if (!displayAnswerStatus) {
       return "bg-primary text-primary-foreground hover:bg-primary/90";
     }
+    
+    const isCorrectAnswer = option === displayQuestion.correctAnswer;
+    const isSelectedAnswer = option === displaySelectedAnswer;
 
-    const isCorrectAnswer = option === currentQuestion.correctAnswer;
-    const isSelectedAnswer = option === selectedAnswer;
-
-    if (answerStatus === 'timeout') {
+    if (displayAnswerStatus === 'timeout') {
         if(isCorrectAnswer) return "bg-success text-success-foreground hover:bg-success/90";
         return "bg-muted text-muted-foreground opacity-70 cursor-not-allowed";
     }
@@ -319,23 +323,20 @@ export default function QuizEnPl() {
     return "bg-muted text-muted-foreground opacity-70 cursor-not-allowed";
   };
   
-  if (questions.length > 0 && currentQuestionIndex >= questions.length) {
+  if (questions.length === 0) return null;
+
+  if (isTutorialFinished || (!isTutorialMode && currentQuestionIndex >= questions.length)) {
     return (
         <QuizResults
-            score={score}
-            totalQuestions={questions.length}
+            score={isTutorialMode ? 1 : score}
+            totalQuestions={isTutorialMode ? 2 : questions.length}
             totalTime={totalTime}
-            sessionErrors={sessionErrors}
+            sessionErrors={isTutorialMode ? [{ word: tutorialQuestions[1].word, userAnswer: tutorialQuestions[1].options.find(o => o !== tutorialQuestions[1].correctAnswer)!, correctAnswer: tutorialQuestions[1].correctAnswer, quiz: QUIZ_NAME }] : sessionErrors}
             quizName={QUIZ_NAME}
             onRestart={restartTest}
             isTutorialMode={isTutorialMode}
         />
     );
-  }
-  
-  if (questions.length === 0) {
-      // Loading state or empty quiz
-      return null;
   }
 
   const formatTime = (seconds: number) => {
@@ -344,9 +345,8 @@ export default function QuizEnPl() {
     return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
   };
 
-  const progressValue = ((currentQuestionIndex + 1) / questions.length) * 100;
+  const progressValue = ((currentQuestionIndex + 1) / (isTutorialMode ? 3 : questions.length)) * 100;
   const questionTimeProgress = (questionTimer / QUESTION_TIME_LIMIT) * 100;
-  const isTutorialIncorrectStep = isTutorialMode && currentQuestionIndex === 1;
 
   return (
     <>
@@ -388,19 +388,28 @@ export default function QuizEnPl() {
               <p className="text-muted-foreground">What is the Polish meaning of</p>
               <p className={cn(
                   "font-headline font-bold text-card-foreground",
-                  currentQuestion.word.length > 20 ? "text-3xl" : "text-4xl"
-              )}>"{currentQuestion.word}"?</p>
+                  displayQuestion.word.length > 20 ? "text-3xl" : "text-4xl"
+              )}>"{displayQuestion.word}"?</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
             {shuffledOptions.map((option) => {
-              const isCorrect = option === currentQuestion.correctAnswer;
+              const isCorrectForTutorial = isTutorialMode && tutorialStep === 2 && option === displayQuestion.correctAnswer;
+              const isIncorrectForTutorial = isTutorialMode && tutorialStep === 3 && (option === displaySelectedAnswer || option === displayQuestion.correctAnswer);
+              
+              let tutorialId = undefined;
+              if (isCorrectForTutorial) {
+                tutorialId = 'quiz-answer-correct';
+              } else if (isIncorrectForTutorial) {
+                tutorialId = 'quiz-answer-incorrect';
+              }
+
               return (
                 <Button
                   key={option}
-                  data-tutorial-id={isTutorialMode && isCorrect ? 'quiz-answer-correct' : (isTutorialMode && !isCorrect ? 'quiz-answer-incorrect' : undefined)}
+                  data-tutorial-id={tutorialId}
                   onClick={() => handleAnswerClick(option)}
-                  disabled={!!answerStatus || isPaused}
+                  disabled={!!displayAnswerStatus || isPaused}
                   className={cn("h-auto text-lg p-4 whitespace-normal transition-all duration-300", getButtonClass(option))}
                 >
                   {option}
@@ -428,7 +437,7 @@ export default function QuizEnPl() {
                 variant="outline" 
                 size="icon" 
                 onClick={handlePauseClick}
-                disabled={!isPaused && questionTimer < MIN_TIME_FOR_PAUSE}
+                disabled={isTutorialMode || (!isPaused && questionTimer < MIN_TIME_FOR_PAUSE)}
             >
               {isPaused ? <Play /> : <Pause />}
             </Button>
@@ -437,7 +446,7 @@ export default function QuizEnPl() {
         <CardFooter className="flex-col gap-4 p-6 pt-0">
           <div className="flex justify-between w-full items-center">
               <div className="text-sm text-muted-foreground">
-                  Question {currentQuestionIndex + 1} of {questions.length}
+                  Question {isTutorialMode ? (tutorialStep! < 3 ? 1 : 2) : currentQuestionIndex + 1} of {isTutorialMode ? 2 : questions.length}
               </div>
               <div className="flex items-center gap-2">
                   <span className="text-sm font-medium">Score:</span>
@@ -445,7 +454,7 @@ export default function QuizEnPl() {
                       key={score}
                       className="text-2xl font-bold text-primary animate-in fade-in zoom-in-125 duration-300"
                   >
-                      {score}
+                      {isTutorialMode ? (tutorialStep! >=2 ? 1 : 0) : score}
                   </div>
               </div>
           </div>
@@ -485,3 +494,4 @@ export default function QuizEnPl() {
     </>
   );
 }
+

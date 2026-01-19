@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -21,7 +21,7 @@ interface QuizResultsProps {
     isTutorialMode?: boolean;
 }
 
-const uiTexts: { [key: string]: Record<Language, string> } = {
+const uiTexts: { [key: string]: Record<Language | 'pl', string> } = {
     perfectTitle: { en: 'Perfect Score!', pl: 'Bezbłędny test!', fr: 'Score Parfait !', de: 'Perfektes Ergebnis!', it: 'Punteggio Perfetto!', es: '¡Puntuación Perfecta!' },
     perfectDesc: { en: 'Excellent! All answers were correct. You are a champion!', pl: 'Doskonale! Wszystkie odpowiedzi były poprawne. Jesteś mistrzem!', fr: 'Excellent ! Toutes les réponses étaient correctes. Vous êtes un champion !', de: 'Ausgezeichnet! Alle Antworten waren richtig. Du bist ein Champion!', it: 'Eccellente! Tutte le risposte erano corrette. Sei un campione!', es: '¡Excelente! Todas las respuestas fueron correctas. ¡Eres un campeón!' },
     greatTitle: { en: 'Great Job!', pl: 'Świetna robota!', fr: 'Excellent Travail !', de: 'Tolle Arbeit!', it: 'Ottimo Lavoro!', es: '¡Gran Trabajo!' },
@@ -29,6 +29,7 @@ const uiTexts: { [key: string]: Record<Language, string> } = {
     goodTitle: { en: 'Good Effort!', pl: 'Dobry wynik!', fr: 'Bel Effort !', de: 'Gute Leistung!', it: 'Buon Tentativo!', es: '¡Buen Esfuerzo!' },
     goodDesc: { en: 'You\'re on the right track. Keep practicing!', pl: 'Jesteś na dobrej drodze. Ćwicz dalej!', fr: 'Vous êtes sur la bonne voie. Continuez à pratiquer !', de: 'Du bist auf dem richtigen Weg. Übe weiter!', it: 'Sei sulla strada giusta. Continua a esercitarti!', es: 'Estás en el camino correcto. ¡Sigue practicando!' },
     practiceTitle: { en: 'Practice Makes Perfect!', pl: 'Ćwiczenie czyni mistrza!', fr: 'C\'est en forgeant qu\'on devient forgeron !', de: 'Übung macht den Meister!', it: 'La pratica rende perfetti!', es: '¡La práctica hace al maestro!' },
+    practiceDesc: { en: 'Keep practicing to improve your score.', pl: 'Ćwicz dalej, aby poprawić swój wynik.', fr: 'Continuez à pratiquer pour améliorer votre score.', de: 'Übe weiter, um dein Ergebnis zu verbessern.', it: 'Continua a esercitarti per migliorare il tuo punteggio.', es: 'Sigue practicando para mejorar tu puntuación.' },
     summary: { en: 'Summary', pl: 'Podsumowanie', fr: 'Résumé', de: 'Zusammenfassung', it: 'Riepilogo', es: 'Resumen' },
     score: { en: 'Score', pl: 'Wynik', fr: 'Score', de: 'Ergebnis', it: 'Punteggio', es: 'Puntuación' },
     accuracy: { en: 'Accuracy', pl: 'Skuteczność', fr: 'Précision', de: 'Genauigkeit', it: 'Precisione', es: 'Precisión' },
@@ -44,11 +45,21 @@ const uiTexts: { [key: string]: Record<Language, string> } = {
 };
 
 export default function QuizResults({ score, totalQuestions, totalTime, quizName, sessionErrors, onRestart, isTutorialMode }: QuizResultsProps) {
-    const lang = useMemo(() => getLanguage(), []);
+    const [lang, setLang] = useState<Language>('en');
+
+    useEffect(() => {
+        const updateLang = () => setLang(getLanguage());
+        updateLang(); // Set on mount
+        window.addEventListener('language-changed', updateLang);
+        return () => window.removeEventListener('language-changed', updateLang);
+    }, []);
+
     const successRate = totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
     
     const getUIText = (key: keyof typeof uiTexts) => {
-        return uiTexts[key][lang] || uiTexts[key]['en'];
+        const texts = uiTexts[key];
+        if (!texts) return `[${String(key)}]`;
+        return (texts as any)[lang] || texts['en'];
     };
 
     const motivationalMessage = useMemo(() => {
@@ -80,6 +91,12 @@ export default function QuizResults({ score, totalQuestions, totalTime, quizName
         };
     }, [successRate, lang]);
     
+    const formatTime = (seconds: number) => {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+    };
+
     const fakeSessionErrors: Omit<ErrorRecord, 'id'>[] = [
         { quiz: 'Tutorial Quiz', word: 'Reliable', userAnswer: 'Religijny', correctAnswer: 'Niezawodny' }
     ];
@@ -171,3 +188,4 @@ export default function QuizResults({ score, totalQuestions, totalTime, quizName
         </Card>
     );
 }
+

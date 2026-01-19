@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { Button } from './ui/button';
 import { saveTutorialState, clearTutorialState, getTutorialState } from '@/lib/storage';
@@ -213,14 +213,14 @@ const quizSteps: Step[] = [
     path: '/quiz/en-pl?tutorial=true',
     elementId: 'quiz-answer-correct',
     title: 'Poprawna odpowiedź',
-    description: 'Brawo! Gdy odpowiesz poprawnie, przycisk podświetli się na zielono. Kliknij go teraz.',
+    description: 'Brawo! Tak wygląda poprawna odpowiedź. Przycisk podświetla się na zielono, aby utrwalić wiedzę.',
     bubblePosition: 'bottom',
   },
   {
     path: '/quiz/en-pl?tutorial=true',
     elementId: 'quiz-answer-incorrect',
     title: 'Błędna odpowiedź',
-    description: 'A teraz zobacz, co się stanie, gdy odpowiesz źle. Zawsze pokazujemy poprawną odpowiedź, abyś mógł się uczyć na błędach.',
+    description: 'Gdy odpowiesz źle, Twój wybór podświetli się na czerwono, a poprawna odpowiedź na zielono, abyś mógł się uczyć na błędach.',
     bubblePosition: 'bottom',
   },
   {
@@ -266,6 +266,7 @@ export default function OnboardingTutorial() {
     const router = useRouter();
     const pathname = usePathname();
     const tutorialState = getTutorialState();
+    const bubbleRef = React.useRef<HTMLDivElement>(null);
     
     const [spotlightStyle, setSpotlightStyle] = useState<React.CSSProperties>({});
     const [bubbleStyle, setBubbleStyle] = useState<React.CSSProperties>({});
@@ -313,7 +314,7 @@ export default function OnboardingTutorial() {
                     pointerEvents: 'auto',
                 });
 
-                const bubbleHeight = 150;
+                const bubbleHeight = bubbleRef.current?.offsetHeight || 180;
                 const bubbleWidth = 256;
                 let bubbleTop;
                 let bubbleLeft = rect.left + rect.width / 2 - bubbleWidth / 2;
@@ -322,7 +323,8 @@ export default function OnboardingTutorial() {
                                     (currentStep.bubblePosition !== 'bottom' && rect.top > bubbleHeight + 40);
 
                 if (isBubbleTop) {
-                    bubbleTop = rect.top - bubbleHeight - 25;
+                    const extraOffset = currentStep.elementId === 'quiz-pause-button' ? 60 : 25;
+                    bubbleTop = rect.top - bubbleHeight - extraOffset;
                 } else {
                     bubbleTop = rect.bottom + 15;
                 }
@@ -342,6 +344,11 @@ export default function OnboardingTutorial() {
                 if (currentStep.action === 'open-extras') {
                     const triggerButton = document.querySelector<HTMLElement>('[data-tutorial-id="extras-trigger"]');
                     if (triggerButton && triggerButton.getAttribute('data-state') === 'closed') {
+                       triggerButton.click();
+                    }
+                } else if (currentStep.action === 'expand-first-item') {
+                    const triggerButton = element.querySelector<HTMLElement>('[role="button"]');
+                     if (triggerButton && triggerButton.getAttribute('data-state') === 'closed') {
                        triggerButton.click();
                     }
                 }
@@ -395,6 +402,7 @@ export default function OnboardingTutorial() {
 
     const handleFinish = () => {
         clearTutorialState();
+        router.push('/');
     };
     
     const handleShowMore = () => {
@@ -477,6 +485,7 @@ export default function OnboardingTutorial() {
                 style={spotlightStyle}
             />
             <div
+                ref={bubbleRef}
                 className="fixed bg-background p-4 rounded-lg shadow-xl w-64 z-[101] transition-all duration-300 pointer-events-auto"
                 style={bubbleStyle}
             >
@@ -494,3 +503,4 @@ export default function OnboardingTutorial() {
         </div>
     );
 }
+
