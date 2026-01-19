@@ -44,62 +44,51 @@ export default function DemoQuiz() {
     
     const prevActiveTutorialStep = usePrevious(activeTutorialStep);
     const currentQuestion = useMemo(() => demoQuestions[currentQuestionIndex], [currentQuestionIndex]);
+    
+    const resetQuestionState = useCallback(() => {
+        setSelectedAnswer(null);
+        setAnswerStatus(null);
+        setQuestionTimer(QUESTION_TIME_LIMIT);
+        timeoutFiredRef.current = false;
+    }, []);
 
     const handleNextQuestion = useCallback(() => {
-        if (currentQuestionIndex < demoQuestions.length - 1) {
-            setCurrentQuestionIndex(prev => prev + 1);
-            setSelectedAnswer(null);
-            setAnswerStatus(null);
-            setQuestionTimer(QUESTION_TIME_LIMIT);
-            timeoutFiredRef.current = false;
-            // Go back to the interactive step for the new question
-            saveTutorialState({ isActive: true, stage: 'quiz', step: 2 });
+        const nextIndex = currentQuestionIndex + 1;
+        if (nextIndex < demoQuestions.length) {
+            setCurrentQuestionIndex(nextIndex);
+            resetQuestionState();
+            saveTutorialState({ isActive: true, stage: 'quiz', step: 2 }); // Back to interactive step
         } else {
-            setCurrentQuestionIndex(demoQuestions.length); // End of quiz
-            saveTutorialState({ isActive: true, stage: 'quiz', step: 5 }); // Move to results screen steps
+            setCurrentQuestionIndex(demoQuestions.length); // End quiz
+            saveTutorialState({ isActive: true, stage: 'quiz', step: 5 }); // Move to results
         }
-    }, [currentQuestionIndex]);
+    }, [currentQuestionIndex, resetQuestionState]);
 
     const restartQuiz = useCallback(() => {
         setCurrentQuestionIndex(0);
         setScore(0);
-        setSelectedAnswer(null);
-        setAnswerStatus(null);
-        setQuestionTimer(QUESTION_TIME_LIMIT);
         setTotalTime(0);
         setIsPaused(false);
-        timeoutFiredRef.current = false;
         setIsQuizActive(false);
+        resetQuestionState();
         saveTutorialState({ isActive: true, stage: 'quiz', step: 0 });
-    }, []);
+    }, [resetQuestionState]);
 
     // Main useEffect to sync with tutorial state
     useEffect(() => {
         const handleStateUpdate = () => {
             const state = getTutorialState();
-            
             if (state?.stage === 'quiz') {
-                const step = state.step;
-                setActiveTutorialStep(step);
-
-                // When we transition FROM the pause slide (1) TO the interactive slide (2)
-                if (prevActiveTutorialStep === 1 && step === 2) {
-                    setIsQuizActive(true);
-                } else if (step !== 2) {
-                    setIsQuizActive(false);
-                }
-
-                // When we transition FROM a feedback slide (3 or 4) TO the next slide, advance the question
-                if ((prevActiveTutorialStep === 3 || prevActiveTutorialStep === 4) && step !== prevActiveTutorialStep) {
+                const newStep = state.step;
+                
+                // Advance the question ONLY when moving from a feedback step to the next one
+                if ((activeTutorialStep === 3 && newStep === 4) || (activeTutorialStep === 4 && newStep === 5)) {
                     handleNextQuestion();
                 }
 
-                // Handle quiz end state
-                if (step >= 5) {
-                    if (currentQuestionIndex < demoQuestions.length) {
-                       setCurrentQuestionIndex(demoQuestions.length);
-                    }
-                }
+                setActiveTutorialStep(newStep);
+                setIsQuizActive(newStep === 2); // Quiz is interactive only on step 2
+
             } else {
                  setIsQuizActive(false);
                  setActiveTutorialStep(null);
@@ -109,7 +98,7 @@ export default function DemoQuiz() {
         handleStateUpdate();
         window.addEventListener('tutorial-state-changed', handleStateUpdate);
         return () => window.removeEventListener('tutorial-state-changed', handleStateUpdate);
-    }, [prevActiveTutorialStep, handleNextQuestion, currentQuestionIndex]);
+    }, [activeTutorialStep, handleNextQuestion]);
 
     // Per-question timer
     useEffect(() => {
@@ -177,7 +166,8 @@ export default function DemoQuiz() {
                 playSound('correct');
                 vibrate('correct');
                 setScore(prev => prev + 1);
-                handleNextQuestion(); // Auto-advance to Q3
+                // Directly advance to Q3 as per logic, and set to interactive
+                handleNextQuestion();
             } else {
                 playSound('incorrect');
                 vibrate('incorrect');
@@ -187,14 +177,14 @@ export default function DemoQuiz() {
         }
         
         if (currentQuestionIndex === 2) { // Q3
-            // Force an incorrect answer display for the tutorial
-            setAnswerStatus("incorrect");
-            playSound('incorrect');
-            vibrate('incorrect');
+            // Force an incorrect answer display for the tutorial if they get it right
             if (isCorrect) {
                  const wrongAnswer = currentQuestion.options.find(o => o !== currentQuestion.correctAnswer)!;
                  setSelectedAnswer(wrongAnswer);
             }
+            setAnswerStatus("incorrect");
+            playSound('incorrect');
+            vibrate('incorrect');
             saveTutorialState({ isActive: true, stage: 'quiz', step: 4 }); // Show slide 29
         }
     };
@@ -247,78 +237,83 @@ export default function DemoQuiz() {
     const questionTimeProgress = (questionTimer / QUESTION_TIME_LIMIT) * 100;
 
     return (
-        <Card className="w-full max-w-lg shadow-2xl">
-            <CardHeader className="text-center pb-2">
-                <div className="flex items-center justify-center gap-2">
-                    <LinguaLearnLogo className="h-8 w-8" />
-                    <CardTitle className="text-3xl font-bold tracking-tight">
-                        Lingua<span className="relative inline-block">Learn<span className="absolute -right-0.5 -bottom-3 text-sm font-semibold tracking-normal text-amber">Lite</span></span>
-                    </CardTitle>
-                </div>
-                <CardDescription className="pt-2">Wybierz poprawną odpowiedź</CardDescription>
-            </CardHeader>
-            <CardContent className="flex flex-col items-center justify-center p-6 space-y-8">
-                    <div data-tutorial-id="quiz-timer" className="w-full space-y-4">
-                    <div className="w-full flex justify-around gap-4 text-center">
-                        <div className="flex items-center gap-2">
-                            <Clock className="h-6 w-6" />
-                            <span className="text-2xl font-bold">{questionTimer}s</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <Clock className="h-6 w-6" />
-                            <span className="text-2xl font-bold">{formatTime(totalTime)}</span>
-                        </div>
+        <>
+            <Card className="w-full max-w-lg shadow-2xl">
+                <CardHeader className="text-center pb-2">
+                    <div className="flex items-center justify-center gap-2">
+                        <LinguaLearnLogo className="h-8 w-8" />
+                        <CardTitle className="text-3xl font-bold tracking-tight">
+                            Lingua<span className="relative inline-block">Learn<span className="absolute -right-0.5 -bottom-3 text-sm font-semibold tracking-normal text-amber">Lite</span></span>
+                        </CardTitle>
                     </div>
-                    <Progress value={questionTimeProgress} className="w-full h-2" />
-                </div>
+                    <CardDescription className="pt-2">Wybierz poprawną odpowiedź</CardDescription>
+                </CardHeader>
+                <CardContent className="flex flex-col items-center justify-center p-6 space-y-8">
+                        <div data-tutorial-id="quiz-timer" className="w-full space-y-4">
+                        <div className="w-full flex justify-around gap-4 text-center">
+                            <div className="flex items-center gap-2">
+                                <Clock className="h-6 w-6" />
+                                <span className="text-2xl font-bold">{questionTimer}s</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <Clock className="h-6 w-6" />
+                                <span className="text-2xl font-bold">{formatTime(totalTime)}</span>
+                            </div>
+                        </div>
+                        <Progress value={questionTimeProgress} className="w-full h-2" />
+                    </div>
 
-                <div className="text-center space-y-2">
-                    <p className="text-muted-foreground">What is the Polish meaning of</p>
-                    <p className={cn(
-                        "font-headline font-bold",
-                        currentQuestion.word.length > 15 ? "text-3xl" : "text-4xl"
-                    )}>"{currentQuestion.word}"?</p>
-                </div>
-                
-                <div data-tutorial-id="quiz-correct-answer" className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
-                    {currentQuestion.options.map((option) => (
-                        <Button
-                            key={option}
-                            onClick={() => handleAnswerClick(option)}
-                            className={cn(
-                                "h-auto text-lg p-4 whitespace-normal transition-all duration-300", 
-                                getButtonClass(option)
-                            )}
-                            disabled={!!answerStatus || isPaused}
-                        >
-                            {option}
-                        </Button>
-                    ))}
-                </div>
-                <div className="flex justify-center gap-4 w-full pt-4 border-t">
-                    <Button variant="outline" size="icon" className="pointer-events-none opacity-50"><Home /></Button>
-                    <Button variant="outline" size="icon" className="pointer-events-none opacity-50"><RefreshCw /></Button>
-                    <div data-tutorial-id="quiz-pause-button">
-                        <Button variant="outline" size="icon" onClick={handlePauseClick}>
-                            {isPaused ? <Play /> : <Pause />}
-                        </Button>
+                    <div className="text-center space-y-2">
+                        <p className="text-muted-foreground">What is the Polish meaning of</p>
+                        <p className={cn(
+                            "font-headline font-bold",
+                            currentQuestion.word.length > 15 ? "text-3xl" : "text-4xl"
+                        )}>"{currentQuestion.word}"?</p>
                     </div>
-                </div>
-            </CardContent>
-            <CardFooter className="flex-col gap-4 p-6 pt-0">
-                <div className="flex justify-between w-full items-center">
-                    <div className="text-sm text-muted-foreground">
-                        Pytanie {currentQuestionIndex + 1} z {demoQuestions.length}
+                    
+                    <div data-tutorial-id="quiz-correct-answer" className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+                        {currentQuestion.options.map((option) => (
+                            <Button
+                                key={option}
+                                onClick={() => handleAnswerClick(option)}
+                                className={cn(
+                                    "h-auto text-lg p-4 whitespace-normal transition-all duration-300", 
+                                    getButtonClass(option)
+                                )}
+                                disabled={!!answerStatus || isPaused}
+                            >
+                                {option}
+                            </Button>
+                        ))}
                     </div>
-                    <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium">Punkty:</span>
-                        <div className="text-2xl font-bold text-primary">
-                            {score}
+                    <div data-tutorial-id="quiz-incorrect-answer" className="hidden"></div>
+                    <div className="flex justify-center gap-4 w-full pt-4 border-t">
+                        <Button variant="outline" size="icon" className="pointer-events-none opacity-50"><Home /></Button>
+                        <Button variant="outline" size="icon" className="pointer-events-none opacity-50"><RefreshCw /></Button>
+                        <div data-tutorial-id="quiz-pause-button">
+                            <Button variant="outline" size="icon" onClick={handlePauseClick}>
+                                {isPaused ? <Play /> : <Pause />}
+                            </Button>
                         </div>
                     </div>
-                </div>
-                <Progress value={overallProgress} className="w-full h-2" />
-            </CardFooter>
-        </Card>
-    );
-}
+                </CardContent>
+                <CardFooter className="flex-col gap-4 p-6 pt-0">
+                    <div className="flex justify-between w-full items-center">
+                        <div className="text-sm text-muted-foreground">
+                            Pytanie {currentQuestionIndex + 1} z {demoQuestions.length}
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <span className="text-sm font-medium">Punkty:</span>
+                            <div className="text-2xl font-bold text-primary">
+                                {score}
+                            </div>
+                        </div>
+                    </div>
+                    <Progress value={overallProgress} className="w-full h-2" />
+                </CardFooter>
+            </Card>
+        </>
+        );
+    }
+    
+    
