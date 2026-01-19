@@ -427,7 +427,7 @@ export default function OnboardingTutorial() {
 
     const handleBack = () => {
         const prevStepIndex = currentStepIndex - 1;
-        if (stage === 'initial' && prevStepIndex === 0) return;
+        if (stage === 'initial' && prevStepIndex < 1) return;
         if (prevStepIndex < 0) return;
 
         const prevStep = steps[prevStepIndex];
@@ -490,9 +490,10 @@ export default function OnboardingTutorial() {
           return (
                <>
                   <h2 className="text-2xl font-bold">Podstawy za nami!</h2>
-                  <p className="text-muted-foreground my-6">Czy chcesz poznać więcej zaawansowanych funkcji, czy wolisz już zacząć naukę?</p>
+                  <p className="text-muted-foreground my-6">Możesz teraz poznać więcej funkcji, wypróbować krótki test lub od razu zacząć naukę.</p>
                   <div className="flex flex-col sm:flex-row gap-2 justify-center">
                       <Button onClick={handleShowMore}>{uiTexts.showMore}</Button>
+                      <Button onClick={handleStartTest} variant="outline">{uiTexts.startTest}</Button>
                       <Button variant="secondary" onClick={handleFinish}>{uiTexts.start}</Button>
                   </div>
               </>
@@ -540,11 +541,11 @@ export default function OnboardingTutorial() {
 
     const isFinalStep = stage === 'quiz' && currentStepIndex === steps.length - 1;
 
-    let currentStepDisplay;
-    let totalStepsDisplay;
+    let currentStepDisplay: number;
+    let totalStepsDisplay: number;
 
     if (stage === 'initial') {
-        const totalInitialSteps = initialSteps.length;
+        const totalInitialSteps = initialSteps.length - 1; // -1 because we don't count the modal
         currentStepDisplay = currentStepIndex;
         totalStepsDisplay = totalInitialSteps;
     } else {
@@ -552,12 +553,12 @@ export default function OnboardingTutorial() {
         const totalExtendedSteps = extendedSteps.length;
         const totalQuizSteps = quizSteps.length;
         const totalOverallBubbleSteps = totalInitialBubbleSteps + totalExtendedSteps + totalQuizSteps;
-
         totalStepsDisplay = totalOverallBubbleSteps;
+
         if (stage === 'extended') {
-            currentStepDisplay = totalInitialBubbleSteps + currentStepIndex;
+            currentStepDisplay = totalInitialBubbleSteps + currentStepIndex + 1;
         } else { // stage === 'quiz'
-            currentStepDisplay = totalInitialBubbleSteps + totalExtendedSteps + currentStepIndex;
+            currentStepDisplay = totalInitialBubbleSteps + totalExtendedSteps + currentStepIndex + 1;
         }
     }
 
@@ -586,7 +587,7 @@ export default function OnboardingTutorial() {
                             <ArrowLeft className="h-4 w-4" />
                         </Button>
                         <span className="text-xs text-muted-foreground">
-                            {stage === 'initial' ? `${currentStepIndex}/${initialSteps.length -1}` : `${currentStepDisplay}/${totalStepsDisplay}`}
+                            {stage === 'initial' ? `${currentStepIndex}/${initialSteps.length - 1}` : `${currentStepDisplay}/${totalStepsDisplay}`}
                         </span>
                     </div>
                     <Button onClick={handleNext} size="sm">
@@ -597,5 +598,6 @@ export default function OnboardingTutorial() {
         </div>
     );
 }
+
 
 
