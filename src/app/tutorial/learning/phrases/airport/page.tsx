@@ -1,3 +1,5 @@
+"use client";
+
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -32,14 +34,26 @@ export default function FakeAirportPhrasesPage() {
                 </CardHeader>
                 <CardContent>
                     <ScrollArea className="h-96 w-full pr-4">
-                        <div className="flex flex-col gap-3" data-tutorial-id="airport-first-phrases">
-                            {fakePhrases.map((p, index) => (
-                                <React.Fragment key={index}>
-                                    <div className="text-sm">
+                        <div className="flex flex-col">
+                            <div data-tutorial-id="airport-first-phrases">
+                                <div className="text-sm py-2">
+                                    <p className="font-bold">{fakePhrases[0].phrase}</p>
+                                    <p className="text-muted-foreground">{fakePhrases[0].translation}</p>
+                                </div>
+                                <Separator />
+                                <div className="text-sm py-2">
+                                    <p className="font-bold">{fakePhrases[1].phrase}</p>
+                                    <p className="text-muted-foreground">{fakePhrases[1].translation}</p>
+                                </div>
+                            </div>
+                            
+                            {fakePhrases.slice(2).map((p, index) => (
+                                 <React.Fragment key={index + 2}>
+                                    <Separator />
+                                    <div className="text-sm py-2">
                                         <p className="font-bold">{p.phrase}</p>
                                         <p className="text-muted-foreground">{p.translation}</p>
                                     </div>
-                                    {index < fakePhrases.length - 1 && <Separator />}
                                 </React.Fragment>
                             ))}
                         </div>
