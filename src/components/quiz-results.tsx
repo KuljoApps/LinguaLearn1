@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,8 +8,6 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Brain, ThumbsUp, Trophy, Clock, CheckCircle, ShieldX } from 'lucide-react';
 import type { ErrorRecord, Language } from '@/lib/storage';
-import { getLanguage } from '@/lib/storage';
-import { cn } from '@/lib/utils';
 
 interface QuizResultsProps {
     score: number;
@@ -44,23 +42,10 @@ const uiTexts: { [key: string]: Record<Language | 'pl', string> } = {
 };
 
 export default function QuizResults({ score, totalQuestions, totalTime, quizName, sessionErrors, onRestart }: QuizResultsProps) {
-    const [lang, setLang] = useState<Language>('en');
-
-    useEffect(() => {
-        const handleLanguageChange = () => {
-            setLang(getLanguage());
-        };
-        handleLanguageChange();
-        window.addEventListener('language-changed', handleLanguageChange);
-        return () => {
-            window.removeEventListener('language-changed', handleLanguageChange);
-        };
-    }, []);
-
     const successRate = totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
     
     const getUIText = (key: keyof typeof uiTexts) => {
-        return uiTexts[key][lang] || uiTexts[key]['en'];
+        return uiTexts[key]['pl'];
     };
 
     const formatTime = (seconds: number) => {
@@ -96,7 +81,7 @@ export default function QuizResults({ score, totalQuestions, totalTime, quizName
             title: getUIText('practiceTitle'),
             description: getUIText('practiceDesc'),
         };
-    }, [successRate, lang]);
+    }, [successRate]);
 
 
     return (
