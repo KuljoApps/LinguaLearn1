@@ -66,7 +66,6 @@ export default function DemoQuizResults({ score, totalQuestions, totalTime, sess
     
     const errorsToDisplay = sessionErrors.length > 0 ? sessionErrors : fakeSessionErrors;
 
-
     return (
         <Card className="w-full max-w-lg shadow-2xl">
             <CardHeader className="items-center text-center pb-4">
@@ -76,42 +75,44 @@ export default function DemoQuizResults({ score, totalQuestions, totalTime, sess
             </CardHeader>
 
             <CardContent className="space-y-4">
-                <Card className="bg-muted/50" data-tutorial-id="quiz-results-summary">
-                    <CardHeader className="pb-2">
-                        <CardTitle className="text-xl text-center">Podsumowanie</CardTitle>
-                    </CardHeader>
-                    <CardContent className="grid grid-cols-2 gap-4 text-center">
-                        <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-background">
-                            <span className="text-2xl font-bold">{score} / {totalQuestions}</span>
-                            <span className="text-xs text-muted-foreground">Wynik</span>
-                        </div>
-                        <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-background">
-                            <span className="text-2xl font-bold">{successRate}%</span>
-                            <span className="text-xs text-muted-foreground">Skuteczność</span>
-                        </div>
-                        <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-background">
-                            <div className="flex items-center gap-2">
-                                <CheckCircle className="h-4 w-4 text-success"/>
-                                <span className="text-2xl font-bold">{score}</span>
+                <div data-tutorial-id="quiz-results-summary">
+                    <Card className="bg-muted/50">
+                        <CardHeader className="pb-2">
+                            <CardTitle className="text-xl text-center">Podsumowanie</CardTitle>
+                        </CardHeader>
+                        <CardContent className="grid grid-cols-2 gap-4 text-center">
+                            <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-background">
+                                <span className="text-2xl font-bold">{score} / {totalQuestions}</span>
+                                <span className="text-xs text-muted-foreground">Wynik</span>
                             </div>
-                            <span className="text-xs text-muted-foreground">Poprawne</span>
-                        </div>
-                        <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-background">
-                            <div className="flex items-center gap-2">
-                                <ShieldX className="h-4 w-4 text-destructive"/>
-                                <span className="text-2xl font-bold">{errorsToDisplay.length}</span>
+                            <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-background">
+                                <span className="text-2xl font-bold">{successRate}%</span>
+                                <span className="text-xs text-muted-foreground">Skuteczność</span>
                             </div>
-                            <span className="text-xs text-muted-foreground">Błędne</span>
-                        </div>
-                        <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-background col-span-2">
-                             <div className="flex items-center gap-2">
-                                <Clock className="h-4 w-4 text-muted-foreground"/>
-                                <span className="text-2xl font-bold">{formatTime(totalTime)}</span>
+                            <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-background">
+                                <div className="flex items-center gap-2">
+                                    <CheckCircle className="h-4 w-4 text-success"/>
+                                    <span className="text-2xl font-bold">{score}</span>
+                                </div>
+                                <span className="text-xs text-muted-foreground">Poprawne</span>
                             </div>
-                            <span className="text-xs text-muted-foreground">Całkowity czas</span>
-                        </div>
-                    </CardContent>
-                </Card>
+                            <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-background">
+                                <div className="flex items-center gap-2">
+                                    <ShieldX className="h-4 w-4 text-destructive"/>
+                                    <span className="text-2xl font-bold">{errorsToDisplay.length}</span>
+                                </div>
+                                <span className="text-xs text-muted-foreground">Błędne</span>
+                            </div>
+                            <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-background col-span-2">
+                                 <div className="flex items-center gap-2">
+                                    <Clock className="h-4 w-4 text-muted-foreground"/>
+                                    <span className="text-2xl font-bold">{formatTime(totalTime)}</span>
+                                </div>
+                                <span className="text-xs text-muted-foreground">Całkowity czas</span>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
 
                 <div className="space-y-2" data-tutorial-id="quiz-results-errors">
                     <h3 className="text-center font-semibold">Warto to powtórzyć</h3>

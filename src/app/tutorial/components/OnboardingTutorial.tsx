@@ -232,55 +232,55 @@ const extendedSteps: Step[] = [
 ];
 
 const quizSteps: Step[] = [
-    {
+    { // step 0 (slide 26)
         path: '/tutorial/quiz-demo',
         elementId: 'quiz-timer',
         title: 'Czas na odpowiedź',
         description: 'Masz 15 sekund na każdą odpowiedź. Pasek postępu pokazuje, ile czasu pozostało. Nie marnuj go!',
         bubblePosition: 'bottom',
     },
-    {
+    { // step 1 (slide 27)
         path: '/tutorial/quiz-demo',
         elementId: 'quiz-pause-button',
         title: 'Potrzebujesz przerwy?',
         description: 'Kliknij pauzę, aby zatrzymać czas. Pamiętaj jednak, że wznowienie quizu kosztuje 5 sekund!',
         bubblePosition: 'top'
     },
-    {
+    { // step 2 - INTERACTIVE
         path: '/tutorial/quiz-demo',
         interactive: true,
-        title: '', // Required but not shown
-        description: '' // Required but not shown
+        title: '',
+        description: ''
     },
-    {
+    { // step 3 (slide 28)
         path: '/tutorial/quiz-demo',
         elementId: 'quiz-correct-answer',
         title: 'Poprawna odpowiedź',
         description: 'Świetnie! Poprawna odpowiedź zostanie podświetlona na zielono. Po chwili automatycznie przejdziesz do następnego pytania.',
         bubblePosition: 'bottom',
     },
-    {
+    { // step 4 (slide 29)
         path: '/tutorial/quiz-demo',
         elementId: 'quiz-incorrect-answer',
         title: 'Błędna odpowiedź',
         description: 'Nie martw się! Twoja błędna odpowiedź podświetli się na czerwono, a prawidłowa — na zielono. Każdy błąd to okazja do nauki!',
         bubblePosition: 'top'
     },
-    {
+    { // step 5 (slide 30)
         path: '/tutorial/quiz-demo',
         elementId: 'quiz-results-summary',
         title: 'Podsumowanie wyników',
         description: 'Po zakończeniu quizu zobaczysz swoje statystyki. Sprawdź, jak Ci poszło!',
         bubblePosition: 'bottom',
     },
-    {
+    { // step 6 (slide 31)
         path: '/tutorial/quiz-demo',
         elementId: 'quiz-results-errors',
         title: 'Przegląd błędów',
         description: 'Wszystkie błędne odpowiedzi z sesji są tutaj. Przeanalizuj je, aby uniknąć ich w przyszłości.',
         bubblePosition: 'top'
     },
-    {
+    { // step 7 (slide 32)
         path: '/tutorial/quiz-demo',
         elementId: 'quiz-results-actions',
         title: 'Co dalej?',
@@ -409,6 +409,13 @@ export default function OnboardingTutorial() {
 
     const handleNext = () => {
         const nextStepIndex = currentStepIndex + 1;
+        
+        if (stage === 'quiz' && (currentStepIndex === 3 || currentStepIndex === 4)) {
+            // After correct/incorrect answer bubble, go back to interactive step
+            saveTutorialState({ isActive: true, stage, step: 2 });
+            return;
+        }
+
         if (stage === 'initial' && nextStepIndex >= steps.length) {
             saveTutorialState({ isActive: true, stage: 'decision', step: 0 });
             return;
@@ -566,8 +573,8 @@ export default function OnboardingTutorial() {
     } else if (stage === 'extended') {
         currentStepDisplay = totalInitialBubbleSteps + currentStepIndex + 1;
     } else if (stage === 'quiz') {
-        const passedInteractiveQuizSteps = quizSteps.slice(0, currentStepIndex).filter(s => s.interactive).length;
-        currentStepDisplay = totalInitialBubbleSteps + totalExtendedSteps + currentStepIndex - passedInteractiveQuizSteps + 1;
+        const quizBubbleSteps = quizSteps.slice(0, currentStepIndex).filter(s => !s.interactive);
+        currentStepDisplay = totalInitialBubbleSteps + totalExtendedSteps + quizBubbleSteps.length + 1;
     }
 
 
@@ -606,10 +613,3 @@ export default function OnboardingTutorial() {
         </div>
     );
 }
-
-
-
-
-
-
-
