@@ -90,18 +90,13 @@ const extendedSteps: Step[] = [
         elementId: 'achievements-grid',
         title: 'Twoje osiągnięcia',
         description: 'Tutaj znajdziesz wszystkie swoje odznaki. Zdobywaj je za postępy w\u00A0nauce, regularność i\u00A0perfekcyjne wyniki w\u00A0quizach!',
+        bubblePosition: 'bottom',
     },
     {
-        path: '/learning/en/dictionary',
-        elementId: 'dictionary-grid',
-        title: 'Baza wiedzy - Słownik',
-        description: 'To jedna z\u00A0głównych sekcji nauki. Otwórzmy przykładową kategorię, aby zobaczyć, jak działa.',
-    },
-    {
-        path: '/learning/en/dictionary/numbers',
-        elementId: 'dictionary-word-list',
-        title: 'Przeglądanie słówek',
-        description: 'Słówka są pogrupowane tematycznie. Możesz oznaczyć trudniejsze pojęcia gwiazdką, aby zawsze były na górze listy i\u00A0łatwiejsze do powtórzenia.',
+        path: '/learning/en',
+        elementId: 'learning-card',
+        title: 'Moduł Nauki',
+        description: 'To centrum wiedzy. Wybierz dowolną kategorię, aby poszerzyć swoje umiejętności językowe przed kolejnym quizem.',
     }
 ];
 
@@ -152,24 +147,23 @@ export default function OnboardingTutorial() {
                     top: `${rect.top - padding / 2}px`,
                     left: `${rect.left - padding / 2}px`,
                     opacity: 1,
-                    position: 'fixed'
+                    position: 'fixed',
+                    borderRadius: 'var(--radius)',
+                    transition: 'all 0.3s ease-in-out',
                 });
 
                 const bubbleHeight = 150; // Estimation
                 const bubbleWidth = 256; // w-64
                 let bubbleTop;
                 let bubbleLeft = rect.left + rect.width / 2 - bubbleWidth / 2;
+                
+                const isBubbleTop = (currentStep.bubblePosition === 'top') || 
+                                    (currentStep.bubblePosition !== 'bottom' && rect.top > bubbleHeight + 40);
 
-                if (currentStep.bubblePosition === 'bottom') {
-                    bubbleTop = rect.bottom + 15;
-                } else if (currentStep.bubblePosition === 'top') {
+                if (isBubbleTop) {
                     bubbleTop = rect.top - bubbleHeight - 25;
                 } else {
-                    if (window.innerHeight - rect.bottom > bubbleHeight + 40) {
-                        bubbleTop = rect.bottom + 15;
-                    } else {
-                        bubbleTop = rect.top - bubbleHeight - 25;
-                    }
+                    bubbleTop = rect.bottom + 15;
                 }
                 
                 if (bubbleLeft < 16) bubbleLeft = 16;
@@ -296,7 +290,12 @@ export default function OnboardingTutorial() {
         <div className="fixed inset-0 z-[100] pointer-events-none">
             {currentStep && !currentStep.isModal && (
                 <>
-                    <div className="absolute inset-0 tutorial-spotlight" style={{...spotlightStyle, boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.7)'}}></div>
+                    <div className="fixed inset-0 tutorial-spotlight" />
+                    <div 
+                        className="absolute rounded-lg shadow-xl pointer-events-auto"
+                        style={spotlightStyle}
+                    />
+
                     <div
                         className="fixed bg-background p-4 rounded-lg shadow-xl w-64 z-50 transition-all duration-300 pointer-events-auto"
                         style={bubbleStyle}
@@ -317,4 +316,3 @@ export default function OnboardingTutorial() {
         </div>
     );
 }
-
