@@ -23,51 +23,20 @@ export default function Home() {
     useEffect(() => {
         setCurrentLanguage(getLanguage());
         
+        // For development purposes, always restart the tutorial on home page visit.
         const showTutorialForTesting = true;
 
-        if (showTutorialForTesting || !isTutorialCompleted()) {
+        if (showTutorialForTesting) {
             saveTutorialState({ isActive: true, stage: 'initial', step: 0 });
-            if (!showTutorialForTesting) {
-              setTutorialCompleted();
-            }
+        } else if (!isTutorialCompleted()) {
+            saveTutorialState({ isActive: true, stage: 'initial', step: 0 });
+            setTutorialCompleted();
         } else {
-            // --- TEMPORARY FOR DEVELOPMENT ---
-            // This logic shows the promo dialog every 5 visits for easier testing.
-            try {
-                const devPromoCounter = parseInt(sessionStorage.getItem('dev_promo_counter') || '0');
-                const newPromoCount = devPromoCounter + 1;
-                if (newPromoCount >= 15) {
-                    setShowPromo(true);
-                    sessionStorage.setItem('dev_promo_counter', '0');
-                } else {
-                    sessionStorage.setItem('dev_promo_counter', newPromoCount.toString());
-                }
-            } catch (e) {
-                sessionStorage.removeItem('dev_promo_counter');
-            }
-
-            // This logic shows the rate dialog every 10 visits for easier testing.
-            try {
-                const devRateCounter = parseInt(sessionStorage.getItem('dev_rate_counter') || '0');
-                const newRateCount = devRateCounter + 1;
-                if (newRateCount >= 10 && !showPromo) { // !showPromo to avoid overlap
-                    setShowRateDialog(true);
-                    sessionStorage.setItem('dev_rate_counter', '0');
-                } else {
-                    sessionStorage.setItem('dev_rate_counter', newRateCount.toString());
-                }
-            } catch (e) {
-                sessionStorage.removeItem('dev_rate_counter');
-            }
-            // --- END TEMPORARY LOGIC ---
-            
-            /* --- PRODUCTION LOGIC ---
-            if (shouldShowProPromo()) {
+             if (shouldShowProPromo()) {
                 setShowPromo(true);
             } else if (shouldShowRateAppDialog()) {
                 setShowRateDialog(true);
             }
-            */
         }
     }, [pathname]);
 

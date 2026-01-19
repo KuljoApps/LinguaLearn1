@@ -299,7 +299,7 @@ export default function OnboardingTutorial() {
     const currentStep = steps[currentStepIndex];
 
     useEffect(() => {
-        if (!currentStep || currentStep.isModal || !currentStep.elementId || ['decision', 'summary', 'final'].includes(stage)) {
+        if (!currentStep || currentStep.isModal || ['decision', 'summary', 'final', 'initial'].includes(stage)) {
             setSpotlightStyle({ opacity: 0 });
             setBubbleStyle({ opacity: 0 });
             return;
@@ -433,6 +433,22 @@ export default function OnboardingTutorial() {
 
     if (!tutorialState?.isActive) return null;
 
+    if (stage === 'initial' && currentStep?.isModal) {
+        return (
+            <div className="fixed inset-0 z-[100] animate-in fade-in-50 flex items-center justify-center p-4">
+                <div className="absolute inset-0 bg-black/70" />
+                <div className="relative bg-background p-6 rounded-lg shadow-xl text-center max-w-sm w-full">
+                    <h2 className="text-2xl font-bold">{currentStep.title} <span className="font-bold text-primary">LinguaLearn</span>!</h2>
+                    <p className="text-muted-foreground my-6" dangerouslySetInnerHTML={{ __html: currentStep.description.replace(/ ([a-zA-Z])\s/g, ' $1\u00A0') }} />
+                    <div className="flex flex-col sm:flex-row gap-2 justify-center">
+                        <Button onClick={handleNext}>{uiTexts.next}</Button>
+                        <Button variant="secondary" onClick={handleFinish}>{uiTexts.exit}</Button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     if (stage === 'decision') {
         return (
              <div className="fixed inset-0 z-[100] animate-in fade-in-50 flex items-center justify-center p-4">
@@ -479,7 +495,7 @@ export default function OnboardingTutorial() {
         )
     }
 
-    if (!currentStep || currentStep.isModal) {
+    if (!currentStep) {
       return null;
     }
 
