@@ -1,6 +1,7 @@
+
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { Button } from './ui/button';
 import { saveTutorialState, clearTutorialState, getTutorialState } from '@/lib/storage';
@@ -61,7 +62,7 @@ const extendedSteps: Step[] = [
         description: 'Uczysz się wieczorem? Użyj tego suwaka, aby nałożyć na aplikację ciepły filtr, który zmniejszy zmęczenie oczu.',
         bubblePosition: 'bottom',
     },
-     {
+    {
         path: '/stats',
         elementId: 'stats-cards',
         title: 'Ogólne statystyki',
@@ -193,93 +194,20 @@ const extendedSteps: Step[] = [
     },
 ];
 
-const quizSteps: Step[] = [
-  {
-    path: '/quiz/demo',
-    elementId: 'quiz-timer',
-    title: 'Licznik czasu',
-    description: 'Na każdą odpowiedź masz określoną ilość czasu. Uważaj, bo szybko ucieka!',
-    bubblePosition: 'bottom',
-  },
-  {
-    path: '/quiz/demo',
-    elementId: 'quiz-pause-button',
-    title: 'Pauza',
-    description: 'Potrzebujesz chwili? Możesz zatrzymać czas, ale uważaj – wznowienie quizu kosztuje kilka cennych sekund!',
-    bubblePosition: 'top',
-  },
-  {
-    path: '/quiz/demo',
-    elementId: 'quiz-answer-correct',
-    title: 'Poprawna odpowiedź',
-    description: 'Brawo! Tak wygląda poprawna odpowiedź. Przycisk podświetla się na zielono, aby utrwalić wiedzę.',
-    bubblePosition: 'bottom',
-  },
-  {
-    path: '/quiz/demo',
-    elementId: 'quiz-answer-incorrect',
-    title: 'Błędna odpowiedź',
-    description: 'Gdy odpowiesz źle, Twój wybór podświetli się na czerwono, a poprawna odpowiedź na zielono, abyś mógł się uczyć na błędach.',
-    bubblePosition: 'bottom',
-  },
-  {
-    path: '/quiz/demo',
-    elementId: 'quiz-iv-translation',
-    title: 'Pytania o Czasowniki',
-    description: 'Niektóre quizy, jak ten o czasownikach nieregularnych, mają inny format. Najpierw wybierasz poprawne tłumaczenie...',
-    bubblePosition: 'bottom',
-  },
-  {
-    path: '/quiz/demo',
-    elementId: 'quiz-iv-forms',
-    title: 'Uzupełnianie Form',
-    description: '...a następnie musisz wpisać poprawne formy czasownika. To świetny sposób na utrwalenie trudniejszych zagadnień.',
-    bubblePosition: 'top',
-  },
-  {
-    path: '/quiz/demo',
-    elementId: 'quiz-results-summary',
-    title: 'Podsumowanie wyników',
-    description: 'Po każdym quizie zobaczysz swoje statystyki: wynik, skuteczność, liczbę błędów oraz całkowity czas.',
-    bubblePosition: 'bottom',
-  },
-  {
-    path: '/quiz/demo',
-    elementId: 'quiz-results-errors',
-    title: 'Przejrzyj swoje błędy',
-    description: 'Wszystkie błędne odpowiedzi z sesji są tu zebrane. To świetny sposób, aby szybko powtórzyć materiał.',
-    bubblePosition: 'top',
-  },
-  {
-    path: '/quiz/demo',
-    elementId: 'quiz-results-buttons',
-    title: 'Co dalej?',
-    description: 'Możesz zagrać jeszcze raz, wrócić do menu głównego lub przejrzeć wszystkie swoje błędy na dedykowanym ekranie.',
-    bubblePosition: 'top',
-  }
-];
 
 const uiTexts = {
     next: 'Dalej',
     finish: 'Zakończ',
     showMore: 'Pokaż więcej',
-    startLearning: 'Zacznij naukę!',
-    startQuiz: 'Zacznij test',
-    exit: 'Wyjdź',
-    restart: 'Rozpocznij ponownie',
-    initialSummaryTitle: 'Podstawy za nami!',
-    initialSummaryDesc: 'Czy chcesz poznać więcej zaawansowanych funkcji, czy wolisz już zacząć naukę?',
-    finalSummaryTitle: 'Wszystko gotowe!',
-    finalSummaryDesc: 'To już prawie koniec! Czy jesteś gotów, aby rozpocząć pierwszy, próbny test i zobaczyć, jak to wszystko działa w praktyce?',
-    finalTitle: 'Gratulacje!',
-    finalDesc: 'Właśnie ukończyłeś pełny samouczek! Jesteś teraz gotów, aby w\u00A0pełni wykorzystać LinguaLearn. Powodzenia w\u00A0nauce!',
+    start: 'Zacznij naukę!',
+    finalTitle: 'Wszystko gotowe!',
+    finalDesc: 'To wszystko! Jesteś gotów, aby w\u00A0pełni wykorzystać LinguaLearn. Powodzenia w\u00A0nauce!',
 };
 
 export default function OnboardingTutorial() {
     const router = useRouter();
     const pathname = usePathname();
     const tutorialState = getTutorialState();
-    const bubbleRef = React.useRef<HTMLDivElement>(null);
     
     const [spotlightStyle, setSpotlightStyle] = useState<React.CSSProperties>({});
     const [bubbleStyle, setBubbleStyle] = useState<React.CSSProperties>({});
@@ -287,26 +215,18 @@ export default function OnboardingTutorial() {
     const stage = tutorialState?.stage || 'initial';
     const currentStepIndex = tutorialState?.step || 0;
     
-    const getSteps = () => {
-        switch(stage) {
-            case 'initial': return initialSteps;
-            case 'extended': return extendedSteps;
-            case 'quiz': return quizSteps;
-            default: return [];
-        }
-    }
-    const steps = getSteps();
+    const steps = stage === 'initial' ? initialSteps : extendedSteps;
     const currentStep = steps[currentStepIndex];
 
     useEffect(() => {
-        if (!currentStep || currentStep.isModal || ['decision', 'summary', 'final', 'initial'].includes(stage)) {
+        if (!currentStep || currentStep.isModal || stage === 'decision' || !currentStep.elementId) {
             setSpotlightStyle({ opacity: 0 });
             setBubbleStyle({ opacity: 0 });
             return;
         }
 
         let attempts = 0;
-        const maxAttempts = 20;
+        const maxAttempts = 20; // Try for 2 seconds
 
         const findAndPosition = () => {
             const element = document.querySelector<HTMLElement>(`[data-tutorial-id="${currentStep.elementId}"]`);
@@ -327,8 +247,8 @@ export default function OnboardingTutorial() {
                     pointerEvents: 'auto',
                 });
 
-                const bubbleHeight = bubbleRef.current?.offsetHeight || 180;
-                const bubbleWidth = 256;
+                const bubbleHeight = 150; // Estimation
+                const bubbleWidth = 256; // w-64
                 let bubbleTop;
                 let bubbleLeft = rect.left + rect.width / 2 - bubbleWidth / 2;
                 
@@ -336,8 +256,7 @@ export default function OnboardingTutorial() {
                                     (currentStep.bubblePosition !== 'bottom' && rect.top > bubbleHeight + 40);
 
                 if (isBubbleTop) {
-                    const extraOffset = currentStep.elementId === 'quiz-pause-button' ? 60 : 25;
-                    bubbleTop = rect.top - bubbleHeight - extraOffset;
+                    bubbleTop = rect.top - bubbleHeight - 25;
                 } else {
                     bubbleTop = rect.bottom + 15;
                 }
@@ -357,11 +276,6 @@ export default function OnboardingTutorial() {
                 if (currentStep.action === 'open-extras') {
                     const triggerButton = document.querySelector<HTMLElement>('[data-tutorial-id="extras-trigger"]');
                     if (triggerButton && triggerButton.getAttribute('data-state') === 'closed') {
-                       triggerButton.click();
-                    }
-                } else if (currentStep.action === 'expand-first-item') {
-                    const triggerButton = element.querySelector<HTMLElement>('[role="button"]');
-                     if (triggerButton && triggerButton.getAttribute('data-state') === 'closed') {
                        triggerButton.click();
                     }
                 }
@@ -385,27 +299,21 @@ export default function OnboardingTutorial() {
             clearTimeout(timeoutId);
             window.removeEventListener('resize', findAndPosition);
         };
-    }, [currentStep, pathname, stage]);
+    }, [currentStep, pathname]);
 
 
     const handleNext = () => {
         const nextStepIndex = currentStepIndex + 1;
-
         if (stage === 'initial' && nextStepIndex >= steps.length) {
             saveTutorialState({ isActive: true, stage: 'decision', step: 0 });
             return;
         }
-
-        if (stage === 'extended' && nextStepIndex >= steps.length) {
-            saveTutorialState({ isActive: true, stage: 'summary', step: 0 });
-            return;
-        }
-
-        if (stage === 'quiz' && nextStepIndex >= steps.length) {
-            saveTutorialState({ isActive: true, stage: 'final', step: 0 });
-            return;
-        }
         
+        if (stage === 'extended' && nextStepIndex >= steps.length) {
+            saveTutorialState({ isActive: true, stage: 'decision', step: -1 }); // Final modal
+            return;
+        }
+
         const nextStep = steps[nextStepIndex];
         if (nextStep?.path && nextStep.path !== pathname) {
             router.push(nextStep.path);
@@ -415,7 +323,6 @@ export default function OnboardingTutorial() {
 
     const handleFinish = () => {
         clearTutorialState();
-        router.push('/');
     };
     
     const handleShowMore = () => {
@@ -425,86 +332,66 @@ export default function OnboardingTutorial() {
         }
         saveTutorialState({ isActive: true, stage: 'extended', step: 0 });
     }
-    
-    const handleStartQuiz = () => {
-        router.push('/quiz/demo');
-        saveTutorialState({ isActive: true, stage: 'quiz', step: 0 });
-    }
 
     if (!tutorialState?.isActive) return null;
 
+    const isLastStep = currentStepIndex === steps.length - 1;
+    
     if (stage === 'initial' && currentStep?.isModal) {
         return (
             <div className="fixed inset-0 z-[100] animate-in fade-in-50 flex items-center justify-center p-4">
                 <div className="absolute inset-0 bg-black/70" />
                 <div className="relative bg-background p-6 rounded-lg shadow-xl text-center max-w-sm w-full">
-                    <h2 className="text-2xl font-bold">{currentStep.title} <span className="font-bold text-primary">LinguaLearn</span>!</h2>
-                    <p className="text-muted-foreground my-6" dangerouslySetInnerHTML={{ __html: currentStep.description.replace(/ ([a-zA-Z])\s/g, ' $1\u00A0') }} />
-                    <div className="flex flex-col sm:flex-row gap-2 justify-center">
-                        <Button onClick={handleNext}>{uiTexts.next}</Button>
-                        <Button variant="secondary" onClick={handleFinish}>{uiTexts.exit}</Button>
+                    <div className="flex items-baseline justify-center gap-2 mb-4">
+                         <h2 className="text-[28px] font-bold tracking-tight">{currentStep.title}</h2>
+                        <h1 className="text-3xl font-bold tracking-tight whitespace-nowrap">
+                            Lingua
+                            <span className="relative inline-block">
+                                Learn
+                                <span className="absolute -right-1 -bottom-3.5 text-base font-semibold tracking-normal text-amber">
+                                Lite
+                                </span>
+                            </span>
+                        </h1>
                     </div>
+                    <p className="text-muted-foreground my-6" dangerouslySetInnerHTML={{ __html: currentStep.description.replace(/ ([a-zA-Z]) /g, ' $1\u00A0') }} />
+                    <Button onClick={handleNext}>{uiTexts.next}</Button>
                 </div>
             </div>
         );
     }
-
-    if (stage === 'decision') {
+    
+    if (stage === 'decision' && currentStepIndex === 0) {
         return (
              <div className="fixed inset-0 z-[100] animate-in fade-in-50 flex items-center justify-center p-4">
                 <div className="absolute inset-0 bg-black/70" />
                 <div className="relative bg-background p-6 rounded-lg shadow-xl text-center max-w-sm w-full">
-                    <h2 className="text-2xl font-bold">{uiTexts.initialSummaryTitle}</h2>
-                    <p className="text-muted-foreground my-6">{uiTexts.initialSummaryDesc}</p>
+                    <h2 className="text-2xl font-bold">Podstawy za nami!</h2>
+                    <p className="text-muted-foreground my-6">Czy chcesz poznać więcej zaawansowanych funkcji, czy wolisz już zacząć naukę?</p>
                     <div className="flex flex-col sm:flex-row gap-2 justify-center">
                         <Button onClick={handleShowMore}>{uiTexts.showMore}</Button>
-                        <Button variant="secondary" onClick={handleFinish}>{uiTexts.startLearning}</Button>
+                        <Button variant="secondary" onClick={handleFinish}>{uiTexts.start}</Button>
                     </div>
                 </div>
             </div>
         );
     }
     
-    if (stage === 'summary') {
-        return (
-             <div className="fixed inset-0 z-[100] animate-in fade-in-50 flex items-center justify-center p-4">
-                <div className="absolute inset-0 bg-black/70" />
-                <div className="relative bg-background p-6 rounded-lg shadow-xl text-center max-w-sm w-full">
-                    <h2 className="text-2xl font-bold">{uiTexts.finalSummaryTitle}</h2>
-                    <p className="text-muted-foreground my-6">{uiTexts.finalSummaryDesc}</p>
-                    <div className="flex flex-col sm:flex-row gap-2 justify-center">
-                        <Button onClick={handleStartQuiz}>{uiTexts.startQuiz}</Button>
-                        <Button variant="secondary" disabled>{uiTexts.exit}</Button>
-                        <Button variant="ghost" disabled>{uiTexts.restart}</Button>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-    
-    if (stage === 'final') {
+    if (stage === 'decision' && currentStepIndex === -1) {
         return (
             <div className="fixed inset-0 z-[100] animate-in fade-in-50 flex items-center justify-center p-4">
                 <div className="absolute inset-0 bg-black/70" />
                 <div className="relative bg-background p-6 rounded-lg shadow-xl text-center max-w-sm w-full">
                     <h2 className="text-2xl font-bold">{uiTexts.finalTitle}</h2>
                     <p className="text-muted-foreground my-6">{uiTexts.finalDesc}</p>
-                    <Button onClick={handleFinish}>{uiTexts.finish}</Button>
+                    <Button onClick={handleFinish}>{uiTexts.start}</Button>
                 </div>
             </div>
         )
     }
 
-    if (!currentStep) {
+    if (!currentStep || currentStep.isModal) {
       return null;
-    }
-
-    const totalSteps = initialSteps.length + extendedSteps.length + quizSteps.length;
-    const getCurrentStepNumber = () => {
-        if (stage === 'initial') return currentStepIndex + 1;
-        if (stage === 'extended') return initialSteps.length + currentStepIndex + 1;
-        if (stage === 'quiz') return initialSteps.length + extendedSteps.length + currentStepIndex + 1;
-        return 0;
     }
 
     return (
@@ -514,7 +401,6 @@ export default function OnboardingTutorial() {
                 style={spotlightStyle}
             />
             <div
-                ref={bubbleRef}
                 className="fixed bg-background p-4 rounded-lg shadow-xl w-64 z-[101] transition-all duration-300 pointer-events-auto"
                 style={bubbleStyle}
             >
@@ -522,10 +408,10 @@ export default function OnboardingTutorial() {
                 <p className="text-sm text-muted-foreground mb-4" dangerouslySetInnerHTML={{ __html: currentStep.description.replace(/ ([a-zA-Z])\s/g, ' $1\u00A0') }} />
                 <div className="flex justify-between items-center">
                     <span className="text-xs text-muted-foreground">
-                        {getCurrentStepNumber()} / {totalSteps}
+                        {stage === 'initial' ? currentStepIndex + 1 : initialSteps.length + currentStepIndex + 1} / {initialSteps.length + extendedSteps.length}
                     </span>
-                    <Button onClick={handleNext} size="sm">
-                      {stage === 'quiz' && currentStepIndex === steps.length - 1 ? uiTexts.finish : uiTexts.next}
+                        <Button onClick={handleNext} size="sm">
+                        {stage === 'extended' && isLastStep ? uiTexts.finish : uiTexts.next}
                     </Button>
                 </div>
             </div>

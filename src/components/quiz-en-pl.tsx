@@ -39,7 +39,7 @@ const QUESTION_TIME_LIMIT = 15;
 const PAUSE_PENALTY = 5;
 const MIN_TIME_FOR_PAUSE = 6;
 const QUIZ_NAME = 'English - Polish';
-const TIME_UPDATE_INTERVAL = 5;
+const TIME_UPDATE_INTERVAL = 5; // seconds
 const QUIZ_LENGTH = 10;
 
 
@@ -94,6 +94,7 @@ export default function QuizEnPl() {
       }
   }, [currentQuestionIndex, questions.length, score, showAchievementToast]);
 
+  // Handle transitions between questions
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (answerStatus) {
@@ -107,10 +108,9 @@ export default function QuizEnPl() {
     return () => clearTimeout(timer);
   }, [answerStatus]);
 
-  const currentQuestion = useMemo(() => questions[currentQuestionIndex], [questions, currentQuestionIndex]);
-
+  // Per-question timer
   useEffect(() => {
-    if (isPaused || !!answerStatus || !currentQuestion) {
+    if (isPaused || !!answerStatus || currentQuestionIndex >= questions.length) {
       return;
     }
 
@@ -124,13 +124,14 @@ export default function QuizEnPl() {
             setSelectedAnswer(null);
             playSound("incorrect");
             vibrate("incorrect");
-            const unlocked = updateStats(false, QUIZ_NAME, currentQuestion.id);
-            unlocked.forEach(showAchievementToast);
             
+            const unlocked = updateStats(false, QUIZ_NAME, questions[currentQuestionIndex].id);
+            unlocked.forEach(showAchievementToast);
+
             const errorRecord = {
-              word: currentQuestion.word,
+              word: questions[currentQuestionIndex].word,
               userAnswer: 'No answer',
-              correctAnswer: currentQuestion.correctAnswer,
+              correctAnswer: questions[currentQuestionIndex].correctAnswer,
               quiz: QUIZ_NAME,
             };
             addError(errorRecord);
@@ -143,8 +144,9 @@ export default function QuizEnPl() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [isPaused, answerStatus, currentQuestion, showAchievementToast]);
+  }, [isPaused, answerStatus, currentQuestionIndex, questions, showAchievementToast]);
 
+  // Total quiz time and periodic time-based achievement check
   useEffect(() => {
     if (currentQuestionIndex >= questions.length || isPaused) {
       return;
@@ -161,6 +163,9 @@ export default function QuizEnPl() {
     return () => clearInterval(interval);
   }, [currentQuestionIndex, questions.length, isPaused, totalTime, showAchievementToast]);
 
+
+  const currentQuestion = useMemo(() => questions[currentQuestionIndex], [questions, currentQuestionIndex]);
+
   useEffect(() => {
     if (currentQuestion) {
       setShuffledOptions(shuffleArray(currentQuestion.options));
@@ -168,11 +173,10 @@ export default function QuizEnPl() {
   }, [currentQuestion]);
   
   const handleAnswerClick = (answer: string) => {
-    if (answerStatus || isPaused || !currentQuestion) return;
+    if (answerStatus || isPaused) return;
 
     setSelectedAnswer(answer);
     const isCorrect = answer === currentQuestion.correctAnswer;
-    
     const unlocked = updateStats(isCorrect, QUIZ_NAME, currentQuestion.id);
     unlocked.forEach(showAchievementToast);
     
@@ -243,10 +247,10 @@ export default function QuizEnPl() {
   }
 
   const getButtonClass = (option: string) => {
-    if (!answerStatus || !currentQuestion) {
+    if (!answerStatus) {
       return "bg-primary text-primary-foreground hover:bg-primary/90";
     }
-    
+
     const isCorrectAnswer = option === currentQuestion.correctAnswer;
     const isSelectedAnswer = option === selectedAnswer;
 
@@ -264,9 +268,7 @@ export default function QuizEnPl() {
     return "bg-muted text-muted-foreground opacity-70 cursor-not-allowed";
   };
   
-  if (questions.length === 0) return null;
-
-  if (currentQuestionIndex >= questions.length) {
+  if (questions.length > 0 && currentQuestionIndex >= questions.length) {
     return (
         <QuizResults
             score={score}
@@ -277,6 +279,11 @@ export default function QuizEnPl() {
             onRestart={restartTest}
         />
     );
+  }
+  
+  if (questions.length === 0) {
+      // Loading state or empty quiz
+      return null;
   }
 
   const formatTime = (seconds: number) => {
@@ -326,31 +333,29 @@ export default function QuizEnPl() {
 
           <div className="text-center space-y-2">
               <p className="text-muted-foreground">What is the Polish meaning of</p>
-              {currentQuestion && <p className={cn(
+              <p className={cn(
                   "font-headline font-bold text-card-foreground",
                   currentQuestion.word.length > 20 ? "text-3xl" : "text-4xl"
-              )}>"{currentQuestion.word}"?</p>}
+              )}>"{currentQuestion.word}"?</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
-            {shuffledOptions.map((option) => {
-              return (
-                <Button
-                  key={option}
-                  onClick={() => handleAnswerClick(option)}
-                  disabled={!!answerStatus || isPaused}
-                  className={cn("h-auto text-lg p-4 whitespace-normal transition-all duration-300", getButtonClass(option))}
-                >
-                  {option}
-                </Button>
-              )
-            })}
+            {shuffledOptions.map((option) => (
+              <Button
+                key={option}
+                onClick={() => handleAnswerClick(option)}
+                disabled={!!answerStatus || isPaused}
+                className={cn("h-auto text-lg p-4 whitespace-normal transition-all duration-300", getButtonClass(option))}
+              >
+                {option}
+              </Button>
+            ))}
           </div>
           <div className="flex justify-center gap-4 w-full pt-4 border-t">
             <Link href="/" passHref>
-                <Button variant="outline" size="icon" onClick={handleHomeClick}>
-                  <Home />
-                </Button>
+              <Button variant="outline" size="icon" onClick={handleHomeClick}>
+                <Home />
+              </Button>
             </Link>
             <Button variant="outline" size="icon" onClick={handleRestartClick}>
               <RefreshCw />

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,14 +9,15 @@ import { Separator } from '@/components/ui/separator';
 import { Brain, ThumbsUp, Trophy, Clock, CheckCircle, ShieldX } from 'lucide-react';
 import type { ErrorRecord, Language } from '@/lib/storage';
 import { getLanguage } from '@/lib/storage';
+import { cn } from '@/lib/utils';
 
 interface QuizResultsProps {
     score: number;
     totalQuestions: number;
     totalTime: number;
+    quizName: string;
     sessionErrors: Omit<ErrorRecord, 'id'>[];
     onRestart: () => void;
-    quizName?: string;
 }
 
 const uiTexts: { [key: string]: Record<Language | 'pl', string> } = {
@@ -27,7 +28,7 @@ const uiTexts: { [key: string]: Record<Language | 'pl', string> } = {
     goodTitle: { en: 'Good Effort!', pl: 'Dobry wynik!', fr: 'Bel Effort !', de: 'Gute Leistung!', it: 'Buon Tentativo!', es: '¡Buen Esfuerzo!' },
     goodDesc: { en: 'You\'re on the right track. Keep practicing!', pl: 'Jesteś na dobrej drodze. Ćwicz dalej!', fr: 'Vous êtes sur la bonne voie. Continuez à pratiquer !', de: 'Du bist auf dem richtigen Weg. Übe weiter!', it: 'Sei sulla strada giusta. Continua a esercitarti!', es: 'Estás en el camino correcto. ¡Sigue practicando!' },
     practiceTitle: { en: 'Practice Makes Perfect!', pl: 'Ćwiczenie czyni mistrza!', fr: 'C\'est en forgeant qu\'on devient forgeron !', de: 'Übung macht den Meister!', it: 'La pratica rende perfetti!', es: '¡La práctica hace al maestro!' },
-    practiceDesc: { en: 'Every attempt is a step forward. Don\'t give up!', pl: 'Każda próba to krok naprzód. Nie poddawaj się!', fr: 'Chaque tentative est un pas en avant. N\'abandonnez pas !', de: 'Jeder Versuch ist ein Schritt nach vorn. Gib nicht auf!', it: 'Ogni tentativo è un passo avanti. Non arrenderti!', es: '¡Cada intento es un paso adelante. No te rindas!' },
+    practiceDesc: { en: 'Every mistake is a learning opportunity. Try again!', pl: 'Każdy błąd to okazja do nauki. Spróbuj jeszcze raz!', fr: 'Chaque erreur est une opportunité d\'apprendre. Réessayez !', de: 'Jeder Fehler ist eine Lernchance. Versuche es erneut!', it: 'Ogni errore è un\'opportunità di apprendimento. Riprova!', es: 'Cada error es una oportunidad de aprendizaje. ¡Inténtalo de nuevo!' },
     summary: { en: 'Summary', pl: 'Podsumowanie', fr: 'Résumé', de: 'Zusammenfassung', it: 'Riepilogo', es: 'Resumen' },
     score: { en: 'Score', pl: 'Wynik', fr: 'Score', de: 'Ergebnis', it: 'Punteggio', es: 'Puntuación' },
     accuracy: { en: 'Accuracy', pl: 'Skuteczność', fr: 'Précision', de: 'Genauigkeit', it: 'Precisione', es: 'Precisión' },
@@ -42,20 +43,30 @@ const uiTexts: { [key: string]: Record<Language | 'pl', string> } = {
     seeAllErrors: { en: 'See all errors', pl: 'Zobacz wszystkie błędy', fr: 'Voir toutes les erreurs', de: 'Alle Fehler ansehen', it: 'Vedi tutti gli errori', es: 'Ver todos los errores' }
 };
 
-export default function QuizResults({ score, totalQuestions, totalTime, sessionErrors, onRestart }: QuizResultsProps) {
+export default function QuizResults({ score, totalQuestions, totalTime, quizName, sessionErrors, onRestart }: QuizResultsProps) {
     const [lang, setLang] = useState<Language>('en');
 
     useEffect(() => {
-        const updateLang = () => setLang(getLanguage());
-        updateLang();
-        window.addEventListener('language-changed', updateLang);
-        return () => window.removeEventListener('language-changed', updateLang);
+        const handleLanguageChange = () => {
+            setLang(getLanguage());
+        };
+        handleLanguageChange();
+        window.addEventListener('language-changed', handleLanguageChange);
+        return () => {
+            window.removeEventListener('language-changed', handleLanguageChange);
+        };
     }, []);
 
     const successRate = totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
     
     const getUIText = (key: keyof typeof uiTexts) => {
         return uiTexts[key][lang] || uiTexts[key]['en'];
+    };
+
+    const formatTime = (seconds: number) => {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
     };
 
     const motivationalMessage = useMemo(() => {
@@ -86,12 +97,7 @@ export default function QuizResults({ score, totalQuestions, totalTime, sessionE
             description: getUIText('practiceDesc'),
         };
     }, [successRate, lang]);
-    
-    const formatTime = (seconds: number) => {
-        const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = seconds % 60;
-        return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
-    };
+
 
     return (
         <Card className="w-full max-w-lg shadow-2xl">

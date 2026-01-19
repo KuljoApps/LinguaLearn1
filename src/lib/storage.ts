@@ -1,4 +1,3 @@
-
 'use client';
 
 import { allAchievements } from './achievements';
@@ -67,7 +66,7 @@ export interface GlobalStats {
 // --- Tutorial State ---
 export interface TutorialState {
   isActive: boolean;
-  stage: 'initial' | 'decision' | 'extended' | 'summary' | 'quiz' | 'final';
+  stage: 'initial' | 'decision' | 'extended';
   step: number;
 }
 
