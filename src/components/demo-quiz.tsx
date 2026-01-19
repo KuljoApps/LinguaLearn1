@@ -218,4 +218,5 @@ export default function DemoQuiz() {
                 <Progress value={overallProgress} className="w-full h-2" />
             </CardFooter>
         </Card>
-    
+    );
+}
