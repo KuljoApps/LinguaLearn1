@@ -12,16 +12,16 @@ export default function FakeErrorsPage() {
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
             <Card className="w-full max-w-4xl shadow-2xl" data-tutorial-id="errors-card">
                 <CardHeader className="flex flex-col items-center gap-4 p-6 sm:flex-row sm:justify-between">
-                    <CardTitle className="text-3xl">Częste Błędy</CardTitle>
+                    <CardTitle className="text-3xl">Common Errors</CardTitle>
                     <div className="flex flex-col gap-2" data-tutorial-id="errors-controls">
                         <Select disabled>
                             <SelectTrigger>
-                                <SelectValue placeholder="Filtruj wg quizu" />
+                                <SelectValue placeholder="Filter by quiz" />
                             </SelectTrigger>
                         </Select>
                         <Button variant="outline" disabled>
                             <ArrowUpDown className="mr-2 h-4 w-4" />
-                            Zobacz najczęstsze
+                            View Most Frequent
                         </Button>
                     </div>
                 </CardHeader>
@@ -29,11 +29,11 @@ export default function FakeErrorsPage() {
                      <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Słowo</TableHead>
-                                <TableHead>Poprawna odpowiedź</TableHead>
-                                <TableHead>Twoja odpowiedź</TableHead>
+                                <TableHead>Word</TableHead>
+                                <TableHead>Correct Answer</TableHead>
+                                <TableHead>Your Answer</TableHead>
                                 <TableHead>Quiz</TableHead>
-                                <TableHead>Data</TableHead>
+                                <TableHead>Date</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -70,10 +70,10 @@ export default function FakeErrorsPage() {
                 <CardFooter className="flex justify-center p-6">
                     <div className="flex flex-wrap justify-center gap-4">
                         <Button variant="outline" disabled>
-                            <ArrowLeft className="mr-2 h-4 w-4" /> Wróć do strony głównej
+                            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Home
                         </Button>
                         <Button variant="destructive" disabled>
-                            <Trash2 className="mr-2 h-4 w-4" /> Wyczyść błędy
+                            <Trash2 className="mr-2 h-4 w-4" /> Clear Errors
                         </Button>
                     </div>
                 </CardFooter>

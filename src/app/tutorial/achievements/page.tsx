@@ -2,7 +2,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, CheckCircle, Trash2, Trophy, Sparkles, Star, Crown } from "lucide-react";
-import { cn } from "@/lib/utils";
 import {
   Tooltip,
   TooltipContent,
@@ -19,7 +18,7 @@ export default function FakeAchievementsPage() {
                 <CardHeader className="text-center">
                     <div className="flex items-center justify-center gap-4">
                         <Trophy className="h-8 w-8" />
-                        <CardTitle className="text-3xl">Osiągnięcia</CardTitle>
+                        <CardTitle className="text-3xl">Achievements</CardTitle>
                     </div>
                 </CardHeader>
                 <CardContent className="space-y-4 max-h-[60vh] overflow-y-auto p-6">
@@ -31,8 +30,8 @@ export default function FakeAchievementsPage() {
                                         <div className="relative">
                                             <Sparkles className="h-12 w-12 mb-2 text-muted-foreground" />
                                         </div>
-                                        <h3 className="font-semibold">Nowicjusz</h3>
-                                        <p className="text-xs text-muted-foreground mt-1">Odpowiedz poprawnie na 50 pytań.</p>
+                                        <h3 className="font-semibold">Novice</h3>
+                                        <p className="text-xs text-muted-foreground mt-1">Answer 50 questions correctly.</p>
                                         <div className="w-full mt-2">
                                             <Progress value={25} className="h-2" />
                                             <p className="text-xs font-mono mt-1">25 / 50</p>
@@ -47,12 +46,12 @@ export default function FakeAchievementsPage() {
                                             <Star className="h-12 w-12 mb-2 text-amber" />
                                             <CheckCircle className="absolute -bottom-1 -right-1 h-5 w-5 text-success bg-background rounded-full" />
                                         </div>
-                                        <h3 className="font-semibold">Uczeń</h3>
-                                        <p className="text-xs text-muted-foreground mt-1">Odpowiedz poprawnie na 250 pytań.</p>
+                                        <h3 className="font-semibold">Apprentice</h3>
+                                        <p className="text-xs text-muted-foreground mt-1">Answer 250 questions correctly.</p>
                                     </Card>
                                 </TooltipTrigger>
                                 <TooltipContent>
-                                    <p>Odblokowano: 24 lip 2024</p>
+                                    <p>Unlocked: Jul 24, 2024</p>
                                 </TooltipContent>
                             </Tooltip>
                              <Tooltip>
@@ -61,8 +60,8 @@ export default function FakeAchievementsPage() {
                                         <div className="relative">
                                             <Crown className="h-12 w-12 mb-2 text-muted-foreground" />
                                         </div>
-                                        <h3 className="font-semibold">Mistrz</h3>
-                                        <p className="text-xs text-muted-foreground mt-1">Odpowiedz poprawnie na 1000 pytań.</p>
+                                        <h3 className="font-semibold">Master</h3>
+                                        <p className="text-xs text-muted-foreground mt-1">Answer 1000 questions correctly.</p>
                                         <div className="w-full mt-2">
                                             <Progress value={27} className="h-2" />
                                             <p className="text-xs font-mono mt-1">273 / 1000</p>
@@ -76,10 +75,10 @@ export default function FakeAchievementsPage() {
                 <CardFooter className="flex justify-center p-6 border-t">
                      <div className="flex flex-wrap justify-center gap-4">
                         <Button variant="outline" disabled>
-                            <ArrowLeft className="mr-2 h-4 w-4" /> Wróć do strony głównej
+                            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Home
                         </Button>
                         <Button variant="destructive" disabled>
-                            <Trash2 className="mr-2 h-4 w-4" /> Resetuj osiągnięcia
+                            <Trash2 className="mr-2 h-4 w-4" /> Reset Achievements
                         </Button>
                     </div>
                 </CardFooter>

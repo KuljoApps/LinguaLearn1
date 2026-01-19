@@ -11,6 +11,12 @@ import { cn } from '@/lib/utils';
 const fakePhrases = [
     { phrase: 'Hello, how are you?', phonetic: '/həˈloʊ, haʊ ɑːr juː?/', translation: 'Cześć, jak się masz?' },
     { phrase: 'What is your name?', phonetic: '/wʌt ɪz jʊər neɪm?/', translation: 'Jak masz na imię?' },
+    { phrase: 'My name is...', phonetic: '/maɪ neɪm ɪz.../', translation: 'Nazywam się...' },
+    { phrase: 'Thank you very much.', phonetic: '/θæŋk juː ˈvɛri mʌtʃ./', translation: 'Dziękuję bardzo.' },
+    { phrase: 'You\'re welcome.', phonetic: '/jʊər ˈwɛlkəm./', translation: 'Nie ma za co.' },
+    { phrase: 'Excuse me / Sorry.', phonetic: '/ɪkˈskjuːs miː / ˈsɔːri./', translation: 'Przepraszam.' },
+    { phrase: 'I don\'t understand.', phonetic: '/aɪ doʊnt ˌʌndərˈstænd./', translation: 'Nie rozumiem.' },
+    { phrase: 'Can you speak more slowly?', phonetic: '/kæn juː spiːk mɔːr ˈsloʊli?/', translation: 'Czy możesz mówić wolniej?' },
 ];
 
 export default function FakeBasicExpressionsPage() {
@@ -26,30 +32,24 @@ export default function FakeBasicExpressionsPage() {
                 <CardContent>
                     <ScrollArea className="h-96 w-full pr-4">
                         <Accordion type="single" collapsible className="w-full" value="item-0">
-                             <AccordionItem value="item-0" data-tutorial-id="phonetics-first-item">
-                                <AccordionTrigger className="text-lg font-semibold hover:no-underline text-left" disabled>
-                                    {fakePhrases[0].phrase}
-                                </AccordionTrigger>
-                                <AccordionContent className="space-y-3 pt-2">
-                                    <div className="flex items-center justify-between">
-                                        <div className="space-y-1">
-                                            <p className="text-muted-foreground font-mono text-sm">{fakePhrases[0].phonetic}</p>
-                                            <p className="text-sm">{fakePhrases[0].translation}</p>
+                            {fakePhrases.map((item, index) => (
+                                <AccordionItem value={`item-${index}`} key={index} data-tutorial-id={index === 0 ? 'phonetics-first-item' : undefined}>
+                                    <AccordionTrigger className="text-lg font-semibold hover:no-underline text-left" disabled>
+                                        {item.phrase}
+                                    </AccordionTrigger>
+                                    <AccordionContent className="space-y-3 pt-2">
+                                        <div className="flex items-center justify-between">
+                                            <div className="space-y-1">
+                                                <p className="text-muted-foreground font-mono text-sm">{item.phonetic}</p>
+                                                <p className="text-sm">{item.translation}</p>
+                                            </div>
+                                            <Button variant="ghost" size="icon" disabled>
+                                                <Volume2 className={cn("h-6 w-6 text-deep-purple", index === 0 && "animate-pulse-strong")} />
+                                            </Button>
                                         </div>
-                                        <Button variant="ghost" size="icon" disabled>
-                                            <Volume2 className="h-6 w-6 text-deep-purple animate-pulse-strong" />
-                                        </Button>
-                                    </div>
-                                </AccordionContent>
-                            </AccordionItem>
-                             <AccordionItem value="item-1">
-                                <AccordionTrigger className="text-lg font-semibold hover:no-underline text-left" disabled>
-                                    {fakePhrases[1].phrase}
-                                </AccordionTrigger>
-                                <AccordionContent>
-                                    ...
-                                </AccordionContent>
-                            </AccordionItem>
+                                    </AccordionContent>
+                                </AccordionItem>
+                            ))}
                         </Accordion>
                     </ScrollArea>
                 </CardContent>

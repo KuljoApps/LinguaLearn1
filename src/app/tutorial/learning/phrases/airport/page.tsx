@@ -10,6 +10,14 @@ import React from "react";
 const fakePhrases = [
     { phrase: 'I\'d like to check in for my flight to Warsaw.', translation: 'Chciałbym/Chciałabym odprawić się na lot do Warszawy.' },
     { phrase: 'I have a connecting flight.', translation: 'Mam lot z przesiadką.' },
+    { phrase: 'Where is the boarding gate for flight LO382?', translation: 'Gdzie jest bramka do wejścia na pokład dla lotu LO382?' },
+    { phrase: 'Is my flight on time?', translation: 'Czy mój lot jest o czasie?' },
+    { phrase: 'My flight has been delayed/cancelled.', translation: 'Mój lot jest opóźniony/odwołany.' },
+    { phrase: 'What time is boarding?', translation: 'O której godzinie jest wejście na pokład?' },
+    { phrase: 'A window/aisle seat, please.', translation: 'Poproszę miejsce przy oknie/od przejścia.' },
+    { phrase: 'Can I take this as carry-on luggage?', translation: 'Czy mogę to wziąć jako bagaż podręczny?' },
+    { phrase: 'How much is the fee for excess baggage?', translation: 'Ile wynosi opłata za nadbagaż?' },
+    { phrase: 'Please take out your laptops and liquids.', translation: 'Proszę wyjąć laptopy i płyny.' },
 ];
 
 export default function FakeAirportPhrasesPage() {

@@ -10,7 +10,12 @@ import { ArrowLeft, Languages } from 'lucide-react';
 const fakePhrases = [
     { phrase: 'Peter Piper picked a peck of pickled peppers.', translation: 'Piotr Piper zebrał miarkę marynowanej papryki.' },
     { phrase: 'She sells seashells by the seashore.', translation: 'Ona sprzedaje muszelki nad brzegiem morza.' },
-    { phrase: 'How much wood would a woodchuck chuck...', translation: 'Ile drewna rzuciłby świstak...' },
+    { phrase: 'How much wood would a woodchuck chuck if a woodchuck could chuck wood?', translation: 'Ile drewna rzuciłby świstak, gdyby świstak potrafił rzucać drewnem?' },
+    { phrase: 'A proper copper coffee pot.', translation: 'Prawidłowy miedziany dzbanek do kawy.' },
+    { phrase: 'Red lorry, yellow lorry.', translation: 'Czerwona ciężarówka, żółta ciężarówka.' },
+    { phrase: 'I scream, you scream, we all scream for ice cream.', translation: 'Ja krzyczę, ty krzyczysz, wszyscy krzyczymy za lodami.' },
+    { phrase: 'Fuzzy Wuzzy was a bear. Fuzzy Wuzzy had no hair.', translation: 'Puszysty Wuzzy był niedźwiedziem. Puszysty Wuzzy nie miał włosów.' },
+    { phrase: 'I saw Susie sitting in a shoeshine shop.', translation: 'Zobaczyłem Susie siedzącą w zakładzie czyszczenia butów.' },
 ];
 
 export default function FakeTongueTwistersPage() {
@@ -27,20 +32,15 @@ export default function FakeTongueTwistersPage() {
                     <ScrollArea className="h-96 w-full pr-4">
                         <div className="flex flex-col gap-3">
                            <div data-tutorial-id="tongue-twisters-first-two" className="flex flex-col gap-3">
-                                {fakePhrases.slice(0, 2).map((p, index) => (
+                                {fakePhrases.map((p, index) => (
                                     <React.Fragment key={index}>
                                         <div className="text-sm">
                                             <p className="font-bold">{p.phrase}</p>
                                             <p className="text-muted-foreground">{p.translation}</p>
                                         </div>
-                                        {index === 0 && <Separator />}
+                                        {index < fakePhrases.length - 1 && <Separator />}
                                     </React.Fragment>
                                 ))}
-                           </div>
-                           <Separator />
-                           <div className="text-sm">
-                                <p className="font-bold">{fakePhrases[2].phrase}</p>
-                                <p className="text-muted-foreground">{fakePhrases[2].translation}</p>
                            </div>
                         </div>
                     </ScrollArea>

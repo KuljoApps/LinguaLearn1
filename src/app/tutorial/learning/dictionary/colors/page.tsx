@@ -15,6 +15,12 @@ const fakeWords = [
     { word: 'blue', translation: 'niebieski', colorCode: '#0000FF' },
     { word: 'green', translation: 'zielony', colorCode: '#008000' },
     { word: 'yellow', translation: 'żółty', colorCode: '#FFFF00' },
+    { word: 'gray', translation: 'szary', colorCode: '#808080' },
+    { word: 'orange', translation: 'pomarańczowy', colorCode: '#FFA500' },
+    { word: 'brown', translation: 'brązowy', colorCode: '#A52A2A' },
+    { word: 'purple', translation: 'fioletowy', colorCode: '#800080' },
+    { word: 'pink', translation: 'różowy', colorCode: '#FFC0CB' },
+    { word: 'navy blue', translation: 'granatowy', colorCode: '#000080' },
 ];
 
 export default function FakeColorsDictionaryPage() {
