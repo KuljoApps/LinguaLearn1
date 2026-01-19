@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { Button } from './ui/button';
 import { saveTutorialState, clearTutorialState, getTutorialState } from '@/lib/storage';
-import LinguaLearnLogo from './LinguaLearnLogo';
 
 interface Step {
     elementId?: string;
@@ -12,12 +11,13 @@ interface Step {
     description: string;
     path?: string;
     isModal?: boolean;
+    bubblePosition?: 'top' | 'bottom';
 }
 
 const initialSteps: Step[] = [
     {
         isModal: true,
-        title: 'Witaj w',
+        title: 'Witaj w\u00A0LinguaLearn',
         description: 'Pozwól, że w\u00A0kilku krokach pokażę Ci najważniejsze funkcje.',
     },
     {
@@ -59,7 +59,7 @@ const extendedSteps: Step[] = [
         title: 'Ochrona Wzroku',
         description: 'Uczysz się wieczorem? Użyj tego suwaka, aby nałożyć na aplikację ciepły filtr, który zmniejszy zmęczenie oczu.',
     },
-     {
+    {
         path: '/stats',
         elementId: 'stats-cards',
         title: 'Ogólne statystyki',
@@ -73,15 +73,10 @@ const extendedSteps: Step[] = [
     },
     {
         path: '/errors',
-        elementId: 'errors-card',
-        title: 'Analiza błędów',
-        description: 'To centrum Twoich błędów. Zobaczmy, jakie masz tu możliwości analizy i\u00A0nauki.',
-    },
-    {
-        path: '/errors',
         elementId: 'errors-controls',
         title: 'Filtrowanie i\u00A0widoki',
         description: 'Możesz filtrować błędy według quizu lub przełączać się między widokiem najnowszych i\u00A0najczęściej popełnianych błędów.',
+        bubblePosition: 'bottom',
     },
     {
         path: '/errors',
@@ -89,7 +84,20 @@ const extendedSteps: Step[] = [
         title: 'Interaktywna tabela',
         description: 'Klikaj nagłówki, aby sortować błędy. Jeśli tabela jest za szeroka, możesz ją przewijać w\u00A0poziomie. Kliknij wiersz, by rozwinąć pełną treść.',
     },
+    {
+        path: '/learning/en/dictionary',
+        elementId: 'dictionary-grid',
+        title: 'Baza wiedzy - Słownik',
+        description: 'To jedna z\u00A0głównych sekcji nauki. Otwórzmy przykładową kategorię, aby zobaczyć, jak działa.',
+    },
+    {
+        path: '/learning/en/dictionary/numbers',
+        elementId: 'dictionary-word-list',
+        title: 'Przeglądanie słówek',
+        description: 'Słówka są pogrupowane tematycznie. Możesz oznaczyć trudniejsze pojęcia gwiazdką, aby zawsze były na górze listy i\u00A0łatwiejsze do powtórzenia.',
+    }
 ];
+
 
 const uiTexts = {
     next: 'Dalej',
@@ -145,10 +153,16 @@ export default function OnboardingTutorial() {
                 let bubbleTop;
                 let bubbleLeft = rect.left + rect.width / 2 - bubbleWidth / 2;
 
-                if (window.innerHeight - rect.bottom > bubbleHeight + 40) {
+                if (currentStep.bubblePosition === 'bottom') {
                     bubbleTop = rect.bottom + 15;
-                } else {
+                } else if (currentStep.bubblePosition === 'top') {
                     bubbleTop = rect.top - bubbleHeight - 25;
+                } else {
+                    if (window.innerHeight - rect.bottom > bubbleHeight + 40) {
+                        bubbleTop = rect.bottom + 15;
+                    } else {
+                        bubbleTop = rect.top - bubbleHeight - 25;
+                    }
                 }
                 
                 if (bubbleLeft < 16) bubbleLeft = 16;
@@ -219,15 +233,13 @@ export default function OnboardingTutorial() {
     if (!tutorialState?.isActive) return null;
 
     const isLastStep = currentStepIndex === steps.length - 1;
-
-    // ----- RENDER LOGIC -----
     
     if (stage === 'initial' && currentStep?.isModal) {
         return (
             <div className="fixed inset-0 z-50 animate-in fade-in-50 flex items-center justify-center p-4">
                 <div className="absolute inset-0 bg-black/70" />
                 <div className="relative bg-background p-6 rounded-lg shadow-xl text-center max-w-sm w-full">
-                     <h2 className="text-2xl font-bold">{currentStep.title}</h2>
+                    <h2 className="text-2xl font-bold tracking-tight">{currentStep.title}</h2>
                     <h1 className="text-4xl font-bold tracking-tight whitespace-nowrap mt-2">
                         Lingua
                         <span className="relative inline-block">
@@ -237,7 +249,7 @@ export default function OnboardingTutorial() {
                             </span>
                         </span>
                     </h1>
-                    <p className="text-muted-foreground my-6">{currentStep.description}</p>
+                    <p className="text-muted-foreground my-6" dangerouslySetInnerHTML={{ __html: currentStep.description.replace(/ ([a-zA-Z]) /g, ' $1\u00A0') }} />
                     <Button onClick={handleNext}>{uiTexts.next}</Button>
                 </div>
             </div>
@@ -275,12 +287,12 @@ export default function OnboardingTutorial() {
 
     return (
         <div className="fixed inset-0 z-50">
-            <div className="absolute inset-0 bg-black/70" onClick={handleFinish} />
+            <div className="absolute inset-0 bg-black/70 tutorial-spotlight" onClick={handleFinish} />
             
             {currentStep && !currentStep.isModal && (
                 <>
                     <div 
-                        className="tutorial-spotlight fixed rounded-lg pointer-events-none transition-all duration-300" 
+                        className="fixed rounded-lg pointer-events-none transition-all duration-300" 
                         style={spotlightStyle}
                     />
                     <div
@@ -288,7 +300,7 @@ export default function OnboardingTutorial() {
                         style={bubbleStyle}
                     >
                         <h3 className="font-bold mb-1 text-lg">{currentStep.title}</h3>
-                        <p className="text-sm text-muted-foreground mb-4" dangerouslySetInnerHTML={{ __html: currentStep.description.replace(/ ([a-zA-Z]) /g, ' $1&nbsp;') }} />
+                        <p className="text-sm text-muted-foreground mb-4" dangerouslySetInnerHTML={{ __html: currentStep.description.replace(/ ([a-zA-Z])\s/g, ' $1\u00A0') }} />
                         <div className="flex justify-between items-center">
                             <span className="text-xs text-muted-foreground">
                                 {stage === 'initial' ? currentStepIndex + 1 : initialSteps.length + currentStepIndex + 1} / {initialSteps.length + extendedSteps.length}
