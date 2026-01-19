@@ -29,28 +29,28 @@ const initialSteps: Step[] = [
         title: 'Zmiana języka',
         description: 'Najpierw wybierz język, którego chcesz się uczyć. Możesz to zmienić w\u00A0każdej chwili.',
         path: '/',
-        bubbleOffset: 13,
+        bubbleOffset: 14,
     },
     {
         elementId: 'quiz-buttons',
         title: 'Główne quizy',
         description: 'To serce aplikacji. Wybierz jeden z\u00A0pięciu trybów, aby sprawdzić swoją wiedzę w\u00A0różnych kategoriach.',
         path: '/',
-        bubbleOffset: 9,
+        bubbleOffset: 10,
     },
     {
         elementId: 'learning-button',
         title: 'Baza wiedzy',
         description: 'Potrzebujesz powtórki? Tutaj znajdziesz moduły do nauki, w\u00A0tym gramatykę, słownictwo i\u00A0wiele więcej.',
         path: '/',
-        bubbleOffset: 35,
+        bubbleOffset: 36,
     },
     {
         elementId: 'toolbar',
         title: 'Narzędzia i postępy',
         description: 'Tutaj możesz dostosować ustawienia, śledzić swoje statystyki, przeglądać błędy i\u00A0sprawdzać swoje osiągnięcia.',
         path: '/',
-        bubbleOffset: 13,
+        bubbleOffset: 14,
     },
 ];
 
@@ -141,6 +141,7 @@ const extendedSteps: Step[] = [
         title: 'Słownik tematyczny',
         description: 'Działa podobnie do zwrotów, ale ma więcej funkcji — o tym opowiemy sobie za chwilę. Kliknij kategorię, aby wejść do środka.',
         bubblePosition: 'bottom',
+        bubbleOffset: -30,
     },
     {
         path: '/tutorial/dictionary-colors',
@@ -148,11 +149,12 @@ const extendedSteps: Step[] = [
         title: 'Nauka i personalizacja',
         description: 'Oprócz listy słówek, możesz oznaczać ulubione pozycje gwiazdką <span class="inline-block h-3 w-3 text-amber fill-amber align-middle mx-1"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-3 w-3"><path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.007z" clip-rule="evenodd"></path></svg></span>, aby mieć je zawsze na górze listy!',
         bubblePosition: 'bottom',
+        bubbleOffset: -15,
     },
     {
         path: '/tutorial/culture',
         elementId: 'culture-about',
-        title: 'Poznawanie kultury kraju',
+        title: 'Poznawanie kultury',
         description: 'Odkryj fascynujące fakty o\u00A0kraju, którego języka się uczysz. To świetny sposób, by zrozumieć kontekst i\u00A0poszerzyć horyzonty.',
         bubblePosition: 'bottom',
     },
@@ -169,7 +171,7 @@ const extendedSteps: Step[] = [
         title: 'Tradycje i historia',
         description: 'Zanurz się w\u00A0lokalnych zwyczajach i\u00A0kluczowych wydarzeniach historycznych, aby lepiej zrozumieć duszę narodu.',
         bubblePosition: 'top',
-        bubbleOffset: 25,
+        bubbleOffset: 15,
     },
     {
         path: '/tutorial/tongue-twisters',
