@@ -88,7 +88,7 @@ const extendedSteps: Step[] = [
     },
      {
         path: '/achievements',
-        elementId: 'first-achievement',
+        elementId: 'achievements-grid',
         title: 'Twoje osiągnięcia',
         description: 'Tutaj znajdziesz wszystkie swoje odznaki. Zdobywaj je za postępy w nauce, regularność i perfekcyjne wyniki w quizach!',
         bubblePosition: 'bottom',
@@ -111,7 +111,7 @@ const extendedSteps: Step[] = [
         title: 'Dodatkowe Materiały',
         description: 'Rozwiń tę sekcję, aby odkryć ciekawostki kulturowe, łamańce językowe i zasady fonetyki, które wzbogacą Twoją naukę.',
         action: 'open-extras',
-        bubblePosition: 'bottom',
+        bubblePosition: 'top',
     },
 ];
 

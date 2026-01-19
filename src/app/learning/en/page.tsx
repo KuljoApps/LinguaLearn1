@@ -91,60 +91,61 @@ export default function LearningEnPage() {
                             </Button>
                         </Link>
                     </div>
-
-                    <Collapsible
-                        open={isExtrasOpen}
-                        onOpenChange={handleExtrasOpenChange}
-                        className="w-full"
-                        data-tutorial-id="learning-extras"
-                    >
-                        <div className="flex items-center justify-center -mb-2">
-                            <Separator className="flex-grow" />
-                            <CollapsibleTrigger asChild>
-                                <Button variant="ghost" className="flex items-center gap-2 px-3" data-tutorial-id="extras-trigger">
-                                    <span className="text-sm italic text-muted-foreground">
-                                        Extras
-                                    </span>
-                                    <ChevronDown
-                                        className={`h-4 w-4 transition-transform duration-200 ${
-                                            isExtrasOpen ? "rotate-180" : ""
-                                        }`}
-                                    />
-                                </Button>
-                            </CollapsibleTrigger>
-                            <Separator className="flex-grow" />
-                        </div>
-
-                        <CollapsibleContent className="pt-4">
-                            <div className="grid grid-cols-2 gap-2">
-                                <Link href="/learning/en/culture">
-                                    <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
-                                        <Landmark className="mr-1 h-5 w-5 text-deep-purple" />
-                                        Culture
+                    
+                    <div className="py-2" data-tutorial-id="learning-extras">
+                        <Collapsible
+                            open={isExtrasOpen}
+                            onOpenChange={handleExtrasOpenChange}
+                            className="w-full"
+                        >
+                            <div className="flex items-center justify-center -mb-2">
+                                <Separator className="flex-grow" />
+                                <CollapsibleTrigger asChild>
+                                    <Button variant="ghost" className="flex items-center gap-2 px-3" data-tutorial-id="extras-trigger">
+                                        <span className="text-sm italic text-muted-foreground">
+                                            Extras
+                                        </span>
+                                        <ChevronDown
+                                            className={`h-4 w-4 transition-transform duration-200 ${
+                                                isExtrasOpen ? "rotate-180" : ""
+                                            }`}
+                                        />
                                     </Button>
-                                </Link>
-
-                                <Link href="/learning/en/phonetics">
-                                    <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
-                                        <AudioLines className="mr-1 h-5 w-5 text-deep-purple" />
-                                        Phonetics
-                                    </Button>
-                                </Link>
+                                </CollapsibleTrigger>
+                                <Separator className="flex-grow" />
                             </div>
 
-                            <div className="mt-4">
-                                <Link href="/learning/en/tongue-twisters">
-                                    <Button
-                                        variant="outline"
-                                        className="w-full h-12 text-lg border-2 border-primary"
-                                    >
-                                        <Languages className="mr-2 h-5 w-5 text-deep-purple" />
-                                        Tongue Twisters
-                                    </Button>
-                                </Link>
-                            </div>
-                        </CollapsibleContent>
-                    </Collapsible>
+                            <CollapsibleContent className="pt-4">
+                                <div className="grid grid-cols-2 gap-2">
+                                    <Link href="/learning/en/culture">
+                                        <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
+                                            <Landmark className="mr-1 h-5 w-5 text-deep-purple" />
+                                            Culture
+                                        </Button>
+                                    </Link>
+
+                                    <Link href="/learning/en/phonetics">
+                                        <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary">
+                                            <AudioLines className="mr-1 h-5 w-5 text-deep-purple" />
+                                            Phonetics
+                                        </Button>
+                                    </Link>
+                                </div>
+
+                                <div className="mt-4">
+                                    <Link href="/learning/en/tongue-twisters">
+                                        <Button
+                                            variant="outline"
+                                            className="w-full h-12 text-lg border-2 border-primary"
+                                        >
+                                            <Languages className="mr-2 h-5 w-5 text-deep-purple" />
+                                            Tongue Twisters
+                                        </Button>
+                                    </Link>
+                                </div>
+                            </CollapsibleContent>
+                        </Collapsible>
+                    </div>
                 </CardContent>
 
                 <CardFooter className="flex justify-center p-6 pt-2">
