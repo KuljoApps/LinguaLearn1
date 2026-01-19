@@ -29,28 +29,28 @@ const initialSteps: Step[] = [
         title: 'Zmiana języka',
         description: 'Najpierw wybierz język, którego chcesz się uczyć. Możesz to zmienić w\u00A0każdej chwili.',
         path: '/',
-        bubbleOffset: 12,
+        bubbleOffset: 13,
     },
     {
         elementId: 'quiz-buttons',
         title: 'Główne quizy',
         description: 'To serce aplikacji. Wybierz jeden z\u00A0pięciu trybów, aby sprawdzić swoją wiedzę w\u00A0różnych kategoriach.',
         path: '/',
-        bubbleOffset: 7,
+        bubbleOffset: 9,
     },
     {
         elementId: 'learning-button',
         title: 'Baza wiedzy',
         description: 'Potrzebujesz powtórki? Tutaj znajdziesz moduły do nauki, w\u00A0tym gramatykę, słownictwo i\u00A0wiele więcej.',
         path: '/',
-        bubbleOffset: 34,
+        bubbleOffset: 35,
     },
     {
         elementId: 'toolbar',
         title: 'Narzędzia i postępy',
         description: 'Tutaj możesz dostosować ustawienia, śledzić swoje statystyki, przeglądać błędy i\u00A0sprawdzać swoje osiągnięcia.',
         path: '/',
-        bubbleOffset: 12,
+        bubbleOffset: 13,
     },
 ];
 
