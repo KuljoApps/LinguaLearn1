@@ -88,7 +88,7 @@ const extendedSteps: Step[] = [
     },
      {
         path: '/achievements',
-        elementId: 'achievements-grid',
+        elementId: 'first-achievement',
         title: 'Twoje osiągnięcia',
         description: 'Tutaj znajdziesz wszystkie swoje odznaki. Zdobywaj je za postępy w nauce, regularność i perfekcyjne wyniki w quizach!',
         bubblePosition: 'bottom',
@@ -162,6 +162,10 @@ export default function OnboardingTutorial() {
                     top: `${rect.top - padding / 2}px`,
                     left: `${rect.left - padding / 2}px`,
                     opacity: 1,
+                    position: 'fixed',
+                    borderRadius: '0.5rem',
+                    transition: 'all 0.3s ease-in-out',
+                    pointerEvents: 'auto',
                 });
 
                 const bubbleHeight = 150; // Estimation
@@ -259,16 +263,18 @@ export default function OnboardingTutorial() {
             <div className="fixed inset-0 z-[100] animate-in fade-in-50 flex items-center justify-center p-4">
                 <div className="absolute inset-0 bg-black/70" />
                 <div className="relative bg-background p-6 rounded-lg shadow-xl text-center max-w-sm w-full">
-                    <h2 className="text-2xl font-bold tracking-tight">{currentStep.title}</h2>
-                    <h1 className="text-4xl font-bold tracking-tight whitespace-nowrap mt-2">
-                        Lingua
-                        <span className="relative inline-block">
-                            Learn
-                            <span className="absolute -right-1 -bottom-4 text-lg font-semibold tracking-normal text-amber">
-                            Lite
+                    <div className="flex items-baseline justify-center gap-2 mb-4">
+                        <h2 className="text-2xl font-bold tracking-tight">{currentStep.title}</h2>
+                        <h1 className="text-3xl font-bold tracking-tight whitespace-nowrap">
+                            Lingua
+                            <span className="relative inline-block">
+                                Learn
+                                <span className="absolute -right-1 -bottom-3.5 text-base font-semibold tracking-normal text-amber">
+                                Lite
+                                </span>
                             </span>
-                        </span>
-                    </h1>
+                        </h1>
+                    </div>
                     <p className="text-muted-foreground my-6" dangerouslySetInnerHTML={{ __html: currentStep.description.replace(/ ([a-zA-Z]) /g, ' $1\u00A0') }} />
                     <Button onClick={handleNext}>{uiTexts.next}</Button>
                 </div>
@@ -312,7 +318,7 @@ export default function OnboardingTutorial() {
     return (
         <div className="fixed inset-0 z-[100] pointer-events-none">
             <div
-                className="absolute tutorial-spotlight rounded-md transition-all duration-300 pointer-events-auto"
+                className="tutorial-spotlight"
                 style={spotlightStyle}
             />
             <div
