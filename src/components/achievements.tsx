@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import Link from "next/link";
 import { ArrowLeft, CheckCircle, Trash2 } from "lucide-react";
-import { getAchievements, clearStats, type AchievementStatus, getLanguage, getTutorialState } from '@/lib/storage';
+import { getAchievements, clearStats, type AchievementStatus, getLanguage, getTutorialState, type Language } from '@/lib/storage';
 import { allAchievements, type Achievement } from '@/lib/achievements';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
@@ -34,11 +34,21 @@ const germanMasteryIds = new Set(['mastery_de_pl', 'mastery_pl_de', 'mastery_irr
 const italianMasteryIds = new Set(['mastery_it_pl', 'mastery_pl_it', 'mastery_irregular_it', 'mastery_phrasal_it', 'mastery_idioms_it']);
 const spanishMasteryIds = new Set(['mastery_es_pl', 'mastery_pl_es', 'mastery_irregular_es', 'mastery_phrasal_es', 'mastery_idioms_es']);
 
+const uiTexts = {
+    title: { en: 'Achievements', fr: 'Succès', de: 'Erfolge', it: 'Obiettivi', es: 'Logros' },
+    unlocked: { en: 'Unlocked', fr: 'Débloqué le', de: 'Freigeschaltet am', it: 'Sbloccato il', es: 'Desbloqueado el' },
+    back: { en: 'Back to Home', fr: "Retour à l'accueil", de: 'Zurück zur Startseite', it: 'Torna alla Home', es: 'Volver al Inicio' },
+    reset: { en: 'Reset Achievements', fr: 'Réinitialiser les succès', de: 'Erfolge zurücksetzen', it: 'Resetta Obiettivi', es: 'Reiniciar Logros' },
+    alertTitle: { en: 'Are you sure?', fr: 'Êtes-vous sûr ?', de: 'Bist du sicher?', it: 'Sei sicuro?', es: '¿Estás seguro?' },
+    alertDesc: { en: 'This will permanently delete all your achievements and related progress data (including stats and errors) for the current language. This action cannot be undone.', fr: 'Cela supprimera définitivement tous vos succès et les données de progression associées (y compris les statistiques et les erreurs) pour la langue actuelle. Cette action ne peut pas être annulée.', de: 'Dadurch werden alle deine Erfolge und zugehörigen Fortschrittsdaten (einschließlich Statistiken und Fehler) für die aktuelle Sprache dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.', it: 'Questo eliminerà permanentemente tutti i tuoi obiettivi e i dati di progresso correlati (incluse statistiche ed errori) per la lingua corrente. Questa azione non può essere annullata.', es: 'Esto eliminará permanentemente todos tus logros y datos de progreso relacionados (incluidas estadísticas y errores) para el idioma actual. Esta acción no se puede deshacer.' },
+    cancel: { en: 'Cancel', fr: 'Annuler', de: 'Abbrechen', it: 'Annulla', es: 'Cancelar' },
+    confirmReset: { en: 'Reset', fr: 'Réinitialiser', de: 'Zurücksetzen', it: 'Resetta', es: 'Reiniciar' },
+};
 
 export default function AchievementsPage() {
     const [achievements, setAchievements] = useState<Record<string, AchievementStatus>>({});
     const [isClearAlertOpen, setIsClearAlertOpen] = useState(false);
-    const [language, setLanguageState] = useState<'en' | 'fr' | 'de' | 'it' | 'es'>('en');
+    const [language, setLanguageState] = useState<Language>('en');
     const [isTutorialActive, setIsTutorialActive] = useState(false);
 
     useEffect(() => {
@@ -52,7 +62,7 @@ export default function AchievementsPage() {
             const isOnAchievementsStep = tutorialState?.isActive &&
                                       tutorialState.stage === 'extended' &&
                                       tutorialState.step === 6;
-            setIsTutorialActive(isOnAchievementsStep && Object.keys(currentAchievements).length === 0);
+            setIsTutorialActive(!!(isOnAchievementsStep && Object.keys(currentAchievements).length === 0));
         };
 
         handleStateUpdate();
@@ -87,18 +97,8 @@ export default function AchievementsPage() {
         return true; // It's a generic achievement, show it always.
     });
 
-    const getUIText = (key: string) => {
-        const texts = {
-            title: { en: 'Achievements', fr: 'Succès', de: 'Erfolge', it: 'Obiettivi', es: 'Logros' },
-            unlocked: { en: 'Unlocked', fr: 'Débloqué le', de: 'Freigeschaltet am', it: 'Sbloccato il', es: 'Desbloqueado el' },
-            back: { en: 'Back to Home', fr: "Retour à l'accueil", de: 'Zurück zur Startseite', it: 'Torna alla Home', es: 'Volver al Inicio' },
-            reset: { en: 'Reset Achievements', fr: 'Réinitialiser les succès', de: 'Erfolge zurücksetzen', it: 'Resetta Obiettivi', es: 'Reiniciar Logros' },
-            alertTitle: { en: 'Are you sure?', fr: 'Êtes-vous sûr ?', de: 'Bist du sicher?', it: 'Sei sicuro?', es: '¿Estás seguro?' },
-            alertDesc: { en: 'This will permanently delete all your achievements and related progress data (including stats and errors) for the current language. This action cannot be undone.', fr: 'Cela supprimera définitivement tous vos succès et les données de progression associées (y compris les statistiques et les erreurs) pour la langue actuelle. Cette action ne peut pas être annulée.', de: 'Dadurch werden alle deine Erfolge und zugehörigen Fortschrittsdaten (einschließlich Statistiken und Fehler) für die aktuelle Sprache dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.', it: 'Questo eliminerà permanentemente tutti i tuoi obiettivi e i dati di progresso correlati (incluse statistiche ed errori) per la lingua corrente. Questa azione non può essere annullata.', es: 'Esto eliminará permanentemente todos tus logros y datos de progreso relacionados (incluidas estadísticas y errores) para el idioma actual. Esta acción no se puede deshacer.' },
-            cancel: { en: 'Cancel', fr: 'Annuler', de: 'Abbrechen', it: 'Annulla', es: 'Cancelar' },
-            confirmReset: { en: 'Reset', fr: 'Réinitialiser', de: 'Zurücksetzen', it: 'Resetta', es: 'Reiniciar' },
-        };
-        return texts[key][language];
+    const getUIText = (key: keyof typeof uiTexts) => {
+        return uiTexts[key][language];
     }
     
     const fakeAchievements: Record<string, AchievementStatus> = {
@@ -111,7 +111,7 @@ export default function AchievementsPage() {
 
     return (
         <>
-            <Card className="w-full max-w-2xl shadow-2xl" data-tutorial-id="achievements-card">
+            <Card className="w-full max-w-2xl shadow-2xl">
                 <CardHeader>
                     <CardTitle className="text-center text-3xl">{getUIText('title')}</CardTitle>
                 </CardHeader>
@@ -200,5 +200,3 @@ export default function AchievementsPage() {
         </>
     );
 }
-
-
