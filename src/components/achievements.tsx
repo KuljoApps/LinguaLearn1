@@ -1,12 +1,12 @@
 
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import Link from "next/link";
-import { ArrowLeft, CheckCircle, Trash2 } from "lucide-react";
+import { ArrowLeft, CheckCircle, Trash2, Trophy } from "lucide-react";
 import { getAchievements, clearStats, type AchievementStatus, getLanguage, getTutorialState, type Language } from "@/lib/storage";
 import { allAchievements, type Achievement } from '@/lib/achievements';
 import { format } from 'date-fns';
@@ -156,8 +156,11 @@ export default function AchievementsPage() {
     return (
         <>
             <Card className="w-full max-w-2xl shadow-2xl">
-                <CardHeader>
-                    <CardTitle className="text-center text-3xl">{getUIText('title')}</CardTitle>
+                <CardHeader className="text-center">
+                    <div className="flex items-center justify-center gap-4">
+                        <Trophy className="h-8 w-8 text-amber" />
+                        <CardTitle className="text-3xl">{getUIText('title')}</CardTitle>
+                    </div>
                 </CardHeader>
                 <CardContent className="space-y-4 max-h-[60vh] overflow-y-auto p-6">
                      <TooltipProvider>
@@ -206,3 +209,4 @@ export default function AchievementsPage() {
         </>
     );
 }
+
