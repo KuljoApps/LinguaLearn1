@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { saveTutorialState, clearTutorialState, getTutorialState } from '@/lib/storage';
+import { saveTutorialState, clearTutorialState, getTutorialState, type TutorialState } from '@/lib/storage';
 import { ArrowLeft } from 'lucide-react';
 
 interface Step {
@@ -44,7 +44,7 @@ const initialSteps: Step[] = [
     },
     {
         elementId: 'toolbar',
-        title: 'Narzędzia i\u00A0postępy',
+        title: 'Narzędzia i postępy',
         description: 'Tutaj możesz dostosować ustawienia, śledzić swoje statystyki, przeglądać błędy i\u00A0sprawdzać swoje osiągnięcia.',
         path: '/',
     },
@@ -187,7 +187,7 @@ const extendedSteps: Step[] = [
         title: 'Trudne dźwięki',
         description: 'Tutaj znajdziesz przykłady słów i zwrotów, które często sprawiają trudność. Ćwicz je, aby brzmieć jak native speaker!',
         bubblePosition: 'top',
-        bubbleOffset: 15,
+        bubbleOffset: 30,
     },
     {
         path: '/tutorial/phonetics-basics',
@@ -409,6 +409,7 @@ export default function OnboardingTutorial() {
 
     const handleBack = () => {
         const prevStepIndex = currentStepIndex - 1;
+        if (stage === 'initial' && prevStepIndex === 0) return;
         if (prevStepIndex < 0) return;
 
         const prevStep = steps[prevStepIndex];
@@ -540,12 +541,12 @@ export default function OnboardingTutorial() {
                             variant="ghost"
                             size="icon"
                             className="h-8 w-8"
-                            disabled={stage === 'initial' && currentStepIndex === 1}
+                            disabled={(stage === 'initial' && currentStepIndex === 1) || (stage === 'extended' && currentStepIndex === 0) || (stage === 'quiz' && currentStepIndex === 0)}
                         >
                             <ArrowLeft className="h-4 w-4" />
                         </Button>
                         <span className="text-xs text-muted-foreground">
-                            {stage === 'initial' ? currentStepIndex + 1 : (stage === 'extended' ? initialSteps.length + currentStepIndex + 1 : initialSteps.length + extendedSteps.length + currentStepIndex + 1)} / {initialSteps.length + extendedSteps.length + quizSteps.length}
+                            {stage === 'initial' ? currentStepIndex : (stage === 'extended' ? initialSteps.length -1 + currentStepIndex + 1 : initialSteps.length - 1 + extendedSteps.length + currentStepIndex + 1)} / {initialSteps.length -1 + extendedSteps.length + quizSteps.length}
                         </span>
                     </div>
                     <Button onClick={handleNext} size="sm">
@@ -556,8 +557,3 @@ export default function OnboardingTutorial() {
         </div>
     );
 }
-
-
-
-
-    

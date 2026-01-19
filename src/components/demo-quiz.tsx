@@ -1,6 +1,7 @@
+
 "use client";
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getTutorialState, type ErrorRecord } from '@/lib/storage';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -40,10 +41,10 @@ export default function DemoQuiz() {
         let questionTimer = 12;
         let totalTime = 4;
 
-        if (step >= 2) { // After first question is answered
+        if (step >= 2) { 
             score = 1;
         }
-        if (step >= 4) { // After second question is answered
+        if (step >= 5) { 
              sessionErrors.push({
                 word: demoQuestions[1].word,
                 userAnswer: 'Smutny',
@@ -52,23 +53,27 @@ export default function DemoQuiz() {
             });
         }
         
-        if (step === 2) {
+        if (step >= 0 && step <=2) {
             questionIndex = 0;
-            selectedAnswer = demoQuestions[0].correctAnswer;
-            answerStatus = 'correct';
-            questionTimer = 10;
-            totalTime = 6;
-        } else if (step === 3) {
+            questionTimer = 12;
+            totalTime = 4;
+            if (step === 2) {
+                 selectedAnswer = demoQuestions[0].correctAnswer;
+                 answerStatus = 'correct';
+                 questionTimer = 10;
+                 totalTime = 6;
+            }
+        } else if (step === 3 || step === 4) {
             questionIndex = 1;
             questionTimer = 15;
             totalTime = 8;
-        } else if (step === 4) { // Replace IV forms with incorrect answer
-            questionIndex = 1;
-            selectedAnswer = 'Smutny';
-            answerStatus = 'incorrect';
-            questionTimer = 11;
-            totalTime = 12;
-        } else if (step === 5) { // Show another incorrect answer
+             if (step === 4) {
+                selectedAnswer = 'Smutny';
+                answerStatus = 'incorrect';
+                questionTimer = 11;
+                totalTime = 12;
+            }
+        } else if (step === 5) {
             questionIndex = 2;
             selectedAnswer = 'Wewnątrz';
             answerStatus = 'incorrect';
@@ -157,17 +162,19 @@ export default function DemoQuiz() {
                 <CardDescription className="pt-2">Wybierz poprawną odpowiedź</CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col items-center justify-center p-6 space-y-8">
-                <div className="w-full flex justify-around gap-4 text-center">
-                    <div data-tutorial-id="quiz-timer" className="flex items-center gap-2">
-                        <Clock className="h-6 w-6" />
-                        <span className="text-2xl font-bold">{questionTimer}s</span>
+                 <div data-tutorial-id="quiz-timer" className="w-full space-y-4">
+                    <div className="w-full flex justify-around gap-4 text-center">
+                        <div className="flex items-center gap-2">
+                            <Clock className="h-6 w-6" />
+                            <span className="text-2xl font-bold">{questionTimer}s</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Clock className="h-6 w-6" />
+                            <span className="text-2xl font-bold">{formatTime(totalTime!)}</span>
+                        </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                        <Clock className="h-6 w-6" />
-                        <span className="text-2xl font-bold">{formatTime(totalTime!)}</span>
-                    </div>
+                    <Progress value={questionTimeProgress} className="w-full h-2" />
                 </div>
-                <Progress value={questionTimeProgress} className="w-full h-2" />
 
                 <div className="text-center space-y-2">
                     <p className="text-muted-foreground">What is the Polish meaning of</p>
@@ -211,5 +218,4 @@ export default function DemoQuiz() {
                 <Progress value={overallProgress} className="w-full h-2" />
             </CardFooter>
         </Card>
-    );
-}
+    
