@@ -46,7 +46,7 @@ export default function DemoQuizResults({ score, totalQuestions, totalTime, sess
             return {
                 icon: <ThumbsUp className="h-16 w-16 text-primary" />,
                 title: 'Dobry wynik!',
-                description: 'Jesteś na dobrej drodze. Ćwicz dalej!',
+                description: 'Jesteś na dobrej drodze! Przeanalizuj błędy z tej sesji, a szybko osiągniesz perfekcję.',
             };
         }
         return {

@@ -46,9 +46,9 @@ const tutorialBubbleOffsets: { [key: string]: number } = {
     'quiz-timer': 0,              // Slajd 26
     'quiz-pause-button': 0,       // Slajd 27
     'quiz-correct-answer': -520,     // Slajd 28
-    'quiz-incorrect-answer': -280,   // Slajd 29
-    'quiz-results-summary': -520,    // Slajd 30
-    'quiz-results-errors': 0,     // Slajd 31
+    'quiz-incorrect-answer': 42,   // Slajd 29
+    'quiz-results-summary': -500,    // Slajd 30
+    'quiz-results-errors': 22,     // Slajd 31
     'quiz-results-actions': 0,    // Slajd 32
 };
 
@@ -558,7 +558,7 @@ export default function OnboardingTutorial() {
 
     const isFinalStep = stage === 'quiz' && currentStepIndex === steps.length - 1;
     
-    const totalInitialBubbleSteps = initialSteps.length - 1;
+    const totalInitialBubbleSteps = initialSteps.filter(s => !s.isModal).length;
     const interactiveQuizStepsCount = quizSteps.filter(s => s.interactive).length;
     const totalExtendedSteps = extendedSteps.length;
     const totalQuizBubbleSteps = quizSteps.length - interactiveQuizStepsCount;
