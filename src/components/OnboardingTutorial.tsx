@@ -12,6 +12,7 @@ interface Step {
     path?: string;
     isModal?: boolean;
     bubblePosition?: 'top' | 'bottom';
+    action?: 'open-extras';
 }
 
 const initialSteps: Step[] = [
@@ -87,17 +88,31 @@ const extendedSteps: Step[] = [
     },
      {
         path: '/achievements',
-        elementId: 'achievements-grid',
+        elementId: 'first-achievement',
         title: 'Twoje osiągnięcia',
-        description: 'Tutaj znajdziesz wszystkie swoje odznaki. Zdobywaj je za postępy w\u00A0nauce, regularność i\u00A0perfekcyjne wyniki w\u00A0quizach!',
+        description: 'Tutaj znajdziesz wszystkie swoje odznaki. Zdobywaj je za postępy w nauce, regularność i perfekcyjne wyniki w quizach!',
         bubblePosition: 'bottom',
     },
     {
         path: '/learning/en',
-        elementId: 'learning-card',
-        title: 'Moduł Nauki',
-        description: 'To centrum wiedzy. Wybierz dowolną kategorię, aby poszerzyć swoje umiejętności językowe przed kolejnym quizem.',
-    }
+        elementId: 'learning-question-base',
+        title: 'Baza Pytań',
+        description: 'To idealne miejsce na powtórkę i naukę bez presji czasu. Znajdziesz tu wszystkie pytania z quizów.',
+    },
+    {
+        path: '/learning/en',
+        elementId: 'learning-main-modules',
+        title: 'Główne Moduły Nauki',
+        description: 'Te kategorie obejmują kluczowe aspekty języka, od gramatyki i czasów po praktyczne zwroty oraz słownictwo.',
+    },
+    {
+        path: '/learning/en',
+        elementId: 'learning-extras',
+        title: 'Dodatkowe Materiały',
+        description: 'Rozwiń tę sekcję, aby odkryć ciekawostki kulturowe, łamańce językowe i zasady fonetyki, które wzbogacą Twoją naukę.',
+        action: 'open-extras',
+        bubblePosition: 'bottom',
+    },
 ];
 
 
@@ -147,9 +162,6 @@ export default function OnboardingTutorial() {
                     top: `${rect.top - padding / 2}px`,
                     left: `${rect.left - padding / 2}px`,
                     opacity: 1,
-                    position: 'fixed',
-                    borderRadius: 'var(--radius)',
-                    transition: 'all 0.3s ease-in-out',
                 });
 
                 const bubbleHeight = 150; // Estimation
@@ -177,6 +189,13 @@ export default function OnboardingTutorial() {
                     opacity: 1,
                     position: 'fixed',
                 });
+                
+                if (currentStep.action === 'open-extras') {
+                    const triggerButton = document.querySelector<HTMLElement>('[data-tutorial-id="extras-trigger"]');
+                    if (triggerButton && triggerButton.getAttribute('data-state') === 'closed') {
+                       triggerButton.click();
+                    }
+                }
 
             } else {
                 attempts++;
@@ -293,7 +312,7 @@ export default function OnboardingTutorial() {
     return (
         <div className="fixed inset-0 z-[100] pointer-events-none">
             <div
-                className="absolute tutorial-spotlight transition-all duration-300 pointer-events-auto"
+                className="absolute tutorial-spotlight rounded-md transition-all duration-300 pointer-events-auto"
                 style={spotlightStyle}
             />
             <div
