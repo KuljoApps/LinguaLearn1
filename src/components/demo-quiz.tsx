@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { getTutorialState, saveTutorialState } from '@/lib/storage';
+import { getTutorialState, saveTutorialState, type ErrorRecord } from '@/lib/storage';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import LinguaLearnLogo from '@/components/LinguaLearnLogo';
-import { Clock, Pause, Home, RefreshCw, Play, Trophy } from 'lucide-react';
+import { Clock, Pause, Home, RefreshCw, Play } from 'lucide-react';
 import DemoQuizResults from './demo-quiz-results';
 import { playSound } from '@/lib/sounds';
 import { vibrate } from '@/lib/vibrations';
@@ -21,6 +21,15 @@ const demoQuestions = [
 const QUESTION_TIME_LIMIT = 15;
 const PAUSE_PENALTY = 5;
 
+// Custom hook to store the previous value of a state or prop
+function usePrevious<T>(value: T): T | undefined {
+  const ref = useRef<T>();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+}
+
 export default function DemoQuiz() {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [score, setScore] = useState(0);
@@ -32,8 +41,8 @@ export default function DemoQuiz() {
     const timeoutFiredRef = useRef(false);
     const [activeTutorialStep, setActiveTutorialStep] = useState<number | null>(null);
     const [isQuizActive, setIsQuizActive] = useState(false);
-    const [isTutorialBubbleVisible, setIsTutorialBubbleVisible] = useState(true);
-
+    
+    const prevActiveTutorialStep = usePrevious(activeTutorialStep);
     const currentQuestion = useMemo(() => demoQuestions[currentQuestionIndex], [currentQuestionIndex]);
 
     const handleNextQuestion = useCallback(() => {
@@ -43,7 +52,8 @@ export default function DemoQuiz() {
             setAnswerStatus(null);
             setQuestionTimer(QUESTION_TIME_LIMIT);
             timeoutFiredRef.current = false;
-            saveTutorialState({ isActive: true, stage: 'quiz', step: 2 }); // Make next question interactive
+            // Go back to the interactive step for the new question
+            saveTutorialState({ isActive: true, stage: 'quiz', step: 2 });
         } else {
             setCurrentQuestionIndex(demoQuestions.length); // End of quiz
             saveTutorialState({ isActive: true, stage: 'quiz', step: 5 }); // Move to results screen steps
@@ -63,19 +73,28 @@ export default function DemoQuiz() {
         saveTutorialState({ isActive: true, stage: 'quiz', step: 0 });
     }, []);
 
+    // Main useEffect to sync with tutorial state
     useEffect(() => {
         const handleStateUpdate = () => {
             const state = getTutorialState();
-            const bubbleSteps = [0, 1, 3, 4, 5, 6, 7];
-            const isBubbleCurrentlyVisible = !!state?.isActive && state.stage === 'quiz' && bubbleSteps.includes(state.step);
-            setIsTutorialBubbleVisible(isBubbleCurrentlyVisible);
-
+            
             if (state?.stage === 'quiz') {
                 const step = state.step;
                 setActiveTutorialStep(step);
-                
-                setIsQuizActive(step === 2);
-                
+
+                // When we transition FROM the pause slide (1) TO the interactive slide (2)
+                if (prevActiveTutorialStep === 1 && step === 2) {
+                    setIsQuizActive(true);
+                } else if (step !== 2) {
+                    setIsQuizActive(false);
+                }
+
+                // When we transition FROM a feedback slide (3 or 4) TO the next slide, advance the question
+                if ((prevActiveTutorialStep === 3 || prevActiveTutorialStep === 4) && step !== prevActiveTutorialStep) {
+                    handleNextQuestion();
+                }
+
+                // Handle quiz end state
                 if (step >= 5) {
                     if (currentQuestionIndex < demoQuestions.length) {
                        setCurrentQuestionIndex(demoQuestions.length);
@@ -90,17 +109,7 @@ export default function DemoQuiz() {
         handleStateUpdate();
         window.addEventListener('tutorial-state-changed', handleStateUpdate);
         return () => window.removeEventListener('tutorial-state-changed', handleStateUpdate);
-    }, [currentQuestionIndex]);
-
-    // Question auto-advance logic
-    useEffect(() => {
-        let timer: NodeJS.Timeout;
-        if (answerStatus && !isTutorialBubbleVisible) {
-            const delay = answerStatus === 'timeout' ? 2500 : 1500;
-            timer = setTimeout(handleNextQuestion, delay);
-        }
-        return () => clearTimeout(timer);
-    }, [answerStatus, isTutorialBubbleVisible, handleNextQuestion]);
+    }, [prevActiveTutorialStep, handleNextQuestion, currentQuestionIndex]);
 
     // Per-question timer
     useEffect(() => {
@@ -116,8 +125,8 @@ export default function DemoQuiz() {
                         timeoutFiredRef.current = true;
                         setAnswerStatus("timeout");
                         if (currentQuestionIndex === 0) {
-                             saveTutorialState({ isActive: true, stage: 'quiz', step: 3 });
-                        } else if (currentQuestionIndex === 1 || currentQuestionIndex === 2) {
+                            saveTutorialState({ isActive: true, stage: 'quiz', step: 3 });
+                        } else {
                             saveTutorialState({ isActive: true, stage: 'quiz', step: 4 });
                         }
                     }
@@ -132,7 +141,7 @@ export default function DemoQuiz() {
 
     // Total quiz time
     useEffect(() => {
-        if (isPaused || !!answerStatus || currentQuestionIndex >= demoQuestions.length) {
+        if (!isQuizActive || isPaused || !!answerStatus || currentQuestionIndex >= demoQuestions.length) {
             return;
         }
         const interval = setInterval(() => {
@@ -145,6 +154,7 @@ export default function DemoQuiz() {
     const handleAnswerClick = (answer: string) => {
         if (answerStatus || !isQuizActive) return;
 
+        // For Q1, only allow the correct answer to be clicked to guide the user
         if (currentQuestionIndex === 0 && answer !== currentQuestion.correctAnswer) {
             return;
         }
@@ -152,8 +162,7 @@ export default function DemoQuiz() {
         setSelectedAnswer(answer);
         const isCorrect = answer === currentQuestion.correctAnswer;
         
-        // --- Handle Tutorial Logic ---
-        if (currentQuestionIndex === 0) {
+        if (currentQuestionIndex === 0) { // Q1
             setAnswerStatus("correct");
             playSound('correct');
             vibrate('correct');
@@ -162,13 +171,13 @@ export default function DemoQuiz() {
             return;
         }
 
-        if (currentQuestionIndex === 1) {
+        if (currentQuestionIndex === 1) { // Q2
             setAnswerStatus(isCorrect ? "correct" : "incorrect");
             if (isCorrect) {
                 playSound('correct');
                 vibrate('correct');
                 setScore(prev => prev + 1);
-                // No tutorial step change here, will auto-advance to Q3
+                handleNextQuestion(); // Auto-advance to Q3
             } else {
                 playSound('incorrect');
                 vibrate('incorrect');
@@ -177,15 +186,16 @@ export default function DemoQuiz() {
             return;
         }
         
-        if (currentQuestionIndex === 2) {
-            setAnswerStatus("incorrect"); // Force incorrect to show tutorial bubble
+        if (currentQuestionIndex === 2) { // Q3
+            // Force an incorrect answer display for the tutorial
+            setAnswerStatus("incorrect");
             playSound('incorrect');
             vibrate('incorrect');
             if (isCorrect) {
                  const wrongAnswer = currentQuestion.options.find(o => o !== currentQuestion.correctAnswer)!;
                  setSelectedAnswer(wrongAnswer);
             }
-            saveTutorialState({ isActive: true, stage: 'quiz', step: 4 });
+            saveTutorialState({ isActive: true, stage: 'quiz', step: 4 }); // Show slide 29
         }
     };
 

@@ -556,16 +556,18 @@ export default function OnboardingTutorial() {
     let totalStepsDisplay: number;
 
     if (stage === 'initial') {
+        // For the initial stage, show progress out of the 5 main steps
         currentStepDisplay = currentStepIndex;
-        totalStepsDisplay = initialSteps.length - 1;
+        totalStepsDisplay = initialSteps.length -1;
     } else {
+        // For extended stages, show the full count
         const totalInitialBubbleSteps = initialSteps.length - 1;
         const totalExtendedSteps = extendedSteps.length;
-        const totalQuizSteps = quizSteps.length;
         
         let interactiveQuizStepsCount = quizSteps.filter(s => s.interactive).length;
+        const totalQuizBubbleSteps = quizSteps.length - interactiveQuizStepsCount;
 
-        const totalOverallBubbleSteps = totalInitialBubbleSteps + totalExtendedSteps + totalQuizSteps - interactiveQuizStepsCount;
+        const totalOverallBubbleSteps = totalInitialBubbleSteps + totalExtendedSteps + totalQuizBubbleSteps;
         
         totalStepsDisplay = totalOverallBubbleSteps;
 
@@ -613,6 +615,7 @@ export default function OnboardingTutorial() {
         </div>
     );
 }
+
 
 
 
