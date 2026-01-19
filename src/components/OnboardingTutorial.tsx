@@ -194,28 +194,12 @@ const extendedSteps: Step[] = [
     },
 ];
 
-const quizSteps: Step[] = [
-    { isModal: true, title: 'Test wiedzy!', description: 'Czy jesteś gotów, aby rozpocząć pierwszy test? Pokażę Ci, jak to działa!', path: '/quiz/demo' },
-    { elementId: 'quiz-timer', title: 'Limit czasu', description: 'Masz 15 sekund na każdą odpowiedź. Czas zacznie uciekać, gdy tylko zniknie ta podpowiedź!', bubblePosition: 'bottom' },
-    { elementId: 'quiz-pause-button', title: 'Pauza', description: 'Potrzebujesz chwili? Zapauzuj grę. Pamiętaj jednak, że wznowienie będzie Cię kosztować 5 sekund!', bubblePosition: 'top' },
-    { elementId: 'quiz-answer-correct', title: 'Poprawna odpowiedź!', description: 'Świetnie! Karta podświetli się na zielono, a Ty zdobędziesz punkt.', bubblePosition: 'bottom' },
-    { elementId: 'quiz-answer-incorrect', title: 'Błędna odpowiedź', description: 'Nic się nie stało! Czerwony kolor wskaże złą odpowiedź, a zielony poprawną. Ucz się na błędach!', bubblePosition: 'bottom' },
-    { elementId: 'quiz-iv-translation', title: 'Pytania dwuetapowe', description: 'W niektórych quizach najpierw musisz wybrać poprawne tłumaczenie...', bubblePosition: 'bottom' },
-    { elementId: 'quiz-iv-forms', title: 'Uzupełnij formy', description: '...a następnie wpisać brakujące formy czasownika. Dopiero wtedy możesz zatwierdzić odpowiedź.', bubblePosition: 'bottom' },
-    { elementId: 'quiz-results-summary', title: 'Podsumowanie wyników', description: 'Po każdej rundzie zobaczysz swoje statystyki – wynik, skuteczność i czas gry. To świetny sposób na śledzenie postępów.', bubblePosition: 'bottom' },
-    { elementId: 'quiz-results-errors', title: 'Analiza błędów', description: 'Tutaj znajdziesz listę pytań, na które odpowiedziałeś niepoprawnie. To idealne narzędzie do nauki!', bubblePosition: 'bottom' },
-    { elementId: 'quiz-results-buttons', title: 'Co dalej?', description: 'Możesz zagrać jeszcze raz, wrócić do menu głównego lub przejrzeć wszystkie swoje błędy w dedykowanej sekcji.', bubblePosition: 'top' }
-];
-
 
 const uiTexts = {
     next: 'Dalej',
     finish: 'Zakończ',
     showMore: 'Pokaż więcej',
-    startLearning: 'Zacznij naukę!',
-    exit: 'Wyjdź',
-    startTest: 'Zacznij test',
-    restartTutorial: 'Zacznij od nowa',
+    start: 'Zacznij naukę!',
     finalTitle: 'Wszystko gotowe!',
     finalDesc: 'To wszystko! Jesteś gotów, aby w\u00A0pełni wykorzystać LinguaLearn. Powodzenia w\u00A0nauce!',
 };
@@ -231,7 +215,7 @@ export default function OnboardingTutorial() {
     const stage = tutorialState?.stage || 'initial';
     const currentStepIndex = tutorialState?.step || 0;
     
-    const steps = stage === 'initial' ? initialSteps : (stage === 'quiz' ? quizSteps : extendedSteps);
+    const steps = stage === 'initial' ? initialSteps : extendedSteps;
     const currentStep = steps[currentStepIndex];
 
     useEffect(() => {
@@ -257,12 +241,14 @@ export default function OnboardingTutorial() {
                     top: `${rect.top - padding / 2}px`,
                     left: `${rect.left - padding / 2}px`,
                     opacity: 1,
+                    position: 'fixed',
                     borderRadius: '0.5rem',
                     transition: 'all 0.3s ease-in-out',
+                    pointerEvents: 'auto',
                 });
 
-                const bubbleHeight = currentStep.bubblePosition === 'top' ? 220 : 150;
-                const bubbleWidth = 256; 
+                const bubbleHeight = 150; // Estimation
+                const bubbleWidth = 256; // w-64
                 let bubbleTop;
                 let bubbleLeft = rect.left + rect.width / 2 - bubbleWidth / 2;
                 
@@ -293,12 +279,6 @@ export default function OnboardingTutorial() {
                        triggerButton.click();
                     }
                 }
-                if (currentStep.action === 'expand-first-item') {
-                    const triggerButton = document.querySelector<HTMLElement>('[data-tutorial-id="phonetics-first-item"] [data-radix-collection-item]');
-                    if (triggerButton && triggerButton.getAttribute('data-state') === 'closed') {
-                       triggerButton.click();
-                    }
-                }
 
             } else {
                 attempts++;
@@ -323,22 +303,13 @@ export default function OnboardingTutorial() {
 
 
     const handleNext = () => {
-        const isLastInitialStep = stage === 'initial' && currentStepIndex === steps.length - 1;
-        const isLastExtendedStep = stage === 'extended' && currentStepIndex === steps.length - 1;
-        
-        if (isLastInitialStep) {
+        const nextStepIndex = currentStepIndex + 1;
+        if (stage === 'initial' && nextStepIndex >= steps.length) {
             saveTutorialState({ isActive: true, stage: 'decision', step: 0 });
             return;
         }
-
-        if(isLastExtendedStep) {
-            saveTutorialState({ isActive: true, stage: 'quiz', step: 0 });
-            router.push('/quiz/demo');
-            return;
-        }
         
-        const nextStepIndex = currentStepIndex + 1;
-        if (stage === 'quiz' && nextStepIndex >= steps.length) {
+        if (stage === 'extended' && nextStepIndex >= steps.length) {
             saveTutorialState({ isActive: true, stage: 'decision', step: -1 }); // Final modal
             return;
         }
@@ -360,14 +331,6 @@ export default function OnboardingTutorial() {
             router.push(firstExtendedStep.path!);
         }
         saveTutorialState({ isActive: true, stage: 'extended', step: 0 });
-    }
-
-    const handleStartTest = () => {
-        const firstQuizStep = quizSteps[0];
-        saveTutorialState({ isActive: true, stage: 'quiz', step: 0 });
-        if (firstQuizStep.path !== pathname) {
-            router.push(firstQuizStep.path!);
-        }
     }
 
     if (!tutorialState?.isActive) return null;
@@ -392,10 +355,7 @@ export default function OnboardingTutorial() {
                         </h1>
                     </div>
                     <p className="text-muted-foreground my-6" dangerouslySetInnerHTML={{ __html: currentStep.description.replace(/ ([a-zA-Z]) /g, ' $1\u00A0') }} />
-                     <div className="flex flex-col sm:flex-row gap-2 justify-center">
-                        <Button onClick={handleNext}>{uiTexts.next}</Button>
-                        <Button variant="secondary" onClick={handleFinish}>{uiTexts.exit}</Button>
-                    </div>
+                    <Button onClick={handleNext}>{uiTexts.next}</Button>
                 </div>
             </div>
         );
@@ -410,24 +370,7 @@ export default function OnboardingTutorial() {
                     <p className="text-muted-foreground my-6">Czy chcesz poznać więcej zaawansowanych funkcji, czy wolisz już zacząć naukę?</p>
                     <div className="flex flex-col sm:flex-row gap-2 justify-center">
                         <Button onClick={handleShowMore}>{uiTexts.showMore}</Button>
-                        <Button variant="secondary" onClick={handleFinish}>{uiTexts.startLearning}</Button>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-    
-    if (stage === 'quiz' && currentStepIndex === 0) {
-        return (
-            <div className="fixed inset-0 z-[100] animate-in fade-in-50 flex items-center justify-center p-4">
-                <div className="absolute inset-0 bg-black/70" />
-                <div className="relative bg-background p-6 rounded-lg shadow-xl text-center max-w-sm w-full">
-                    <h2 className="text-2xl font-bold">{currentStep.title}</h2>
-                    <p className="text-muted-foreground my-6">{currentStep.description}</p>
-                    <div className="flex flex-col gap-2 justify-center">
-                        <Button onClick={handleNext}>{uiTexts.startTest}</Button>
-                        <Button variant="secondary" disabled>{uiTexts.exit}</Button>
-                        <Button variant="link" className="text-xs text-muted-foreground" disabled>{uiTexts.restartTutorial}</Button>
+                        <Button variant="secondary" onClick={handleFinish}>{uiTexts.start}</Button>
                     </div>
                 </div>
             </div>
@@ -441,7 +384,7 @@ export default function OnboardingTutorial() {
                 <div className="relative bg-background p-6 rounded-lg shadow-xl text-center max-w-sm w-full">
                     <h2 className="text-2xl font-bold">{uiTexts.finalTitle}</h2>
                     <p className="text-muted-foreground my-6">{uiTexts.finalDesc}</p>
-                    <Button onClick={handleFinish}>{uiTexts.startLearning}</Button>
+                    <Button onClick={handleFinish}>{uiTexts.start}</Button>
                 </div>
             </div>
         )
@@ -452,24 +395,23 @@ export default function OnboardingTutorial() {
     }
 
     return (
-        <div className="fixed inset-0 z-[100]">
-            <div className="absolute inset-0 bg-black/70" />
+        <div className="fixed inset-0 z-[100] pointer-events-none">
             <div
-                className="pointer-events-none fixed rounded-lg border-2 border-white ring-4 ring-white/50 shadow-2xl transition-all duration-300"
+                className="tutorial-spotlight"
                 style={spotlightStyle}
             />
             <div
-                className="fixed bg-background p-4 rounded-lg shadow-xl w-64 z-[101] transition-all duration-300"
+                className="fixed bg-background p-4 rounded-lg shadow-xl w-64 z-[101] transition-all duration-300 pointer-events-auto"
                 style={bubbleStyle}
             >
                 <h3 className="font-bold mb-1 text-lg">{currentStep.title}</h3>
                 <p className="text-sm text-muted-foreground mb-4" dangerouslySetInnerHTML={{ __html: currentStep.description.replace(/ ([a-zA-Z])\s/g, ' $1\u00A0') }} />
                 <div className="flex justify-between items-center">
                     <span className="text-xs text-muted-foreground">
-                        {stage === 'initial' ? currentStepIndex + 1 : stage === 'extended' ? initialSteps.length + currentStepIndex + 1 : initialSteps.length + extendedSteps.length + currentStepIndex} / {initialSteps.length + extendedSteps.length + quizSteps.length -1}
+                        {stage === 'initial' ? currentStepIndex + 1 : initialSteps.length + currentStepIndex + 1} / {initialSteps.length + extendedSteps.length}
                     </span>
-                    <Button onClick={handleNext} size="sm">
-                        {(stage === 'quiz' && isLastStep) ? uiTexts.finish : uiTexts.next}
+                        <Button onClick={handleNext} size="sm">
+                        {stage === 'extended' && isLastStep ? uiTexts.finish : uiTexts.next}
                     </Button>
                 </div>
             </div>
