@@ -54,13 +54,13 @@ const extendedSteps: Step[] = [
     {
         path: '/tutorial/settings',
         elementId: 'settings-switches',
-        title: 'Dźwięki i\u00A0Wibracje',
+        title: 'Dźwięki i wibracje',
         description: 'Włącz lub wyłącz efekty dźwiękowe i\u00A0haptyczne. Możesz też dostosować głośność, aby nauka była komfortowa.',
     },
     {
         path: '/tutorial/settings',
         elementId: 'settings-eyecare',
-        title: 'Ochrona Wzroku',
+        title: 'Ochrona wzroku',
         description: 'Uczysz się wieczorem? Użyj tego suwaka, aby nałożyć na aplikację ciepły filtr, który zmniejszy zmęczenie oczu.',
         bubblePosition: 'bottom',
     },
@@ -115,19 +115,19 @@ const extendedSteps: Step[] = [
         description: 'Rozwiń tę sekcję, aby odkryć ciekawostki kulturowe, łamańce językowe i zasady fonetyki, które wzbogacą Twoją naukę.',
         action: 'open-extras',
         bubblePosition: 'top',
-        bubbleOffset: 30,
+        bubbleOffset: 15,
     },
     {
         path: '/tutorial/phrases',
         elementId: 'phrases-airport',
-        title: 'Praktyczne Zwroty',
+        title: 'Praktyczne zwroty',
         description: 'Ten dział to Twój niezbędnik w podróży. Znajdziesz tu gotowe zwroty na każdą sytuację, od lotniska po restaurację. To musisz zobaczyć!',
         bubblePosition: 'bottom'
     },
     {
         path: '/tutorial/phrases-airport',
         elementId: 'airport-first-phrases',
-        title: 'Najważniejsze Zwroty',
+        title: 'Najważniejsze zwroty',
         description: 'Każda kategoria zaczyna się od kluczowych wyrażeń, które warto znać na pamięć. To Twój szybki start w każdej rozmowie.',
         bubblePosition: 'bottom'
     },
@@ -148,24 +148,24 @@ const extendedSteps: Step[] = [
     {
         path: '/tutorial/culture',
         elementId: 'culture-about',
-        title: 'Poznaj Kulturę Kraju',
+        title: 'Poznaj kulturę kraju',
         description: 'Odkryj fascynujące fakty o\u00A0kraju, którego języka się uczysz. To świetny sposób, by zrozumieć kontekst i\u00A0poszerzyć horyzonty.',
         bubblePosition: 'bottom',
     },
     {
         path: '/tutorial/culture',
         elementId: 'culture-places',
-        title: 'Ważne Miejsca',
+        title: 'Ważne miejsca',
         description: 'Przeglądaj najważniejsze miasta i\u00A0zabytki. Każdy element zawiera ciekawe opisy, fakty i\u00A0statystyki.',
         bubblePosition: 'bottom',
     },
     {
         path: '/tutorial/culture',
         elementId: 'culture-history',
-        title: 'Tradycje i Historia',
+        title: 'Tradycje i historia',
         description: 'Zanurz się w\u00A0lokalnych zwyczajach i\u00A0kluczowych wydarzeniach historycznych, aby lepiej zrozumieć duszę narodu.',
         bubblePosition: 'top',
-        bubbleOffset: 40,
+        bubbleOffset: 25,
     },
     {
         path: '/tutorial/tongue-twisters',
@@ -184,9 +184,10 @@ const extendedSteps: Step[] = [
     {
         path: '/tutorial/phonetics',
         elementId: 'phonetics-difficult',
-        title: 'Trudne Dźwięki',
+        title: 'Trudne dźwięki',
         description: 'Tutaj znajdziesz przykłady słów i zwrotów, które często sprawiają trudność. Ćwicz je, aby brzmieć jak native speaker!',
-        bubblePosition: 'top'
+        bubblePosition: 'top',
+        bubbleOffset: 15,
     },
     {
         path: '/tutorial/phonetics-basics',
