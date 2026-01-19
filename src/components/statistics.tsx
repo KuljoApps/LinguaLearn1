@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowLeft, CheckCircle, Flame, Percent, ShieldX, Trash2, ArrowUpRight } from "lucide-react";
-import { getStats, clearStats, type Stats, getErrors, type ErrorRecord, getLanguage, type Language } from "@/lib/storage";
+import { getStats, clearStats, type Stats, getErrors, type ErrorRecord, getLanguage, type Language, getTutorialState } from "@/lib/storage";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -54,20 +54,31 @@ export default function StatisticsPage() {
     const [errors, setErrors] = useState<ErrorRecord[]>([]);
     const [isClearAlertOpen, setIsClearAlertOpen] = useState(false);
     const [language, setLanguage] = useState<Language>('en');
+    const [isTutorialActiveForGrid, setIsTutorialActiveForGrid] = useState(false);
 
     useEffect(() => {
         const loadDataForCurrentLanguage = () => {
-            setLanguage(getLanguage());
-            setStats(getStats());
+            const currentLang = getLanguage();
+            setLanguage(currentLang);
+            const currentStats = getStats();
+            setStats(currentStats);
             setErrors(getErrors());
+
+            const tutorialState = getTutorialState();
+            const isOnStatsGridStep = tutorialState?.isActive &&
+                                      tutorialState.stage === 'extended' &&
+                                      tutorialState.step === 3; // Step 3 is the grid
+            
+            setIsTutorialActiveForGrid(isOnStatsGridStep && currentStats.lastFiftyAnswers.length === 0);
         };
 
-        loadDataForCurrentLanguage(); // Initial load
-
+        loadDataForCurrentLanguage();
         window.addEventListener('language-changed', loadDataForCurrentLanguage);
+        window.addEventListener('tutorial-state-changed', loadDataForCurrentLanguage);
 
         return () => {
             window.removeEventListener('language-changed', loadDataForCurrentLanguage);
+            window.removeEventListener('tutorial-state-changed', loadDataForCurrentLanguage);
         };
     }, []);
 
@@ -91,9 +102,13 @@ export default function StatisticsPage() {
     const renderLastFiftyAnswersGrid = () => {
         const gridItems = [];
         let errorIndex = -1;
+        
+        const answersToRender = isTutorialActiveForGrid
+            ? Array.from({ length: 50 }, () => Math.random() > 0.3)
+            : stats.lastFiftyAnswers;
 
         for (let i = 0; i < 50; i++) {
-            const answer = stats.lastFiftyAnswers[i];
+            const answer = answersToRender[i];
 
             if (answer === undefined) {
                 gridItems.push(<div key={`empty-${i}`} className="h-4 w-4 rounded-sm bg-muted/20" />);
@@ -111,7 +126,7 @@ export default function StatisticsPage() {
                 errorIndex++;
                 const currentError = errors[errorIndex];
 
-                if (!currentError) {
+                if (!currentError || isTutorialActiveForGrid) { // Don't show popover for fake data
                     gridItems.push(
                         <div
                             key={`error-no-data-${i}`}
@@ -166,7 +181,7 @@ export default function StatisticsPage() {
                     <CardTitle className="text-center text-3xl">{getUIText('title')}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-4" data-tutorial-id="stats-cards">
                         <Popover>
                             <PopoverTrigger asChild>
                                 <Card className="relative cursor-pointer transition-colors hover:bg-muted/50">
@@ -290,7 +305,7 @@ export default function StatisticsPage() {
                             </PopoverContent>
                         </Popover>
                     </div>
-                    <Card>
+                    <Card data-tutorial-id="last-50-grid">
                         <CardHeader>
                             <CardTitle className="text-sm font-medium">{getUIText('lastFifty')}</CardTitle>
                         </CardHeader>

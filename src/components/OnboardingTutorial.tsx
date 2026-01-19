@@ -61,9 +61,21 @@ const extendedSteps: Step[] = [
     },
      {
         path: '/stats',
-        elementId: 'stats-card',
-        title: 'Statystyki',
-        description: 'Przejdźmy teraz do Twoich statystyk, aby zobaczyć, jak sobie radzisz. Zaraz wszystko Ci wyjaśnię.',
+        elementId: 'stats-cards',
+        title: 'Ogólne statystyki',
+        description: 'Tutaj znajdziesz podsumowanie swoich postępów. Kliknij na każdą kartę, aby zobaczyć szczegółowe dane dla poszczególnych quizów.',
+    },
+    {
+        path: '/stats',
+        elementId: 'last-50-grid',
+        title: 'Ostatnie odpowiedzi',
+        description: 'Ta siatka pokazuje Twoje ostatnie 50\u00A0odpowiedzi. Zielony to sukces, czerwony to błąd. Najedź na czerwony kwadrat, aby zobaczyć szczegóły błędu.',
+    },
+    {
+        path: '/errors',
+        elementId: 'errors-card',
+        title: 'Analiza błędów',
+        description: 'Przejdźmy teraz do Twoich błędów, aby zobaczyć, jak sobie radzisz. Zaraz wszystko Ci wyjaśnię.',
     },
 ];
 
@@ -264,7 +276,7 @@ export default function OnboardingTutorial() {
                         style={bubbleStyle}
                     >
                         <h3 className="font-bold mb-1 text-lg">{currentStep.title}</h3>
-                        <p className="text-sm text-muted-foreground mb-4">{currentStep.description}</p>
+                        <p className="text-sm text-muted-foreground mb-4" dangerouslySetInnerHTML={{ __html: currentStep.description.replace(/ ([a-zA-Z]) /g, ' $1&nbsp;') }} />
                         <div className="flex justify-between items-center">
                             <span className="text-xs text-muted-foreground">
                                 {stage === 'initial' ? currentStepIndex + 1 : initialSteps.length + currentStepIndex + 1} / {initialSteps.length + extendedSteps.length}
