@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import { getTutorialState, type ErrorRecord, type TutorialState } from '@/lib/storage';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import { getTutorialState, saveTutorialState, type TutorialState } from '@/lib/storage';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -23,76 +23,80 @@ export default function DemoQuiz() {
     const [score, setScore] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
     const [answerStatus, setAnswerStatus] = useState<"correct" | "incorrect" | "timeout" | null>(null);
-    const [sessionErrors, setSessionErrors] = useState<Omit<ErrorRecord, 'id'>[]>([]);
-    
     const [totalTime, setTotalTime] = useState(0);
     const [questionTimer, setQuestionTimer] = useState(QUESTION_TIME_LIMIT);
     const [isPaused, setIsPaused] = useState(false);
-    const [isTutorialBubbleVisible, setIsTutorialBubbleVisible] = useState(false);
     const timeoutFiredRef = useRef(false);
-
-    const checkTutorialState = useCallback(() => {
-        const state = getTutorialState();
-        const isQuizStepActive = state?.stage === 'quiz' && state.step >= 0 && state.step <= 6; // Steps 26-32
-        setIsTutorialBubbleVisible(isQuizStepActive);
-
-        // Special handling for the results screens
-        if (state?.stage === 'quiz' && state.step >= 4) { // Steps 30, 31, 32
-            if (currentQuestionIndex < demoQuestions.length) {
-                // Force quiz to end to show results
-                setCurrentQuestionIndex(demoQuestions.length);
-            }
-        } else if (currentQuestionIndex >= demoQuestions.length && (!state || state.stage !== 'quiz')) {
-            // If tutorial is exited, reset quiz
-            restartQuiz();
-        }
-    }, [currentQuestionIndex]);
-
-    useEffect(() => {
-        checkTutorialState();
-        window.addEventListener('tutorial-state-changed', checkTutorialState);
-        return () => window.removeEventListener('tutorial-state-changed', checkTutorialState);
-    }, [checkTutorialState]);
+    const [isQuizActive, setIsQuizActive] = useState(false);
+    const [activeTutorialStep, setActiveTutorialStep] = useState<number | null>(null);
 
     const currentQuestion = useMemo(() => demoQuestions[currentQuestionIndex], [currentQuestionIndex]);
 
-    const advanceToNextQuestion = useCallback(() => {
-        if (currentQuestionIndex < demoQuestions.length - 1) {
-            setCurrentQuestionIndex(prev => prev + 1);
-            setAnswerStatus(null);
-            setSelectedAnswer(null);
-            setQuestionTimer(QUESTION_TIME_LIMIT);
-            timeoutFiredRef.current = false;
-        } else {
-            setCurrentQuestionIndex(demoQuestions.length); // End of quiz
-        }
-    }, [currentQuestionIndex]);
+    const restartQuiz = useCallback(() => {
+        setCurrentQuestionIndex(0);
+        setScore(0);
+        setSelectedAnswer(null);
+        setAnswerStatus(null);
+        setQuestionTimer(QUESTION_TIME_LIMIT);
+        setTotalTime(0);
+        setIsPaused(false);
+        timeoutFiredRef.current = false;
+        setIsQuizActive(false);
+    }, []);
 
     useEffect(() => {
-        if (answerStatus) {
-            const timer = setTimeout(advanceToNextQuestion, 2000);
-            return () => clearTimeout(timer);
-        }
-    }, [answerStatus, advanceToNextQuestion]);
+        const handleStateUpdate = () => {
+            const state = getTutorialState();
+            if (state?.stage === 'quiz') {
+                setActiveTutorialStep(state.step);
 
+                if (state.step === 0 && currentQuestionIndex !== 0) {
+                    restartQuiz();
+                }
+
+                // Step 2 is the new "interactive" step
+                if (state.step === 2) {
+                    setIsQuizActive(true);
+                    timeoutFiredRef.current = false;
+                } else {
+                    setIsQuizActive(false);
+                }
+
+                if (state.step >= 4) { // Force to results screen
+                     if (currentQuestionIndex < demoQuestions.length) {
+                        setCurrentQuestionIndex(demoQuestions.length);
+                    }
+                }
+
+            } else {
+                setActiveTutorialStep(null);
+                setIsQuizActive(false);
+            }
+        };
+
+        handleStateUpdate();
+        window.addEventListener('tutorial-state-changed', handleStateUpdate);
+        return () => window.removeEventListener('tutorial-state-changed', handleStateUpdate);
+    }, [currentQuestionIndex, restartQuiz]);
+
+
+    // Per-question timer
     useEffect(() => {
-        if (isPaused || !!answerStatus || currentQuestionIndex >= demoQuestions.length || isTutorialBubbleVisible) {
+        if (!isQuizActive || isPaused || !!answerStatus) {
             return;
         }
 
         const interval = setInterval(() => {
-            setQuestionTimer(prev => {
+            setQuestionTimer((prev) => {
                 if (prev <= 1) {
                     clearInterval(interval);
                     if (!timeoutFiredRef.current) {
                         timeoutFiredRef.current = true;
                         setAnswerStatus("timeout");
-                        setSessionErrors(prev => [...prev, {
-                            word: currentQuestion.word,
-                            userAnswer: 'No answer',
-                            correctAnswer: currentQuestion.correctAnswer,
-                            quiz: "Demo Quiz"
-                        }]);
+                        // Timeout on Q1 also leads to slide 28
+                        if(currentQuestionIndex === 0) {
+                           saveTutorialState({ isActive: true, stage: 'quiz', step: 3 }); // Advance to slide 28
+                        }
                     }
                     return 0;
                 }
@@ -101,64 +105,55 @@ export default function DemoQuiz() {
         }, 1000);
 
         return () => clearInterval(interval);
-    }, [isPaused, answerStatus, currentQuestionIndex, demoQuestions.length, isTutorialBubbleVisible, currentQuestion]);
+    }, [isQuizActive, isPaused, answerStatus, currentQuestionIndex]);
 
+    // Total quiz time
     useEffect(() => {
-        if (isPaused || !!answerStatus || currentQuestionIndex >= demoQuestions.length || isTutorialBubbleVisible) {
+        if (!isQuizActive || isPaused || !!answerStatus || currentQuestionIndex >= demoQuestions.length) {
             return;
         }
         const interval = setInterval(() => {
             setTotalTime(prev => prev + 1);
         }, 1000);
         return () => clearInterval(interval);
-    }, [isPaused, answerStatus, currentQuestionIndex, demoQuestions.length, isTutorialBubbleVisible]);
+    }, [isQuizActive, isPaused, answerStatus, currentQuestionIndex]);
+
 
     const handleAnswerClick = (answer: string) => {
-        if (answerStatus) return;
+        if (answerStatus || !isQuizActive) return;
 
         setSelectedAnswer(answer);
         const isCorrect = answer === currentQuestion.correctAnswer;
-
-        if (isCorrect) {
-            setScore(prev => prev + 1);
+        
+        if (currentQuestionIndex === 0 && isCorrect) {
             setAnswerStatus("correct");
-        } else {
-            setAnswerStatus("incorrect");
-            setSessionErrors(prev => [...prev, {
-                word: currentQuestion.word,
-                userAnswer: answer,
-                correctAnswer: currentQuestion.correctAnswer,
-                quiz: "Demo Quiz"
-            }]);
+            setScore(prev => prev + 1);
+            saveTutorialState({ isActive: true, stage: 'quiz', step: 3 }); // Advance to slide 28
         }
     };
-    
-    const restartQuiz = () => {
-        setCurrentQuestionIndex(0);
-        setScore(0);
-        setSelectedAnswer(null);
-        setAnswerStatus(null);
-        setSessionErrors([]);
-        setQuestionTimer(QUESTION_TIME_LIMIT);
-        setTotalTime(0);
-        setIsPaused(false);
-        timeoutFiredRef.current = false;
-    }
 
     const handlePauseClick = () => {
+        if (!isQuizActive) return;
         setIsPaused(prev => !prev);
     };
 
     const getButtonClass = (option: string) => {
-        if (!answerStatus) {
-            return "bg-primary text-primary-foreground hover:bg-primary/90";
+        if (answerStatus) {
+            const isCorrectAnswer = option === currentQuestion.correctAnswer;
+            const isSelectedAnswer = option === selectedAnswer;
+
+            if (answerStatus === 'timeout' && isCorrectAnswer) {
+                return "bg-success text-success-foreground hover:bg-success/90";
+            }
+            if (isCorrectAnswer) return "bg-success text-success-foreground";
+            if (isSelectedAnswer) return "bg-destructive text-destructive-foreground";
+            return "bg-muted text-muted-foreground opacity-70";
         }
-        const isCorrectAnswer = option === currentQuestion.correctAnswer;
-        const isSelectedAnswer = option === selectedAnswer;
-    
-        if (isCorrectAnswer) return "bg-success text-success-foreground";
-        if (isSelectedAnswer && !isCorrectAnswer) return "bg-destructive text-destructive-foreground";
-        return "bg-muted text-muted-foreground opacity-70";
+        // When tutorial is showing a bubble, but no answer has been given
+        if (activeTutorialStep !== null && [0,1,3].includes(activeTutorialStep)) { 
+            return "bg-primary text-primary-foreground";
+        }
+        return "bg-primary text-primary-foreground hover:bg-primary/90";
     };
 
     if (currentQuestionIndex >= demoQuestions.length) {
@@ -167,9 +162,8 @@ export default function DemoQuiz() {
                 score={score}
                 totalQuestions={demoQuestions.length}
                 totalTime={totalTime}
-                sessionErrors={sessionErrors}
+                sessionErrors={[]} // Simplified for now
                 onRestart={restartQuiz}
-                quizName="Demo Quiz"
             />
         );
     }
@@ -217,13 +211,16 @@ export default function DemoQuiz() {
                     )}>"{currentQuestion.word}"?</p>
                 </div>
                 
-                <div data-tutorial-id={answerStatus === 'correct' ? "quiz-correct-answer" : answerStatus === 'incorrect' ? "quiz-incorrect-answer" : undefined} className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+                <div data-tutorial-id="quiz-correct-answer" className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
                     {currentQuestion.options.map((option) => (
                         <Button
                             key={option}
                             onClick={() => handleAnswerClick(option)}
-                            disabled={!!answerStatus || (currentQuestionIndex === 0 && option !== currentQuestion.correctAnswer)}
-                            className={cn("h-auto text-lg p-4 whitespace-normal", getButtonClass(option))}
+                            className={cn(
+                                "h-auto text-lg p-4 whitespace-normal transition-all duration-300", 
+                                getButtonClass(option),
+                                (isQuizActive && currentQuestionIndex === 0 && option !== currentQuestion.correctAnswer) && "pointer-events-none"
+                            )}
                         >
                             {option}
                         </Button>
@@ -254,5 +251,6 @@ export default function DemoQuiz() {
                 <Progress value={overallProgress} className="w-full h-2" />
             </CardFooter>
         </Card>
+    </>
     );
 }

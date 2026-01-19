@@ -15,6 +15,7 @@ interface Step {
     isModal?: boolean;
     bubblePosition?: 'top' | 'bottom';
     action?: 'open-extras' | 'expand-first-item';
+    interactive?: boolean;
 }
 
 const tutorialBubbleOffsets: { [key: string]: number } = {
@@ -248,6 +249,12 @@ const quizSteps: Step[] = [
     },
     {
         path: '/tutorial/quiz-demo',
+        interactive: true,
+        title: '', // Required but not shown
+        description: '' // Required but not shown
+    },
+    {
+        path: '/tutorial/quiz-demo',
         elementId: 'quiz-correct-answer',
         title: 'Poprawna odpowiedź',
         description: 'Świetnie! Poprawna odpowiedź zostanie podświetlona na zielono. Po chwili automatycznie przejdziesz do następnego pytania.',
@@ -290,7 +297,7 @@ const uiTexts = {
     exit: 'Wyjdź',
     showMore: 'Pokaż więcej',
     start: 'Zacznij naukę!',
-    startTest: 'Zacznij test',
+    startTest: 'Zacznij krótki test',
     finalTitle: 'Wszystko gotowe!',
     finalDesc: 'To wszystko! Jesteś gotów, aby w\u00A0pełni wykorzystać LinguaLearn. Powodzenia w\u00A0nauce!',
 };
@@ -310,7 +317,7 @@ export default function OnboardingTutorial() {
     const currentStep = (stage === 'decision') ? null : steps[currentStepIndex];
 
     useEffect(() => {
-        if (!currentStep || currentStep.isModal || !currentStep.elementId) {
+        if (!currentStep || currentStep.isModal || !currentStep.elementId || currentStep.interactive) {
             setSpotlightStyle({ opacity: 0 });
             setBubbleStyle({ opacity: 0 });
             return;
@@ -460,6 +467,10 @@ export default function OnboardingTutorial() {
     }
 
     if (!tutorialState?.isActive) return null;
+    
+    if (currentStep?.interactive) {
+        return null;
+    }
 
     const renderModalContent = () => {
       if (stage === 'initial' && currentStepIndex === 0) {
@@ -540,25 +551,29 @@ export default function OnboardingTutorial() {
     if (!currentStep) return null;
 
     const isFinalStep = stage === 'quiz' && currentStepIndex === steps.length - 1;
-
+    
     let currentStepDisplay: number;
     let totalStepsDisplay: number;
 
     if (stage === 'initial') {
-        const totalInitialSteps = initialSteps.length - 1; // -1 because we don't count the modal
         currentStepDisplay = currentStepIndex;
-        totalStepsDisplay = totalInitialSteps;
+        totalStepsDisplay = initialSteps.length - 1;
     } else {
         const totalInitialBubbleSteps = initialSteps.length - 1;
         const totalExtendedSteps = extendedSteps.length;
         const totalQuizSteps = quizSteps.length;
-        const totalOverallBubbleSteps = totalInitialBubbleSteps + totalExtendedSteps + totalQuizSteps;
+        
+        let interactiveQuizStepsCount = quizSteps.filter(s => s.interactive).length;
+
+        const totalOverallBubbleSteps = totalInitialBubbleSteps + totalExtendedSteps + totalQuizSteps - interactiveQuizStepsCount;
+        
         totalStepsDisplay = totalOverallBubbleSteps;
 
         if (stage === 'extended') {
-            currentStepDisplay = totalInitialBubbleSteps + currentStepIndex + 1;
+            currentStepDisplay = totalInitialBubbleSteps + currentStepIndex;
         } else { // stage === 'quiz'
-            currentStepDisplay = totalInitialBubbleSteps + totalExtendedSteps + currentStepIndex + 1;
+            let passedInteractiveQuizSteps = quizSteps.slice(0, currentStepIndex).filter(s => s.interactive).length;
+            currentStepDisplay = totalInitialBubbleSteps + totalExtendedSteps + currentStepIndex - passedInteractiveQuizSteps;
         }
     }
 
@@ -587,7 +602,7 @@ export default function OnboardingTutorial() {
                             <ArrowLeft className="h-4 w-4" />
                         </Button>
                         <span className="text-xs text-muted-foreground">
-                            {stage === 'initial' ? `${currentStepIndex}/${initialSteps.length - 1}` : `${currentStepDisplay}/${totalStepsDisplay}`}
+                             {stage === 'initial' ? `${currentStepIndex}/${totalStepsDisplay}` : `${currentStepDisplay}/${totalStepsDisplay}`}
                         </span>
                     </div>
                     <Button onClick={handleNext} size="sm">
@@ -598,6 +613,7 @@ export default function OnboardingTutorial() {
         </div>
     );
 }
+
 
 
 
