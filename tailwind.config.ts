@@ -98,12 +98,19 @@ export default {
             '0%, 100%': { transform: 'translateX(0)' },
             '25%': { transform: 'translateX(2px)' },
             '75%': { transform: 'translateX(-2px)' },
+        },
+        'shake': {
+          '10%, 90%': { transform: 'rotate(-3deg)' },
+          '20%, 80%': { transform: 'rotate(3deg)' },
+          '30%, 50%, 70%': { transform: 'rotate(-3deg)' },
+          '40%, 60%': { transform: 'rotate(3deg)' },
         }
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'shake-sm': 'shake-sm 0.2s ease-in-out',
+        'shake': 'shake 0.5s ease-in-out',
       },
     },
   },

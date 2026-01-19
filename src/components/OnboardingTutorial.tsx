@@ -18,7 +18,7 @@ interface Step {
 const initialSteps: Step[] = [
     {
         isModal: true,
-        title: 'Witaj w\u00A0LinguaLearn',
+        title: 'Witaj w',
         description: 'Pozwól, że w\u00A0kilku krokach pokażę Ci najważniejsze funkcje.',
     },
     {
@@ -30,7 +30,7 @@ const initialSteps: Step[] = [
     {
         elementId: 'quiz-buttons',
         title: 'Główne quizy',
-        description: 'To serce aplikacji! Wybierz jeden z\u00A0pięciu trybów, aby sprawdzić swoją wiedzę w\u00A0różnych kategoriach.',
+        description: 'To serce aplikacji. Wybierz jeden z\u00A0pięciu trybów, aby sprawdzić swoją wiedzę w\u00A0różnych kategoriach.',
         path: '/',
     },
     {
@@ -71,7 +71,7 @@ const extendedSteps: Step[] = [
         path: '/stats',
         elementId: 'last-50-grid',
         title: 'Ostatnie odpowiedzi',
-        description: 'Ta siatka pokazuje Twoje ostatnie 50\u00A0odpowiedzi. Zielony to sukces, czerwony to błąd. Najedź na czerwony kwadrat <span class="inline-block h-3 w-3 bg-destructive rounded-sm align-middle mx-1"></span>, aby zobaczyć szczegóły błędu.',
+        description: 'Ta siatka pokazuje Twoje ostatnie 50\u00A0odpowiedzi. Zielony to sukces, czerwony to błąd. Kliknij na czerwony kwadrat <span class="inline-block h-3 w-3 bg-destructive rounded-sm align-middle mx-1"></span>, aby zobaczyć szczegóły błędu.',
     },
     {
         path: '/errors',
@@ -96,19 +96,19 @@ const extendedSteps: Step[] = [
     {
         path: '/learning/en',
         elementId: 'learning-question-base',
-        title: 'Baza Pytań',
+        title: 'Baza pytań',
         description: 'To idealne miejsce na powtórkę i naukę bez presji czasu. Znajdziesz tu wszystkie pytania z quizów.',
     },
     {
         path: '/learning/en',
         elementId: 'learning-main-modules',
-        title: 'Główne Moduły Nauki',
+        title: 'Główne moduły nauki',
         description: 'Te kategorie obejmują kluczowe aspekty języka, od gramatyki i czasów po praktyczne zwroty oraz słownictwo.',
     },
     {
         path: '/learning/en',
         elementId: 'learning-extras',
-        title: 'Dodatkowe Materiały',
+        title: 'Dodatkowe materiały',
         description: 'Rozwiń tę sekcję, aby odkryć ciekawostki kulturowe, łamańce językowe i zasady fonetyki, które wzbogacą Twoją naukę.',
         action: 'open-extras',
         bubblePosition: 'top',
