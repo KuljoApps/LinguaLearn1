@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Brain, ThumbsUp, Trophy, Clock, CheckCircle, ShieldX } from 'lucide-react';
 import type { ErrorRecord, Language } from '@/lib/storage';
+import { getLanguage } from '@/lib/storage';
+import { cn } from '@/lib/utils';
 
 interface QuizResultsProps {
     score: number;
@@ -18,7 +20,7 @@ interface QuizResultsProps {
     onRestart: () => void;
 }
 
-const uiTexts: { [key: string]: Record<Language | 'pl', string> } = {
+const uiTexts: { [key: string]: Record<Language, string> } = {
     perfectTitle: { en: 'Perfect Score!', pl: 'Bezbłędny test!', fr: 'Score Parfait !', de: 'Perfektes Ergebnis!', it: 'Punteggio Perfetto!', es: '¡Puntuación Perfecta!' },
     perfectDesc: { en: 'Excellent! All answers were correct. You are a champion!', pl: 'Doskonale! Wszystkie odpowiedzi były poprawne. Jesteś mistrzem!', fr: 'Excellent ! Toutes les réponses étaient correctes. Vous êtes un champion !', de: 'Ausgezeichnet! Alle Antworten waren richtig. Du bist ein Champion!', it: 'Eccellente! Tutte le risposte erano corrette. Sei un campione!', es: '¡Excelente! Todas las respuestas fueron correctas. ¡Eres un campeón!' },
     greatTitle: { en: 'Great Job!', pl: 'Świetna robota!', fr: 'Excellent Travail !', de: 'Tolle Arbeit!', it: 'Ottimo Lavoro!', es: '¡Gran Trabajo!' },
@@ -42,10 +44,20 @@ const uiTexts: { [key: string]: Record<Language | 'pl', string> } = {
 };
 
 export default function QuizResults({ score, totalQuestions, totalTime, quizName, sessionErrors, onRestart }: QuizResultsProps) {
+    const [lang, setLang] = useState<Language>('pl'); // Default to Polish
+
+    useEffect(() => {
+        const updateLang = () => setLang(getLanguage());
+        updateLang();
+        window.addEventListener('language-changed', updateLang);
+        return () => window.removeEventListener('language-changed', updateLang);
+    }, []);
+
     const successRate = totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
     
     const getUIText = (key: keyof typeof uiTexts) => {
-        return uiTexts[key]['pl'];
+        const texts = uiTexts[key];
+        return (lang in texts ? texts[lang] : texts['pl']);
     };
 
     const formatTime = (seconds: number) => {
@@ -81,7 +93,7 @@ export default function QuizResults({ score, totalQuestions, totalTime, quizName
             title: getUIText('practiceTitle'),
             description: getUIText('practiceDesc'),
         };
-    }, [successRate]);
+    }, [successRate, lang]);
 
 
     return (

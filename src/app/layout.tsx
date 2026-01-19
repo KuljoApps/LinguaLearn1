@@ -2,7 +2,7 @@ import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
 import EyeCareManager from '@/components/EyeCareManager';
-import TutorialManager from '@/components/TutorialManager';
+import TutorialManager from '@/app/tutorial/components/TutorialManager';
 
 export const metadata: Metadata = {
   title: 'LinguaLearn',

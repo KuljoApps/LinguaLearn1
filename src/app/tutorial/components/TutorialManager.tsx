@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import OnboardingTutorial from './OnboardingTutorial';
+import OnboardingTutorial from '@/app/tutorial/components/OnboardingTutorial';
 import { getTutorialState, type TutorialState } from '@/lib/storage';
 
 export default function TutorialManager() {
