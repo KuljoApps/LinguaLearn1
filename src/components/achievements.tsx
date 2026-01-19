@@ -34,7 +34,9 @@ const germanMasteryIds = new Set(['mastery_de_pl', 'mastery_pl_de', 'mastery_irr
 const italianMasteryIds = new Set(['mastery_it_pl', 'mastery_pl_it', 'mastery_irregular_it', 'mastery_phrasal_it', 'mastery_idioms_it']);
 const spanishMasteryIds = new Set(['mastery_es_pl', 'mastery_pl_es', 'mastery_irregular_es', 'mastery_phrasal_es', 'mastery_idioms_es']);
 
-const uiTexts = {
+type UiTextKeys = 'title' | 'unlocked' | 'back' | 'reset' | 'alertTitle' | 'alertDesc' | 'cancel' | 'confirmReset';
+
+const uiTexts: Record<UiTextKeys, Record<Language, string>> = {
     title: { en: 'Achievements', fr: 'Succès', de: 'Erfolge', it: 'Obiettivi', es: 'Logros' },
     unlocked: { en: 'Unlocked', fr: 'Débloqué le', de: 'Freigeschaltet am', it: 'Sbloccato il', es: 'Desbloqueado el' },
     back: { en: 'Back to Home', fr: "Retour à l'accueil", de: 'Zurück zur Startseite', it: 'Torna alla Home', es: 'Volver al Inicio' },
@@ -62,7 +64,7 @@ export default function AchievementsPage() {
             const isOnAchievementsStep = tutorialState?.isActive &&
                                       tutorialState.stage === 'extended' &&
                                       tutorialState.step === 6;
-            setIsTutorialActive(isOnAchievementsStep && Object.keys(currentAchievements).length === 0);
+            setIsTutorialActive(!!(isOnAchievementsStep && Object.keys(currentAchievements).length === 0));
         };
 
         handleStateUpdate();
@@ -97,7 +99,7 @@ export default function AchievementsPage() {
         return true; // It's a generic achievement, show it always.
     });
 
-    const getUIText = (key: keyof typeof uiTexts) => {
+    const getUIText = (key: UiTextKeys) => {
         return uiTexts[key][language];
     }
     

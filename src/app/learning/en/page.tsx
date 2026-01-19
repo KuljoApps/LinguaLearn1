@@ -45,7 +45,7 @@ export default function LearningEnPage() {
                 tutorialState?.isActive &&
                 tutorialState.stage === "extended" &&
                 tutorialState.step === 9; // Index for "learning-extras"
-            setIsExtrasTutorialActive(isOnExtrasStep);
+            setIsExtrasTutorialActive(!!isOnExtrasStep);
         };
 
         handleTutorialUpdate();
