@@ -62,7 +62,7 @@ export default function FakeLearningPage() {
                     </div>
                     
                     <div className="py-0" data-tutorial-id="learning-extras">
-                        <Collapsible className="w-full">
+                        <Collapsible open={true} className="w-full">
                             <div className="flex items-center justify-center -mb-2">
                                 <Separator className="flex-grow" />
                                 <CollapsibleTrigger asChild>
@@ -70,14 +70,14 @@ export default function FakeLearningPage() {
                                         <span className="text-sm italic text-muted-foreground">
                                             Extras
                                         </span>
-                                        <ChevronDown className="h-4 w-4 transition-transform duration-200" />
+                                        <ChevronDown className="h-4 w-4 transition-transform duration-200 rotate-180" />
                                     </Button>
                                 </CollapsibleTrigger>
                                 <Separator className="flex-grow" />
                             </div>
 
                             <CollapsibleContent>
-                                <div className="grid grid-cols-2 gap-2">
+                                <div className="grid grid-cols-2 gap-2 pt-4">
                                     <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary pointer-events-none">
                                         <Landmark className="mr-1 h-5 w-5 text-deep-purple" />
                                         Culture
