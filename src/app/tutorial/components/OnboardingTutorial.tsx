@@ -29,6 +29,7 @@ const initialSteps: Step[] = [
         title: 'Zmiana języka',
         description: 'Najpierw wybierz język, którego chcesz się uczyć. Możesz to zmienić w\u00A0każdej chwili.',
         path: '/',
+        bubbleOffset: 10,
     },
     {
         elementId: 'quiz-buttons',
@@ -41,12 +42,14 @@ const initialSteps: Step[] = [
         title: 'Baza wiedzy',
         description: 'Potrzebujesz powtórki? Tutaj znajdziesz moduły do nauki, w\u00A0tym gramatykę, słownictwo i\u00A0wiele więcej.',
         path: '/',
+        bubbleOffset: 30,
     },
     {
         elementId: 'toolbar',
         title: 'Narzędzia i postępy',
         description: 'Tutaj możesz dostosować ustawienia, śledzić swoje statystyki, przeglądać błędy i\u00A0sprawdzać swoje osiągnięcia.',
         path: '/',
+        bubbleOffset: 10,
     },
 ];
 
