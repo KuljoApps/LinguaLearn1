@@ -52,13 +52,26 @@ export default function PhrasesPage({ title, backHref, phrases, children }: Phra
             <CardContent>
                 <ScrollArea className="h-96 w-full pr-4">
                     <div className="flex flex-col gap-3">
-                        {phrases.map((p, index) => (
-                            <React.Fragment key={index}>
+                        <div data-tutorial-id="airport-first-phrases" className="flex flex-col gap-3">
+                            {phrases.slice(0, 2).map((p, index) => (
+                                <React.Fragment key={index}>
+                                    <div className="text-sm">
+                                        <p className="font-bold">{p.phrase}</p>
+                                        {p.translation && <p className="text-muted-foreground">{p.translation}</p>}
+                                    </div>
+                                    {index === 0 && phrases.length > 1 && <Separator />}
+                                </React.Fragment>
+                            ))}
+                        </div>
+
+                        {phrases.slice(2).map((p, index) => (
+                             <React.Fragment key={index + 2}>
+                                {index === 0 && phrases.length > 2 && <Separator />}
                                 <div className="text-sm">
                                     <p className="font-bold">{p.phrase}</p>
                                     {p.translation && <p className="text-muted-foreground">{p.translation}</p>}
                                 </div>
-                                {index < phrases.length - 1 && <Separator />}
+                                {index < phrases.slice(2).length - 1 && <Separator />}
                             </React.Fragment>
                         ))}
                     </div>

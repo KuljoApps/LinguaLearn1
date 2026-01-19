@@ -20,7 +20,7 @@ export default function PhrasesEnPage() {
                             Restaurant
                         </Button>
                     </Link>
-                    <Link href="/learning/en/phrases/airport" passHref>
+                    <Link href="/learning/en/phrases/airport" passHref data-tutorial-id="phrases-airport">
                         <Button variant="outline" className="w-full h-24 flex-col gap-2 text-lg border-2 border-primary">
                             <Plane className="h-12 w-12 text-deep-purple" />
                             Airport

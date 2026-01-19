@@ -114,6 +114,20 @@ const extendedSteps: Step[] = [
         action: 'open-extras',
         bubblePosition: 'top',
     },
+    {
+        path: '/learning/en/phrases',
+        elementId: 'phrases-airport',
+        title: 'Praktyczne Zwroty',
+        description: 'Ten dział to Twój niezbędnik w podróży. Znajdziesz tu gotowe zwroty na każdą sytuację, od lotniska po restaurację. To musisz zobaczyć!',
+        bubblePosition: 'bottom'
+    },
+    {
+        path: '/learning/en/phrases/airport',
+        elementId: 'airport-first-phrases',
+        title: 'Najważniejsze Zwroty',
+        description: 'Każda kategoria zaczyna się od kluczowych wyrażeń, które warto znać na pamięć. To Twój szybki start w każdej rozmowie.',
+        bubblePosition: 'bottom'
+    },
 ];
 
 
