@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect, useMemo } from 'react';
@@ -28,10 +27,11 @@ export default function DictionaryPage({ title, backHref, words, children }: Dic
     useEffect(() => {
         const handleStateUpdate = () => {
             const tutorialState = getTutorialState();
+            // The step index in the extended array is 13, which corresponds to the user-facing step 19.
             const isWordListTutorialActive =
                 tutorialState?.isActive &&
                 tutorialState.stage === 'extended' &&
-                tutorialState.step === 18;
+                tutorialState.step === 13;
 
             const realFavorites = getFavorites(categorySlug);
             if (isWordListTutorialActive) {
@@ -99,6 +99,46 @@ export default function DictionaryPage({ title, backHref, words, children }: Dic
         return words;
     }, [words, favorites, lang, favoritesTitle, title]);
 
+    const renderedItems = sortedWords.map((w, index) => {
+        if (w.isHeader) {
+            const isFavoritesHeader = w.special === 'favorites-header';
+            return (
+                <div key={`header-${w.word}-${index}`} className={cn("pt-6 pb-2", isFavoritesHeader && "pt-0")}>
+                    <h3 className="text-xl font-bold italic tracking-tight text-primary">{w.word}</h3>
+                </div>
+            );
+        }
+        return (
+            <React.Fragment key={`${w.word}-${index}`}>
+                <div className="flex items-center justify-between text-sm py-1.5">
+                    <div className="flex items-center gap-2">
+                        {w.colorCode && (
+                            <div
+                                className="h-4 w-4 shrink-0 rounded-full border"
+                                style={{ backgroundColor: w.colorCode }}
+                            />
+                        )}
+                        <div>
+                            <p className="font-bold">{w.word}</p>
+                            <p className="text-muted-foreground">
+                                {w.translation}
+                                {w.numeric && <span className="font-mono text-xs ml-2 tracking-tighter">({w.numeric})</span>}
+                            </p>
+                        </div>
+                    </div>
+                     <button onClick={() => handleFavoriteToggle(w.word)} className="p-2 -m-2 rounded-full hover:bg-accent transition-colors">
+                        <Star className={cn(
+                            "h-3.5 w-3.5 transition-all",
+                            favorites.includes(w.word)
+                                ? "text-amber fill-amber"
+                                : "text-muted-foreground/40 hover:text-muted-foreground/80"
+                        )} />
+                    </button>
+                </div>
+                {index < sortedWords.length - 1 && !sortedWords[index + 1]?.isHeader && <Separator />}
+            </React.Fragment>
+        );
+    });
 
     return (
         <Card className="w-full max-w-2xl shadow-2xl">
@@ -109,48 +149,12 @@ export default function DictionaryPage({ title, backHref, words, children }: Dic
                 </div>
             </CardHeader>
             <CardContent>
-                <ScrollArea className="h-96 w-full pr-4" data-tutorial-id="dictionary-word-list">
+                <ScrollArea className="h-96 w-full pr-4">
                     <div className="flex flex-col">
-                        {sortedWords.map((w, index) => {
-                            if (w.isHeader) {
-                                const isFavoritesHeader = w.special === 'favorites-header';
-                                return (
-                                    <div key={`header-${w.word}-${index}`} className={cn("pt-6 pb-2", isFavoritesHeader && "pt-0")}>
-                                        <h3 className="text-xl font-bold italic tracking-tight text-primary">{w.word}</h3>
-                                    </div>
-                                );
-                            }
-                            return (
-                                <React.Fragment key={`${w.word}-${index}`}>
-                                    <div className="flex items-center justify-between text-sm py-1.5">
-                                        <div className="flex items-center gap-2">
-                                            {w.colorCode && (
-                                                <div
-                                                    className="h-4 w-4 shrink-0 rounded-full border"
-                                                    style={{ backgroundColor: w.colorCode }}
-                                                />
-                                            )}
-                                            <div>
-                                                <p className="font-bold">{w.word}</p>
-                                                <p className="text-muted-foreground">
-                                                    {w.translation}
-                                                    {w.numeric && <span className="font-mono text-xs ml-2 tracking-tighter">({w.numeric})</span>}
-                                                </p>
-                                            </div>
-                                        </div>
-                                         <button onClick={() => handleFavoriteToggle(w.word)} className="p-2 -m-2 rounded-full hover:bg-accent transition-colors">
-                                            <Star className={cn(
-                                                "h-3.5 w-3.5 transition-all",
-                                                favorites.includes(w.word)
-                                                    ? "text-amber fill-amber"
-                                                    : "text-muted-foreground/40 hover:text-muted-foreground/80"
-                                            )} />
-                                        </button>
-                                    </div>
-                                    {index < sortedWords.length - 1 && !sortedWords[index + 1]?.isHeader && <Separator />}
-                                </React.Fragment>
-                            );
-                        })}
+                        <div data-tutorial-id="dictionary-word-list">
+                            {renderedItems.slice(0, 3)}
+                        </div>
+                        {renderedItems.slice(3)}
                     </div>
                 </ScrollArea>
             </CardContent>
