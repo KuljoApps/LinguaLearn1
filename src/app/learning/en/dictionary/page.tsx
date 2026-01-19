@@ -72,7 +72,7 @@ export default function DictionaryEnPage() {
                             Numbers
                         </Button>
                     </Link>
-                    <Link href="/learning/en/dictionary/colors" passHref>
+                    <Link href="/learning/en/dictionary/colors" passHref data-tutorial-id="dictionary-colors">
                         <Button variant="outline" className="w-full h-24 flex-col gap-2 text-lg border-2 border-primary">
                             <Palette className="h-12 w-12 text-deep-purple" />
                             Colors

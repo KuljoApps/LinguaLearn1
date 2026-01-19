@@ -128,6 +128,20 @@ const extendedSteps: Step[] = [
         description: 'Każda kategoria zaczyna się od kluczowych wyrażeń, które warto znać na pamięć. To Twój szybki start w każdej rozmowie.',
         bubblePosition: 'bottom'
     },
+    {
+        path: '/learning/en/dictionary',
+        elementId: 'dictionary-colors',
+        title: 'Słownik tematyczny',
+        description: 'Działa podobnie do zwrotów, ale ma więcej funkcji — o tym opowiemy sobie za chwilę. Kliknij kategorię, aby wejść do środka.',
+        bubblePosition: 'top',
+    },
+    {
+        path: '/learning/en/dictionary/colors',
+        elementId: 'dictionary-word-list',
+        title: 'Ucz się i personalizuj',
+        description: 'Oprócz listy słówek, możesz oznaczać ulubione pozycje gwiazdką <span class="inline-block h-3 w-3 text-amber fill-amber align-middle mx-1"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-3 w-3"><path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.007z" clip-rule="evenodd"></path></svg></span>, aby mieć je zawsze na górze listy!',
+        bubblePosition: 'bottom',
+    },
 ];
 
 
@@ -279,7 +293,7 @@ export default function OnboardingTutorial() {
                 <div className="absolute inset-0 bg-black/70" />
                 <div className="relative bg-background p-6 rounded-lg shadow-xl text-center max-w-sm w-full">
                     <div className="flex items-baseline justify-center gap-2 mb-4">
-                        <h2 className="text-[28px] font-bold tracking-tight">{currentStep.title}</h2>
+                         <h2 className="text-[28px] font-bold tracking-tight">{currentStep.title}</h2>
                         <h1 className="text-3xl font-bold tracking-tight whitespace-nowrap">
                             Lingua
                             <span className="relative inline-block">
