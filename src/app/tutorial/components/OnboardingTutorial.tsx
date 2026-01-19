@@ -30,25 +30,25 @@ const tutorialBubbleOffsets: { [key: string]: number } = {
     'stats-cards': 0,             // Slajd 7
     'last-50-grid': 0,            // Slajd 8
     'errors-controls': 0,         // Slajd 9
-    'errors-table': 0,            // Slajd 10
+    'errors-table': 12,            // Slajd 10
     'achievements-grid': 0,       // Slajd 11
     'learning-question-base': 0,  // Slajd 12
-    'learning-main-modules': 0,   // Slajd 13
-    'learning-extras': 15,        // Slajd 14
+    'learning-main-modules': 36,   // Slajd 13
+    'learning-extras': 36,        // Slajd 14
     'phrases-airport': 0,         // Slajd 15
     'airport-first-phrases': 0,   // Slajd 16
-    'dictionary-colors': -30,     // Slajd 17
-    'dictionary-word-list': -15,  // Slajd 18
+    'dictionary-colors': 0,     // Slajd 17
+    'dictionary-word-list': 0,  // Slajd 18
     'culture-about': 0,           // Slajd 19
     'culture-places': 0,          // Slajd 20
-    'culture-history': 15,        // Slajd 21
+    'culture-history': 36,        // Slajd 21
     'tongue-twisters-first-two': 0, // Slajd 22
     'phonetics-alphabet': 0,      // Slajd 23
-    'phonetics-difficult': 30,    // Slajd 24
+    'phonetics-difficult': 36,    // Slajd 24
     'phonetics-first-item': 0,    // Slajd 25
     'quiz-timer': 0,              // Slajd 26
     'quiz-pause-button': 0,       // Slajd 27
-    'quiz-correct-answer': 0,     // Slajd 28
+    'quiz-correct-answer': -520,     // Slajd 28
     'quiz-incorrect-answer': 0,   // Slajd 29
     'quiz-results-summary': 0,    // Slajd 30
     'quiz-results-errors': 0,     // Slajd 31
