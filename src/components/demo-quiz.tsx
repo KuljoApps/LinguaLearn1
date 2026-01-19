@@ -13,8 +13,8 @@ import DemoQuizResults from './demo-quiz-results';
 
 const demoQuestions = [
     { id: 1, word: 'Hello', options: ['Do widzenia', 'Cześć', 'Dziękuję', 'Przepraszam'], correctAnswer: 'Cześć' },
-    { id: 2, word: 'Funny', options: ['Poważny', 'Smutny', 'Zabawny', 'Nudny'], correctAnswer: 'Zabawny' },
-    { id: 3, word: 'Throughout', options: ['Na zewnątrz', 'Pod spodem', 'Wewnątrz', 'Przez cały (czas)'], correctAnswer: 'Przez cały (czas)' },
+    { id: 2, word: 'Throughout', options: ['Na zewnątrz', 'Pod spodem', 'Wewnątrz', 'Przez cały (czas)'], correctAnswer: 'Przez cały (czas)' },
+    { id: 3, word: 'Impeccable', options: ['Niedbały', 'Zwykły', 'Nieskazitelny', 'Brudny'], correctAnswer: 'Nieskazitelny' },
 ];
 
 export default function DemoQuiz() {
@@ -53,17 +53,17 @@ export default function DemoQuiz() {
             });
         }
         
-        if (step >= 0 && step <=2) {
+        if (step >= 0 && step <=1) {
             questionIndex = 0;
             questionTimer = 12;
             totalTime = 4;
-            if (step === 2) {
-                 selectedAnswer = demoQuestions[0].correctAnswer;
-                 answerStatus = 'correct';
-                 questionTimer = 10;
-                 totalTime = 6;
-            }
-        } else if (step === 3 || step === 4) {
+        } else if (step === 2) { // Slajd 28
+             questionIndex = 0;
+             selectedAnswer = demoQuestions[0].correctAnswer;
+             answerStatus = 'correct';
+             questionTimer = 10;
+             totalTime = 6;
+        } else if (step === 3 || step === 4) { // Slajd 29
             questionIndex = 1;
             questionTimer = 15;
             totalTime = 8;
@@ -184,11 +184,11 @@ export default function DemoQuiz() {
                     )}>"{question!.word}"?</p>
                 </div>
                 
-                <div data-tutorial-id={step === 2 ? "quiz-correct-answer" : (step === 5 ? "quiz-incorrect-answer" : undefined)} className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+                <div data-tutorial-id={step === 2 ? "quiz-correct-answer" : (step === 4 ? "quiz-incorrect-answer" : undefined)} className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
                     {question!.options.map((option) => (
                         <Button
                             key={option}
-                            disabled
+                            disabled={step === 2 && option !== question!.correctAnswer}
                             className={cn("h-auto text-lg p-4 whitespace-normal", getButtonClass(option))}
                         >
                             {option}

@@ -33,7 +33,7 @@ const tutorialBubbleOffsets: { [key: string]: number } = {
     'errors-table': 12,            // Slajd 10
     'achievements-grid': 0,       // Slajd 11
     'learning-question-base': 0,  // Slajd 12
-    'learning-main-modules': 36,   // Slajd 13
+    'learning-main-modules': 0,   // Slajd 13
     'learning-extras': 36,        // Slajd 14
     'phrases-airport': 0,         // Slajd 15
     'airport-first-phrases': 0,   // Slajd 16
@@ -44,7 +44,7 @@ const tutorialBubbleOffsets: { [key: string]: number } = {
     'culture-history': 36,        // Slajd 21
     'tongue-twisters-first-two': 0, // Slajd 22
     'phonetics-alphabet': 0,      // Slajd 23
-    'phonetics-difficult': 36,    // Slajd 24
+    'phonetics-difficult': 30,    // Slajd 24
     'phonetics-first-item': 0,    // Slajd 25
     'quiz-timer': 0,              // Slajd 26
     'quiz-pause-button': 0,       // Slajd 27
