@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { saveTutorialState, clearTutorialState, getTutorialState } from '@/lib/storage';
+import { ArrowLeft } from 'lucide-react';
 
 interface Step {
     elementId?: string;
@@ -114,77 +115,77 @@ const extendedSteps: Step[] = [
         bubblePosition: 'top',
     },
     {
-        path: '/tutorial/learning/phrases',
+        path: '/tutorial/phrases',
         elementId: 'phrases-airport',
         title: 'Praktyczne Zwroty',
         description: 'Ten dział to Twój niezbędnik w podróży. Znajdziesz tu gotowe zwroty na każdą sytuację, od lotniska po restaurację. To musisz zobaczyć!',
         bubblePosition: 'bottom'
     },
     {
-        path: '/tutorial/learning/phrases/airport',
+        path: '/tutorial/phrases-airport',
         elementId: 'airport-first-phrases',
         title: 'Najważniejsze Zwroty',
         description: 'Każda kategoria zaczyna się od kluczowych wyrażeń, które warto znać na pamięć. To Twój szybki start w każdej rozmowie.',
         bubblePosition: 'bottom'
     },
     {
-        path: '/tutorial/learning/dictionary',
+        path: '/tutorial/dictionary',
         elementId: 'dictionary-colors',
         title: 'Słownik tematyczny',
         description: 'Działa podobnie do zwrotów, ale ma więcej funkcji — o tym opowiemy sobie za chwilę. Kliknij kategorię, aby wejść do środka.',
         bubblePosition: 'bottom',
     },
     {
-        path: '/tutorial/learning/dictionary/colors',
+        path: '/tutorial/dictionary-colors',
         elementId: 'dictionary-word-list',
         title: 'Ucz się i personalizuj',
         description: 'Oprócz listy słówek, możesz oznaczać ulubione pozycje gwiazdką <span class="inline-block h-3 w-3 text-amber fill-amber align-middle mx-1"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-3 w-3"><path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.007z" clip-rule="evenodd"></path></svg></span>, aby mieć je zawsze na górze listy!',
         bubblePosition: 'bottom',
     },
     {
-        path: '/tutorial/learning/culture',
+        path: '/tutorial/culture',
         elementId: 'culture-about',
         title: 'Poznaj Kulturę Kraju',
         description: 'Odkryj fascynujące fakty o\u00A0kraju, którego języka się uczysz. To świetny sposób, by zrozumieć kontekst i\u00A0poszerzyć horyzonty.',
         bubblePosition: 'bottom',
     },
     {
-        path: '/tutorial/learning/culture',
+        path: '/tutorial/culture',
         elementId: 'culture-places',
         title: 'Ważne Miejsca',
         description: 'Przeglądaj najważniejsze miasta i\u00A0zabytki. Każdy element zawiera ciekawe opisy, fakty i\u00A0statystyki.',
         bubblePosition: 'bottom',
     },
     {
-        path: '/tutorial/learning/culture',
+        path: '/tutorial/culture',
         elementId: 'culture-history',
         title: 'Tradycje i Historia',
         description: 'Zanurz się w\u00A0lokalnych zwyczajach i\u00A0kluczowych wydarzeniach historycznych, aby lepiej zrozumieć duszę narodu.',
         bubblePosition: 'top',
     },
     {
-        path: '/tutorial/learning/tongue-twisters',
+        path: '/tutorial/tongue-twisters',
         elementId: 'tongue-twisters-first-two',
         title: 'Humorystyczne uzupełnienie',
         description: 'Na koniec odrobina zabawy! Ta sekcja to świetne uzupełnienie nauki o kulturze, które pomoże Ci ćwiczyć wymowę w zabawny sposób.',
         bubblePosition: 'bottom',
     },
     {
-        path: '/tutorial/learning/phonetics',
+        path: '/tutorial/phonetics',
         elementId: 'phonetics-alphabet',
         title: 'Alfabet i wymowa',
         description: 'Naucz się poprawnej wymowy liter i dźwięków. To podstawa, która ułatwi Ci mówienie i rozumienie.',
         bubblePosition: 'bottom'
     },
     {
-        path: '/tutorial/learning/phonetics',
+        path: '/tutorial/phonetics',
         elementId: 'phonetics-difficult',
         title: 'Trudne Dźwięki',
         description: 'Tutaj znajdziesz przykłady słów i zwrotów, które często sprawiają trudność. Ćwicz je, aby brzmieć jak native speaker!',
         bubblePosition: 'top'
     },
     {
-        path: '/tutorial/learning/phonetics/basic-expressions',
+        path: '/tutorial/phonetics-basics',
         elementId: 'phonetics-first-item',
         title: 'Ćwicz wymowę',
         description: 'Posłuchaj, jak lektor wymawia każdy zwrot, klikając ikonę głośnika. Możesz odtwarzać nagranie tyle razy, ile potrzebujesz, aby doskonalić swój akcent!',
@@ -399,6 +400,19 @@ export default function OnboardingTutorial() {
         saveTutorialState({ isActive: true, stage, step: nextStepIndex });
     };
 
+    const handleBack = () => {
+        const prevStepIndex = currentStepIndex - 1;
+        if (prevStepIndex < 0) return;
+
+        const prevStep = steps[prevStepIndex];
+
+        if (prevStep?.path && prevStep.path !== pathname) {
+            router.push(prevStep.path);
+        }
+        saveTutorialState({ isActive: true, stage, step: prevStepIndex });
+    };
+
+
     const handleFinish = () => {
         clearTutorialState();
     };
@@ -504,7 +518,7 @@ export default function OnboardingTutorial() {
     return (
         <div className="fixed inset-0 z-[100]">
             <div
-                className="absolute rounded-md border-2 border-white tutorial-spotlight transition-all duration-300 pointer-events-none"
+                className="absolute rounded-md tutorial-spotlight transition-all duration-300 pointer-events-none"
                 style={spotlightStyle}
             />
             <div
@@ -514,9 +528,20 @@ export default function OnboardingTutorial() {
                 <h3 className="font-bold mb-1 text-lg">{currentStep.title}</h3>
                 <p className="text-sm text-muted-foreground mb-4" dangerouslySetInnerHTML={{ __html: currentStep.description.replace(/ ([a-zA-Z])\s/g, ' $1\u00A0') }} />
                 <div className="flex justify-between items-center">
-                    <span className="text-xs text-muted-foreground">
-                        {stage === 'initial' ? currentStepIndex + 1 : (stage === 'extended' ? initialSteps.length + currentStepIndex + 1 : initialSteps.length + extendedSteps.length + currentStepIndex + 1)} / {initialSteps.length + extendedSteps.length + quizSteps.length}
-                    </span>
+                    <div className="flex items-center gap-2">
+                         <Button
+                            onClick={handleBack}
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8"
+                            disabled={stage === 'initial' && currentStepIndex === 0}
+                        >
+                            <ArrowLeft className="h-4 w-4" />
+                        </Button>
+                        <span className="text-xs text-muted-foreground">
+                            {stage === 'initial' ? currentStepIndex + 1 : (stage === 'extended' ? initialSteps.length + currentStepIndex + 1 : initialSteps.length + extendedSteps.length + currentStepIndex + 1)} / {initialSteps.length + extendedSteps.length + quizSteps.length}
+                        </span>
+                    </div>
                     <Button onClick={handleNext} size="sm">
                         {isFinalStep ? uiTexts.finish : uiTexts.next}
                     </Button>
