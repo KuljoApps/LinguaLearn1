@@ -88,7 +88,7 @@ const extendedSteps: Step[] = [
     },
      {
         path: '/achievements',
-        elementId: 'first-achievement',
+        elementId: 'achievements-grid',
         title: 'Twoje osiągnięcia',
         description: 'Tutaj znajdziesz wszystkie swoje odznaki. Zdobywaj je za postępy w nauce, regularność i perfekcyjne wyniki w quizach!',
         bubblePosition: 'bottom',
@@ -264,7 +264,7 @@ export default function OnboardingTutorial() {
                 <div className="absolute inset-0 bg-black/70" />
                 <div className="relative bg-background p-6 rounded-lg shadow-xl text-center max-w-sm w-full">
                     <div className="flex items-baseline justify-center gap-2 mb-4">
-                        <h2 className="text-2xl font-bold tracking-tight">{currentStep.title}</h2>
+                        <h2 className="text-[28px] font-bold tracking-tight">{currentStep.title}</h2>
                         <h1 className="text-3xl font-bold tracking-tight whitespace-nowrap">
                             Lingua
                             <span className="relative inline-block">

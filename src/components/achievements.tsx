@@ -119,54 +119,8 @@ export default function AchievementsPage() {
                 </CardHeader>
                 <CardContent className="space-y-4 max-h-[60vh] overflow-y-auto p-6">
                      <TooltipProvider>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                           {/* Wrapper for the first two items for the tutorial to focus on */}
-                            <div data-tutorial-id="achievements-grid" className="sm:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {displayedAchievements.slice(0, 2).map((achievement, index) => {
-                                    const status = displayAchievementsData[achievement.id] || { progress: 0, unlockedAt: null };
-                                    const isUnlocked = !!status.unlockedAt;
-                                    const progressPercentage = isUnlocked ? 100 : (status.progress / achievement.goal) * 100;
-                                    const Icon = achievement.icon;
-                                    
-                                    const achievementName = (isFrench && achievement.name_fr) ? achievement.name_fr : (isGerman && achievement.name_de) ? achievement.name_de : (isItalian && achievement.name_it) ? achievement.name_it : (isSpanish && achievement.name_es) ? achievement.name_es : achievement.name;
-                                    const achievementDescription = (isFrench && achievement.description_fr) ? achievement.description_fr : (isGerman && achievement.description_de) ? achievement.description_de : (isItalian && achievement.description_it) ? achievement.description_it : (isSpanish && achievement.description_es) ? achievement.description_es : achievement.description;
-
-                                    return (
-                                        <Tooltip key={achievement.id}>
-                                            <TooltipTrigger asChild>
-                                                <Card className={cn(
-                                                    "flex flex-col items-center justify-center p-4 text-center transition-all",
-                                                    !isUnlocked && "bg-muted/50 opacity-60"
-                                                )}>
-                                                    <div className="relative">
-                                                        <Icon className={cn("h-12 w-12 mb-2", isUnlocked ? "text-amber" : "text-muted-foreground")} />
-                                                         {isUnlocked && (
-                                                            <CheckCircle className="absolute -bottom-1 -right-1 h-5 w-5 text-success bg-background rounded-full" />
-                                                        )}
-                                                    </div>
-                                                    <h3 className="font-semibold">{achievementName}</h3>
-                                                    <p className="text-xs text-muted-foreground mt-1">{achievementDescription}</p>
-                                                    
-                                                    {!isUnlocked && achievement.goal > 1 && (
-                                                        <div className="w-full mt-2">
-                                                            <Progress value={progressPercentage} className="h-2" />
-                                                            <p className="text-xs font-mono mt-1">{Math.floor(status.progress)} / {achievement.goal}</p>
-                                                        </div>
-                                                    )}
-                                                </Card>
-                                            </TooltipTrigger>
-                                            {isUnlocked && status.unlockedAt && (
-                                                <TooltipContent>
-                                                    <p>{getUIText('unlocked')}: {format(new Date(status.unlockedAt), "PPP")}</p>
-                                                </TooltipContent>
-                                            )}
-                                        </Tooltip>
-                                    );
-                                })}
-                            </div>
-
-                            {/* Render the rest of the items */}
-                            {displayedAchievements.slice(2).map((achievement, index) => {
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" data-tutorial-id="achievements-grid">
+                            {displayedAchievements.map((achievement, index) => {
                                 const status = displayAchievementsData[achievement.id] || { progress: 0, unlockedAt: null };
                                 const isUnlocked = !!status.unlockedAt;
                                 const progressPercentage = isUnlocked ? 100 : (status.progress / achievement.goal) * 100;
