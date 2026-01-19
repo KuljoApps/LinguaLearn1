@@ -101,7 +101,7 @@ export default function DemoQuiz() {
         }, 1000);
 
         return () => clearInterval(interval);
-    }, [isPaused, answerStatus, currentQuestionIndex, questions.length, isTutorialBubbleVisible, currentQuestion]);
+    }, [isPaused, answerStatus, currentQuestionIndex, demoQuestions.length, isTutorialBubbleVisible, currentQuestion]);
 
     useEffect(() => {
         if (isPaused || !!answerStatus || currentQuestionIndex >= demoQuestions.length || isTutorialBubbleVisible) {
@@ -111,7 +111,7 @@ export default function DemoQuiz() {
             setTotalTime(prev => prev + 1);
         }, 1000);
         return () => clearInterval(interval);
-    }, [isPaused, answerStatus, currentQuestionIndex, questions.length, isTutorialBubbleVisible]);
+    }, [isPaused, answerStatus, currentQuestionIndex, demoQuestions.length, isTutorialBubbleVisible]);
 
     const handleAnswerClick = (answer: string) => {
         if (answerStatus) return;
