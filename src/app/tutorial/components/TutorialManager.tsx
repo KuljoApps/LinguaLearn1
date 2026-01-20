@@ -1,36 +1,28 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
 import OnboardingTutorial from '@/app/tutorial/components/OnboardingTutorial';
 import { getTutorialState, type TutorialState } from '@/lib/storage';
 
 export default function TutorialManager() {
-    const [state, setState] = useState<TutorialState | null>(null);
-    const pathname = usePathname();
-
-    const updateState = () => {
-        setState(getTutorialState());
-    };
+    // This key is used to force a re-render of the OnboardingTutorial component
+    // when the tutorial state changes globally.
+    const [, setForceUpdate] = useState(0);
 
     useEffect(() => {
-        updateState(); // Initial check
-        window.addEventListener('tutorial-state-changed', updateState);
+        const handleStateUpdate = () => {
+            setForceUpdate(c => c + 1);
+        };
+
+        window.addEventListener('tutorial-state-changed', handleStateUpdate);
         return () => {
-            window.removeEventListener('tutorial-state-changed', updateState);
+            window.removeEventListener('tutorial-state-changed', handleStateUpdate);
         };
     }, []);
 
-    // Also update when path changes, in case the event listener fires before the page component is ready
-    useEffect(() => {
-        // A small delay to ensure the new page's DOM is available for the tutorial to find elements
-        const timeoutId = setTimeout(() => {
-            updateState();
-        }, 50); 
-        return () => clearTimeout(timeoutId);
-    }, [pathname]);
+    const tutorialState = getTutorialState();
 
-    if (!state || !state.isActive) {
+    if (!tutorialState || !tutorialState.isActive) {
         return null;
     }
 

@@ -335,36 +335,24 @@ export default function OnboardingTutorial() {
     useEffect(() => {
         if (!currentStep) return;
 
-        // Prefetching logic
-        const getStepPath = (index: number, currentStage: typeof stage) => {
-            const stageSteps = currentStage === 'initial' ? initialSteps : currentStage === 'extended' ? extendedSteps : quizSteps;
-            if (index >= 0 && index < stageSteps.length) {
-                return stageSteps[index].path;
-            }
-            return null;
-        };
-
-        const nextPath = getStepPath(currentStepIndex + 1, stage);
-        const prevPath = getStepPath(currentStepIndex - 1, stage);
-
-        if (nextPath && nextPath !== pathname) {
-            router.prefetch(nextPath);
-        }
-        if (prevPath && prevPath !== pathname) {
-            router.prefetch(prevPath);
-        }
-
-        // Reactive navigation
-        if (currentStep.path && pathname && currentStep.path !== pathname) {
+        // Reactive navigation: This effect handles routing whenever the currentStep demands a different path.
+        if (currentStep.path && pathname !== currentStep.path) {
             router.push(currentStep.path);
         }
 
-    }, [currentStepIndex, stage, router, pathname, currentStep, steps]);
+    }, [currentStep, router, pathname]);
 
     useEffect(() => {
         if (!currentStep || currentStep.isModal || !currentStep.elementId) {
             setSpotlightStyle({ opacity: 0 });
             setBubbleStyle({ opacity: 0 });
+            return;
+        }
+
+        // Safeguard: Only try to position the bubble if we are on the correct page.
+        if (currentStep.path && pathname !== currentStep.path) {
+            setSpotlightStyle({ opacity: 0, transition: 'none' });
+            setBubbleStyle({ opacity: 0, transition: 'none' });
             return;
         }
 
@@ -442,7 +430,7 @@ export default function OnboardingTutorial() {
         setSpotlightStyle({ opacity: 0, transition: 'none' });
         setBubbleStyle({ opacity: 0, transition: 'none' });
         
-        const timeoutId = setTimeout(findAndPosition, 150);
+        const timeoutId = setTimeout(findAndPosition, 50);
 
         window.addEventListener('resize', findAndPosition);
 
@@ -476,9 +464,17 @@ export default function OnboardingTutorial() {
 
     const handleBack = () => {
         const prevStepIndex = currentStepIndex - 1;
-        if (stage === 'initial' && prevStepIndex < 1) return;
-        if (prevStepIndex < 0) return;
 
+        if (stage === 'initial' && prevStepIndex < 1) return; // Can't go back from the first bubble step
+        if (stage === 'extended' && prevStepIndex < 0) {
+            saveTutorialState({ isActive: true, stage: 'decision', step: 0 });
+            return;
+        }
+        if (stage === 'quiz' && prevStepIndex < 0) {
+            saveTutorialState({ isActive: true, stage: 'decision', step: 1 });
+            return;
+        }
+        
         saveTutorialState({ isActive: true, stage, step: prevStepIndex });
     };
 
@@ -615,7 +611,7 @@ export default function OnboardingTutorial() {
                             variant="ghost"
                             size="icon"
                             className="h-8 w-8"
-                            disabled={(stage === 'initial' && currentStepIndex === 1) || (stage === 'extended' && currentStepIndex === 0) || (stage === 'quiz' && currentStepIndex === 0)}
+                            disabled={(stage === 'initial' && currentStepIndex === 1)}
                         >
                             <ArrowLeft className="h-4 w-4" />
                         </Button>
