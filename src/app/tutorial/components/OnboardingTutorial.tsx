@@ -44,9 +44,9 @@ const tutorialBubbleOffsets: { [key: string]: number } = {
     'phonetics-first-item': 0,    // Slajd 25
     'quiz-timer': 0,              // Slajd 26
     'quiz-pause-button': 0,       // Slajd 27
-    'quiz-correct-answer-feedback': -520, // Slajd 28
-    'quiz-incorrect-answer-feedback': 42, // Slajd 29
-    'quiz-results-summary': -520,    // Slajd 30
+    'quiz-correct-answer': -520,     // Slajd 28
+    'quiz-incorrect-answer': 42,   // Slajd 29
+    'quiz-results-summary': -500,    // Slajd 30
     'quiz-results-errors': 22,     // Slajd 31
     'quiz-results-actions': 40,    // Slajd 32
 };
@@ -231,49 +231,49 @@ const extendedSteps: Step[] = [
 ];
 
 const quizSteps: Step[] = [
-    {
-        path: '/tutorial/quiz-question1',
+    { // step 0 (slide 26)
+        path: '/tutorial/quiz-demo',
         elementId: 'quiz-timer',
         title: 'Czas na odpowiedź',
         description: 'Masz 15 sekund na każdą odpowiedź. Pasek postępu pokazuje, ile czasu pozostało. Nie marnuj go!',
         bubblePosition: 'bottom',
     },
-    {
-        path: '/tutorial/quiz-question1',
+    { // step 1 (slide 27)
+        path: '/tutorial/quiz-demo',
         elementId: 'quiz-pause-button',
         title: 'Potrzebujesz przerwy?',
         description: 'Kliknij pauzę, aby zatrzymać czas. Pamiętaj jednak, że wznowienie quizu kosztuje 5 sekund!',
         bubblePosition: 'top'
     },
-    {
+    { // step 2 (slide 28)
         path: '/tutorial/quiz-correct',
-        elementId: 'quiz-correct-answer-feedback',
+        elementId: 'quiz-correct-answer',
         title: 'Poprawna odpowiedź',
         description: 'Świetnie! Poprawna odpowiedź zostanie podświetlona na zielono. Po chwili automatycznie przejdziesz do następnego pytania.',
         bubblePosition: 'bottom',
     },
-    {
+    { // step 3 (slide 29)
         path: '/tutorial/quiz-incorrect',
-        elementId: 'quiz-incorrect-answer-feedback',
+        elementId: 'quiz-incorrect-answer',
         title: 'Błędna odpowiedź',
         description: 'Nie martw się! Twoja błędna odpowiedź podświetli się na czerwono, a prawidłowa — na zielono. Każdy błąd to okazja do nauki!',
         bubblePosition: 'top'
     },
-    {
+    { // step 4 (slide 30)
         path: '/tutorial/quiz-results',
         elementId: 'quiz-results-summary',
         title: 'Podsumowanie wyników',
         description: 'Po zakończeniu quizu zobaczysz swoje statystyki. Sprawdź, jak Ci poszło!',
         bubblePosition: 'bottom',
     },
-    {
+    { // step 5 (slide 31)
         path: '/tutorial/quiz-results',
         elementId: 'quiz-results-errors',
         title: 'Przegląd błędów',
         description: 'Wszystkie błędne odpowiedzi z sesji są tutaj. Przeanalizuj je, aby uniknąć ich w przyszłości.',
         bubblePosition: 'top'
     },
-    {
+    { // step 6 (slide 32)
         path: '/tutorial/quiz-results',
         elementId: 'quiz-results-actions',
         title: 'Co dalej?',
@@ -462,10 +462,11 @@ export default function OnboardingTutorial() {
 
 
     const handleFinish = () => {
-        clearTutorialState();
-        if (pathname.startsWith('/tutorial')) {
-          router.push('/');
+        const isFinalQuizStep = stage === 'quiz' && currentStepIndex === steps.length - 1;
+        if (isFinalQuizStep) {
+            router.push('/');
         }
+        clearTutorialState();
     };
     
     const handleShowMore = () => {
@@ -572,11 +573,9 @@ export default function OnboardingTutorial() {
     const totalOverallBubbleSteps = totalInitialBubbleSteps + totalExtendedSteps + totalQuizBubbleSteps;
 
     let currentStepDisplay: number = 0;
-    let totalStepsDisplay: number = totalOverallBubbleSteps;
 
     if (stage === 'initial') {
         currentStepDisplay = currentStepIndex;
-        totalStepsDisplay = totalInitialBubbleSteps;
     } else if (stage === 'extended') {
         currentStepDisplay = totalInitialBubbleSteps + currentStepIndex + 1;
     } else if (stage === 'quiz') {
@@ -608,7 +607,7 @@ export default function OnboardingTutorial() {
                             <ArrowLeft className="h-4 w-4" />
                         </Button>
                         <span className="text-xs text-muted-foreground">
-                            {stage === 'initial' ? `${currentStepDisplay}/${totalStepsDisplay}` : `${currentStepDisplay}/${totalOverallBubbleSteps}`}
+                            {stage === 'initial' ? `${currentStepDisplay}/${totalInitialBubbleSteps}` : `${currentStepDisplay}/${totalOverallBubbleSteps}`}
                         </span>
                     </div>
                     <Button onClick={isFinalStep ? handleFinish : handleNext} size="sm">

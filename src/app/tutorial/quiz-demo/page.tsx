@@ -1,7 +1,7 @@
 "use client";
 
-import FakeQuizDemoPage from '@/app/tutorial/pages/FakeQuizDemoPage';
+import FakeQuizQuestion1Page from '@/app/tutorial/pages/FakeQuizQuestion1Page';
 
 export default function TutorialQuizDemoPage() {
-  return <FakeQuizDemoPage />;
+  return <FakeQuizQuestion1Page />;
 }
