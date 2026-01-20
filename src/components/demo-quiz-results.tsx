@@ -32,7 +32,7 @@ export default function DemoQuizResults({ score, totalQuestions, totalTime, sess
             return {
                 icon: <Trophy className="h-16 w-16 text-amber animate-shake" />,
                 title: 'Bezbłędny test!',
-                description: 'Doskonale! Wszystkie odpowiedzi były poprawne. Jesteś mistrzem!',
+                description: 'Doskonale! Wszystkie odpowiedzi były poprawne. Mistrzowski wynik!',
             };
         }
         if (successRate >= 80) {
@@ -46,19 +46,22 @@ export default function DemoQuizResults({ score, totalQuestions, totalTime, sess
             return {
                 icon: <ThumbsUp className="h-16 w-16 text-primary" />,
                 title: 'Dobry wynik!',
-                description: 'Jesteś na dobrej drodze! Przeanalizuj błędy z tej sesji, a szybko osiągniesz perfekcję.',
+                description: 'Jesteś na dobrej drodze. Ćwicz dalej aby opanować język do perfekcji!',
             };
         }
         return {
             icon: <Brain className="h-16 w-16 text-muted-foreground" />,
             title: 'Ćwiczenie czyni mistrza!',
-            description: 'Każdy błąd to okazja do nauki. Spróbuj jeszcze raz!',
+            description: 'Każdy błąd to okazja do nauki. Spróbuj jeszcze raz i\u00A0zrób to lepiej!',
         };
     })();
 
     const fakeSessionErrors = [
         { word: 'Throughout', userAnswer: 'Na zewnątrz', correctAnswer: 'Przez cały (czas)', quiz: 'Demo Quiz' },
         { word: 'Impeccable', userAnswer: 'Zwykły', correctAnswer: 'Nieskazitelny', quiz: 'Demo Quiz' },
+        { word: 'Reliable', userAnswer: 'Religijny', correctAnswer: 'Niezawodny', quiz: 'Demo Quiz' },
+        { word: 'Accomplish', userAnswer: 'Akompaniować', correctAnswer: 'Osiągnąć', quiz: 'Demo Quiz' },
+        { word: 'Conscious', userAnswer: 'Sumienny', correctAnswer: 'Świadomy', quiz: 'Demo Quiz' },
     ];
     
     const errorsToDisplay = sessionErrors.length > 0 ? sessionErrors : fakeSessionErrors;
@@ -133,7 +136,9 @@ export default function DemoQuizResults({ score, totalQuestions, totalTime, sess
             <CardFooter className="flex-col gap-4 pt-4" data-tutorial-id="quiz-results-actions">
                  <div className="flex w-full gap-4">
                     <Button onClick={onRestart} className="w-full">Zagraj ponownie</Button>
-                    <Button asChild variant="outline" className="w-full pointer-events-none opacity-50"><Link href="/">Wróć do menu</Link></Button>
+                    <Link href="/" passHref className="w-full">
+                        <Button variant="outline" className="w-full">Wróć do menu</Button>
+                    </Link>
                 </div>
                 <Button variant="link" className="text-muted-foreground pointer-events-none opacity-50">
                     Zobacz wszystkie błędy
