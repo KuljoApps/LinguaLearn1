@@ -36,7 +36,7 @@ export default function QuizPausePage() {
                             </div>
                             <div className="flex items-center gap-2">
                                 <Clock className="h-6 w-6" />
-                                <span className="text-2xl font-bold">00:26</span>
+                                <span className="text-2xl font-bold">00:05</span>
                             </div>
                         </div>
                         <Progress value={(10 / 15) * 100} className="w-full h-2" />

@@ -17,41 +17,41 @@ interface Step {
 }
 
 const tutorialBubbleOffsets: { [key: string]: number } = {
-    'language-switcher': 14,      // Slajd 1
-    'quiz-buttons': 10,           // Slajd 2
-    'learning-button': 36,        // Slajd 3
-    'toolbar': 14,                // Slajd 4
-    'settings-switches': 0,       // Slajd 5
-    'settings-eyecare': 0,        // Slajd 6
-    'stats-cards': 0,             // Slajd 7
-    'last-50-grid': 0,            // Slajd 8
-    'errors-controls': 0,         // Slajd 9
-    'errors-table': 12,            // Slajd 10
-    'achievements-grid': 0,       // Slajd 11
-    'learning-question-base': 0,  // Slajd 12
-    'learning-main-modules': 0,   // Slajd 13
-    'learning-extras': 36,        // Slajd 14
-    'phrases-airport': 0,         // Slajd 15
-    'airport-first-phrases': 0,   // Slajd 16
-    'dictionary-colors': 0,     // Slajd 17
-    'dictionary-word-list': 0,  // Slajd 18
-    'culture-about': 0,           // Slajd 19
-    'culture-places': 0,          // Slajd 20
-    'culture-history': 36,        // Slajd 21
-    'tongue-twisters-first-two': 0, // Slajd 22
-    'phonetics-alphabet': 0,      // Slajd 23
-    'phonetics-difficult': 36,    // Slajd 24
-    'phonetics-first-item': 0,    // Slajd 25
-    'quiz-timer': 0,              // Slajd 26
-    'quiz-pause-button': 0,       // Slajd 27
-    'quiz-correct-answer': 42,    // Slajd 28
-    'quiz-incorrect-answer': 42,   // Slajd 29
-    'quiz-results-summary': 22,    // Slajd 30
-    'quiz-results-errors': 22,     // Slajd 31
-    'quiz-results-actions': 40,    // Slajd 32
-    'irregular-quiz-part1': 0,    // Slajd 33
-    'irregular-quiz-part2': 0,    // Slajd 34
-    'irregular-quiz-hint': 40,    // Slajd 35
+    'language-switcher': 14,
+    'quiz-buttons': 10,
+    'learning-button': 36,
+    'toolbar': 14,
+    'settings-switches': 0,
+    'settings-eyecare': 0,
+    'stats-cards': 0,
+    'last-50-grid': 0,
+    'errors-controls': 0,
+    'errors-table': 12,
+    'achievements-grid': 0,
+    'learning-question-base': 0,
+    'learning-main-modules': 0,
+    'learning-extras': 36,
+    'phrases-airport': 0,
+    'airport-first-phrases': 0,
+    'dictionary-colors': 0,
+    'dictionary-word-list': 0,
+    'culture-about': 0,
+    'culture-places': 0,
+    'culture-history': 36,
+    'tongue-twisters-first-two': 0,
+    'phonetics-alphabet': 0,
+    'phonetics-difficult': 36,
+    'phonetics-first-item': 0,
+    'quiz-timer': 0,
+    'quiz-pause-button': 0,
+    'quiz-correct-answer': 42,
+    'quiz-incorrect-answer': 42,
+    'quiz-results-summary': 22,
+    'quiz-results-errors': 22,
+    'quiz-results-actions': 40,
+    'irregular-quiz-part1': 0,
+    'irregular-quiz-part2': 0,
+    'irregular-quiz-hint': 40,
 };
 
 
@@ -262,48 +262,48 @@ const quizSteps: Step[] = [
         description: 'Nie martw się! Twoja błędna odpowiedź podświetli się na czerwono, a prawidłowa — na zielono. Każdy błąd to okazja do nauki!',
         bubblePosition: 'top'
     },
-    { // step 4 (slide 30)
-        path: '/tutorial/quiz-results',
-        elementId: 'quiz-results-summary',
-        title: 'Podsumowanie wyników',
-        description: 'Po zakończeniu quizu zobaczysz swoje statystyki. Sprawdź, jak Ci poszło!',
-        bubblePosition: 'bottom',
-    },
-    { // step 5 (slide 31)
-        path: '/tutorial/quiz-results',
-        elementId: 'quiz-results-errors',
-        title: 'Przegląd błędów',
-        description: 'Wszystkie błędne odpowiedzi z sesji są tutaj. Przeanalizuj je, aby uniknąć ich w przyszłości.',
-        bubblePosition: 'top'
-    },
-    { // step 6 (slide 32)
-        path: '/tutorial/quiz-results',
-        elementId: 'quiz-results-actions',
-        title: 'Co dalej?',
-        description: 'Możesz zagrać ponownie, wrócić do menu lub przejrzeć wszystkie swoje błędy w dedykowanej sekcji.',
-        bubblePosition: 'top'
-    },
-    { // step 7 (slide 33)
+    { // step 4 (Nowy slajd 33)
         path: '/tutorial/irregular-question',
         elementId: 'irregular-quiz-part1',
         title: 'Testy z czasowników',
         description: 'Ten typ quizu ma dłuższy czas na odpowiedź (30s) i sprawdza dwie rzeczy: tłumaczenie oraz znajomość form czasowników nieregularnych.',
         bubblePosition: 'bottom',
     },
-    { // step 8 (slide 34)
+    { // step 5 (Nowy slajd 34)
         path: '/tutorial/irregular-question',
         elementId: 'irregular-quiz-part2',
         title: 'Wpisywanie odpowiedzi',
         description: 'Po wybraniu poprawnego tłumaczenia, aktywują się pola do wpisania dwóch pozostałych form czasownika. Zobaczmy, jak to działa.',
         bubblePosition: 'bottom',
     },
-    { // step 9 (slide 35)
+    { // step 6 (Nowy slajd 35)
         path: '/tutorial/irregular-question',
         elementId: 'irregular-quiz-hint',
         title: 'Dwie poprawne formy',
         description: 'Gdy wpiszesz błędną odpowiedź, system podświetli ją na czerwono i wskaże poprawną formę. Niektóre czasowniki, jak "be", mają dwie opcje (was/were) - obie są zaliczane jako poprawne!',
         bubblePosition: 'top',
-    }
+    },
+    { // step 7 (Stary slajd 30)
+        path: '/tutorial/quiz-results',
+        elementId: 'quiz-results-summary',
+        title: 'Podsumowanie wyników',
+        description: 'Po zakończeniu quizu zobaczysz swoje statystyki. Sprawdź, jak Ci poszło!',
+        bubblePosition: 'bottom',
+    },
+    { // step 8 (Stary slajd 31)
+        path: '/tutorial/quiz-results',
+        elementId: 'quiz-results-errors',
+        title: 'Przegląd błędów',
+        description: 'Wszystkie błędne odpowiedzi z sesji są tutaj. Przeanalizuj je, aby uniknąć ich w przyszłości.',
+        bubblePosition: 'top'
+    },
+    { // step 9 (Stary slajd 32)
+        path: '/tutorial/quiz-results',
+        elementId: 'quiz-results-actions',
+        title: 'Co dalej?',
+        description: 'Możesz zagrać ponownie, wrócić do menu lub przejrzeć wszystkie swoje błędy w dedykowanej sekcji.',
+        bubblePosition: 'top'
+    },
 ];
 
 
@@ -487,7 +487,7 @@ export default function OnboardingTutorial() {
 
     const handleFinish = () => {
         clearTutorialState();
-        if (stage === 'decision' && currentStepIndex === -1) {
+        if (pathname.startsWith('/tutorial')) {
             router.push('/');
         }
     };
