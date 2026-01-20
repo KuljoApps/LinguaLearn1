@@ -59,9 +59,6 @@ export default function DemoQuizResults({ score, totalQuestions, totalTime, sess
     const fakeSessionErrors = [
         { word: 'Throughout', userAnswer: 'Na zewnątrz', correctAnswer: 'Przez cały (czas)', quiz: 'Demo Quiz' },
         { word: 'Impeccable', userAnswer: 'Zwykły', correctAnswer: 'Nieskazitelny', quiz: 'Demo Quiz' },
-        { word: 'Reliable', userAnswer: 'Religijny', correctAnswer: 'Niezawodny', quiz: 'Demo Quiz' },
-        { word: 'Accomplish', userAnswer: 'Akompaniować', correctAnswer: 'Osiągnąć', quiz: 'Demo Quiz' },
-        { word: 'Conscious', userAnswer: 'Sumienny', correctAnswer: 'Świadomy', quiz: 'Demo Quiz' },
     ];
     
     const errorsToDisplay = sessionErrors.length > 0 ? sessionErrors : fakeSessionErrors;
@@ -136,9 +133,7 @@ export default function DemoQuizResults({ score, totalQuestions, totalTime, sess
             <CardFooter className="flex-col gap-4 pt-4" data-tutorial-id="quiz-results-actions">
                  <div className="flex w-full gap-4">
                     <Button onClick={onRestart} className="w-full">Zagraj ponownie</Button>
-                    <Link href="/" passHref className="w-full">
-                        <Button variant="outline" className="w-full">Wróć do menu</Button>
-                    </Link>
+                    <Button asChild variant="outline" className="w-full pointer-events-none opacity-50"><Link href="/">Wróć do menu</Link></Button>
                 </div>
                 <Button variant="link" className="text-muted-foreground pointer-events-none opacity-50">
                     Zobacz wszystkie błędy
