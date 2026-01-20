@@ -49,7 +49,7 @@ export default function IrregularVerbQuizPage() {
 
     useEffect(() => {
         let timeoutId: NodeJS.Timeout;
-        if (activeStep === 5) { // Animation for slide 31
+        if (activeStep === 5) { // Animation for slide 32
             setShowHint(false);
             setForm2Input('');
             setForm3Input('');
@@ -65,7 +65,7 @@ export default function IrregularVerbQuizPage() {
                 setForm3Class('bg-destructive text-destructive-foreground');
             };
             animate();
-        } else if (activeStep === 6) { // Hint for slide 32
+        } else if (activeStep === 6) { // Hint for slide 33
             setForm2Input('was');
             setForm3Input('beed');
             setForm2Class('');
@@ -124,7 +124,7 @@ export default function IrregularVerbQuizPage() {
                                 <Input value={form3Input} readOnly className={cn("text-center transition-colors duration-300", form3Class)} />
                             </div>
                         </div>
-                        <div className="text-center h-10 mt-2" data-tutorial-id="irregular-quiz-hint">
+                        <div className="text-center h-16 mt-2" data-tutorial-id="irregular-quiz-hint">
                             {showHint && (
                                 <div className="animate-in fade-in">
                                     <p className="text-success font-medium">
