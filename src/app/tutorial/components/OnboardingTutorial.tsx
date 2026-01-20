@@ -44,11 +44,14 @@ const tutorialBubbleOffsets: { [key: string]: number } = {
     'phonetics-first-item': 0,    // Slajd 25
     'quiz-timer': 0,              // Slajd 26
     'quiz-pause-button': 0,       // Slajd 27
-    'quiz-correct-answer': 42,
-    'quiz-incorrect-answer': 42,
-    'quiz-results-summary': 22,
-    'quiz-results-errors': 22,
-    'quiz-results-actions': 40,
+    'quiz-correct-answer': 42,    // Slajd 28
+    'quiz-incorrect-answer': 42,   // Slajd 29
+    'quiz-results-summary': 22,    // Slajd 30
+    'quiz-results-errors': 22,     // Slajd 31
+    'quiz-results-actions': 40,    // Slajd 32
+    'irregular-quiz-part1': 0,    // Slajd 33
+    'irregular-quiz-part2': 0,    // Slajd 34
+    'irregular-quiz-hint': 40,    // Slajd 35
 };
 
 
@@ -231,55 +234,76 @@ const extendedSteps: Step[] = [
 ];
 
 const quizSteps: Step[] = [
-    { 
-        path: '/tutorial/quiz-demo',
+    { // step 0 (slide 26)
+        path: '/tutorial/quiz-correct',
         elementId: 'quiz-timer',
         title: 'Czas na odpowiedź',
         description: 'Masz 15 sekund na każdą odpowiedź. Pasek postępu pokazuje, ile czasu pozostało. Nie marnuj go!',
         bubblePosition: 'bottom',
     },
-    { 
-        path: '/tutorial/quiz-demo',
+    { // step 1 (slide 27)
+        path: '/tutorial/quiz-pause',
         elementId: 'quiz-pause-button',
         title: 'Potrzebujesz przerwy?',
         description: 'Kliknij pauzę, aby zatrzymać czas. Pamiętaj jednak, że wznowienie quizu kosztuje 5 sekund!',
         bubblePosition: 'top'
     },
-    { 
+    { // step 2 (slide 28)
         path: '/tutorial/quiz-correct',
         elementId: 'quiz-correct-answer',
         title: 'Poprawna odpowiedź',
         description: 'Świetnie! Poprawna odpowiedź zostanie podświetlona na zielono. Po chwili automatycznie przejdziesz do następnego pytania.',
         bubblePosition: 'top',
     },
-    {
+    { // step 3 (slide 29)
         path: '/tutorial/quiz-incorrect',
         elementId: 'quiz-incorrect-answer',
         title: 'Błędna odpowiedź',
         description: 'Nie martw się! Twoja błędna odpowiedź podświetli się na czerwono, a prawidłowa — na zielono. Każdy błąd to okazja do nauki!',
         bubblePosition: 'top'
     },
-    { 
+    { // step 4 (slide 30)
         path: '/tutorial/quiz-results',
         elementId: 'quiz-results-summary',
         title: 'Podsumowanie wyników',
         description: 'Po zakończeniu quizu zobaczysz swoje statystyki. Sprawdź, jak Ci poszło!',
         bubblePosition: 'bottom',
     },
-    { 
+    { // step 5 (slide 31)
         path: '/tutorial/quiz-results',
         elementId: 'quiz-results-errors',
         title: 'Przegląd błędów',
         description: 'Wszystkie błędne odpowiedzi z sesji są tutaj. Przeanalizuj je, aby uniknąć ich w przyszłości.',
         bubblePosition: 'top'
     },
-    { 
+    { // step 6 (slide 32)
         path: '/tutorial/quiz-results',
         elementId: 'quiz-results-actions',
         title: 'Co dalej?',
         description: 'Możesz zagrać ponownie, wrócić do menu lub przejrzeć wszystkie swoje błędy w dedykowanej sekcji.',
         bubblePosition: 'top'
     },
+    { // step 7 (slide 33)
+        path: '/tutorial/irregular-question',
+        elementId: 'irregular-quiz-part1',
+        title: 'Testy z czasowników',
+        description: 'Ten typ quizu ma dłuższy czas na odpowiedź (30s) i sprawdza dwie rzeczy: tłumaczenie oraz znajomość form czasowników nieregularnych.',
+        bubblePosition: 'bottom',
+    },
+    { // step 8 (slide 34)
+        path: '/tutorial/irregular-question',
+        elementId: 'irregular-quiz-part2',
+        title: 'Wpisywanie odpowiedzi',
+        description: 'Po wybraniu poprawnego tłumaczenia, aktywują się pola do wpisania dwóch pozostałych form czasownika. Zobaczmy, jak to działa.',
+        bubblePosition: 'bottom',
+    },
+    { // step 9 (slide 35)
+        path: '/tutorial/irregular-question',
+        elementId: 'irregular-quiz-hint',
+        title: 'Dwie poprawne formy',
+        description: 'Gdy wpiszesz błędną odpowiedź, system podświetli ją na czerwono i wskaże poprawną formę. Niektóre czasowniki, jak "be", mają dwie opcje (was/were) - obie są zaliczane jako poprawne!',
+        bubblePosition: 'top',
+    }
 ];
 
 
@@ -462,11 +486,10 @@ export default function OnboardingTutorial() {
 
 
     const handleFinish = () => {
-        const isFinalQuizStep = stage === 'quiz' && currentStepIndex === steps.length - 1;
-        if (isFinalQuizStep) {
+        clearTutorialState();
+        if (stage === 'decision' && currentStepIndex === -1) {
             router.push('/');
         }
-        clearTutorialState();
     };
     
     const handleShowMore = () => {
@@ -618,4 +641,3 @@ export default function OnboardingTutorial() {
         </div>
     );
 }
-
