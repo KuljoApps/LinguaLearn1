@@ -56,30 +56,30 @@ const tutorialBubbleOffsets: { [key: string]: number } = {
 
 
 const initialSteps: Step[] = [
-    {
+    { // Slajd 1
         isModal: true,
         title: 'Witaj w',
         description: 'Pozwól, że w\u00A0kilku krokach pokażę Ci najważniejsze funkcje.',
     },
-    {
+    { // Slajd 2
         elementId: 'language-switcher',
         title: 'Zmiana języka',
         description: 'Najpierw wybierz język, którego chcesz się uczyć. Możesz to zmienić w\u00A0każdej chwili.',
         path: '/',
     },
-    {
+    { // Slajd 3
         elementId: 'quiz-buttons',
         title: 'Główne quizy',
         description: 'To serce aplikacji. Wybierz jeden z\u00A0pięciu trybów, aby sprawdzić swoją wiedzę w\u00A0różnych kategoriach.',
         path: '/',
     },
-    {
+    { // Slajd 4
         elementId: 'learning-button',
         title: 'Baza wiedzy',
         description: 'Potrzebujesz powtórki? Tutaj znajdziesz moduły do nauki, w\u00A0tym gramatykę, słownictwo i\u00A0wiele więcej.',
         path: '/',
     },
-    {
+    { // Slajd 5
         elementId: 'toolbar',
         title: 'Narzędzia i postępy',
         description: 'Tutaj możesz dostosować ustawienia, śledzić swoje statystyki, przeglądać błędy i\u00A0sprawdzać swoje osiągnięcia.',
@@ -88,64 +88,64 @@ const initialSteps: Step[] = [
 ];
 
 const extendedSteps: Step[] = [
-    {
+    { // Slajd 6
         path: '/tutorial/settings',
         elementId: 'settings-switches',
         title: 'Dźwięki i wibracje',
         description: 'Włącz lub wyłącz efekty dźwiękowe i\u00A0haptyczne. Możesz też dostosować głośność, aby nauka była komfortowa.',
     },
-    {
+    { // Slajd 7
         path: '/tutorial/settings',
         elementId: 'settings-eyecare',
         title: 'Ochrona wzroku',
         description: 'Uczysz się wieczorem? Użyj tego suwaka, aby nałożyć na aplikację ciepły filtr, który zmniejszy zmęczenie oczu.',
         bubblePosition: 'bottom',
     },
-     {
+     { // Slajd 8
         path: '/tutorial/stats',
         elementId: 'stats-cards',
         title: 'Ogólne statystyki',
         description: 'Tutaj znajdziesz podsumowanie swoich postępów. Kliknij na każdą kartę, aby zobaczyć szczegółowe dane dla poszczególnych quizów.',
     },
-    {
+    { // Slajd 9
         path: '/tutorial/stats',
         elementId: 'last-50-grid',
         title: 'Ostatnie odpowiedzi',
         description: 'Ta siatka pokazuje Twoje ostatnie 50\u00A0odpowiedzi. Zielony to sukces, czerwony to błąd. Kliknij na czerwony kwadrat <span class="inline-block h-3 w-3 bg-destructive rounded-sm align-middle mx-1"></span>, aby zobaczyć szczegóły błędu.',
     },
-    {
+    { // Slajd 10
         path: '/tutorial/errors',
         elementId: 'errors-controls',
         title: 'Filtrowanie i widoki',
         description: 'Możesz filtrować błędy według quizu lub przełączać się między widokiem najnowszych i\u00A0najczęściej popełnianych błędów.',
         bubblePosition: 'bottom',
     },
-    {
+    { // Slajd 11
         path: '/tutorial/errors',
         elementId: 'errors-table',
         title: 'Interaktywna tabela',
         description: 'Klikaj nagłówki, aby sortować błędy. Jeśli tabela jest za szeroka, możesz ją przewijać w\u00A0poziomie.',
     },
-     {
+     { // Slajd 12
         path: '/tutorial/achievements',
         elementId: 'achievements-grid',
         title: 'Twoje osiągnięcia',
         description: 'Tutaj znajdziesz wszystkie swoje odznaki. Zdobywaj je za postępy w nauce, regularność i perfekcyjne wyniki w quizach!',
         bubblePosition: 'bottom',
     },
-    {
+    { // Slajd 13
         path: '/tutorial/learning',
         elementId: 'learning-question-base',
         title: 'Baza pytań',
         description: 'To idealne miejsce na powtórkę i naukę bez presji czasu. Znajdziesz tu wszystkie pytania z quizów.',
     },
-    {
+    { // Slajd 14
         path: '/tutorial/learning',
         elementId: 'learning-main-modules',
         title: 'Główne moduły nauki',
         description: 'Te kategorie obejmują kluczowe aspekty języka, od gramatyki i czasów po praktyczne zwroty oraz słownictwo.',
     },
-    {
+    { // Slajd 15
         path: '/tutorial/learning',
         elementId: 'learning-extras',
         title: 'Dodatkowe materiały',
@@ -153,151 +153,143 @@ const extendedSteps: Step[] = [
         action: 'open-extras',
         bubblePosition: 'top',
     },
-    {
+    { // Slajd 16
         path: '/tutorial/phrases',
         elementId: 'phrases-airport',
         title: 'Praktyczne zwroty',
         description: 'Ten dział to Twój niezbędnik w podróży. Znajdziesz tu gotowe zwroty na każdą sytuację, od lotniska po restaurację. To musisz zobaczyć!',
         bubblePosition: 'bottom'
     },
-    {
+    { // Slajd 17
         path: '/tutorial/phrases-airport',
         elementId: 'airport-first-phrases',
         title: 'Najważniejsze zwroty',
         description: 'Każda kategoria zaczyna się od kluczowych wyrażeń, które warto znać na pamięć. To Twój szybki start w każdej rozmowie.',
         bubblePosition: 'bottom'
     },
-    {
+    { // Slajd 18
         path: '/tutorial/dictionary',
         elementId: 'dictionary-colors',
         title: 'Słownik tematyczny',
         description: 'Działa podobnie do zwrotów, ale ma więcej funkcji — o tym opowiemy sobie za chwilę. Kliknij kategorię, aby wejść do środka.',
         bubblePosition: 'bottom',
     },
-    {
+    { // Slajd 19
         path: '/tutorial/dictionary-colors',
         elementId: 'dictionary-word-list',
         title: 'Nauka i personalizacja',
         description: 'Oprócz listy słówek, możesz oznaczać ulubione pozycje gwiazdką <span class="inline-block h-3 w-3 text-amber fill-amber align-middle mx-1"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-3 w-3"><path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.007z" clip-rule="evenodd"></path></svg></span>, aby mieć je zawsze na górze listy!',
         bubblePosition: 'bottom',
     },
-    {
+    { // Slajd 20
         path: '/tutorial/culture',
         elementId: 'culture-about',
         title: 'Poznawanie kultury',
         description: 'Odkryj fascynujące fakty o\u00A0kraju, którego języka się uczysz. To świetny sposób, by zrozumieć kontekst i\u00A0poszerzyć horyzonty.',
         bubblePosition: 'bottom',
     },
-    {
+    { // Slajd 21
         path: '/tutorial/culture',
         elementId: 'culture-places',
         title: 'Ważne miejsca',
         description: 'Przeglądaj najważniejsze miasta i\u00A0zabytki. Każdy element zawiera ciekawe opisy, fakty i\u00A0statystyki.',
         bubblePosition: 'bottom',
     },
-    {
+    { // Slajd 22
         path: '/tutorial/culture',
         elementId: 'culture-history',
         title: 'Tradycje i historia',
         description: 'Zanurz się w\u00A0lokalnych zwyczajach i\u00A0kluczowych wydarzeniach historycznych, aby lepiej zrozumieć duszę narodu.',
         bubblePosition: 'top',
     },
-    {
+    { // Slajd 23
         path: '/tutorial/tongue-twisters',
         elementId: 'tongue-twisters-first-two',
         title: 'Humorystyczne uzupełnienie',
         description: 'Na koniec odrobina zabawy! Ta sekcja to świetne uzupełnienie nauki o kulturze, które pomoże Ci ćwiczyć wymowę w zabawny sposób.',
         bubblePosition: 'bottom',
     },
-    {
+    { // Slajd 24
         path: '/tutorial/phonetics',
         elementId: 'phonetics-alphabet',
         title: 'Alfabet i wymowa',
         description: 'Naucz się poprawnej wymowy liter i dźwięków. To podstawa, która ułatwi Ci mówienie i rozumienie.',
         bubblePosition: 'bottom'
     },
-    {
-        path: '/tutorial/phonetics',
+    { // Slajd 25
+        path: '/tutorial/phonetics-basics',
         elementId: 'phonetics-difficult',
         title: 'Trudne dźwięki',
         description: 'Tutaj znajdziesz przykłady słów i zwrotów, które często sprawiają trudność. Ćwicz je, aby brzmieć jak native speaker!',
         bubblePosition: 'top',
     },
-    {
-        path: '/tutorial/phonetics-basics',
-        elementId: 'phonetics-first-item',
-        title: 'Ćwiczenie wymowy',
-        description: 'Posłuchaj, jak lektor wymawia każdy zwrot, klikając ikonę głośnika. Możesz odtwarzać nagranie tyle razy, ile potrzebujesz, aby doskonalić swój akcent!',
-        bubblePosition: 'bottom',
-        action: 'expand-first-item'
-    },
 ];
 
 const quizSteps: Step[] = [
-    { // step 0 (slide 26)
+    { // step 0 (Slajd 26)
         path: '/tutorial/quiz-correct',
         elementId: 'quiz-timer',
         title: 'Czas na odpowiedź',
         description: 'Masz 15 sekund na każdą odpowiedź. Pasek postępu pokazuje, ile czasu pozostało. Nie marnuj go!',
         bubblePosition: 'bottom',
     },
-    { // step 1 (slide 27)
+    { // step 1 (Slajd 27)
         path: '/tutorial/quiz-pause',
         elementId: 'quiz-pause-button',
         title: 'Potrzebujesz przerwy?',
         description: 'Kliknij pauzę, aby zatrzymać czas. Pamiętaj jednak, że wznowienie quizu kosztuje 5 sekund!',
         bubblePosition: 'top'
     },
-    { // step 2 (slide 28)
+    { // step 2 (Slajd 28)
         path: '/tutorial/quiz-correct',
         elementId: 'quiz-correct-answer',
         title: 'Poprawna odpowiedź',
         description: 'Świetnie! Poprawna odpowiedź zostanie podświetlona na zielono. Po chwili automatycznie przejdziesz do następnego pytania.',
         bubblePosition: 'top',
     },
-    { // step 3 (slide 29)
+    { // step 3 (Slajd 29)
         path: '/tutorial/quiz-incorrect',
         elementId: 'quiz-incorrect-answer',
         title: 'Błędna odpowiedź',
         description: 'Nie martw się! Twoja błędna odpowiedź podświetli się na czerwono, a prawidłowa — na zielono. Każdy błąd to okazja do nauki!',
         bubblePosition: 'top'
     },
-    { // step 4 (slide 30)
+    { // step 4 (Slajd 30)
         path: '/tutorial/irregular-question',
         elementId: 'irregular-quiz-part1',
         title: 'Testy z czasowników',
         description: 'Ten typ quizu ma dłuższy czas na odpowiedź (30s) i sprawdza dwie rzeczy: tłumaczenie oraz znajomość form czasowników nieregularnych.',
         bubblePosition: 'bottom',
     },
-    { // step 5 (slide 31)
+    { // step 5 (Slajd 31)
         path: '/tutorial/irregular-question',
         elementId: 'irregular-quiz-part2',
         title: 'Wpisywanie odpowiedzi',
         description: 'Po wybraniu poprawnego tłumaczenia, aktywują się pola do wpisania dwóch pozostałych form czasownika. Zobaczmy, jak to działa.',
         bubblePosition: 'bottom',
     },
-    { // step 6 (slide 32)
+    { // step 6 (Slajd 32)
         path: '/tutorial/irregular-question',
         elementId: 'irregular-quiz-hint',
         title: 'Dwie poprawne formy',
         description: 'Gdy wpiszesz błędną odpowiedź, system podświetli ją na czerwono i wskaże poprawną formę. Niektóre czasowniki, jak "be", mają dwie opcje (was/were) - obie są zaliczane jako poprawne!',
         bubblePosition: 'top',
     },
-    { // step 7 (slide 33)
+    { // step 7 (Slajd 33)
         path: '/tutorial/quiz-results',
         elementId: 'quiz-results-summary',
         title: 'Podsumowanie wyników',
         description: 'Po zakończeniu quizu zobaczysz swoje statystyki. Sprawdź, jak Ci poszło!',
         bubblePosition: 'bottom',
     },
-    { // step 8 (slide 34)
+    { // step 8 (Slajd 34)
         path: '/tutorial/quiz-results',
         elementId: 'quiz-results-errors',
         title: 'Przegląd błędów',
         description: 'Wszystkie błędne odpowiedzi z sesji są tutaj. Przeanalizuj je, aby uniknąć ich w przyszłości.',
         bubblePosition: 'top'
     },
-    { // step 9 (slide 35)
+    { // step 9 (Slajd 35)
         path: '/tutorial/quiz-results',
         elementId: 'quiz-results-actions',
         title: 'Co dalej?',

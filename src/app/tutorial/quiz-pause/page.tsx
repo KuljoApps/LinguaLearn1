@@ -14,6 +14,14 @@ const question = {
 };
 
 export default function QuizPausePage() {
+    const questionTimer = 10;
+    const totalTime = 86; // 01:26
+    
+    const formatTime = (seconds: number) => {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+    };
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
@@ -32,14 +40,14 @@ export default function QuizPausePage() {
                         <div className="w-full flex justify-around gap-4 text-center">
                             <div className="flex items-center gap-2">
                                 <Clock className="h-6 w-6" />
-                                <span className="text-2xl font-bold">10s</span>
+                                <span className="text-2xl font-bold">{questionTimer}s</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <Clock className="h-6 w-6" />
-                                <span className="text-2xl font-bold">01:26</span>
+                                <span className="text-2xl font-bold">{formatTime(totalTime)}</span>
                             </div>
                         </div>
-                        <Progress value={(10 / 15) * 100} className="w-full h-2" />
+                        <Progress value={(questionTimer / 15) * 100} className="w-full h-2" />
                     </div>
                     <div className="text-center space-y-2">
                         <p className="text-muted-foreground">What is the Polish meaning of</p>
