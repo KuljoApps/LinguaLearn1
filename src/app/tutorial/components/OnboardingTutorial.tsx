@@ -44,11 +44,11 @@ const tutorialBubbleOffsets: { [key: string]: number } = {
     'phonetics-first-item': 0,    // Slajd 25
     'quiz-timer': 0,              // Slajd 26
     'quiz-pause-button': 0,       // Slajd 27
-    'quiz-correct-answer': -520,     // Slajd 28
-    'quiz-incorrect-answer': 42,   // Slajd 29
-    'quiz-results-summary': -500,    // Slajd 30
-    'quiz-results-errors': 22,     // Slajd 31
-    'quiz-results-actions': 40,    // Slajd 32
+    'quiz-correct-answer': 42,
+    'quiz-incorrect-answer': 42,
+    'quiz-results-summary': 22,
+    'quiz-results-errors': 22,
+    'quiz-results-actions': 40,
 };
 
 
@@ -231,49 +231,49 @@ const extendedSteps: Step[] = [
 ];
 
 const quizSteps: Step[] = [
-    { // step 0 (slide 26)
+    { 
         path: '/tutorial/quiz-demo',
         elementId: 'quiz-timer',
         title: 'Czas na odpowiedź',
         description: 'Masz 15 sekund na każdą odpowiedź. Pasek postępu pokazuje, ile czasu pozostało. Nie marnuj go!',
         bubblePosition: 'bottom',
     },
-    { // step 1 (slide 27)
+    { 
         path: '/tutorial/quiz-demo',
         elementId: 'quiz-pause-button',
         title: 'Potrzebujesz przerwy?',
         description: 'Kliknij pauzę, aby zatrzymać czas. Pamiętaj jednak, że wznowienie quizu kosztuje 5 sekund!',
         bubblePosition: 'top'
     },
-    { // step 2 (slide 28)
+    { 
         path: '/tutorial/quiz-correct',
         elementId: 'quiz-correct-answer',
         title: 'Poprawna odpowiedź',
         description: 'Świetnie! Poprawna odpowiedź zostanie podświetlona na zielono. Po chwili automatycznie przejdziesz do następnego pytania.',
-        bubblePosition: 'bottom',
+        bubblePosition: 'top',
     },
-    { // step 3 (slide 29)
+    {
         path: '/tutorial/quiz-incorrect',
         elementId: 'quiz-incorrect-answer',
         title: 'Błędna odpowiedź',
         description: 'Nie martw się! Twoja błędna odpowiedź podświetli się na czerwono, a prawidłowa — na zielono. Każdy błąd to okazja do nauki!',
         bubblePosition: 'top'
     },
-    { // step 4 (slide 30)
+    { 
         path: '/tutorial/quiz-results',
         elementId: 'quiz-results-summary',
         title: 'Podsumowanie wyników',
         description: 'Po zakończeniu quizu zobaczysz swoje statystyki. Sprawdź, jak Ci poszło!',
         bubblePosition: 'bottom',
     },
-    { // step 5 (slide 31)
+    { 
         path: '/tutorial/quiz-results',
         elementId: 'quiz-results-errors',
         title: 'Przegląd błędów',
         description: 'Wszystkie błędne odpowiedzi z sesji są tutaj. Przeanalizuj je, aby uniknąć ich w przyszłości.',
         bubblePosition: 'top'
     },
-    { // step 6 (slide 32)
+    { 
         path: '/tutorial/quiz-results',
         elementId: 'quiz-results-actions',
         title: 'Co dalej?',
@@ -358,7 +358,7 @@ export default function OnboardingTutorial() {
                     transition: 'all 0.3s ease-in-out',
                 });
 
-                const bubbleHeight = stage === 'quiz' && currentStepIndex === 1 ? 170 : 150; 
+                const bubbleHeight = 150;
                 const bubbleWidth = 256; 
                 let bubbleTop;
                 let bubbleLeft = rect.left + rect.width / 2 - bubbleWidth / 2;
@@ -618,3 +618,4 @@ export default function OnboardingTutorial() {
         </div>
     );
 }
+
