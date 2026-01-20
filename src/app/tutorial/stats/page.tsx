@@ -1,5 +1,8 @@
 "use client";
 
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { getTutorialState } from '@/lib/storage';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -7,6 +10,17 @@ import { ArrowLeft, CheckCircle, Flame, Percent, ShieldX, Trash2, ArrowUpRight }
 import React from 'react';
 
 export default function Stats() {
+    const router = useRouter();
+
+    useEffect(() => {
+        const tutorialState = getTutorialState();
+        if (!tutorialState || !tutorialState.isActive) {
+            const timer = setTimeout(() => {
+                router.push('/');
+            }, 2000);
+            return () => clearTimeout(timer);
+        }
+    }, [router]);
 
     const renderLastFiftyAnswersGrid = () => {
         const gridItems = [];

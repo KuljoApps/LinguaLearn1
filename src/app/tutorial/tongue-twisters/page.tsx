@@ -1,6 +1,8 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { getTutorialState } from '@/lib/storage';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -19,6 +21,18 @@ const fakePhrases = [
 ];
 
 export default function TongueTwisters() {
+    const router = useRouter();
+
+    useEffect(() => {
+        const tutorialState = getTutorialState();
+        if (!tutorialState || !tutorialState.isActive) {
+            const timer = setTimeout(() => {
+                router.push('/');
+            }, 2000);
+            return () => clearTimeout(timer);
+        }
+    }, [router]);
+    
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
             <Card className="w-full max-w-2xl shadow-2xl">

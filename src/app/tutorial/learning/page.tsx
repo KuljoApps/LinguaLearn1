@@ -1,5 +1,8 @@
 "use client";
 
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { getTutorialState } from '@/lib/storage';
 import {
     BookCopy,
     ArrowLeft,
@@ -23,6 +26,18 @@ import {
 } from "@/components/ui/collapsible";
 
 export default function Learning() {
+    const router = useRouter();
+
+    useEffect(() => {
+        const tutorialState = getTutorialState();
+        if (!tutorialState || !tutorialState.isActive) {
+            const timer = setTimeout(() => {
+                router.push('/');
+            }, 2000);
+            return () => clearTimeout(timer);
+        }
+    }, [router]);
+
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
             <Card className="w-full max-w-md shadow-2xl" data-tutorial-id="learning-card">

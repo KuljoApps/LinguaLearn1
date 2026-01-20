@@ -1,5 +1,8 @@
 "use client";
 
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { getTutorialState } from '@/lib/storage';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -12,6 +15,18 @@ import {
 } from "@/components/ui/tooltip";
 
 export default function Achievements() {
+    const router = useRouter();
+
+    useEffect(() => {
+        const tutorialState = getTutorialState();
+        if (!tutorialState || !tutorialState.isActive) {
+            const timer = setTimeout(() => {
+                router.push('/');
+            }, 2000);
+            return () => clearTimeout(timer);
+        }
+    }, [router]);
+
     const apprenticeProgress = (159 / 250) * 100;
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">

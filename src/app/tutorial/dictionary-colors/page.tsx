@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
+import { getTutorialState } from '@/lib/storage';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -44,9 +46,18 @@ const fakeWords = [
 ];
 
 export default function DictionaryColors() {
+    const router = useRouter();
     const [favorites, setFavorites] = useState<string[]>([]);
     
     useEffect(() => {
+        const tutorialState = getTutorialState();
+        if (!tutorialState || !tutorialState.isActive) {
+            const timer = setTimeout(() => {
+                router.push('/');
+            }, 2000);
+            return () => clearTimeout(timer);
+        }
+
         const timeouts: NodeJS.Timeout[] = [];
         
         timeouts.push(setTimeout(() => {
@@ -64,7 +75,7 @@ export default function DictionaryColors() {
         return () => {
             timeouts.forEach(clearTimeout);
         };
-    }, []);
+    }, [router]);
 
     const sortedWords = useMemo(() => {
         const favoriteWords = fakeWords.filter(w => favorites.includes(w.word));

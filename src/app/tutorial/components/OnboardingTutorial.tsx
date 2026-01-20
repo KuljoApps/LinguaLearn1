@@ -49,7 +49,7 @@ const tutorialBubbleOffsets: { [key: string]: number } = {
     'irregular-quiz-part1': 0,
     'irregular-quiz-part2': -340,
     'irregular-quiz-hint': 80,
-    'quiz-results-summary': 22,
+    'quiz-results-summary': 8,
     'quiz-results-errors': 22,
     'quiz-results-actions': 40,
 };
