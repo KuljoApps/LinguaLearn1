@@ -22,7 +22,7 @@ export default function Achievements() {
         if (!tutorialState || !tutorialState.isActive) {
             const timer = setTimeout(() => {
                 router.push('/');
-            }, 2000);
+            }, 3000);
             return () => clearTimeout(timer);
         }
     }, [router]);

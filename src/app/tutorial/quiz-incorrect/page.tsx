@@ -6,6 +6,9 @@ import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import LinguaLearnLogo from '@/components/LinguaLearnLogo';
 import { Clock } from 'lucide-react';
+import { getTutorialState } from '@/lib/storage';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 const question = {
     word: 'Throughout', 
@@ -16,6 +19,17 @@ const question = {
 export default function QuizIncorrectPage() {
     const selectedAnswer = 'Na zewnątrz';
     const answerStatus = "incorrect";
+    const router = useRouter();
+
+    useEffect(() => {
+        const tutorialState = getTutorialState();
+        if (!tutorialState || !tutorialState.isActive) {
+            const timer = setTimeout(() => {
+                router.push('/');
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [router]);
 
     const getButtonClass = (option: string) => {
         const isCorrectAnswer = option === question.correctAnswer;

@@ -6,6 +6,9 @@ import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import LinguaLearnLogo from '@/components/LinguaLearnLogo';
 import { Clock, Pause, Home, RefreshCw, Play } from 'lucide-react';
+import { getTutorialState } from '@/lib/storage';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 const question = {
     word: 'Hello',
@@ -16,8 +19,20 @@ const question = {
 const QUESTION_TIME_LIMIT = 15;
 
 export default function QuizPausePage() {
+    const router = useRouter();
+
+    useEffect(() => {
+        const tutorialState = getTutorialState();
+        if (!tutorialState || !tutorialState.isActive) {
+            const timer = setTimeout(() => {
+                router.push('/');
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [router]);
+    
     const questionTimer = 10;
-    const totalTime = 86; // 1 minute 26 seconds
+    const totalTime = 5; 
     
     const formatTime = (seconds: number) => {
         const minutes = Math.floor(seconds / 60);

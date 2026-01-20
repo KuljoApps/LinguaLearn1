@@ -234,70 +234,70 @@ const extendedSteps: Step[] = [
 ];
 
 const quizSteps: Step[] = [
-    { // step 0 (Slajd 27)
+    { // Slajd 27
         path: '/tutorial/quiz-correct',
         elementId: 'quiz-timer',
         title: 'Czas na odpowiedź',
         description: 'Masz 15 sekund na każdą odpowiedź. Pasek postępu pokazuje, ile czasu pozostało. Nie marnuj go!',
         bubblePosition: 'bottom',
     },
-    { // step 1 (Slajd 28)
+    { // Slajd 28
         path: '/tutorial/quiz-pause',
         elementId: 'quiz-pause-button',
         title: 'Potrzebujesz przerwy?',
         description: 'Kliknij pauzę, aby zatrzymać czas. Pamiętaj jednak, że wznowienie quizu kosztuje 5 sekund!',
         bubblePosition: 'top'
     },
-    { // step 2 (Slajd 29)
+    { // Slajd 29
         path: '/tutorial/quiz-correct',
         elementId: 'quiz-correct-answer',
         title: 'Poprawna odpowiedź',
         description: 'Świetnie! Poprawna odpowiedź zostanie podświetlona na zielono. Po chwili automatycznie przejdziesz do następnego pytania.',
         bubblePosition: 'top',
     },
-    { // step 3 (Slajd 30)
+    { // Slajd 30
         path: '/tutorial/quiz-incorrect',
         elementId: 'quiz-incorrect-answer',
         title: 'Błędna odpowiedź',
         description: 'Nie martw się! Twoja błędna odpowiedź podświetli się na czerwono, a prawidłowa — na zielono. Każdy błąd to okazja do nauki!',
         bubblePosition: 'top'
     },
-    { // step 4 (Slajd 31)
+    { // Slajd 31
         path: '/tutorial/irregular-question',
         elementId: 'irregular-quiz-part1',
         title: 'Testy z czasowników',
         description: 'Ten typ quizu ma dłuższy czas na odpowiedź (30s) i sprawdza dwie rzeczy: tłumaczenie oraz znajomość form czasowników nieregularnych.',
         bubblePosition: 'bottom',
     },
-    { // step 5 (Slajd 32)
+    { // Slajd 32
         path: '/tutorial/irregular-question',
         elementId: 'irregular-quiz-part2',
         title: 'Wpisywanie odpowiedzi',
         description: 'Po wybraniu poprawnego tłumaczenia, aktywują się pola do wpisania dwóch pozostałych form czasownika. Zobaczmy, jak to działa.',
         bubblePosition: 'bottom',
     },
-    { // step 6 (Slajd 33)
+    { // Slajd 33
         path: '/tutorial/irregular-question',
         elementId: 'irregular-quiz-hint',
         title: 'Dwie poprawne formy',
         description: 'Gdy wpiszesz błędną odpowiedź, system podświetli ją na czerwono i wskaże poprawną formę. Niektóre czasowniki, jak "be", mają dwie opcje (was/were) - obie są zaliczane jako poprawne!',
         bubblePosition: 'top',
     },
-    { // step 7 (Slajd 34)
+    { // Slajd 34
         path: '/tutorial/quiz-results',
         elementId: 'quiz-results-summary',
         title: 'Podsumowanie wyników',
         description: 'Po zakończeniu quizu zobaczysz swoje statystyki. Sprawdź, jak Ci poszło!',
         bubblePosition: 'bottom',
     },
-    { // step 8 (Slajd 35)
+    { // Slajd 35
         path: '/tutorial/quiz-results',
         elementId: 'quiz-results-errors',
         title: 'Przegląd błędów',
         description: 'Wszystkie błędne odpowiedzi z sesji są tutaj. Przeanalizuj je, aby uniknąć ich w przyszłości.',
         bubblePosition: 'top'
     },
-    { // step 9 (Slajd 36)
+    { // Slajd 36
         path: '/tutorial/quiz-results',
         elementId: 'quiz-results-actions',
         title: 'Co dalej?',
@@ -319,12 +319,21 @@ const uiTexts = {
 };
 
 export default function OnboardingTutorial() {
+    const [tutorialState, setTutorialState] = useState<TutorialState | null>(null);
     const router = useRouter();
     const pathname = usePathname();
-    const tutorialState = getTutorialState();
     
     const [spotlightStyle, setSpotlightStyle] = useState<React.CSSProperties>({});
     const [bubbleStyle, setBubbleStyle] = useState<React.CSSProperties>({});
+
+    useEffect(() => {
+        const updateState = () => {
+            setTutorialState(getTutorialState());
+        };
+        updateState();
+        window.addEventListener('tutorial-state-changed', updateState);
+        return () => window.removeEventListener('tutorial-state-changed', updateState);
+    }, []);
 
     const stage = tutorialState?.stage || 'initial';
     const currentStepIndex = tutorialState?.step || 0;
@@ -333,14 +342,10 @@ export default function OnboardingTutorial() {
     const currentStep = (stage === 'decision') ? null : steps[currentStepIndex];
     
     useEffect(() => {
-        if (!currentStep) return;
-
-        // Reactive navigation: This effect handles routing whenever the currentStep demands a different path.
-        if (currentStep.path && pathname !== currentStep.path) {
+        if (currentStep?.path && pathname !== currentStep.path) {
             router.push(currentStep.path);
         }
-
-    }, [currentStep, router, pathname]);
+    }, [currentStep, pathname, router]);
 
     useEffect(() => {
         if (!currentStep || currentStep.isModal || !currentStep.elementId) {
@@ -494,7 +499,9 @@ export default function OnboardingTutorial() {
         saveTutorialState({ isActive: true, stage: 'quiz', step: 0 });
     }
 
-    if (!tutorialState?.isActive) return null;
+    if (!tutorialState || !tutorialState.isActive) {
+        return null;
+    }
     
     const renderModalContent = () => {
       if (stage === 'initial' && currentStepIndex === 0) {

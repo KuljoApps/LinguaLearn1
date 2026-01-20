@@ -10,6 +10,7 @@ import LinguaLearnLogo from '@/components/LinguaLearnLogo';
 import { Clock, ArrowLeft } from 'lucide-react';
 import { Label } from "@/components/ui/label";
 import { getTutorialState } from '@/lib/storage';
+import { useRouter } from 'next/navigation';
 
 const question = {
     verb: 'be',
@@ -26,6 +27,18 @@ export default function IrregularVerbQuizPage() {
     const [form3Class, setForm3Class] = useState('');
     const [showHint, setShowHint] = useState(false);
     const [activeStep, setActiveStep] = useState<number | null>(null);
+    const router = useRouter();
+
+    useEffect(() => {
+        const tutorialState = getTutorialState();
+        if (!tutorialState || !tutorialState.isActive) {
+            const timer = setTimeout(() => {
+                router.push('/');
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [router]);
+
 
     useEffect(() => {
         const updateStep = () => {

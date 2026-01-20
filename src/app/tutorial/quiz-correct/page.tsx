@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import LinguaLearnLogo from '@/components/LinguaLearnLogo';
 import { Clock, Pause, Home, RefreshCw } from 'lucide-react';
 import { getTutorialState } from '@/lib/storage';
+import { useRouter } from 'next/navigation';
 
 
 const question = {
@@ -22,6 +23,17 @@ export default function QuizCorrectPage() {
     const [activeStep, setActiveStep] = useState<number | null>(null);
     const [questionTimer, setQuestionTimer] = useState(QUESTION_TIME_LIMIT);
     const [totalTime, setTotalTime] = useState(0);
+    const router = useRouter();
+
+    useEffect(() => {
+        const tutorialState = getTutorialState();
+        if (!tutorialState || !tutorialState.isActive) {
+            const timer = setTimeout(() => {
+                router.push('/');
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [router]);
 
     useEffect(() => {
         const updateStep = () => {
