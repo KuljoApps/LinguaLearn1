@@ -46,12 +46,12 @@ const tutorialBubbleOffsets: { [key: string]: number } = {
     'quiz-pause-button': 0,
     'quiz-correct-answer': 42,
     'quiz-incorrect-answer': 42,
+    'irregular-quiz-part1': 0,
+    'irregular-quiz-part2': -340,
+    'irregular-quiz-hint': 40,
     'quiz-results-summary': 22,
     'quiz-results-errors': 22,
     'quiz-results-actions': 40,
-    'irregular-quiz-part1': 0,
-    'irregular-quiz-part2': 0,
-    'irregular-quiz-hint': 40,
 };
 
 
@@ -262,42 +262,42 @@ const quizSteps: Step[] = [
         description: 'Nie martw się! Twoja błędna odpowiedź podświetli się na czerwono, a prawidłowa — na zielono. Każdy błąd to okazja do nauki!',
         bubblePosition: 'top'
     },
-    { // step 4 (Nowy slajd 33)
+    { // step 4 (slide 30)
         path: '/tutorial/irregular-question',
         elementId: 'irregular-quiz-part1',
         title: 'Testy z czasowników',
         description: 'Ten typ quizu ma dłuższy czas na odpowiedź (30s) i sprawdza dwie rzeczy: tłumaczenie oraz znajomość form czasowników nieregularnych.',
         bubblePosition: 'bottom',
     },
-    { // step 5 (Nowy slajd 34)
+    { // step 5 (slide 31)
         path: '/tutorial/irregular-question',
         elementId: 'irregular-quiz-part2',
         title: 'Wpisywanie odpowiedzi',
         description: 'Po wybraniu poprawnego tłumaczenia, aktywują się pola do wpisania dwóch pozostałych form czasownika. Zobaczmy, jak to działa.',
         bubblePosition: 'bottom',
     },
-    { // step 6 (Nowy slajd 35)
+    { // step 6 (slide 32)
         path: '/tutorial/irregular-question',
         elementId: 'irregular-quiz-hint',
         title: 'Dwie poprawne formy',
         description: 'Gdy wpiszesz błędną odpowiedź, system podświetli ją na czerwono i wskaże poprawną formę. Niektóre czasowniki, jak "be", mają dwie opcje (was/were) - obie są zaliczane jako poprawne!',
         bubblePosition: 'top',
     },
-    { // step 7 (Stary slajd 30)
+    { // step 7 (slide 33)
         path: '/tutorial/quiz-results',
         elementId: 'quiz-results-summary',
         title: 'Podsumowanie wyników',
         description: 'Po zakończeniu quizu zobaczysz swoje statystyki. Sprawdź, jak Ci poszło!',
         bubblePosition: 'bottom',
     },
-    { // step 8 (Stary slajd 31)
+    { // step 8 (slide 34)
         path: '/tutorial/quiz-results',
         elementId: 'quiz-results-errors',
         title: 'Przegląd błędów',
         description: 'Wszystkie błędne odpowiedzi z sesji są tutaj. Przeanalizuj je, aby uniknąć ich w przyszłości.',
         bubblePosition: 'top'
     },
-    { // step 9 (Stary slajd 32)
+    { // step 9 (slide 35)
         path: '/tutorial/quiz-results',
         elementId: 'quiz-results-actions',
         title: 'Co dalej?',
