@@ -68,7 +68,7 @@ export interface TutorialState {
   isActive: boolean;
   stage: 'initial' | 'decision' | 'extended' | 'quiz';
   step: number;
-  origin?: 'decision-0' | 'decision-1' | 'quiz-decision';
+  origin?: 'decision-0' | 'decision-1' | 'quiz-decision' | 'extended-decision';
 }
 
 const TUTORIAL_STATE_KEY = 'linguaLearnTutorialState';
@@ -123,6 +123,12 @@ export const setLanguage = (lang: Language) => {
     localStorage.setItem(LANGUAGE_KEY, lang);
     window.dispatchEvent(new CustomEvent('language-changed'));
 }
+
+const getKey = (baseKey: string) => {
+    const lang = getLanguage();
+    return `${baseKey}_${lang}`;
+};
+
 
 // --- Favorites Functions ---
 
@@ -618,3 +624,6 @@ export const addError = (error: Omit<ErrorRecord, 'id'>) => {
 
 export const clearErrors = (): Achievement[] => {
     if (typeof window === 'undefined') return [];
+    localStorage.removeItem(getKey('linguaLearnErrors_v2'));
+    return checkAndUnlockAchievements(getStats());
+};

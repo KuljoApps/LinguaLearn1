@@ -455,12 +455,16 @@ export default function OnboardingTutorial() {
         const nextStepIndex = currentStepIndex + 1;
 
         if (stage === 'initial' && nextStepIndex >= steps.length) {
-            saveTutorialState({ isActive: true, stage: 'decision', step: 0 });
+            saveTutorialState({ isActive: true, stage: 'decision', step: 0, origin: 'decision-0' });
             return;
         }
         
         if (stage === 'extended' && nextStepIndex >= steps.length) {
-            saveTutorialState({ isActive: true, stage: 'decision', step: 1, origin: tutorialState?.origin });
+            if (tutorialState?.origin === 'quiz-decision') {
+                saveTutorialState({ isActive: true, stage: 'decision', step: -1, origin: 'quiz-decision' });
+            } else {
+                saveTutorialState({ isActive: true, stage: 'decision', step: 1, origin: tutorialState?.origin });
+            }
             return;
         }
         
@@ -507,7 +511,7 @@ export default function OnboardingTutorial() {
     };
     
     const handleShowMore = () => {
-        saveTutorialState({ isActive: true, stage: 'extended', step: 0 });
+        saveTutorialState({ isActive: true, stage: 'extended', step: 0, origin: 'decision-0' });
     }
     
     const handleStartTest = () => {
@@ -562,7 +566,7 @@ export default function OnboardingTutorial() {
                   </>
               );
           }
-          if (currentStepIndex === 1) {
+          if (currentStepIndex === 1) { // After extended tutorial (but not after quiz -> extended)
               return (
                   <>
                       <h2 className="text-2xl font-bold">{uiTexts.afterExtendedTitle}</h2>
@@ -574,7 +578,7 @@ export default function OnboardingTutorial() {
                   </>
               );
           }
-          if (currentStepIndex === -1) {
+          if (currentStepIndex === -1) { // After a quiz, or after quiz -> extended
             if (tutorialState?.origin === 'decision-0') {
                  return (
                     <>
@@ -587,7 +591,7 @@ export default function OnboardingTutorial() {
                     </>
                 )
             }
-             if (tutorialState?.origin === 'extended-decision') {
+             if (tutorialState?.origin === 'extended-decision' || tutorialState?.origin === 'quiz-decision') {
                 return (
                     <>
                         <h2 className="text-2xl font-bold">{uiTexts.afterAllTitle}</h2>
@@ -596,14 +600,7 @@ export default function OnboardingTutorial() {
                     </>
                 )
             }
-            return (
-                <>
-                    <h2 className="text-2xl font-bold">{uiTexts.afterAllTitle}</h2>
-                    <p className="text-muted-foreground my-6">{uiTexts.afterAllDesc}</p>
-                     <Button onClick={handleFinish}>{uiTexts.start}</Button>
-                </>
-            )
-        }
+          }
       }
       
       return null;
@@ -634,26 +631,16 @@ export default function OnboardingTutorial() {
         currentStepDisplay = currentStepIndex;
         totalStepsDisplay = totalInitialBubbleSteps;
     } else if (stage === 'extended') {
-        if (tutorialState.origin === 'quiz-decision') {
-            currentStepDisplay = currentStepIndex + 1;
-            totalStepsDisplay = extendedSteps.length;
-        } else {
-            currentStepDisplay = totalInitialBubbleSteps + currentStepIndex + 1;
-            totalStepsDisplay = totalInitialBubbleSteps + extendedSteps.length;
-        }
+        currentStepDisplay = currentStepIndex + 1;
+        totalStepsDisplay = extendedSteps.length;
     } else if (stage === 'quiz') {
-        if (tutorialState.origin === 'extended-decision') {
-            currentStepDisplay = currentStepIndex + 1;
-            totalStepsDisplay = quizSteps.length;
-        } else {
-            currentStepDisplay = totalInitialBubbleSteps + currentStepIndex + 1;
-            totalStepsDisplay = totalInitialBubbleSteps + quizSteps.length;
-        }
+        currentStepDisplay = currentStepIndex + 1;
+        totalStepsDisplay = quizSteps.length;
     }
 
     const isBackButtonDisabled = (stage === 'initial' && currentStepIndex === 1) || 
-                                 (stage === 'quiz' && currentStepIndex === 0 && tutorialState?.origin === 'decision-0') ||
-                                 (stage === 'extended' && currentStepIndex === 0 && tutorialState?.origin === 'quiz-decision');
+                                 (stage === 'quiz' && currentStepIndex === 0 && (tutorialState?.origin === 'decision-0' || tutorialState?.origin === 'extended-decision')) ||
+                                 (stage === 'extended' && currentStepIndex === 0 && (tutorialState?.origin === 'decision-0' || tutorialState?.origin === 'quiz-decision'));
 
 
     return (
