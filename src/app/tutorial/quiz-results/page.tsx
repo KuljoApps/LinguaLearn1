@@ -24,66 +24,79 @@ export default function QuizResultsPage() {
     const scrollAreaRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const tutorialState = getTutorialState();
-        if (!tutorialState || !tutorialState.isActive) {
-            const timer = setTimeout(() => {
-                router.push('/');
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    
-        const isThisStepActive = tutorialState.stage === 'quiz' && tutorialState.step === 8;
         let timeouts: NodeJS.Timeout[] = [];
         let animationFrameId: number;
-    
-        const easeInOutQuad = (t: number, b: number, c: number, d: number) => {
-            t /= d / 2;
-            if (t < 1) return (c / 2) * t * t + b;
-            t--;
-            return (-c / 2) * (t * (t - 2) - 1) + b;
-        };
-    
-        const animateScroll = (element: Element, to: number, duration: number) => {
-            const start = element.scrollTop;
-            const change = to - start;
-            let startTime: number | null = null;
-    
-            const animation = (currentTime: number) => {
-                if (startTime === null) startTime = currentTime;
-                const timeElapsed = currentTime - startTime;
-                const run = easeInOutQuad(timeElapsed, start, change, duration);
-                element.scrollTop = run;
-                if (timeElapsed < duration) {
-                    animationFrameId = requestAnimationFrame(animation);
-                }
-            };
-            animationFrameId = requestAnimationFrame(animation);
-        };
-    
-        if (isThisStepActive && scrollAreaRef.current) {
-            const viewport = scrollAreaRef.current?.querySelector('div[data-radix-scroll-area-viewport]');
-    
-            if (viewport) {
-                const scrollDown = () => {
-                    const maxScroll = viewport.scrollHeight - viewport.clientHeight;
-                    animateScroll(viewport, maxScroll, 3000); // Slower scroll down (3 seconds)
-                    timeouts.push(setTimeout(scrollUp, 4000)); // Wait longer before scrolling up
-                };
-    
-                const scrollUp = () => {
-                    animateScroll(viewport, 0, 3000); // Slower scroll up (3 seconds)
-                    timeouts.push(setTimeout(scrollDown, 4000)); // Wait longer before repeating
-                };
-    
-                timeouts.push(setTimeout(scrollDown, 1200)); // Initial start
-            }
-        }
-    
-        return () => {
+
+        const cleanupAnimation = () => {
             timeouts.forEach(clearTimeout);
             if (animationFrameId) {
                 cancelAnimationFrame(animationFrameId);
             }
+        };
+
+        const handleStateUpdate = () => {
+            const tutorialState = getTutorialState();
+            if (!tutorialState || !tutorialState.isActive) {
+                const timer = setTimeout(() => {
+                    router.push('/');
+                }, 3000);
+                timeouts.push(timer);
+                return;
+            }
+        
+            const isThisStepActive = tutorialState.stage === 'quiz' && tutorialState.step === 8;
+            cleanupAnimation();
+    
+            if (isThisStepActive && scrollAreaRef.current) {
+                const viewport = scrollAreaRef.current?.querySelector('div[data-radix-scroll-area-viewport]');
+        
+                if (viewport) {
+                    const easeInOutQuad = (t: number, b: number, c: number, d: number) => {
+                        t /= d / 2;
+                        if (t < 1) return (c / 2) * t * t + b;
+                        t--;
+                        return (-c / 2) * (t * (t - 2) - 1) + b;
+                    };
+        
+                    const animateScroll = (element: Element, to: number, duration: number) => {
+                        const start = element.scrollTop;
+                        const change = to - start;
+                        let startTime: number | null = null;
+        
+                        const animation = (currentTime: number) => {
+                            if (startTime === null) startTime = currentTime;
+                            const timeElapsed = currentTime - startTime;
+                            const run = easeInOutQuad(timeElapsed, start, change, duration);
+                            element.scrollTop = run;
+                            if (timeElapsed < duration) {
+                                animationFrameId = requestAnimationFrame(animation);
+                            }
+                        };
+                        animationFrameId = requestAnimationFrame(animation);
+                    };
+        
+                    const scrollDown = () => {
+                        const maxScroll = viewport.scrollHeight - viewport.clientHeight;
+                        animateScroll(viewport, maxScroll, 3000);
+                        timeouts.push(setTimeout(scrollUp, 4000));
+                    };
+        
+                    const scrollUp = () => {
+                        animateScroll(viewport, 0, 3000);
+                        timeouts.push(setTimeout(scrollDown, 4000));
+                    };
+        
+                    timeouts.push(setTimeout(scrollDown, 1200));
+                }
+            }
+        };
+
+        handleStateUpdate();
+        window.addEventListener('tutorial-state-changed', handleStateUpdate);
+
+        return () => {
+            cleanupAnimation();
+            window.removeEventListener('tutorial-state-changed', handleStateUpdate);
         };
     }, [router]);
 
