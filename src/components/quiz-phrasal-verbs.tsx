@@ -75,25 +75,15 @@ export default function QuizPhrasalVerbs() {
     });
   }, [toast]);
   
-  const setupQuiz = useCallback(() => {
+  useEffect(() => {
     const newQuestions = shuffleArray(initialQuestions).slice(0, QUIZ_LENGTH);
     setQuestions(newQuestions);
-    setCurrentQuestionIndex(0);
-    setScore(0);
-    setSelectedAnswer(null);
-    setAnswerStatus(null);
-    setQuestionTimer(QUESTION_TIME_LIMIT);
-    setTotalTime(0);
-    setIsPaused(false);
-    setSessionErrors([]);
     timeoutFiredRef.current = false;
-    setIsRestartAlertOpen(false);
   }, []);
 
   useEffect(() => {
-    setupQuiz();
-  }, [setupQuiz]);
-
+      timeoutFiredRef.current = false;
+  }, [currentQuestionIndex]);
 
   // Finalize session achievements
   useEffect(() => {
@@ -113,7 +103,6 @@ export default function QuizPhrasalVerbs() {
         setSelectedAnswer(null);
         setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
         setQuestionTimer(QUESTION_TIME_LIMIT);
-        timeoutFiredRef.current = false;
       }, 1500);
     }
     return () => clearTimeout(timer);
@@ -215,7 +204,7 @@ export default function QuizPhrasalVerbs() {
     if (currentQuestionIndex > 0) {
       setIsRestartAlertOpen(true);
     } else {
-      setupQuiz();
+      restartTest();
     }
   };
   
@@ -236,6 +225,20 @@ export default function QuizPhrasalVerbs() {
       setQuestionTimer(newTime);
       setIsPaused(false);
     }
+  }
+
+  const restartTest = () => {
+    setQuestions(shuffleArray(initialQuestions).slice(0, QUIZ_LENGTH));
+    setCurrentQuestionIndex(0);
+    setScore(0);
+    setSelectedAnswer(null);
+    setAnswerStatus(null);
+    setQuestionTimer(QUESTION_TIME_LIMIT);
+    setTotalTime(0);
+    setIsPaused(false);
+    setSessionErrors([]);
+    timeoutFiredRef.current = false;
+    setIsRestartAlertOpen(false);
   }
 
   const goHome = () => {
@@ -273,13 +276,13 @@ export default function QuizPhrasalVerbs() {
             totalTime={totalTime}
             sessionErrors={sessionErrors}
             quizName={QUIZ_NAME}
-            onRestart={setupQuiz}
+            onRestart={restartTest}
         />
     );
   }
   
-  if (!currentQuestion) {
-    return null;
+  if (questions.length === 0) {
+    return null; // Loading or empty state
   }
 
 
@@ -396,7 +399,7 @@ export default function QuizPhrasalVerbs() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={setupQuiz}>Restart</AlertDialogAction>
+            <AlertDialogAction onClick={restartTest}>Restart</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
