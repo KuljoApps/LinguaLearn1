@@ -54,39 +54,41 @@ Musisz dodać logikę, która uruchomi samouczek. Fragmenty kodu znajdziesz w fo
 
 To najważniejszy i najbardziej czasochłonny krok. Musisz przejść przez pliki komponentów w nowej aplikacji i dodać atrybuty `data-tutorial-id="nazwa-elementu"` do elementów, które mają być podświetlane.
 
-Poniżej znajduje się lista wszystkich `id` używanych w samouczku. Przykłady implementacji dla każdego z nich znajdziesz w odpowiednich plikach w folderze `3_Oznaczanie_Elementow`.
+Poniżej znajduje się lista wszystkich `id` używanych w samouczku, wraz ze wskazaniem **przykładowych plików z bieżącego projektu**, gdzie możesz zobaczyć, jak zostały zaimplementowane.
 
-*   **Ekran główny (`page.tsx`)**:
+*   **Ekran główny (przykład: `src/app/page.tsx`)**:
     *   `language-switcher`
     *   `quiz-buttons`
     *   `learning-button`
     *   `toolbar`
-*   **Ustawienia (`settings.tsx`)**:
+*   **Ustawienia (przykład: `src/components/settings.tsx`)**:
     *   `settings-switches`
     *   `settings-eyecare`
-*   **Statystyki (`statistics.tsx`)**:
+    *   `dev-tools-trigger`
+*   **Statystyki (przykład: `src/components/statistics.tsx`)**:
     *   `stats-cards`
     *   `last-50-grid`
-*   **Błędy (`errors.tsx`)**:
+*   **Błędy (przykład: `src/components/errors.tsx`)**:
     *   `errors-controls`
     *   `errors-table`
-*   **Osiągnięcia (`achievements.tsx`)**:
+*   **Osiągnięcia (przykład: `src/components/achievements.tsx`)**:
     *   `achievements-grid`
-*   **Ekran Nauki (`learning/en/page.tsx`)**:
+*   **Ekran Nauki (przykład: `src/app/learning/en/page.tsx`)**:
     *   `learning-card`
     *   `learning-question-base`
     *   `learning-main-modules`
     *   `learning-extras`
     *   `extras-trigger`
-*   **Podstrony Nauki**:
-    *   `phrases-airport`
-    *   `airport-first-phrases`
-    *   `dictionary-colors`
-    *   `dictionary-word-list`
-    *   `culture-about`, `culture-places`, `culture-history`
-    *   `tongue-twisters-first-two`
-    *   `phonetics-alphabet`, `phonetics-difficult`, `phonetics-first-item`
-*   **Quiz**:
+*   **Podstrony Nauki (przykłady w `src/app/learning/en/...` oraz `src/components/...`)**:
+    *   `phrases-airport` (w `phrases/page.tsx`)
+    *   `airport-first-phrases` (w `phrases-page.tsx`)
+    *   `dictionary-colors` (w `dictionary/page.tsx`)
+    *   `dictionary-word-list` (w `dictionary-page.tsx`)
+    *   `culture-about`, `culture-places`, `culture-history` (w `culture/page.tsx`)
+    *   `tongue-twisters-first-two` (w `phrases-page.tsx` dla łamańców językowych)
+    *   `phonetics-alphabet`, `phonetics-difficult` (w `phonetics/page.tsx`)
+    *   `phonetics-first-item` (w `phonetics-category-page.tsx`)
+*   **Quiz (przykłady w `src/components/demo-quiz.tsx` i `src/app/tutorial/irregular-question/page.tsx`)**:
     *   `quiz-timer`
     *   `quiz-pause-button`
     *   `quiz-correct-answer`, `quiz-incorrect-answer`
