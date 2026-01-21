@@ -28,7 +28,7 @@ export default function RateAppDialog({ open, onOpenChange }: RateAppDialogProps
             Podoba Ci się aplikacja?
           </DialogTitle>
           <DialogDescription className="text-center pt-2">
-            Twoja opinia jest dla nas bardzo ważna. Pomaga nam ulepszać aplikację i docierać do nowych użytkowników. Poświęć chwilę, aby nas ocenić.
+            Twoja opinia jest dla nas bardzo ważna. Pomaga nam ulepszać aplikację i&nbsp;docierać do nowych użytkowników. Poświęć chwilę, aby nas ocenić.
           </DialogDescription>
         </DialogHeader>
 
@@ -53,7 +53,7 @@ export default function RateAppDialog({ open, onOpenChange }: RateAppDialogProps
         
         <DialogFooter className="flex-col sm:flex-row sm:justify-center gap-2 pt-2">
             <Button type="button" size="lg" onClick={handleRate}>
-              Oceń w sklepie
+              Oceń w&nbsp;sklepie
             </Button>
             <Button type="button" variant="secondary" onClick={() => onOpenChange(false)}>
               Może później

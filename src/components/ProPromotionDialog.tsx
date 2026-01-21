@@ -28,7 +28,7 @@ export default function ProPromotionDialog({ open, onOpenChange }: ProPromotionD
             </div>
             <div>
               <h4 className="font-semibold">Wszystkie przyszłe języki</h4>
-              <p className="text-sm text-muted-foreground">Uzyskajjjj dostęp do wszystkich nowych języków dodawanych do aplikacji.</p>
+              <p className="text-sm text-muted-foreground">Uzyskaj dostęp do wszystkich nowych języków dodawanych do aplikacji.</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -37,7 +37,7 @@ export default function ProPromotionDialog({ open, onOpenChange }: ProPromotionD
             </div>
             <div>
               <h4 className="font-semibold">Śledzenie postępów i codzienne wyzwania</h4>
-              <p className="text-sm text-muted-foreground">Monitoruj swoje wyniki dzięki zaawansowanym statystykom i realizuj codzienne misje, aby zdobywać nagrody.</p>
+              <p className="text-sm text-muted-foreground">Monitoruj swoje wyniki dzięki zaawansowanym statystykom i&nbsp;realizuj codzienne misje, aby zdobywać nagrody.</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -46,7 +46,7 @@ export default function ProPromotionDialog({ open, onOpenChange }: ProPromotionD
             </div>
             <div>
               <h4 className="font-semibold">Dożywotnia licencja</h4>
-              <p className="text-sm text-muted-foreground">Jedna, niska opłata za dostęp do wszystkich funkcji <span className="font-semibold text-deep-purple">PRO</span> na zawsze.</p>
+              <p className="text-sm text-muted-foreground">Jedna, niska opłata za dostęp do wszystkich funkcji <span className="font-semibold text-deep-purple">PRO</span> na&nbsp;zawsze.</p>
             </div>
           </div>
         </div>
