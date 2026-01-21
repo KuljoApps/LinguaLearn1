@@ -8,8 +8,8 @@ import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import { ArrowLeft, Trash2 } from "lucide-react";
-import { getSettings, saveSettings, clearSettings, type Settings as AppSettings, getLanguage, type Language } from "@/lib/storage";
+import { ArrowLeft, Trash2, Code } from "lucide-react";
+import { getSettings, saveSettings, clearSettings, type Settings as AppSettings, getLanguage, type Language, saveTutorialState } from "@/lib/storage";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,6 +20,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { useRouter } from "next/navigation";
+import ProPromotionDialog from "@/components/ProPromotionDialog";
+import RateAppDialog from "@/components/RateAppDialog";
 
 const uiTexts = {
     title: { en: 'Settings', fr: 'Réglages', de: 'Einstellungen', it: 'Impostazioni', es: 'Ajustes' },
@@ -43,6 +47,11 @@ export default function SettingsPage() {
     const [settings, setSettings] = useState<AppSettings>(getSettings);
     const [isResetAlertOpen, setIsResetAlertOpen] = useState(false);
     const [language, setLanguageState] = useState<Language>('en');
+    const [isDevToolsOpen, setIsDevToolsOpen] = useState(false);
+    const [showPromoDialog, setShowPromoDialog] = useState(false);
+    const [showRateDialog, setShowRateDialog] = useState(false);
+    const router = useRouter();
+
 
      useEffect(() => {
         const handleLanguageChange = () => {
@@ -78,8 +87,15 @@ export default function SettingsPage() {
         setIsResetAlertOpen(false);
     };
 
+    const handleRunTutorial = () => {
+        saveTutorialState({ isActive: true, stage: 'initial', step: 0 });
+        router.push('/');
+    };
+
     return (
         <>
+            <ProPromotionDialog open={showPromoDialog} onOpenChange={setShowPromoDialog} />
+            <RateAppDialog open={showRateDialog} onOpenChange={setShowRateDialog} />
             <Card className="w-full max-w-md shadow-2xl" data-tutorial-id="settings-card">
                 <CardHeader>
                     <CardTitle className="text-center text-3xl">{getUIText('title')}</CardTitle>
@@ -146,8 +162,8 @@ export default function SettingsPage() {
                         </div>
                     </div>
                 </CardContent>
-                <CardFooter className="flex justify-center p-6 pt-2">
-                    <div className="flex flex-wrap justify-center gap-4">
+                <CardFooter className="flex-col justify-center p-6 pt-2">
+                    <div className="flex flex-wrap justify-center gap-4 w-full">
                         <Link href="/" passHref>
                             <Button variant="outline">
                                 <ArrowLeft className="mr-2 h-4 w-4" /> {getUIText('backToHome')}
@@ -157,6 +173,26 @@ export default function SettingsPage() {
                             <Trash2 className="mr-2 h-4 w-4" /> {getUIText('resetSettings')}
                         </Button>
                     </div>
+                    <Separator className="my-4" />
+                     <Collapsible open={isDevToolsOpen} onOpenChange={setIsDevToolsOpen} className="w-full">
+                        <CollapsibleTrigger asChild>
+                            <Button variant="ghost" className="w-full">
+                                <Code className="mr-2 h-4 w-4" />
+                                Dev Tools
+                            </Button>
+                        </CollapsibleTrigger>
+                        <CollapsibleContent className="space-y-2 pt-4">
+                            <Button onClick={handleRunTutorial} variant="outline" className="w-full">
+                                Uruchom samouczek
+                            </Button>
+                            <Button onClick={() => setShowPromoDialog(true)} variant="outline" className="w-full">
+                                Pokaż okno PRO
+                            </Button>
+                            <Button onClick={() => setShowRateDialog(true)} variant="outline" className="w-full">
+                                Pokaż okno oceny
+                            </Button>
+                        </CollapsibleContent>
+                    </Collapsible>
                 </CardFooter>
             </Card>
 

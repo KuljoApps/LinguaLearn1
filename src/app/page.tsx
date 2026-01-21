@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import LinguaLearnLogo from '@/components/LinguaLearnLogo';
-import { getLanguage, setLanguage, shouldShowProPromo, shouldShowRateAppDialog, isTutorialCompleted, setTutorialCompleted, saveTutorialState } from '@/lib/storage';
+import { getLanguage, setLanguage, shouldShowProPromo, shouldShowRateAppDialog, isTutorialCompleted, saveTutorialState } from '@/lib/storage';
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -23,14 +23,8 @@ export default function Home() {
     useEffect(() => {
         setCurrentLanguage(getLanguage());
         
-        // For development purposes, always restart the tutorial on home page visit.
-        const showTutorialForTesting = true;
-
-        if (showTutorialForTesting) {
+        if (!isTutorialCompleted()) {
             saveTutorialState({ isActive: true, stage: 'initial', step: 0 });
-        } else if (!isTutorialCompleted()) {
-            saveTutorialState({ isActive: true, stage: 'initial', step: 0 });
-            setTutorialCompleted();
         } else {
              if (shouldShowProPromo()) {
                 setShowPromo(true);

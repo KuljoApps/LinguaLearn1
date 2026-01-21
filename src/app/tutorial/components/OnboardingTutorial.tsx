@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { saveTutorialState, clearTutorialState, getTutorialState, type TutorialState } from '@/lib/storage';
+import { saveTutorialState, clearTutorialState, getTutorialState, setTutorialCompleted, type TutorialState } from '@/lib/storage';
 import { ArrowLeft } from 'lucide-react';
 
 interface Step {
@@ -321,7 +321,7 @@ const uiTexts = {
     afterAllDesc: 'To wszystko! Znasz już całą aplikację. Teraz możesz zacząć prawdziwą naukę. Powodzenia!',
     almostDoneTitle: 'Prawie wszystko gotowe!',
     almostDoneDesc: 'Znasz już podstawy i wiesz, jak działają quizy. Chcesz teraz poznać resztę zaawansowanych funkcji, czy od razu zacząć naukę?',
-    exploreMore: 'Poznaj więcej!',
+    exploreMore: 'Poznaj więcej',
 };
 
 export default function OnboardingTutorial() {
@@ -463,13 +463,17 @@ export default function OnboardingTutorial() {
             if (tutorialState?.origin === 'quiz-decision') {
                 saveTutorialState({ isActive: true, stage: 'decision', step: -1, origin: 'quiz-decision' });
             } else {
-                saveTutorialState({ isActive: true, stage: 'decision', step: 1, origin: tutorialState?.origin });
+                saveTutorialState({ isActive: true, stage: 'decision', step: 1, origin: 'decision-0' });
             }
             return;
         }
         
         if (stage === 'quiz' && nextStepIndex >= steps.length) {
-            saveTutorialState({ isActive: true, stage: 'decision', step: -1, origin: tutorialState?.origin });
+             if (tutorialState?.origin === 'extended-decision') {
+                saveTutorialState({ isActive: true, stage: 'decision', step: -1, origin: 'extended-decision' });
+            } else {
+                saveTutorialState({ isActive: true, stage: 'decision', step: -1, origin: 'decision-0' });
+            }
             return;
         }
 
@@ -504,6 +508,7 @@ export default function OnboardingTutorial() {
 
 
     const handleFinish = () => {
+        setTutorialCompleted();
         clearTutorialState();
         if (pathname.startsWith('/tutorial')) {
             router.push('/');
@@ -566,7 +571,7 @@ export default function OnboardingTutorial() {
                   </>
               );
           }
-          if (currentStepIndex === 1) { // After extended tutorial (but not after quiz -> extended)
+          if (currentStepIndex === 1) { 
               return (
                   <>
                       <h2 className="text-2xl font-bold">{uiTexts.afterExtendedTitle}</h2>
@@ -578,7 +583,7 @@ export default function OnboardingTutorial() {
                   </>
               );
           }
-          if (currentStepIndex === -1) { // After a quiz, or after quiz -> extended
+          if (currentStepIndex === -1) { 
             if (tutorialState?.origin === 'decision-0') {
                  return (
                     <>
@@ -636,6 +641,21 @@ export default function OnboardingTutorial() {
     } else if (stage === 'quiz') {
         currentStepDisplay = currentStepIndex + 1;
         totalStepsDisplay = quizSteps.length;
+    }
+    
+    if (tutorialState?.origin === 'decision-0' && stage === 'quiz') {
+      totalStepsDisplay = quizSteps.length;
+    }
+    if (tutorialState?.origin === 'decision-0' && stage === 'extended') {
+      totalStepsDisplay = extendedSteps.length;
+    }
+    
+    if (tutorialState?.origin === 'quiz-decision' && stage === 'extended') {
+      totalStepsDisplay = extendedSteps.length;
+    }
+    
+    if (tutorialState?.origin === 'extended-decision' && stage === 'quiz') {
+      totalStepsDisplay = quizSteps.length;
     }
 
     const isBackButtonDisabled = (stage === 'initial' && currentStepIndex === 1) || 
