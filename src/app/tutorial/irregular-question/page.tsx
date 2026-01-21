@@ -61,8 +61,7 @@ export default function IrregularVerbQuizPage() {
     };
 
     useEffect(() => {
-        let timeoutId: NodeJS.Timeout;
-        if (activeStep === 5) { // Animation for slide 31
+        if (activeStep === 5) { // Step 32: "Wpisywanie odpowiedzi" - Animate typing
             setShowHint(false);
             setForm2Input('');
             setForm3Input('');
@@ -78,20 +77,22 @@ export default function IrregularVerbQuizPage() {
                 setForm3Class('bg-destructive text-destructive-foreground');
             };
             animate();
-        } else if (activeStep === 6) { // Hint for slide 32
+        } else if (activeStep === 6) { // Step 33: "Dwie poprawne formy" - Show hint statically
+            // Set the state to match the end of the previous animation's state
             setForm2Input('was');
             setForm3Input('beed');
             setForm2Class('');
             setForm3Class('bg-destructive text-destructive-foreground');
-            timeoutId = setTimeout(() => setShowHint(true), 500);
+            // Show the hint immediately, without delay
+            setShowHint(true);
         } else {
+            // Reset state for all other steps
             setForm2Input('');
             setForm3Input('');
             setForm2Class('');
             setForm3Class('');
             setShowHint(false);
         }
-        return () => clearTimeout(timeoutId);
     }, [activeStep]);
     
     return (
