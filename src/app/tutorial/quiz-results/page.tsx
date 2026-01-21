@@ -86,7 +86,7 @@ export default function QuizResultsPage() {
                         timeouts.push(setTimeout(scrollDown, 4000));
                     };
         
-                    timeouts.push(setTimeout(scrollDown, 1200));
+                    timeouts.push(setTimeout(scrollDown, 400));
                 }
             }
         };
