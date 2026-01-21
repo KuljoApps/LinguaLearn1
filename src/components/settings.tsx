@@ -8,7 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import { ArrowLeft, Trash2, Code } from "lucide-react";
+import { ArrowLeft, Trash2, ChevronDown, GraduationCap, Crown, Star } from "lucide-react";
 import { getSettings, saveSettings, clearSettings, type Settings as AppSettings, getLanguage, type Language, saveTutorialState } from "@/lib/storage";
 import {
   AlertDialog,
@@ -173,26 +173,39 @@ export default function SettingsPage() {
                             <Trash2 className="mr-2 h-4 w-4" /> {getUIText('resetSettings')}
                         </Button>
                     </div>
-                    <Separator className="my-4" />
-                     <Collapsible open={isDevToolsOpen} onOpenChange={setIsDevToolsOpen} className="w-full">
-                        <CollapsibleTrigger asChild>
-                            <Button variant="ghost" className="w-full">
-                                <Code className="mr-2 h-4 w-4" />
-                                Dev Tools
-                            </Button>
-                        </CollapsibleTrigger>
-                        <CollapsibleContent className="space-y-2 pt-4">
-                            <Button onClick={handleRunTutorial} variant="outline" className="w-full">
-                                Uruchom samouczek
-                            </Button>
-                            <Button onClick={() => setShowPromoDialog(true)} variant="outline" className="w-full">
-                                Pokaż okno PRO
-                            </Button>
-                            <Button onClick={() => setShowRateDialog(true)} variant="outline" className="w-full">
-                                Pokaż okno oceny
-                            </Button>
-                        </CollapsibleContent>
-                    </Collapsible>
+
+                    {/* --- DEV TOOLS --- */}
+                    <div className="w-full pt-4 mt-4 border-t border-dashed">
+                        <Collapsible open={isDevToolsOpen} onOpenChange={setIsDevToolsOpen} className="w-full">
+                            <div className="flex items-center justify-center -mb-2">
+                                <Separator className="flex-grow" />
+                                <CollapsibleTrigger asChild>
+                                    <Button variant="ghost" className="flex items-center gap-2 px-3">
+                                        <span className="text-sm italic text-muted-foreground">Developer Tools</span>
+                                        <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isDevToolsOpen ? 'rotate-180' : ''}`} />
+                                    </Button>
+                                </CollapsibleTrigger>
+                                <Separator className="flex-grow" />
+                            </div>
+                            <CollapsibleContent className="pt-4">
+                              <div className="flex flex-col gap-2">
+                                <Button variant="secondary" size="sm" onClick={handleRunTutorial}>
+                                  <GraduationCap className="mr-2 h-4 w-4" />
+                                  Uruchom samouczek
+                                </Button>
+                                <Button variant="secondary" size="sm" onClick={() => setShowPromoDialog(true)}>
+                                  <Crown className="mr-2 h-4 w-4" />
+                                  Pokaż okno PRO
+                                </Button>
+                                <Button variant="secondary" size="sm" onClick={() => setShowRateDialog(true)}>
+                                  <Star className="mr-2 h-4 w-4" />
+                                  Pokaż okno oceny
+                                </Button>
+                              </div>
+                            </CollapsibleContent>
+                        </Collapsible>
+                    </div>
+                    {/* --- END DEV TOOLS --- */}
                 </CardFooter>
             </Card>
 
