@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { getTutorialState } from '@/lib/storage';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,6 +21,7 @@ const fakeSessionErrors = [
 
 export default function QuizResultsPage() {
     const router = useRouter();
+    const scrollAreaRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const tutorialState = getTutorialState();
@@ -30,7 +31,36 @@ export default function QuizResultsPage() {
             }, 3000);
             return () => clearTimeout(timer);
         }
+
+        const isThisStepActive = tutorialState.stage === 'quiz' && tutorialState.step === 8;
+        let scrollInterval: NodeJS.Timeout | undefined;
+
+        if (isThisStepActive && scrollAreaRef.current) {
+            const viewport = scrollAreaRef.current?.querySelector('div[data-radix-scroll-area-viewport]');
+            
+            if (viewport) {
+                const animateScroll = () => {
+                    const maxScroll = viewport.scrollHeight - viewport.clientHeight;
+                    viewport.scrollTo({ top: maxScroll, behavior: 'smooth' });
+
+                    setTimeout(() => {
+                        viewport.scrollTo({ top: 0, behavior: 'smooth' });
+                    }, 2500); 
+                };
+
+                const startTimeout = setTimeout(() => {
+                    animateScroll();
+                    scrollInterval = setInterval(animateScroll, 5000); // Repeat
+                }, 1200);
+
+                return () => {
+                    clearTimeout(startTimeout);
+                    if (scrollInterval) clearInterval(scrollInterval);
+                };
+            }
+        }
     }, [router]);
+
 
     const formatTime = (seconds: number) => {
         const minutes = Math.floor(seconds / 60);
@@ -123,7 +153,7 @@ export default function QuizResultsPage() {
 
                     <div className="space-y-2" data-tutorial-id="quiz-results-errors">
                         <h3 className="text-center font-semibold">Warto to powtórzyć</h3>
-                        <ScrollArea className="h-32 w-full rounded-md border p-2">
+                        <ScrollArea ref={scrollAreaRef} className="h-32 w-full rounded-md border p-2">
                             <div className="space-y-2">
                                 {fakeSessionErrors.map((error, index) => (
                                     <React.Fragment key={index}>
@@ -153,4 +183,3 @@ export default function QuizResultsPage() {
         </main>
     );
 }
-      
