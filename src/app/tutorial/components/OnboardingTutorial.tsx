@@ -325,8 +325,10 @@ export default function OnboardingTutorial() {
     
     const [spotlightStyle, setSpotlightStyle] = useState<React.CSSProperties>({});
     const [bubbleStyle, setBubbleStyle] = useState<React.CSSProperties>({});
+    const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
+        setIsMounted(true);
         const updateState = () => {
             setTutorialState(getTutorialState());
         };
@@ -334,6 +336,7 @@ export default function OnboardingTutorial() {
         window.addEventListener('tutorial-state-changed', updateState);
         return () => window.removeEventListener('tutorial-state-changed', updateState);
     }, []);
+
 
     const stage = tutorialState?.stage || 'initial';
     const currentStepIndex = tutorialState?.step || 0;
@@ -475,8 +478,9 @@ export default function OnboardingTutorial() {
             saveTutorialState({ isActive: true, stage: 'decision', step: 0 });
             return;
         }
+        const backToStep = tutorialState?.origin === 'decision-0' ? 0 : 1;
         if (stage === 'quiz' && prevStepIndex < 0) {
-            saveTutorialState({ isActive: true, stage: 'decision', step: 1 });
+            saveTutorialState({ isActive: true, stage: 'decision', step: backToStep });
             return;
         }
         
@@ -496,10 +500,11 @@ export default function OnboardingTutorial() {
     }
 
     const handleStartTest = () => {
-        saveTutorialState({ isActive: true, stage: 'quiz', step: 0 });
+        const origin = stage === 'decision' && currentStepIndex === 0 ? 'decision-0' : 'decision-1';
+        saveTutorialState({ isActive: true, stage: 'quiz', step: 0, origin: origin });
     }
 
-    if (!tutorialState || !tutorialState.isActive) {
+    if (!isMounted || !tutorialState || !tutorialState.isActive) {
         return null;
     }
     
@@ -589,14 +594,29 @@ export default function OnboardingTutorial() {
     const totalOverallBubbleSteps = totalInitialBubbleSteps + totalExtendedSteps + totalQuizBubbleSteps;
 
     let currentStepDisplay: number = 0;
+    let totalStepsDisplay: number = 0;
 
     if (stage === 'initial') {
         currentStepDisplay = currentStepIndex;
+        totalStepsDisplay = totalInitialBubbleSteps;
     } else if (stage === 'extended') {
         currentStepDisplay = totalInitialBubbleSteps + currentStepIndex + 1;
+        totalStepsDisplay = totalInitialBubbleSteps + totalExtendedSteps;
     } else if (stage === 'quiz') {
-        currentStepDisplay = totalInitialBubbleSteps + totalExtendedSteps + currentStepIndex + 1;
+        const cameFromInitial = tutorialState.origin === 'decision-0';
+        currentStepDisplay = currentStepIndex + 1;
+        totalStepsDisplay = totalQuizBubbleSteps;
+        
+        if (!cameFromInitial) {
+             currentStepDisplay += totalInitialBubbleSteps + totalExtendedSteps;
+             totalStepsDisplay += totalInitialBubbleSteps + totalExtendedSteps;
+        }
     }
+
+
+    const cameFromInitialDecision = tutorialState?.origin === 'decision-0';
+    const isBackButtonDisabled = (stage === 'initial' && currentStepIndex === 1) || 
+                                 (stage === 'quiz' && currentStepIndex === 0 && cameFromInitialDecision);
 
 
     return (
@@ -618,12 +638,12 @@ export default function OnboardingTutorial() {
                             variant="ghost"
                             size="icon"
                             className="h-8 w-8"
-                            disabled={(stage === 'initial' && currentStepIndex === 1)}
+                            disabled={isBackButtonDisabled}
                         >
                             <ArrowLeft className="h-4 w-4" />
                         </Button>
                         <span className="text-xs text-muted-foreground">
-                            {stage === 'initial' ? `${currentStepDisplay}/${totalInitialBubbleSteps}` : `${currentStepDisplay}/${totalOverallBubbleSteps}`}
+                            {currentStepDisplay}/{totalStepsDisplay}
                         </span>
                     </div>
                     <Button onClick={isFinalStep ? handleFinish : handleNext} size="sm">
@@ -634,4 +654,3 @@ export default function OnboardingTutorial() {
         </div>
     );
 }
-
