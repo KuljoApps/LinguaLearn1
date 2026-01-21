@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { getTutorialState } from '@/lib/storage';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,14 +11,13 @@ import { Brain, ThumbsUp, Trophy, Clock, CheckCircle, ShieldX } from 'lucide-rea
 import type { ErrorRecord } from '@/lib/storage';
 
 const fakeSessionErrors = [
-    { word: 'Throughout', userAnswer: 'Na zewnątrz', correctAnswer: 'Przez cały (czas)', quiz: 'Demo Quiz' },
+    { word: 'Reliable', userAnswer: 'Religijny', correctAnswer: 'Niezawodny', quiz: 'Demo Quiz' },
+    { word: 'Accomplish', userAnswer: 'Akompaniować', correctAnswer: 'Osiągnąć', quiz: 'Demo Quiz' },
+    { word: 'Conscious', userAnswer: 'Sumienny', correctAnswer: 'Świadomy', quiz: 'Demo Quiz' },
+    { word: 'Eventually', userAnswer: 'Ewentualnie', correctAnswer: 'Ostatecznie', quiz: 'Demo Quiz' },
+    { word: 'Fabric', userAnswer: 'Fabryka', correctAnswer: 'Tkanina', quiz: 'Demo Quiz' },
+    { word: 'Sympathetic', userAnswer: 'Sympatyczny', correctAnswer: 'Współczujący', quiz: 'Demo Quiz' }
 ];
-
-const motivationalMessage = {
-    icon: <ThumbsUp className="h-16 w-16 text-primary" />,
-    title: 'Dobry wynik!',
-    description: 'Jesteś na dobrej drodze. Ćwicz dalej, aby opanować język do perfekcji!',
-};
 
 export default function QuizResultsPage() {
     const router = useRouter();
@@ -39,6 +38,40 @@ export default function QuizResultsPage() {
         return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
     };
 
+    const score = 24;
+    const totalQuestions = 30;
+    const successRate = Math.round((score / totalQuestions) * 100);
+
+    const motivationalMessage = useMemo(() => {
+        if (successRate === 100) {
+            return {
+                icon: <Trophy className="h-16 w-16 text-amber animate-shake" />,
+                title: 'Bezbłędny test!',
+                description: 'Doskonale! Wszystkie odpowiedzi były poprawne. Jesteś mistrzem!',
+            };
+        }
+        if (successRate >= 80) {
+            return {
+                icon: <Trophy className="h-16 w-16 text-amber" />,
+                title: 'Świetna robota!',
+                description: 'Twój wynik jest imponujący. Tak trzymać!',
+            };
+        }
+        if (successRate >= 50) {
+            return {
+                icon: <ThumbsUp className="h-16 w-16 text-primary" />,
+                title: 'Dobry wynik!',
+                description: 'Jesteś na dobrej drodze. Ćwicz dalej!',
+            };
+        }
+        return {
+            icon: <Brain className="h-16 w-16 text-muted-foreground" />,
+            title: 'Ćwiczenie czyni mistrza!',
+            description: 'Każdy błąd to okazja do nauki. Spróbuj jeszcze raz!',
+        };
+    }, [successRate]);
+
+
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
             <Card className="w-full max-w-lg shadow-2xl">
@@ -56,31 +89,31 @@ export default function QuizResultsPage() {
                             </CardHeader>
                             <CardContent className="grid grid-cols-2 gap-4 text-center">
                                 <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-background">
-                                    <span className="text-2xl font-bold">1 / 2</span>
+                                    <span className="text-2xl font-bold">{score} / {totalQuestions}</span>
                                     <span className="text-xs text-muted-foreground">Wynik</span>
                                 </div>
                                 <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-background">
-                                    <span className="text-2xl font-bold">50%</span>
+                                    <span className="text-2xl font-bold">{successRate}%</span>
                                     <span className="text-xs text-muted-foreground">Skuteczność</span>
                                 </div>
                                 <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-background">
                                     <div className="flex items-center gap-2">
                                         <CheckCircle className="h-4 w-4 text-success"/>
-                                        <span className="text-2xl font-bold">1</span>
+                                        <span className="text-2xl font-bold">{score}</span>
                                     </div>
                                     <span className="text-xs text-muted-foreground">Poprawne</span>
                                 </div>
                                 <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-background">
                                     <div className="flex items-center gap-2">
                                         <ShieldX className="h-4 w-4 text-destructive"/>
-                                        <span className="text-2xl font-bold">1</span>
+                                        <span className="text-2xl font-bold">{totalQuestions - score}</span>
                                     </div>
                                     <span className="text-xs text-muted-foreground">Błędne</span>
                                 </div>
                                 <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-background col-span-2">
                                     <div className="flex items-center gap-2">
                                         <Clock className="h-4 w-4 text-muted-foreground"/>
-                                        <span className="text-2xl font-bold">{formatTime(15)}</span>
+                                        <span className="text-2xl font-bold">{formatTime(138)}</span>
                                     </div>
                                     <span className="text-xs text-muted-foreground">Całkowity czas</span>
                                 </div>
