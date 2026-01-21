@@ -313,8 +313,8 @@ const uiTexts = {
     exit: 'Wyjdź',
     exitToMenu: 'Wyjdź do menu',
     showMore: 'Pokaż więcej',
-    start: 'Zacznij naukę',
-    startTest: 'Zacznij krótki test',
+    start: 'Zacznij naukę!',
+    startTest: 'Zacznij krótki test!',
     afterExtendedTitle: 'Wprowadzenie zakończone!',
     afterExtendedDesc: 'Wiesz już wszystko, co potrzebne, aby w pełni korzystać z aplikacji. Chcesz teraz wypróbować krótki test, aby zobaczyć jak działa quiz?',
     afterAllTitle: 'Wszystko gotowe!',
@@ -460,11 +460,7 @@ export default function OnboardingTutorial() {
         }
         
         if (stage === 'extended' && nextStepIndex >= steps.length) {
-            if (tutorialState?.origin === 'quiz-decision') {
-                saveTutorialState({ isActive: true, stage: 'decision', step: -1, origin: 'quiz-decision' });
-            } else {
-                saveTutorialState({ isActive: true, stage: 'decision', step: 1, origin: 'decision-0' });
-            }
+             saveTutorialState({ isActive: true, stage: 'decision', step: 1, origin: 'extended-decision' });
             return;
         }
         
@@ -551,7 +547,6 @@ export default function OnboardingTutorial() {
             <p className="text-muted-foreground my-6" dangerouslySetInnerHTML={{ __html: currentStep!.description.replace(/ ([a-zA-Z]) /g, ' $1\u00A0') }} />
             <div className="flex flex-col sm:flex-row gap-2 justify-center">
                 <Button onClick={handleNext}>{uiTexts.next}</Button>
-                <Button variant="secondary" onClick={handleFinish}>{uiTexts.exit}</Button>
             </div>
           </>
         )
@@ -584,7 +579,16 @@ export default function OnboardingTutorial() {
               );
           }
           if (currentStepIndex === -1) { 
-            if (tutorialState?.origin === 'decision-0') {
+             if (tutorialState?.origin === 'extended-decision' || (tutorialState?.origin === 'quiz-decision')) {
+                return (
+                    <>
+                        <h2 className="text-2xl font-bold">{uiTexts.afterAllTitle}</h2>
+                        <p className="text-muted-foreground my-6">{uiTexts.afterAllDesc}</p>
+                         <Button onClick={handleFinish}>{uiTexts.start}</Button>
+                    </>
+                )
+            }
+             if (tutorialState?.origin === 'decision-0') {
                  return (
                     <>
                         <h2 className="text-2xl font-bold">{uiTexts.almostDoneTitle}</h2>
@@ -593,15 +597,6 @@ export default function OnboardingTutorial() {
                              <Button onClick={handleExploreExtended}>{uiTexts.exploreMore}</Button>
                              <Button variant="secondary" onClick={handleFinish}>{uiTexts.start}</Button>
                         </div>
-                    </>
-                )
-            }
-             if (tutorialState?.origin === 'extended-decision' || tutorialState?.origin === 'quiz-decision') {
-                return (
-                    <>
-                        <h2 className="text-2xl font-bold">{uiTexts.afterAllTitle}</h2>
-                        <p className="text-muted-foreground my-6">{uiTexts.afterAllDesc}</p>
-                         <Button onClick={handleFinish}>{uiTexts.start}</Button>
                     </>
                 )
             }
@@ -643,20 +638,16 @@ export default function OnboardingTutorial() {
         totalStepsDisplay = quizSteps.length;
     }
     
-    if (tutorialState?.origin === 'decision-0' && stage === 'quiz') {
-      totalStepsDisplay = quizSteps.length;
-    }
-    if (tutorialState?.origin === 'decision-0' && stage === 'extended') {
-      totalStepsDisplay = extendedSteps.length;
-    }
-    
     if (tutorialState?.origin === 'quiz-decision' && stage === 'extended') {
-      totalStepsDisplay = extendedSteps.length;
+        currentStepDisplay = currentStepIndex + 1;
+        totalStepsDisplay = extendedSteps.length;
     }
     
-    if (tutorialState?.origin === 'extended-decision' && stage === 'quiz') {
-      totalStepsDisplay = quizSteps.length;
+    if (tutorialState?.origin === 'decision-0' && stage === 'quiz') {
+        currentStepDisplay = currentStepIndex + 1;
+        totalStepsDisplay = quizSteps.length;
     }
+
 
     const isBackButtonDisabled = (stage === 'initial' && currentStepIndex === 1) || 
                                  (stage === 'quiz' && currentStepIndex === 0 && (tutorialState?.origin === 'decision-0' || tutorialState?.origin === 'extended-decision')) ||
