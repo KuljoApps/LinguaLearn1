@@ -455,7 +455,7 @@ export default function OnboardingTutorial() {
         const nextStepIndex = currentStepIndex + 1;
 
         if (stage === 'initial' && nextStepIndex >= steps.length) {
-            saveTutorialState({ isActive: true, stage: 'decision', step: 0, origin: 'decision-0' });
+            saveTutorialState({ isActive: true, stage: 'decision', step: 0 });
             return;
         }
         
@@ -481,16 +481,16 @@ export default function OnboardingTutorial() {
             if (tutorialState?.origin === 'quiz-decision') {
                 saveTutorialState({ isActive: true, stage: 'decision', step: -1, origin: 'decision-0' });
             } else {
-                saveTutorialState({ isActive: true, stage: 'decision', step: 0, origin: 'decision-0' });
+                saveTutorialState({ isActive: true, stage: 'decision', step: 0 });
             }
             return;
         }
     
         if (stage === 'quiz' && prevStepIndex < 0) {
-            if (tutorialState?.origin === 'decision-0') {
-                saveTutorialState({ isActive: true, stage: 'decision', step: 0, origin: 'decision-0' });
+            if (tutorialState?.origin === 'extended-decision') {
+                saveTutorialState({ isActive: true, stage: 'decision', step: 1 });
             } else {
-                saveTutorialState({ isActive: true, stage: 'decision', step: 1, origin: tutorialState?.origin });
+                saveTutorialState({ isActive: true, stage: 'decision', step: 0 });
             }
             return;
         }
@@ -507,7 +507,7 @@ export default function OnboardingTutorial() {
     };
     
     const handleShowMore = () => {
-        saveTutorialState({ isActive: true, stage: 'extended', step: 0, origin: tutorialState?.origin });
+        saveTutorialState({ isActive: true, stage: 'extended', step: 0 });
     }
     
     const handleStartTest = () => {
@@ -575,7 +575,7 @@ export default function OnboardingTutorial() {
               );
           }
           if (currentStepIndex === -1) {
-            if (tutorialState?.origin === 'quiz-decision') {
+            if (tutorialState?.origin === 'decision-0') {
                  return (
                     <>
                         <h2 className="text-2xl font-bold">{uiTexts.almostDoneTitle}</h2>
@@ -598,8 +598,8 @@ export default function OnboardingTutorial() {
             }
             return (
                 <>
-                    <h2 className="text-2xl font-bold">{uiTexts.finalTitle}</h2>
-                    <p className="text-muted-foreground my-6">{uiTexts.finalDesc}</p>
+                    <h2 className="text-2xl font-bold">{uiTexts.afterAllTitle}</h2>
+                    <p className="text-muted-foreground my-6">{uiTexts.afterAllDesc}</p>
                      <Button onClick={handleFinish}>{uiTexts.start}</Button>
                 </>
             )
@@ -642,15 +642,12 @@ export default function OnboardingTutorial() {
             totalStepsDisplay = totalInitialBubbleSteps + extendedSteps.length;
         }
     } else if (stage === 'quiz') {
-        if (tutorialState.origin === 'decision-0') {
-            currentStepDisplay = totalInitialBubbleSteps + currentStepIndex + 1;
-            totalStepsDisplay = totalInitialBubbleSteps + quizSteps.length;
-        } else if (tutorialState.origin === 'extended-decision') {
+        if (tutorialState.origin === 'extended-decision') {
             currentStepDisplay = currentStepIndex + 1;
             totalStepsDisplay = quizSteps.length;
         } else {
-            currentStepDisplay = totalInitialBubbleSteps + extendedSteps.length + currentStepIndex + 1;
-            totalStepsDisplay = totalInitialBubbleSteps + extendedSteps.length + quizSteps.length;
+            currentStepDisplay = totalInitialBubbleSteps + currentStepIndex + 1;
+            totalStepsDisplay = totalInitialBubbleSteps + quizSteps.length;
         }
     }
 
