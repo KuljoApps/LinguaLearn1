@@ -234,70 +234,70 @@ const extendedSteps: Step[] = [
 ];
 
 const quizSteps: Step[] = [
-    { // Slajd 27 -> Quiz 1
+    { // Slajd 27
         path: '/tutorial/quiz-correct',
         elementId: 'quiz-timer',
         title: 'Czas na odpowiedź',
         description: 'Masz 15 sekund na każdą odpowiedź. Pasek postępu pokazuje, ile czasu pozostało. Nie marnuj go!',
         bubblePosition: 'bottom',
     },
-    { // Slajd 28 -> Quiz 2
+    { // Slajd 28
         path: '/tutorial/quiz-pause',
         elementId: 'quiz-pause-button',
         title: 'Potrzebujesz przerwy?',
         description: 'Kliknij pauzę, aby zatrzymać czas. Pamiętaj jednak, że wznowienie quizu kosztuje 5 sekund!',
         bubblePosition: 'top'
     },
-    { // Slajd 29 -> Quiz 3
+    { // Slajd 29
         path: '/tutorial/quiz-correct',
         elementId: 'quiz-correct-answer',
         title: 'Poprawna odpowiedź',
         description: 'Świetnie! Poprawna odpowiedź zostanie podświetlona na zielono. Po chwili automatycznie przejdziesz do następnego pytania.',
         bubblePosition: 'top',
     },
-    { // Slajd 30 -> Quiz 4
+    { // Slajd 30
         path: '/tutorial/irregular-question',
         elementId: 'irregular-quiz-part1',
         title: 'Testy z czasowników',
         description: 'Ten typ quizu ma dłuższy czas na odpowiedź (30s) i sprawdza dwie rzeczy: tłumaczenie oraz znajomość form czasowników nieregularnych.',
         bubblePosition: 'bottom',
     },
-    { // Slajd 31 -> Quiz 5
+    { // Slajd 31
         path: '/tutorial/irregular-question',
         elementId: 'irregular-quiz-part2',
         title: 'Wpisywanie odpowiedzi',
         description: 'Po wybraniu poprawnego tłumaczenia, aktywują się pola do wpisania dwóch pozostałych form czasownika. Zobaczmy, jak to działa.',
         bubblePosition: 'bottom',
     },
-    { // Slajd 32 -> Quiz 6
+    { // Slajd 32
         path: '/tutorial/irregular-question',
         elementId: 'irregular-quiz-hint',
         title: 'Dwie poprawne formy',
         description: 'Gdy wpiszesz błędną odpowiedź, system podświetli ją na czerwono i wskaże poprawną formę. Niektóre czasowniki, jak "be", mają dwie opcje (was/were) - obie są zaliczane jako poprawne!',
         bubblePosition: 'top',
     },
-    { // Slajd 33 -> Quiz 7
+    { // Slajd 33
         path: '/tutorial/quiz-incorrect',
         elementId: 'quiz-incorrect-answer',
         title: 'Błędna odpowiedź',
         description: 'Nie martw się! Twoja błędna odpowiedź podświetli się na czerwono, a prawidłowa — na zielono. Każdy błąd to okazja do nauki!',
         bubblePosition: 'top'
     },
-    { // Slajd 34 -> Quiz 8
+    { // Slajd 34
         path: '/tutorial/quiz-results',
         elementId: 'quiz-results-summary',
         title: 'Podsumowanie wyników',
         description: 'Po zakończeniu quizu zobaczysz swoje statystyki. Sprawdź, jak Ci poszło!',
         bubblePosition: 'bottom',
     },
-    { // Slajd 35 -> Quiz 9
+    { // Slajd 35
         path: '/tutorial/quiz-results',
         elementId: 'quiz-results-errors',
         title: 'Przegląd błędów',
         description: 'Wszystkie błędne odpowiedzi z sesji są tutaj. Przeanalizuj je, aby uniknąć ich w przyszłości.',
         bubblePosition: 'top'
     },
-    { // Slajd 36 -> Quiz 10
+    { // Slajd 36
         path: '/tutorial/quiz-results',
         elementId: 'quiz-results-actions',
         title: 'Co dalej?',
@@ -548,21 +548,21 @@ export default function OnboardingTutorial() {
           if (currentStepIndex === 1) {
               return (
                   <>
-                      <h2 className="text-2xl font-bold">{uiTexts.finalTitle}</h2>
-                      <p className="text-muted-foreground my-6">{uiTexts.finalDesc}</p>
-                      <Button onClick={handleFinish}>{uiTexts.start}</Button>
+                      <h2 className="text-2xl font-bold">{uiTexts.quizEndTitle}</h2>
+                      <p className="text-muted-foreground my-6">{uiTexts.quizEndDesc}</p>
+                       <div className="flex flex-col sm:flex-row gap-2 justify-center">
+                          <Button onClick={handleShowMore}>{uiTexts.showMore}</Button>
+                          <Button variant="secondary" onClick={handleFinish}>{uiTexts.start}</Button>
+                      </div>
                   </>
               );
           }
           if (currentStepIndex === 2) {
             return (
                 <>
-                    <h2 className="text-2xl font-bold">{uiTexts.quizEndTitle}</h2>
-                    <p className="text-muted-foreground my-6">{uiTexts.quizEndDesc}</p>
-                     <div className="flex flex-col sm:flex-row gap-2 justify-center">
-                        <Button onClick={handleShowMore}>{uiTexts.showMore}</Button>
-                        <Button variant="secondary" onClick={handleFinish}>{uiTexts.start}</Button>
-                    </div>
+                    <h2 className="text-2xl font-bold">{uiTexts.finalTitle}</h2>
+                    <p className="text-muted-foreground my-6">{uiTexts.finalDesc}</p>
+                     <Button onClick={handleFinish}>{uiTexts.start}</Button>
                 </>
             )
         }
