@@ -312,10 +312,13 @@ const uiTexts = {
     finish: 'Zakończ',
     exit: 'Wyjdź',
     showMore: 'Pokaż więcej',
-    start: 'Zacznij naukę!',
+    start: 'Zacznij naukę',
     startTest: 'Zacznij krótki test',
     finalTitle: 'Wszystko gotowe!',
     finalDesc: 'To wszystko! Jesteś gotów, aby w\u00A0pełni wykorzystać LinguaLearn. Powodzenia w\u00A0nauce!',
+    almostDoneTitle: 'Prawie wszystko gotowe!',
+    almostDoneDesc: 'Znasz już podstawy i wiesz, jak działają quizy. Chcesz teraz poznać resztę zaawansowanych funkcji, czy od razu zacząć naukę?',
+    exploreMore: 'Poznaj więcej!',
 };
 
 export default function OnboardingTutorial() {
@@ -354,7 +357,6 @@ export default function OnboardingTutorial() {
             return;
         }
 
-        // Safeguard: Only try to position the bubble if we are on the correct page.
         if (currentStep.path && pathname !== currentStep.path) {
             setSpotlightStyle({ opacity: 0, transition: 'none' });
             setBubbleStyle({ opacity: 0, transition: 'none' });
@@ -455,12 +457,12 @@ export default function OnboardingTutorial() {
         }
         
         if (stage === 'extended' && nextStepIndex >= steps.length) {
-            saveTutorialState({ isActive: true, stage: 'decision', step: 1, origin: 'decision-1' });
+            saveTutorialState({ isActive: true, stage: 'decision', step: -1, origin: tutorialState?.origin });
             return;
         }
         
         if (stage === 'quiz' && nextStepIndex >= steps.length) {
-            saveTutorialState({ isActive: true, stage: 'decision', step: -1 });
+            saveTutorialState({ isActive: true, stage: 'decision', step: -1, origin: tutorialState?.origin });
             return;
         }
 
@@ -469,17 +471,27 @@ export default function OnboardingTutorial() {
 
     const handleBack = () => {
         const prevStepIndex = currentStepIndex - 1;
-
-        if (stage === 'initial' && prevStepIndex < 1) return; // Can't go back from the first bubble step
+    
+        if (stage === 'initial' && prevStepIndex < 1) return;
+    
         if (stage === 'extended' && prevStepIndex < 0) {
-            saveTutorialState({ isActive: true, stage: 'decision', step: 0, origin: tutorialState?.origin });
+            if (tutorialState?.origin === 'quiz-decision') {
+                saveTutorialState({ isActive: true, stage: 'decision', step: -1, origin: 'decision-0' });
+            } else {
+                saveTutorialState({ isActive: true, stage: 'decision', step: 0, origin: 'decision-0' });
+            }
             return;
         }
+    
         if (stage === 'quiz' && prevStepIndex < 0) {
-            saveTutorialState({ isActive: true, stage: 'decision', step: 1, origin: tutorialState?.origin });
+            if (tutorialState?.origin === 'decision-0') {
+                saveTutorialState({ isActive: true, stage: 'decision', step: 0, origin: 'decision-0' });
+            } else {
+                saveTutorialState({ isActive: true, stage: 'decision', step: 1, origin: tutorialState?.origin });
+            }
             return;
         }
-        
+    
         saveTutorialState({ ...tutorialState!, stage, step: prevStepIndex });
     };
 
@@ -498,6 +510,11 @@ export default function OnboardingTutorial() {
     const handleStartTest = () => {
         saveTutorialState({ isActive: true, stage: 'quiz', step: 0, origin: tutorialState?.origin });
     }
+
+    const handleExploreExtended = () => {
+        saveTutorialState({ isActive: true, stage: 'extended', step: 0, origin: 'quiz-decision' });
+    }
+
 
     if (!tutorialState || !tutorialState.isActive) {
         return null;
@@ -555,6 +572,18 @@ export default function OnboardingTutorial() {
               );
           }
           if (currentStepIndex === -1) {
+            if (tutorialState?.origin === 'decision-0') {
+                 return (
+                    <>
+                        <h2 className="text-2xl font-bold">{uiTexts.almostDoneTitle}</h2>
+                        <p className="text-muted-foreground my-6">{uiTexts.almostDoneDesc}</p>
+                         <div className="flex flex-col sm:flex-row gap-2 justify-center">
+                             <Button onClick={handleExploreExtended}>{uiTexts.exploreMore}</Button>
+                             <Button variant="secondary" onClick={handleFinish}>{uiTexts.start}</Button>
+                        </div>
+                    </>
+                )
+            }
             return (
                 <>
                     <h2 className="text-2xl font-bold">{uiTexts.finalTitle}</h2>
@@ -602,8 +631,8 @@ export default function OnboardingTutorial() {
         }
     } else if (stage === 'quiz') {
         if (tutorialState.origin === 'decision-0') {
-            currentStepDisplay = currentStepIndex + 1;
-            totalStepsDisplay = quizSteps.length;
+            currentStepDisplay = totalInitialBubbleSteps + currentStepIndex + 1;
+            totalStepsDisplay = totalInitialBubbleSteps + quizSteps.length;
         } else {
             currentStepDisplay = totalInitialBubbleSteps + extendedSteps.length + currentStepIndex + 1;
             totalStepsDisplay = totalInitialBubbleSteps + extendedSteps.length + quizSteps.length;
