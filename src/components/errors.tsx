@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, useMemo } from 'react';
@@ -6,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Link from "next/link";
-import { ArrowLeft, Trash2, ArrowUpDown, Trophy } from "lucide-react";
+import { ArrowLeft, Trash2, ArrowUpDown, Trophy, ShieldX } from "lucide-react";
 import { getErrors, clearErrors, type ErrorRecord, type Achievement, getLanguage, type Language, getTutorialState } from '@/lib/storage';
 import {
   AlertDialog,
@@ -377,7 +376,10 @@ export default function ErrorsPage() {
         <>
             <Card className="w-full max-w-4xl shadow-2xl" data-tutorial-id="errors-card">
                 <CardHeader className="flex flex-col items-center gap-4 p-6 sm:flex-row sm:justify-between">
-                    <CardTitle className="text-3xl">{getUIText('title')}</CardTitle>
+                    <div className="flex items-center gap-4">
+                        <ShieldX className="h-8 w-8" />
+                        <CardTitle className="text-3xl">{getUIText('title')}</CardTitle>
+                    </div>
                     <div className="flex flex-col gap-2" data-tutorial-id="errors-controls">
                         <Select value={quizFilter} onValueChange={(value) => handleFilterChange(value as QuizFilter)}>
                             <SelectTrigger>
