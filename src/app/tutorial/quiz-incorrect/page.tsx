@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import LinguaLearnLogo from '@/components/LinguaLearnLogo';
-import { Clock } from 'lucide-react';
+import { Clock, Home, Pause, RefreshCw } from 'lucide-react';
 import { getTutorialState } from '@/lib/storage';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -88,6 +88,11 @@ export default function QuizIncorrectPage() {
                                 {option}
                             </Button>
                         ))}
+                    </div>
+                    <div className="flex justify-center gap-4 w-full pt-4 border-t">
+                        <Button variant="outline" size="icon"><Home /></Button>
+                        <Button variant="outline" size="icon"><RefreshCw /></Button>
+                        <Button variant="outline" size="icon"><Pause /></Button>
                     </div>
                 </CardContent>
                  <CardFooter className="flex-col gap-4 p-6 pt-0">

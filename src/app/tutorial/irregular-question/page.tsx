@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import LinguaLearnLogo from '@/components/LinguaLearnLogo';
-import { Clock, ArrowLeft } from 'lucide-react';
+import { Clock, ArrowLeft, Home, RefreshCw, Pause } from 'lucide-react';
 import { Label } from "@/components/ui/label";
 import { getTutorialState } from '@/lib/storage';
 import { useRouter } from 'next/navigation';
@@ -149,6 +149,11 @@ export default function IrregularVerbQuizPage() {
                                 </div>
                             )}
                         </div>
+                    </div>
+                    <div className="flex justify-center gap-4 w-full pt-4 border-t">
+                        <Button variant="outline" size="icon"><Home /></Button>
+                        <Button variant="outline" size="icon"><RefreshCw /></Button>
+                        <Button variant="outline" size="icon"><Pause /></Button>
                     </div>
                 </CardContent>
                 <CardFooter className="flex justify-center p-6 pt-0">
