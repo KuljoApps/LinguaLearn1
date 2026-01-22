@@ -1,7 +1,6 @@
-
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getTutorialState } from "@/lib/storage";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
@@ -10,9 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Trash2, Settings as SettingsIcon, ChevronDown, GraduationCap, Crown, Star } from "lucide-react";
-import { Collapsible, CollapsibleTrigger } from '@/components/ui/collapsible';
-
+import { ArrowLeft, Trash2, Settings as SettingsIcon } from "lucide-react";
 
 export default function SettingsTutorialPage() {
     const router = useRouter();
@@ -70,29 +67,14 @@ export default function SettingsTutorialPage() {
                             </div>
                         </div>
                     </CardContent>
-                    <CardFooter className="flex-col justify-center p-6 pt-2">
-                        <div className="flex flex-wrap justify-center gap-4 w-full">
+                    <CardFooter className="flex justify-center p-6">
+                        <div className="flex flex-wrap justify-center gap-4">
                             <Button variant="outline" className="pointer-events-none">
                                 <ArrowLeft className="mr-2 h-4 w-4" /> Back to Home
                             </Button>
                             <Button variant="destructive" className="pointer-events-none">
                                 <Trash2 className="mr-2 h-4 w-4" /> Reset Settings
                             </Button>
-                        </div>
-
-                        <div className="w-full pt-4 mt-4 border-t border-dashed">
-                            <Collapsible className="w-full">
-                                <div data-tutorial-id="dev-tools-trigger" className="flex items-center justify-center -mb-2">
-                                    <Separator className="flex-grow" />
-                                    <CollapsibleTrigger asChild>
-                                        <Button variant="ghost" className="flex items-center gap-2 px-3 pointer-events-none">
-                                            <span className="text-sm italic text-muted-foreground">Developer Tools</span>
-                                            <ChevronDown className={`h-4 w-4 transition-transform duration-200`} />
-                                        </Button>
-                                    </CollapsibleTrigger>
-                                    <Separator className="flex-grow" />
-                                </div>
-                            </Collapsible>
                         </div>
                     </CardFooter>
                 </Card>
