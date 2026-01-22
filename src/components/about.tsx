@@ -18,7 +18,7 @@ const uiTexts = {
     termsTitle: { en: 'Terms and Licenses', fr: 'Termes et licences', de: 'Bedingungen und Lizenzen', it: 'Termini e licenze', es: 'Términos y licencias' },
     terms: { en: 'Terms', fr: 'Termes', de: 'Bedingungen', it: 'Termini', es: 'Términos' },
     licenses: { en: 'Licenses', fr: 'Licences', de: 'Lizenzen', it: 'Licenze', es: 'Licencias' },
-    back: { en: 'Back to Settings', fr: 'Retour aux réglages', de: 'Zurück zu den Einstellungen', it: 'Torna alle Impostazioni', es: 'Volver a Ajustes' },
+    back: { en: 'Back to About', fr: 'Retour à À propos', de: 'Zurück zu Über', it: 'Torna a Informazioni', es: 'Volver a Acerca de' },
 };
 
 export default function AboutPage() {
@@ -43,7 +43,7 @@ export default function AboutPage() {
         <Card className="w-full max-w-md shadow-2xl">
             <CardHeader className="items-center text-center">
                 <LinguaLearnLogo width="48" height="48" />
-                <CardTitle className="text-3xl font-bold tracking-tight pt-2 whitespace-nowrap">
+                <CardTitle className="text-3xl font-bold tracking-tight pt-2">
                     {getUIText('title')} Lingua
                     <span className="relative inline-block">
                         Learn
@@ -65,15 +65,15 @@ export default function AboutPage() {
                         <div className="space-y-1 text-sm text-left">
                             <p className="font-bold">Kuljo Apps (Damian Kuliś)</p>
                             <div className="flex items-center gap-2 text-muted-foreground">
-                                <MapPin className="h-4 w-4 text-deep-purple" />
+                                <MapPin className="h-4 w-4 text-amber" />
                                 <span>{getUIText('city')}</span>
                             </div>
                             <div className="flex items-center gap-2 text-muted-foreground">
-                                <Mail className="h-4 w-4 text-deep-purple" />
+                                <Mail className="h-4 w-4 text-amber" />
                                 <span>kuljo.apps@gmail.com</span>
                             </div>
                             <div className="flex items-center gap-2 text-muted-foreground">
-                                <Phone className="h-4 w-4 text-deep-purple" />
+                                <Phone className="h-4 w-4 text-amber" />
                                 <span>600 130 255</span>
                             </div>
                         </div>
@@ -85,13 +85,13 @@ export default function AboutPage() {
                     <div className="grid grid-cols-2 gap-4 w-full">
                          <Link href="/settings/about/terms" passHref className="w-full">
                             <Button variant="outline" className="w-full">
-                                <FileText className="mr-2 h-4 w-4 text-deep-purple" />
+                                <FileText className="mr-2 h-4 w-4 text-amber" />
                                 {getUIText('terms')}
                             </Button>
                         </Link>
                         <Link href="/settings/about/licenses" passHref className="w-full">
                             <Button variant="outline" className="w-full">
-                                <Gavel className="mr-2 h-4 w-4 text-deep-purple" />
+                                <Gavel className="mr-2 h-4 w-4 text-amber" />
                                 {getUIText('licenses')}
                             </Button>
                         </Link>
