@@ -11,7 +11,7 @@ import KuljoAppsLogo from "./KuljoAppsLogo";
 import { getLanguage, type Language } from "@/lib/storage";
 
 const uiTexts = {
-    title: { en: 'About LinguaLearn', fr: 'À propos de LinguaLearn', de: 'Über LinguaLearn', it: 'Informazioni su LinguaLearn', es: 'Acerca de LinguaLearn' },
+    title: { en: 'About', fr: 'À propos de', de: 'Über', it: 'Informazioni su', es: 'Acerca de' },
     description: { en: 'This application is a language learning tool designed to help you expand your vocabulary through interactive quizzes.', fr: "Cette application est un outil d'apprentissage des langues conçu pour vous aider à élargir votre vocabulaire grâce à des quiz interactifs.", de: 'Diese Anwendung ist ein Sprachlerntool, das Ihnen hilft, Ihren Wortschatz durch interaktive Quizze zu erweitern.', it: 'Questa applicazione è uno strumento di apprendimento linguistico progettato per aiutarti ad ampliare il tuo vocabolario attraverso quiz interattivi.', es: 'Esta aplicación es una herramienta de aprendizaje de idiomas diseñada para ayudarte a ampliar tu vocabulario a través de cuestionarios interactivos.' },
     contact: { en: 'Contact the Creator', fr: 'Contacter le créateur', de: 'Kontakt zum Ersteller', it: 'Contatta il creatore', es: 'Contactar al creador' },
     city: { en: 'Warsaw', fr: 'Varsovie', de: 'Warschau', it: 'Varsavia', es: 'Varsovia' },
@@ -42,19 +42,16 @@ export default function AboutPage() {
     return (
         <Card className="w-full max-w-md shadow-2xl">
             <CardHeader className="items-center text-center">
-                 <div className="flex items-center justify-center gap-4">
-                    <LinguaLearnLogo width="48" height="48" />
-                    <h1 className="text-3xl font-bold tracking-tight whitespace-nowrap">
-                        Lingua
-                        <span className="relative inline-block">
-                            Learn
-                            <span className="absolute -right-1 -bottom-3.5 text-base font-semibold tracking-normal text-amber">
-                            Lite
-                            </span>
+                <LinguaLearnLogo width="48" height="48" />
+                <CardTitle className="text-3xl font-bold tracking-tight pt-2 whitespace-nowrap">
+                    {getUIText('title')}&nbsp;Lingua
+                    <span className="relative inline-block">
+                        Learn
+                        <span className="absolute -right-1 -bottom-3.5 text-base font-semibold tracking-normal text-amber">
+                        Lite
                         </span>
-                    </h1>
-                </div>
-                <CardTitle className="text-2xl pt-2">{getUIText('title')}</CardTitle>
+                    </span>
+                </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6 text-center">
                 <p className="text-muted-foreground">
