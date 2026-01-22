@@ -116,17 +116,21 @@ export default function SettingsPage() {
             <RateAppDialog open={showRateDialog} onOpenChange={setShowRateDialog} />
             <Card className="shadow-2xl overflow-hidden">
                  <CardHeader className="relative flex items-center justify-center p-6">
-                    {/* Placeholder to maintain height */}
-                    <div className="h-8 w-8 invisible" /> 
-                    <div className={cn(
-                        "absolute transition-all duration-500 ease-out",
-                        animate ? "left-[calc(50%_-_4rem)]" : "left-1/2 -translate-x-1/2"
-                    )}>
-                        <SettingsIcon className={cn(
-                            "h-8 w-8 shrink-0 text-foreground",
-                            animate && "animate-icon-fly-out"
-                        )} />
+                    {/* Placeholder to maintain height and width for centering */}
+                    <div className="flex items-center gap-2 invisible">
+                        <SettingsIcon className="h-8 w-8 shrink-0" />
+                        <CardTitle className="whitespace-nowrap text-3xl">
+                            {getUIText('title')}
+                        </CardTitle>
                     </div>
+                    
+                    <div className={cn(
+                        "absolute",
+                        animate ? "animate-icon-fly-out" : ""
+                    )}>
+                        <SettingsIcon className="h-8 w-8 shrink-0 text-foreground" />
+                    </div>
+                    
                     <CardTitle className={cn(
                         "absolute whitespace-nowrap text-3xl",
                         animate ? "animate-text-slide-in" : "opacity-0"
