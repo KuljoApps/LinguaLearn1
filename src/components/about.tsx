@@ -42,8 +42,18 @@ export default function AboutPage() {
     return (
         <Card className="w-full max-w-md shadow-2xl">
             <CardHeader className="items-center text-center">
-                <LinguaLearnLogo width="48" height="48" />
-                <CardTitle className="text-3xl">{getUIText('title')}</CardTitle>
+                 <div className="flex items-center justify-center gap-4">
+                    <LinguaLearnLogo width="48" height="48" />
+                    <h1 className="text-3xl font-bold tracking-tight whitespace-nowrap">
+                        Lingua
+                        <span className="relative inline-block">
+                            Learn
+                            <span className="absolute -right-1 -bottom-3.5 text-base font-semibold tracking-normal text-amber">
+                            Lite
+                            </span>
+                        </span>
+                    </h1>
+                </div>
             </CardHeader>
             <CardContent className="space-y-6 text-center">
                 <p className="text-muted-foreground">
