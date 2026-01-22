@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Trash2, Settings } from "lucide-react";
+import { ArrowLeft, Trash2, Settings as SettingsIcon } from "lucide-react";
 
 export default function Settings() {
     const router = useRouter();
@@ -29,7 +29,7 @@ export default function Settings() {
             <Card className="w-full max-w-md shadow-2xl" data-tutorial-id="settings-card">
                 <CardHeader className="items-center text-center">
                     <div className="flex items-center justify-center gap-4">
-                        <Settings className="h-8 w-8" />
+                        <SettingsIcon className="h-8 w-8" />
                         <CardTitle className="text-3xl">Settings</CardTitle>
                     </div>
                 </CardHeader>
