@@ -2,9 +2,9 @@
 "use client";
 
 import { allAchievements, devAchievements } from './achievements';
-import type { Achievement } from './types';
+import type { Achievement as AchievementType } from './types';
 
-export type { Achievement };
+export type Achievement = AchievementType;
 
 export interface MasteryProgress {
     [quizName: string]: number[]; // Array of unique question IDs
