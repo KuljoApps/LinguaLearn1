@@ -24,7 +24,7 @@ export default function TraditionsPage({ data }: { data: TraditionsPageData }) {
             <CardTitle className="text-3xl">{t('title')}</CardTitle>
           </div>
         </CardHeader>
-        <CardContent className="p-4 pt-2">
+        <CardContent className="pl-6 pr-2 pt-2 pb-4">
           <ScrollArea className="h-[70vh] w-full pr-4">
             <Accordion type="single" collapsible className="w-full">
               {data.traditions.map((tradition, index) => (
