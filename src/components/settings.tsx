@@ -110,15 +110,20 @@ export default function SettingsPage() {
     };
     
     return (
-        <>
+        <div className="w-full max-w-md">
             <ProPromotionDialog open={showPromoDialog} onOpenChange={setShowPromoDialog} />
             <RateAppDialog open={showRateDialog} onOpenChange={setShowRateDialog} />
-            <Card className="w-full max-w-md shadow-2xl" data-tutorial-id="settings-card">
-                 <CardHeader className="relative flex items-center justify-center overflow-hidden p-6">
-                    <SettingsIcon className={cn(
-                        "h-8 w-8 shrink-0 text-foreground",
-                        animate && "animate-icon-fly-out"
-                    )} />
+            <Card className="shadow-2xl overflow-hidden" data-tutorial-id="settings-card">
+                 <CardHeader className="relative flex items-center justify-center p-6">
+                    <div className={cn(
+                        "absolute transition-all duration-500 ease-out",
+                        animate ? "left-[calc(50%_-_4rem)]" : "left-1/2 -translate-x-1/2"
+                    )}>
+                        <SettingsIcon className={cn(
+                            "h-8 w-8 shrink-0 text-foreground",
+                            animate && "animate-icon-fly-out"
+                        )} />
+                    </div>
                     <CardTitle className={cn(
                         "absolute whitespace-nowrap text-3xl",
                         animate ? "animate-text-slide-in" : "opacity-0"
@@ -245,6 +250,6 @@ export default function SettingsPage() {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-        </>
+        </div>
     );
 }
