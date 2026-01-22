@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -115,6 +116,8 @@ export default function SettingsPage() {
             <RateAppDialog open={showRateDialog} onOpenChange={setShowRateDialog} />
             <Card className="shadow-2xl overflow-hidden">
                  <CardHeader className="relative flex items-center justify-center p-6">
+                    {/* Placeholder to maintain height */}
+                    <div className="h-8 w-8 invisible" /> 
                     <div className={cn(
                         "absolute transition-all duration-500 ease-out",
                         animate ? "left-[calc(50%_-_4rem)]" : "left-1/2 -translate-x-1/2"
