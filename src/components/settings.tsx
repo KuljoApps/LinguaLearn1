@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -21,7 +22,6 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { useRouter } from "next/navigation";
 import ProPromotionDialog from "@/components/ProPromotionDialog";
 import RateAppDialog from "@/components/RateAppDialog";
 import { cn } from "@/lib/utils";
@@ -113,7 +113,7 @@ export default function SettingsPage() {
         <div className="w-full max-w-md">
             <ProPromotionDialog open={showPromoDialog} onOpenChange={setShowPromoDialog} />
             <RateAppDialog open={showRateDialog} onOpenChange={setShowRateDialog} />
-            <Card className="shadow-2xl overflow-hidden" data-tutorial-id="settings-card">
+            <Card className="shadow-2xl overflow-hidden">
                  <CardHeader className="relative flex items-center justify-center p-6">
                     <div className={cn(
                         "absolute transition-all duration-500 ease-out",
