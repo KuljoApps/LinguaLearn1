@@ -8,8 +8,8 @@ import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import { ArrowLeft, Trash, Sparkles, ChevronDown, GraduationCap, Crown, Star, Settings, Trophy } from "lucide-react";
-import { getSettings, saveSettings, clearSettings, type Settings as AppSettings, getLanguage, type Language, saveTutorialState, saveAchievements, getAchievements, clearFakeAchievements, type AchievementStatus } from "@/lib/storage";
+import { ArrowLeft, Trash2, ChevronDown, GraduationCap, Crown, Star, Settings } from "lucide-react";
+import { getSettings, saveSettings, clearSettings, type Settings as AppSettings, getLanguage, type Language, saveTutorialState } from "@/lib/storage";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,8 +24,6 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { useRouter } from "next/navigation";
 import ProPromotionDialog from "@/components/ProPromotionDialog";
 import RateAppDialog from "@/components/RateAppDialog";
-import { useToast } from "@/hooks/use-toast";
-import { playSound } from "@/lib/sounds";
 
 const uiTexts = {
     title: { en: 'Settings', fr: 'Réglages', de: 'Einstellungen', it: 'Impostazioni', es: 'Ajustes' },
@@ -54,7 +52,6 @@ export default function SettingsPage() {
     const [showPromoDialog, setShowPromoDialog] = useState(false);
     const [showRateDialog, setShowRateDialog] = useState(false);
     const router = useRouter();
-    const { toast } = useToast();
 
     useEffect(() => {
         setSettings(getSettings());
@@ -107,50 +104,6 @@ export default function SettingsPage() {
         localStorage.setItem(DEV_TOOLS_COLLAPSIBLE_STATE_KEY, JSON.stringify(open));
     };
     
-    const showAchievementToast = (achievement: { name: string }) => {
-        playSound('achievement');
-        toast({
-            title: (
-                <div className="flex items-center gap-2">
-                    <Trophy className="h-5 w-5 text-amber" />
-                    <span className="font-bold">Achievement Unlocked!</span>
-                </div>
-            ),
-            description: `You've earned: "${achievement.name}"`,
-        });
-    };
-
-    const handleCreateFakeAchievements = () => {
-        const achievements = getAchievements();
-        
-        const fakeAchievementKeys = Object.keys(achievements).filter(k => k.startsWith('fake_'));
-        const highestNum = fakeAchievementKeys.reduce((max, key) => {
-            const num = parseInt(key.split('_')[1], 10);
-            return isNaN(num) ? max : Math.max(max, num);
-        }, 0);
-        const newNum = highestNum + 1;
-
-        const fakeAchievementId = `fake_${newNum}`;
-        const fakeAchievementName = `Fake Achievement ${newNum}`;
-        
-        const newAchievements: Record<string, AchievementStatus> = {
-            ...achievements,
-            [fakeAchievementId]: { progress: 1, unlockedAt: Date.now() },
-        };
-        
-        saveAchievements(newAchievements);
-        
-        showAchievementToast({ name: fakeAchievementName });
-    };
-
-    const handleDeleteFakeAchievements = () => {
-        clearFakeAchievements();
-        toast({
-          title: "Sukces!",
-          description: "Usunięto wszystkie fałszywe osiągnięcia.",
-        });
-    };
-
     return (
         <>
             <ProPromotionDialog open={showPromoDialog} onOpenChange={setShowPromoDialog} />
@@ -228,7 +181,7 @@ export default function SettingsPage() {
                             </Button>
                         </Link>
                         <Button variant="destructive" onClick={() => setIsResetAlertOpen(true)}>
-                            <Trash className="mr-2 h-4 w-4" /> {getUIText('resetSettings')}
+                            <Trash2 className="mr-2 h-4 w-4" /> {getUIText('resetSettings')}
                         </Button>
                     </div>
 
@@ -258,14 +211,6 @@ export default function SettingsPage() {
                                   <Star className="mr-2 h-4 w-4" />
                                   Pokaż okno oceny
                                 </Button>
-                                <Button variant="secondary" size="sm" onClick={handleCreateFakeAchievements}>
-                                    <Sparkles className="mr-2 h-4 w-4" />
-                                    Stwórz fake achievements
-                                </Button>
-                                <Button variant="destructive" size="sm" onClick={handleDeleteFakeAchievements}>
-                                    <Trash className="mr-2 h-4 w-4" />
-                                    Usuń fake achievements
-                                </Button>
                               </div>
                             </CollapsibleContent>
                         </Collapsible>
@@ -284,11 +229,4 @@ export default function SettingsPage() {
                     <AlertDialogFooter>
                         <AlertDialogCancel>{getUIText('cancel')}</AlertDialogCancel>
                         <AlertDialogAction onClick={handleResetSettings} className="bg-destructive hover:bg-destructive/90">
-                            {getUIText('reset')}
-                        </AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
-        </>
-    );
-}
+                            {getUIText('reset

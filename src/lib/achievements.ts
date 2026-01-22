@@ -1,4 +1,3 @@
-
 import { Award, BarChart, Brain, BookMarked, BrainCircuit, CalendarClock, Clock, Crown, Flame, Globe, MessagesSquare, Sparkles, Star, Trophy, Webhook, Zap, type LucideIcon } from 'lucide-react';
 import { questions as enPlQuestions } from './questions-en-pl';
 import { questions as plEnQuestions } from './questions-pl-en';
@@ -103,24 +102,4 @@ export const allAchievements: Achievement[] = [
   { id: 'mastery_irregular_es', name: 'Verb Virtuoso (ES)', name_es: 'Virtuoso de los Verbos (ES)', description: 'Correctly answer every irregular verb question.', description_es: 'Responde correctamente a cada pregunta de verbos irregulares.', icon: Webhook, goal: irregularVerbsEsQuestions.length },
   { id: 'mastery_phrasal_es', name: 'False Friends Expert (ES)', name_es: 'Experto en Falsos Amigos (ES)', description: 'Correctly answer every false friend question.', description_es: 'Responde correctamente a cada pregunta sobre falsos amigos.', icon: Brain, goal: phrasalVerbsEsQuestions.length },
   { id: 'mastery_idioms_es', name: 'Idiom Idol (ES)', name_es: 'Ídolo de los Modismos (ES)', description: 'Correctly answer every idiom question.', description_es: 'Responde correctamente a cada pregunta de modismos.', icon: MessagesSquare, goal: idiomsEsQuestions.length },
-];
-
-export const devAchievements: Achievement[] = [
-  // Total Correct Answers
-  { id: 'dev_novice', name: 'Dev Novice', description: 'Answer 1 question correctly.', icon: Sparkles, goal: 1 },
-  { id: 'dev_apprentice', name: 'Dev Apprentice', description: 'Answer 2 questions correctly.', icon: Star, goal: 2 },
-  { id: 'dev_master', name: 'Dev Master', description: 'Answer 3 questions correctly.', icon: Crown, goal: 3 },
-
-  // Streaks
-  { id: 'dev_streak3', name: 'Dev On Fire', description: 'Get 3 correct answers in a row.', icon: Flame, goal: 3 },
-  { id: 'dev_streak5', name: 'Dev Unstoppable', description: 'Get 5 correct answers in a row.', icon: Zap, goal: 5 },
-
-  // Time Spent (in seconds for testing)
-  { id: 'dev_time_10s', name: 'Dev Time Traveler', description: 'Spend 10 seconds learning.', icon: Clock, goal: 10 },
-
-  // Daily Play
-  { id: 'dev_daily_2', name: 'Dev Committed', description: 'Play on 2 separate days.', icon: CalendarClock, goal: 2 },
-  
-  // Perfect Scores
-  { id: 'dev_perfectionist', name: 'Dev Perfectionist', description: 'Get a perfect score on 1 quiz.', icon: Award, goal: 1 },
 ];

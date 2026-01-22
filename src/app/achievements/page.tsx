@@ -6,9 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import Link from "next/link";
-import { ArrowLeft, CheckCircle, ChevronDown, Sparkles, Trash2, Trophy } from "lucide-react";
-import { getAchievements, clearStats, type AchievementStatus, getLanguage, getTutorialState, type Language, clearNewAchievementsCount, clearDevAchievements } from "@/lib/storage";
-import { allAchievements, devAchievements, type Achievement } from '@/lib/achievements';
+import { ArrowLeft, CheckCircle, Trash2, Trophy } from "lucide-react";
+import { getAchievements, clearStats, type AchievementStatus, getLanguage, getTutorialState, type Language, clearNewAchievementsCount } from "@/lib/storage";
+import { allAchievements, type Achievement } from '@/lib/achievements';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import {
@@ -27,8 +27,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Separator } from '@/components/ui/separator';
 
 const englishMasteryIds = new Set(['mastery_en_pl', 'mastery_pl_en', 'mastery_irregular', 'mastery_phrasal', 'mastery_idioms']);
 const frenchMasteryIds = new Set(['mastery_fr_pl', 'mastery_pl_fr', 'mastery_irregular_fr', 'mastery_phrasal_fr', 'mastery_idioms_fr']);
@@ -36,9 +34,7 @@ const germanMasteryIds = new Set(['mastery_de_pl', 'mastery_pl_de', 'mastery_irr
 const italianMasteryIds = new Set(['mastery_it_pl', 'mastery_pl_it', 'mastery_irregular_it', 'mastery_phrasal_it', 'mastery_idioms_it']);
 const spanishMasteryIds = new Set(['mastery_es_pl', 'mastery_pl_es', 'mastery_irregular_es', 'mastery_phrasal_es', 'mastery_idioms_es']);
 
-const DEV_ACHIEVEMENTS_COLLAPSIBLE_STATE_KEY = 'linguaLearnDevAchievementsOpen';
-
-type UiTextKeys = 'title' | 'unlocked' | 'back' | 'reset' | 'alertTitle' | 'alertDesc' | 'cancel' | 'confirmReset' | 'devAlertDesc' | 'resetDev';
+type UiTextKeys = 'title' | 'unlocked' | 'back' | 'reset' | 'alertTitle' | 'alertDesc' | 'cancel' | 'confirmReset';
 
 const uiTexts: Record<UiTextKeys, Record<Language, string>> = {
     title: { en: 'Achievements', fr: 'Succès', de: 'Erfolge', it: 'Obiettivi', es: 'Logros' },
@@ -49,17 +45,13 @@ const uiTexts: Record<UiTextKeys, Record<Language, string>> = {
     alertDesc: { en: 'This will permanently delete all your achievements and related progress data (including stats and errors) for the current language. This action cannot be undone.', fr: 'Cela supprimera définitivement tous vos succès et les données de progression associées (y compris les statistiques et les erreurs) pour la langue actuelle. Cette action ne peut pas être annulée.', de: 'Dadurch werden alle deine Erfolge und zugehörigen Fortschrittsdaten (einschließlich Statistiken und Fehler) für die aktuelle Sprache dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.', it: 'Questo eliminerà permanentemente tutti i tuoi obiettivi e i dati di progresso correlati (incluse statistiche ed errori) per la lingua corrente. Questa azione non può essere annullata.', es: 'Esto eliminará permanentemente todos tus logros y datos de progreso relacionados (incluidas estadísticas y errores) para el idioma actual. Esta acción no se puede deshacer.' },
     cancel: { en: 'Cancel', fr: 'Annuler', de: 'Abbrechen', it: 'Annulla', es: 'Cancelar' },
     confirmReset: { en: 'Reset', fr: 'Réinitialiser', de: 'Zurücksetzen', it: 'Resetta', es: 'Reiniciar' },
-    devAlertDesc: { en: 'This will reset all your dev achievements progress. This action cannot be undone.', fr: '', de: '', it: '', es: ''},
-    resetDev: { en: 'Reset Dev Achievements', fr: '', de: '', it: '', es: ''},
 };
 
 export default function AchievementsPage() {
     const [achievements, setAchievements] = useState<Record<string, AchievementStatus>>({});
     const [isClearAlertOpen, setIsClearAlertOpen] = useState(false);
-    const [isDevClearAlertOpen, setIsDevClearAlertOpen] = useState(false);
     const [language, setLanguageState] = useState<Language>('en');
     const [isTutorialActive, setIsTutorialActive] = useState(false);
-    const [isDevOpen, setIsDevOpen] = useState(false);
 
     useEffect(() => {
         // When the user visits this page, clear the "new" count.
@@ -83,11 +75,6 @@ export default function AchievementsPage() {
         window.addEventListener('tutorial-state-changed', handleStateUpdate);
         window.addEventListener('achievements-changed', handleStateUpdate);
 
-        const savedDevState = localStorage.getItem(DEV_ACHIEVEMENTS_COLLAPSIBLE_STATE_KEY);
-        if (savedDevState === 'true') {
-            setIsDevOpen(true);
-        }
-
         return () => {
             window.removeEventListener('language-changed', handleStateUpdate);
             window.removeEventListener('tutorial-state-changed', handleStateUpdate);
@@ -100,18 +87,7 @@ export default function AchievementsPage() {
         setAchievements(getAchievements());
         setIsClearAlertOpen(false);
     };
-
-    const handleClearDevAchievements = () => {
-        clearDevAchievements();
-        setAchievements(getAchievements());
-        setIsDevClearAlertOpen(false);
-    };
-
-    const handleDevOpenChange = (open: boolean) => {
-        setIsDevOpen(open);
-        localStorage.setItem(DEV_ACHIEVEMENTS_COLLAPSIBLE_STATE_KEY, JSON.stringify(open));
-    }
-
+    
     const isFrench = language === 'fr';
     const isGerman = language === 'de';
     const isItalian = language === 'it';
@@ -140,52 +116,47 @@ export default function AchievementsPage() {
 
     const displayAchievementsData = isTutorialActive ? fakeAchievements : achievements;
 
-    const renderAchievementItems = (achievementList: Achievement[], data: Record<string, AchievementStatus>) => {
-        return achievementList.map((achievement) => {
-            const status = data[achievement.id] || { progress: 0, unlockedAt: null };
-            const isUnlocked = !!status.unlockedAt;
-            const progressPercentage = isUnlocked ? 100 : (achievement.goal > 0 ? (status.progress / achievement.goal) * 100 : 0);
-            const Icon = achievement.icon;
-            
-            const achievementName = (isFrench && achievement.name_fr) ? achievement.name_fr : (isGerman && achievement.name_de) ? achievement.name_de : (isItalian && achievement.name_it) ? achievement.name_it : (isSpanish && achievement.name_es) ? achievement.name_es : achievement.name;
-            const achievementDescription = (isFrench && achievement.description_fr) ? achievement.description_fr : (isGerman && achievement.description_de) ? achievement.description_de : (isItalian && achievement.description_it) ? achievement.description_it : (isSpanish && achievement.description_es) ? achievement.description_es : achievement.description;
+    const achievementItems = displayedAchievements.map((achievement) => {
+        const status = displayAchievementsData[achievement.id] || { progress: 0, unlockedAt: null };
+        const isUnlocked = !!status.unlockedAt;
+        const progressPercentage = isUnlocked ? 100 : (achievement.goal > 0 ? (status.progress / achievement.goal) * 100 : 0);
+        const Icon = achievement.icon;
+        
+        const achievementName = (isFrench && achievement.name_fr) ? achievement.name_fr : (isGerman && achievement.name_de) ? achievement.name_de : (isItalian && achievement.name_it) ? achievement.name_it : (isSpanish && achievement.name_es) ? achievement.name_es : achievement.name;
+        const achievementDescription = (isFrench && achievement.description_fr) ? achievement.description_fr : (isGerman && achievement.description_de) ? achievement.description_de : (isItalian && achievement.description_it) ? achievement.description_it : (isSpanish && achievement.description_es) ? achievement.description_es : achievement.description;
 
-            return (
-                <Tooltip key={achievement.id}>
-                    <TooltipTrigger asChild>
-                        <Card className={cn(
-                            "flex flex-col items-center justify-center p-4 text-center transition-all",
-                            !isUnlocked && "bg-muted/50 opacity-60"
-                        )}>
-                            <div className="relative">
-                                <Icon className={cn("h-12 w-12 mb-2", isUnlocked ? "text-amber" : "text-muted-foreground")} />
-                                    {isUnlocked && (
-                                    <CheckCircle className="absolute -bottom-1 -right-1 h-5 w-5 text-success bg-background rounded-full" />
-                                )}
-                            </div>
-                            <h3 className="font-semibold">{achievementName}</h3>
-                            <p className="text-xs text-muted-foreground mt-1">{achievementDescription}</p>
-                            
-                            {!isUnlocked && achievement.goal > 1 && (
-                                <div className="w-full mt-2">
-                                    <Progress value={progressPercentage} className="h-2" />
-                                    <p className="text-xs font-mono mt-1">{Math.floor(status.progress)} / {achievement.goal}</p>
-                                </div>
+        return (
+            <Tooltip key={achievement.id}>
+                <TooltipTrigger asChild>
+                    <Card className={cn(
+                        "flex flex-col items-center justify-center p-4 text-center transition-all",
+                        !isUnlocked && "bg-muted/50 opacity-60"
+                    )}>
+                        <div className="relative">
+                            <Icon className={cn("h-12 w-12 mb-2", isUnlocked ? "text-amber" : "text-muted-foreground")} />
+                                {isUnlocked && (
+                                <CheckCircle className="absolute -bottom-1 -right-1 h-5 w-5 text-success bg-background rounded-full" />
                             )}
-                        </Card>
-                    </TooltipTrigger>
-                    {isUnlocked && status.unlockedAt && (
-                        <TooltipContent>
-                            <p>{getUIText('unlocked')}: {format(new Date(status.unlockedAt), "PPP")}</p>
-                        </TooltipContent>
-                    )}
-                </Tooltip>
-            );
-        });
-    }
-
-    const regularAchievementItems = renderAchievementItems(displayedAchievements, displayAchievementsData);
-    const devAchievementItems = renderAchievementItems(devAchievements, achievements);
+                        </div>
+                        <h3 className="font-semibold">{achievementName}</h3>
+                        <p className="text-xs text-muted-foreground mt-1">{achievementDescription}</p>
+                        
+                        {!isUnlocked && achievement.goal > 1 && (
+                            <div className="w-full mt-2">
+                                <Progress value={progressPercentage} className="h-2" />
+                                <p className="text-xs font-mono mt-1">{Math.floor(status.progress)} / {achievement.goal}</p>
+                            </div>
+                        )}
+                    </Card>
+                </TooltipTrigger>
+                {isUnlocked && status.unlockedAt && (
+                    <TooltipContent>
+                        <p>{getUIText('unlocked')}: {format(new Date(status.unlockedAt), "PPP")}</p>
+                    </TooltipContent>
+                )}
+            </Tooltip>
+        );
+    });
 
     return (
         <>
@@ -200,35 +171,11 @@ export default function AchievementsPage() {
                      <TooltipProvider>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                            <div data-tutorial-id="achievements-grid" className="col-span-1 sm:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {regularAchievementItems.slice(0, 2)}
+                                {achievementItems.slice(0, 2)}
                            </div>
-                           {regularAchievementItems.slice(2)}
+                           {achievementItems.slice(2)}
                         </div>
                     </TooltipProvider>
-
-                    <div className="mt-6 border-t border-dashed pt-4">
-                        <Collapsible open={isDevOpen} onOpenChange={handleDevOpenChange}>
-                            <CollapsibleTrigger asChild>
-                                <Button variant="ghost" className="w-full flex items-center justify-center gap-2">
-                                    <Sparkles className="h-4 w-4" />
-                                    <span className="text-sm font-semibold">Dev Achievements</span>
-                                    <ChevronDown className={`h-4 w-4 transition-transform ${isDevOpen ? 'rotate-180' : ''}`} />
-                                </Button>
-                            </CollapsibleTrigger>
-                            <CollapsibleContent className="pt-4">
-                                <TooltipProvider>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                        {devAchievementItems}
-                                    </div>
-                                </TooltipProvider>
-                                <div className="mt-4 flex justify-center">
-                                    <Button variant="destructive" size="sm" onClick={() => setIsDevClearAlertOpen(true)} disabled={!Object.keys(achievements).some(k => k.startsWith('dev_'))}>
-                                        <Trash2 className="mr-2 h-4 w-4" /> {getUIText('resetDev')}
-                                    </Button>
-                                </div>
-                            </CollapsibleContent>
-                        </Collapsible>
-                    </div>
                 </CardContent>
                 <CardFooter className="flex justify-center p-6 border-t">
                      <div className="flex flex-wrap justify-center gap-4">
@@ -260,26 +207,4 @@ export default function AchievementsPage() {
                         <AlertDialogCancel>{getUIText('cancel')}</AlertDialogCancel>
                         <AlertDialogAction onClick={handleClearAchievements} className="bg-destructive hover:bg-destructive/90">
                            {getUIText('confirmReset')}
-                        </AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
-            <AlertDialog open={isDevClearAlertOpen} onOpenChange={setIsDevClearAlertOpen}>
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>{getUIText('alertTitle')}</AlertDialogTitle>
-                        <AlertDialogDescription>
-                           {getUIText('devAlertDesc')}
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel>{getUIText('cancel')}</AlertDialogCancel>
-                        <AlertDialogAction onClick={handleClearDevAchievements} className="bg-destructive hover:bg-destructive/90">
-                           {getUIText('confirmReset')}
-                        </AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
-        </>
-    );
-}
+                        </
