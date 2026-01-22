@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
@@ -150,23 +149,20 @@ export default function QuizDePl() {
 
   // Total quiz time and periodic time-based achievement check
   useEffect(() => {
-    if (currentQuestionIndex >= questions.length || isPaused || !!answerStatus) {
+    if (currentQuestionIndex >= questions.length || isPaused) {
       return;
     }
 
     const interval = setInterval(() => {
-      setTotalTime((prev) => {
-          const newTotalTime = prev + 1;
-          if (newTotalTime > 0 && newTotalTime % TIME_UPDATE_INTERVAL === 0) {
-              const unlocked = updateTimeSpent(TIME_UPDATE_INTERVAL);
-              unlocked.forEach(showAchievementToast);
-          }
-          return newTotalTime;
-      });
+      setTotalTime((prev) => prev + 1);
+      if ((totalTime + 1) % TIME_UPDATE_INTERVAL === 0) {
+          const unlocked = updateTimeSpent(TIME_UPDATE_INTERVAL);
+          unlocked.forEach(showAchievementToast);
+      }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [currentQuestionIndex, questions.length, isPaused, answerStatus, showAchievementToast]);
+  }, [currentQuestionIndex, questions.length, isPaused, totalTime, showAchievementToast]);
 
 
   const currentQuestion = useMemo(() => questions[currentQuestionIndex], [questions, currentQuestionIndex]);
@@ -425,3 +421,5 @@ export default function QuizDePl() {
     </>
   );
 }
+
+    
