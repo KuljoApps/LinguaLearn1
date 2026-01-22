@@ -11,9 +11,10 @@ import { Slider } from "@/components/ui/slider";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Trash2, Settings as SettingsIcon, ChevronDown, GraduationCap, Crown, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Collapsible, CollapsibleTrigger } from '@/components/ui/collapsible';
 
 
-export default function SettingsPage() {
+export default function SettingsTutorialPage() {
     const router = useRouter();
     const [animate, setAnimate] = useState(false);
 
@@ -31,9 +32,9 @@ export default function SettingsPage() {
     }, [router]);
     
     return (
-        <main className="flex min-h-screen flex-col items-center justify-center p-4">
+        <>
             <Card className="w-full max-w-md shadow-2xl" data-tutorial-id="settings-card">
-                <CardHeader className="relative flex h-14 items-center justify-center overflow-hidden p-6">
+                 <CardHeader className="relative flex h-14 items-center justify-center overflow-hidden p-6">
                     <SettingsIcon className={cn(
                         "h-8 w-8 text-foreground",
                         animate && "animate-icon-fly-out"
