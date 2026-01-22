@@ -6,7 +6,7 @@ import { getTutorialState } from '@/lib/storage';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ArrowLeft, Trash2, ArrowUpDown } from "lucide-react";
+import { ArrowLeft, Trash2, ArrowUpDown, ShieldX } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import React from 'react';
 
@@ -27,7 +27,10 @@ export default function Errors() {
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
             <Card className="w-full max-w-4xl shadow-2xl" data-tutorial-id="errors-card">
                 <CardHeader className="flex flex-col items-center gap-4 p-6 sm:flex-row sm:justify-between">
-                    <CardTitle className="text-3xl">Common Errors</CardTitle>
+                    <div className="flex items-center gap-4">
+                        <ShieldX className="h-8 w-8" />
+                        <CardTitle className="text-3xl">Common Errors</CardTitle>
+                    </div>
                     <div className="flex flex-col gap-2" data-tutorial-id="errors-controls">
                         <Select open={false}>
                             <SelectTrigger className="pointer-events-none">
