@@ -115,28 +115,32 @@ export default function SettingsPage() {
             <ProPromotionDialog open={showPromoDialog} onOpenChange={setShowPromoDialog} />
             <RateAppDialog open={showRateDialog} onOpenChange={setShowRateDialog} />
             <Card className="shadow-2xl overflow-hidden">
-                 <CardHeader className="relative flex items-center justify-center p-6">
-                    {/* Placeholder to maintain height and width for centering */}
-                    <div className="flex items-center gap-2 invisible">
-                        <SettingsIcon className="h-8 w-8 shrink-0" />
-                        <CardTitle className="whitespace-nowrap text-3xl">
+                 <CardHeader>
+                    <div className="relative flex items-center justify-center">
+                        {/* Invisible placeholder for centering */}
+                        <div className="flex items-center gap-2 invisible">
+                            <SettingsIcon className="h-8 w-8 shrink-0" />
+                            <CardTitle className="whitespace-nowrap text-3xl">
+                                {getUIText('title')}
+                            </CardTitle>
+                        </div>
+                        
+                        {/* Animated icon */}
+                        <div className={cn(
+                            "absolute",
+                            animate ? "animate-icon-fly-out" : ""
+                        )}>
+                            <SettingsIcon className="h-8 w-8 shrink-0 text-foreground" />
+                        </div>
+                        
+                        {/* Animated title */}
+                        <CardTitle className={cn(
+                            "absolute whitespace-nowrap text-3xl",
+                            animate ? "animate-text-slide-in" : "opacity-0"
+                        )}>
                             {getUIText('title')}
                         </CardTitle>
                     </div>
-                    
-                    <div className={cn(
-                        "absolute",
-                        animate ? "animate-icon-fly-out" : ""
-                    )}>
-                        <SettingsIcon className="h-8 w-8 shrink-0 text-foreground" />
-                    </div>
-                    
-                    <CardTitle className={cn(
-                        "absolute whitespace-nowrap text-3xl",
-                        animate ? "animate-text-slide-in" : "opacity-0"
-                    )}>
-                        {getUIText('title')}
-                    </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div data-tutorial-id="settings-switches" className="space-y-4">

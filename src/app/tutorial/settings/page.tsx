@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -28,9 +29,9 @@ export default function SettingsTutorialPage() {
     }, [router]);
     
     return (
-        <>
+        <div className="w-full max-w-md">
             <Card className="w-full max-w-md shadow-2xl" data-tutorial-id="settings-card">
-                 <CardHeader className="text-center p-6">
+                 <CardHeader>
                     <div className="flex items-center justify-center gap-2">
                         <SettingsIcon className="h-8 w-8" />
                         <CardTitle className="text-3xl">Settings</CardTitle>
@@ -95,6 +96,6 @@ export default function SettingsTutorialPage() {
                     </div>
                 </CardFooter>
             </Card>
-        </>
+        </div>
     );
 }
