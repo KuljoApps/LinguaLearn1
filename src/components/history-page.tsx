@@ -23,8 +23,8 @@ export default function HistoryPage({ data }: { data: HistoryPageData }) {
                 <CardTitle className="text-3xl">{t('title')}</CardTitle>
             </div>
         </CardHeader>
-        <CardContent className="p-4 pt-2">
-          <ScrollArea className="h-[70vh] w-full pr-1">
+        <CardContent className="pl-6 pr-2 pt-2 pb-4">
+          <ScrollArea className="h-[70vh] w-full pr-4">
             <Accordion type="multiple" className="w-full">
               {data.events.map((event, index) => (
                 <AccordionItem value={`item-${index}`} key={index}>
@@ -35,9 +35,9 @@ export default function HistoryPage({ data }: { data: HistoryPageData }) {
                     </div>
                   </AccordionTrigger>
                   <AccordionContent className="space-y-3 pt-2">
-                    <p className="text-muted-foreground text-justify">{event.description.native.replace(/ ([a-zA-Z])\s/g, ' $1\u00A0')}</p>
+                    <p className="text-muted-foreground text-justify">{event.description.native.replace(/ ([a-zA-Z])\s/g, ' $1 ')}</p>
                     <hr className="my-2 border-border" />
-                    <p className="text-sm text-justify">{event.description.pl.replace(/ ([a-zA-Z])\s/g, ' $1\u00A0')}</p>
+                    <p className="text-sm text-justify">{event.description.pl.replace(/ ([a-zA-Z])\s/g, ' $1 ')}</p>
                   </AccordionContent>
                 </AccordionItem>
               ))}
