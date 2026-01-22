@@ -114,7 +114,7 @@ export default function SettingsPage() {
             <ProPromotionDialog open={showPromoDialog} onOpenChange={setShowPromoDialog} />
             <RateAppDialog open={showRateDialog} onOpenChange={setShowRateDialog} />
             <Card className="w-full max-w-md shadow-2xl" data-tutorial-id="settings-card">
-                 <CardHeader className="relative flex h-14 items-center justify-center overflow-hidden p-6">
+                 <CardHeader className="relative flex items-center justify-center overflow-hidden p-6">
                     <SettingsIcon className={cn(
                         "h-8 w-8 shrink-0 text-foreground",
                         animate && "animate-icon-fly-out"
@@ -248,4 +248,3 @@ export default function SettingsPage() {
         </>
     );
 }
-    
