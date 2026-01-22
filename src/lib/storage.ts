@@ -1,6 +1,7 @@
+
 "use client";
 
-import { allAchievements } from './achievements';
+import { allAchievements, devAchievements } from './achievements';
 import type { Achievement } from './types';
 
 export type { Achievement };
@@ -318,13 +319,32 @@ export const clearFakeAchievements = () => {
     }
 }
 
+export const clearDevAchievements = () => {
+    if (typeof window === 'undefined') return;
+    try {
+        const allAchievementsData = getAchievements();
+        const realAchievements: Record<string, AchievementStatus> = {};
+        for (const key in allAchievementsData) {
+            if (!key.startsWith('dev_')) {
+                realAchievements[key] = allAchievementsData[key];
+            }
+        }
+        localStorage.setItem(getKey('linguaLearnAchievements_v2'), JSON.stringify(realAchievements));
+        window.dispatchEvent(new CustomEvent('achievements-changed'));
+    } catch (error) {
+        console.error("Failed to clear dev achievements", error);
+    }
+};
+
 
 const checkAndUnlockAchievements = (stats: Stats): Achievement[] => {
     const achievements = getAchievements();
     const masteryProgress = getMasteryProgress();
     const newlyUnlocked: Achievement[] = [];
+    
+    const allAchievementDefs = [...allAchievements, ...devAchievements];
 
-    allAchievements.forEach(achievement => {
+    allAchievementDefs.forEach(achievement => {
         const status = achievements[achievement.id] || { progress: 0, unlockedAt: null };
         if (status.unlockedAt) return; // Already unlocked
 
@@ -333,26 +353,34 @@ const checkAndUnlockAchievements = (stats: Stats): Achievement[] => {
             case 'novice':
             case 'apprentice':
             case 'master':
+            case 'dev_novice':
+            case 'dev_apprentice':
+            case 'dev_master':
                 currentProgress = stats.totalCorrectAnswers;
                 break;
             case 'streak25':
             case 'streak50':
             case 'streak100':
+            case 'dev_streak3':
+            case 'dev_streak5':
                 currentProgress = stats.longestStreak;
                 break;
             case 'time_1h':
             case 'time_3h':
             case 'time_6h':
+            case 'dev_time_10s':
                 currentProgress = stats.totalTimeSpent;
                 break;
             case 'daily_7':
             case 'daily_14':
             case 'daily_30':
+            case 'dev_daily_2':
                 currentProgress = stats.uniqueDaysPlayed;
                 break;
             case 'perfectionist':
             case 'virtuoso':
             case 'grandmaster':
+            case 'dev_perfectionist':
                 currentProgress = stats.totalPerfectScores || 0;
                 break;
             // English Mastery
@@ -441,7 +469,7 @@ const checkAndUnlockAchievements = (stats: Stats): Achievement[] => {
 
         status.progress = currentProgress;
         
-        if (currentProgress >= achievement.goal) {
+        if (achievement.goal > 0 && currentProgress >= achievement.goal) {
             if (!status.unlockedAt) { // This is where we detect a *newly* unlocked achievement
                 status.unlockedAt = Date.now();
                 newlyUnlocked.push(achievement);
