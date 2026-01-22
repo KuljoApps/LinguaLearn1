@@ -44,10 +44,10 @@ export default function AboutPage() {
             <CardHeader className="items-center text-center">
                 <LinguaLearnLogo width="48" height="48" />
                 <CardTitle className="text-3xl font-bold tracking-tight pt-2 whitespace-nowrap">
-                    {getUIText('title')}&nbsp;Lingua
+                    {getUIText('title')} Lingua
                     <span className="relative inline-block">
                         Learn
-                        <span className="absolute -right-1 -bottom-3.5 text-base font-semibold tracking-normal text-amber">
+                        <span className="absolute -right-1 -bottom-4 text-lg font-semibold tracking-normal text-amber">
                         Lite
                         </span>
                     </span>
