@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { getTutorialState } from '@/lib/storage';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { getTutorialState } from "@/lib/storage";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -16,7 +16,6 @@ import { Collapsible, CollapsibleTrigger } from '@/components/ui/collapsible';
 
 export default function SettingsTutorialPage() {
     const router = useRouter();
-    const [animate, setAnimate] = useState(false);
 
     useEffect(() => {
         const tutorialState = getTutorialState();
@@ -26,25 +25,16 @@ export default function SettingsTutorialPage() {
             }, 3000);
             return () => clearTimeout(timer);
         }
-
-        const animationTimer = setTimeout(() => setAnimate(true), 500);
-        return () => clearTimeout(animationTimer);
     }, [router]);
     
     return (
         <>
             <Card className="w-full max-w-md shadow-2xl" data-tutorial-id="settings-card">
-                 <CardHeader className="relative flex items-center justify-center overflow-hidden p-6">
-                    <SettingsIcon className={cn(
-                        "h-8 w-8 shrink-0 text-foreground",
-                        animate && "animate-icon-fly-out"
-                    )} />
-                    <CardTitle className={cn(
-                        "absolute whitespace-nowrap text-3xl",
-                        animate ? "animate-text-slide-in" : "opacity-0"
-                    )}>
-                        Settings
-                    </CardTitle>
+                 <CardHeader className="text-center p-6">
+                    <div className="flex items-center justify-center gap-2">
+                        <SettingsIcon className="h-8 w-8" />
+                        <CardTitle className="text-3xl">Settings</CardTitle>
+                    </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div data-tutorial-id="settings-switches" className="space-y-4">
@@ -108,4 +98,3 @@ export default function SettingsTutorialPage() {
         </>
     );
 }
-    
