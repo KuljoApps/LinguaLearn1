@@ -1,15 +1,15 @@
+
 "use client";
 
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { getTutorialState } from '@/lib/storage';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { ArrowLeft, CheckCircle, Flame, Percent, ShieldX, Trash2, BarChart } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { ArrowLeft, CheckCircle, Flame, Percent, ShieldX, Trash2, ArrowUpRight, BarChart } from "lucide-react";
-import React from 'react';
 
-export default function Stats() {
+export default function StatsTutorialPage() {
     const router = useRouter();
 
     useEffect(() => {
@@ -22,61 +22,19 @@ export default function Stats() {
         }
     }, [router]);
 
-    const renderLastFiftyAnswersGrid = () => {
-        const gridItems = [];
-        const fakeAnswers = React.useMemo(() => {
-            let answers = [];
-            for (let i = 0; i < 50; i++) {
-                answers.push(Math.random() > 0.3); // about 70% correct
-            }
-            return answers;
-        }, []);
-
-        for (let i = 0; i < 50; i++) {
-            const answer = fakeAnswers[i];
-            if (answer) {
-                 gridItems.push(<div key={`correct-${i}`} className="h-4 w-4 rounded-sm bg-success" />);
-            } else {
-                 gridItems.push(
-                    <Popover key={`error-${i}`}>
-                        <PopoverTrigger asChild>
-                            <button
-                                aria-label="Show error details"
-                                className="h-4 w-4 rounded-sm bg-destructive cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                            />
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto max-w-xs text-sm">
-                             <div className="space-y-2">
-                                <h4 className="font-medium leading-none text-center">Error Details</h4>
-                                <p className="text-muted-foreground">
-                                    From quiz: <span className="font-semibold text-foreground">English - Polish</span>
-                                </p>
-                                <p>
-                                    <span className="text-muted-foreground">Word: </span>
-                                    <span className="font-bold">Reliable</span>
-                                </p>
-                                <p>
-                                    <span className="text-muted-foreground">Correct: </span>
-                                    <span className="font-bold text-success">Niezawodny</span>
-                                </p>
-                                <p>
-                                    <span className="text-muted-foreground">Your answer: </span>
-                                    <span className="font-bold text-destructive">Religijny</span>
-                                </p>
-                            </div>
-                        </PopoverContent>
-                    </Popover>
-                 )
-            }
-        }
-        return gridItems;
+    const fakeStats = {
+      totalAnswers: 128,
+      totalErrors: 17,
+      longestStreak: 23,
     };
-
+    const successRate = Math.round(((fakeStats.totalAnswers - fakeStats.totalErrors) / fakeStats.totalAnswers) * 100);
+    
+    const fakeAnswers = useMemo(() => Array.from({ length: 50 }, (_, i) => i > 40 || (i > 20 && i < 25) ? false : Math.random() > 0.2), []);
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
-            <Card className="w-full max-w-md shadow-2xl" data-tutorial-id="stats-card">
-                <CardHeader>
+            <Card className="w-full max-w-md shadow-2xl">
+                <CardHeader className="p-6 text-center">
                     <div className="flex items-center justify-center gap-4">
                         <BarChart className="h-8 w-8" />
                         <CardTitle className="text-3xl">Statistics</CardTitle>
@@ -84,46 +42,22 @@ export default function Stats() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="grid grid-cols-2 gap-4" data-tutorial-id="stats-cards">
-                        <Card className="relative cursor-pointer transition-colors hover:bg-muted/50">
-                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                <CardTitle className="text-sm font-medium">Total Answers</CardTitle>
-                                <CheckCircle className="h-5 w-5 text-amber" />
-                            </CardHeader>
-                            <CardContent>
-                                <div className="text-2xl font-bold">128</div>
-                            </CardContent>
-                             <ArrowUpRight className="absolute bottom-2 right-2 h-4 w-4 text-muted-foreground/40" />
-                        </Card>
-                        <Card className="relative cursor-pointer transition-colors hover:bg-muted/50">
-                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                <CardTitle className="text-sm font-medium">Total Errors</CardTitle>
-                                <ShieldX className="h-5 w-5 text-amber" />
-                            </CardHeader>
-                            <CardContent>
-                                <div className="text-2xl font-bold">17</div>
-                            </CardContent>
-                            <ArrowUpRight className="absolute bottom-2 right-2 h-4 w-4 text-muted-foreground/40" />
-                        </Card>
-                        <Card className="relative cursor-pointer transition-colors hover:bg-muted/50">
-                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                <CardTitle className="text-sm font-medium">Success Rate</CardTitle>
-                                <Percent className="h-5 w-5 text-amber" />
-                            </CardHeader>
-                            <CardContent>
-                                <div className="text-2xl font-bold">87%</div>
-                            </CardContent>
-                             <ArrowUpRight className="absolute bottom-2 right-2 h-4 w-4 text-muted-foreground/40" />
-                        </Card>
-                        <Card className="relative cursor-pointer transition-colors hover:bg-muted/50">
-                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                <CardTitle className="text-sm font-medium">Longest Streak</CardTitle>
-                                <Flame className="h-6 w-6 text-amber" />
-                            </CardHeader>
-                            <CardContent>
-                                <div className="text-2xl font-bold">23</div>
-                            </CardContent>
-                             <ArrowUpRight className="absolute bottom-2 right-2 h-4 w-4 text-muted-foreground/40" />
-                        </Card>
+                        <Popover>
+                            <PopoverTrigger asChild><Card className="cursor-pointer"><CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2"><CardTitle className="text-sm font-medium">Total Answers</CardTitle><CheckCircle className="h-5 w-5 text-amber" /></CardHeader><CardContent><div className="text-2xl font-bold">{fakeStats.totalAnswers}</div></CardContent></Card></PopoverTrigger>
+                            <PopoverContent className="w-56"><h4 className="font-medium text-center mb-2">Answers per Quiz</h4></PopoverContent>
+                        </Popover>
+                         <Popover>
+                            <PopoverTrigger asChild><Card className="cursor-pointer"><CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2"><CardTitle className="text-sm font-medium">Total Errors</CardTitle><ShieldX className="h-5 w-5 text-amber" /></CardHeader><CardContent><div className="text-2xl font-bold">{fakeStats.totalErrors}</div></CardContent></Card></PopoverTrigger>
+                            <PopoverContent className="w-56"><h4 className="font-medium text-center mb-2">Errors per Quiz</h4></PopoverContent>
+                        </Popover>
+                         <Popover>
+                            <PopoverTrigger asChild><Card className="cursor-pointer"><CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2"><CardTitle className="text-sm font-medium">Success Rate</CardTitle><Percent className="h-5 w-5 text-amber" /></CardHeader><CardContent><div className="text-2xl font-bold">{successRate}%</div></CardContent></Card></PopoverTrigger>
+                            <PopoverContent className="w-56"><h4 className="font-medium text-center mb-2">Success Rate per Quiz</h4></PopoverContent>
+                        </Popover>
+                        <Popover>
+                            <PopoverTrigger asChild><Card className="cursor-pointer"><CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2"><CardTitle className="text-sm font-medium">Longest Streak</CardTitle><Flame className="h-6 w-6 text-amber" /></CardHeader><CardContent><div className="text-2xl font-bold">{fakeStats.longestStreak}</div></CardContent></Card></PopoverTrigger>
+                            <PopoverContent className="w-auto"><div className="text-center space-y-1"><h4 className="font-medium mb-1">Longest Streak Achieved</h4></div></PopoverContent>
+                        </Popover>
                     </div>
                     <Card data-tutorial-id="last-50-grid">
                         <CardHeader>
@@ -131,19 +65,25 @@ export default function Stats() {
                         </CardHeader>
                         <CardContent>
                             <div className="flex flex-wrap gap-1">
-                                {renderLastFiftyAnswersGrid()}
+                                {fakeAnswers.map((answer, i) => (
+                                    <Popover key={`answer-${i}`}>
+                                        <PopoverTrigger asChild>
+                                            <button
+                                                aria-label="Answer detail"
+                                                className={`h-4 w-4 rounded-sm ${answer ? 'bg-success' : 'bg-destructive'}`}
+                                            />
+                                        </PopoverTrigger>
+                                        {!answer && <PopoverContent className="w-auto max-w-xs text-sm"><div className="space-y-2"><h4 className="font-medium leading-none text-center">Error Details</h4></div></PopoverContent>}
+                                    </Popover>
+                                ))}
                             </div>
                         </CardContent>
                     </Card>
                 </CardContent>
                 <CardFooter className="flex justify-center">
                     <div className="flex flex-wrap justify-center gap-4">
-                        <Button variant="outline" className="pointer-events-none">
-                            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Home
-                        </Button>
-                        <Button variant="destructive" className="pointer-events-none">
-                            <Trash2 className="mr-2 h-4 w-4" /> Clear Stats
-                        </Button>
+                        <Button variant="outline" disabled><ArrowLeft className="mr-2 h-4 w-4" /> Back to Home</Button>
+                        <Button variant="destructive" disabled><Trash2 className="mr-2 h-4 w-4" /> Clear Stats</Button>
                     </div>
                 </CardFooter>
             </Card>
