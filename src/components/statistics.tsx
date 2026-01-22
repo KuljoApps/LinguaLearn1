@@ -17,6 +17,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 
 const defaultStats: Stats = { totalAnswers: 0, totalCorrectAnswers: 0, totalErrors: 0, longestStreak: 0, currentStreak: 0, lastFiftyAnswers: [], longestStreakDate: null, longestStreakQuiz: null, perQuizStats: {}, totalTimeSpent: 0, lastPlayTimestamp: null, uniqueDaysPlayed: 0, playedQuizzes: [], totalPerfectScores: 0 };
 
@@ -55,6 +56,7 @@ export default function StatisticsPage() {
     const [language, setLanguage] = useState<Language>('en');
     const [isTutorialActiveForCards, setIsTutorialActiveForCards] = useState(false);
     const [isTutorialActiveForGrid, setIsTutorialActiveForGrid] = useState(false);
+    const [animate, setAnimate] = useState(false);
 
     useEffect(() => {
         const loadDataForCurrentLanguage = () => {
@@ -79,12 +81,15 @@ export default function StatisticsPage() {
         };
 
         loadDataForCurrentLanguage();
+        const timer = setTimeout(() => setAnimate(true), 500);
+
         window.addEventListener('language-changed', loadDataForCurrentLanguage);
         window.addEventListener('tutorial-state-changed', loadDataForCurrentLanguage);
 
         return () => {
             window.removeEventListener('language-changed', loadDataForCurrentLanguage);
             window.removeEventListener('tutorial-state-changed', loadDataForCurrentLanguage);
+            clearTimeout(timer);
         };
     }, []);
 
@@ -194,12 +199,19 @@ export default function StatisticsPage() {
 
 
     return (
-        <>
-            <Card className="w-full max-w-md shadow-2xl" data-tutorial-id="stats-card">
-                <CardHeader>
-                    <div className="flex items-center justify-center gap-4">
-                        <BarChart className="h-8 w-8" />
-                        <CardTitle className="text-3xl">{getUIText('title')}</CardTitle>
+        <div className="w-full max-w-md">
+            <Card className="w-full max-w-md shadow-2xl overflow-hidden" data-tutorial-id="stats-card">
+                <CardHeader className="p-6">
+                    <div className="relative flex h-8 items-center justify-center">
+                        <div className={cn("absolute", animate ? "animate-icon-fly-out" : "")}>
+                            <BarChart className="h-8 w-8 shrink-0 text-foreground" />
+                        </div>
+                        <CardTitle className={cn(
+                            "absolute whitespace-nowrap text-3xl",
+                            animate ? "animate-text-slide-in" : "opacity-0"
+                        )}>
+                            {getUIText('title')}
+                        </CardTitle>
                     </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -368,6 +380,6 @@ export default function StatisticsPage() {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-        </>
+        </div>
     );
 }
