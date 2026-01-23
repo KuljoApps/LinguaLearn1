@@ -218,7 +218,7 @@ export default function SettingsPage() {
                                 <Separator className="flex-grow" />
                                 <CollapsibleTrigger asChild>
                                     <Button variant="ghost" className="flex items-center gap-2 px-3">
-                                        <span className="text-sm italic text-muted-foreground">Developer Tools</span>
+                                        <span className="text-sm italic text-muted-foreground">Nie jestem debilem, jestem Gemini</span>
                                         <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isDevToolsOpen ? 'rotate-180' : ''}`} />
                                     </Button>
                                 </CollapsibleTrigger>
