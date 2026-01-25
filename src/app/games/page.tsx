@@ -2,12 +2,11 @@
 
 import { 
     ArrowLeft, Gamepad2, Zap, Sparkles, Heart, 
-    Star, Rocket, Cloud, Sun, Moon
+    Star, Rocket
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
 import { setAppTheme, type AppTheme } from '@/lib/storage';
 import { useRouter } from 'next/navigation';
 
@@ -193,65 +192,6 @@ export default function GamesPage() {
                                 {getIcon(2)}
                                 <span>SOLAR FLARE</span>
                                 {getIcon(2)}
-                            </Button>
-                        </div>
-                    </div>
-
-                    <Separator className="my-6" />
-
-                    {/* CATEGORY 2: PASTEL DREAM */}
-                    <div>
-                        <h2 className="text-2xl font-bold mb-4 text-center text-pink-500 bg-gradient-to-r from-pink-100 to-purple-100 py-2 rounded-lg border border-pink-300">
-                            ✨ PASTEL DREAM ✨
-                        </h2>
-
-                        <div className="mb-4">
-                            <h3 className="text-lg font-semibold mb-2 text-amber-600">Amber & Gold</h3>
-                            <Button 
-                                onClick={() => handleThemeSelect({ className: 'text-xl text-gray-800 bg-amber-300 hover:opacity-90 transition-all rounded-2xl shadow-inner border border-amber-400/50' })}
-                                className="w-full h-20 mb-2 flex items-center justify-center gap-4 text-xl text-gray-800 bg-amber-300 hover:opacity-90 transition-all rounded-2xl shadow-inner border border-amber-400/50">
-                                <Sun className="h-10 w-10 text-amber-700" />
-                                <span className="font-semibold">GOLDEN HOUR</span>
-                                <Sun className="h-10 w-10 text-amber-700" />
-                            </Button>
-                            <Button 
-                                onClick={() => handleThemeSelect({ className: 'text-xl text-gray-800 bg-gradient-to-r from-yellow-200 via-amber-100 to-yellow-100 hover:opacity-90 transition-all rounded-2xl shadow-inner border border-yellow-300/50' })}
-                                className="w-full h-20 mb-2 flex items-center justify-center gap-4 text-xl text-gray-800 bg-gradient-to-r from-yellow-200 via-amber-100 to-yellow-100 hover:opacity-90 transition-all rounded-2xl shadow-inner border border-yellow-300/50">
-                                {getIcon(1)}
-                                <span className="font-semibold">AMBER GLOW</span>
-                                {getIcon(1)}
-                            </Button>
-                            <Button 
-                                onClick={() => handleThemeSelect({ className: 'text-xl text-gray-800 bg-amber-400 hover:opacity-90 transition-all rounded-2xl shadow-inner border border-amber-500/30' })}
-                                className="w-full h-20 mb-2 flex items-center justify-center gap-4 text-xl text-gray-800 bg-amber-400 hover:opacity-90 transition-all rounded-2xl shadow-inner border border-amber-500/30">
-                                {getIcon(2)}
-                                <span className="font-semibold">HONEY SUNDROP</span>
-                                {getIcon(2)}
-                            </Button>
-                        </div>
-
-                        <div className="mb-4">
-                            <h3 className="text-lg font-semibold mb-2 text-purple-600">Deep Purple</h3>
-                            <Button 
-                                onClick={() => handleThemeSelect({ className: 'text-xl text-gray-800 bg-gradient-to-r from-purple-200 via-violet-200 to-purple-100 hover:opacity-90 transition-all rounded-2xl shadow-inner border border-purple-300/50' })}
-                                className="w-full h-20 mb-2 flex items-center justify-center gap-4 text-xl text-gray-800 bg-gradient-to-r from-purple-200 via-violet-200 to-purple-100 hover:opacity-90 transition-all rounded-2xl shadow-inner border border-purple-300/50">
-                                <Moon className="h-10 w-10 text-purple-500" />
-                                <span className="font-semibold">DEEP TWILIGHT</span>
-                                <Moon className="h-10 w-10 text-purple-500" />
-                            </Button>
-                            <Button 
-                                onClick={() => handleThemeSelect({ className: 'text-xl text-gray-800 bg-gradient-to-r from-violet-200 via-purple-100 to-indigo-200 hover:opacity-90 transition-all rounded-2xl shadow-inner border border-violet-300/50' })}
-                                className="w-full h-20 mb-2 flex items-center justify-center gap-4 text-xl text-gray-800 bg-gradient-to-r from-violet-200 via-purple-100 to-indigo-200 hover:opacity-90 transition-all rounded-2xl shadow-inner border border-violet-300/50">
-                                {getIcon(3)}
-                                <span className="font-semibold">ROYAL DREAM</span>
-                                {getIcon(3)}
-                            </Button>
-                            <Button 
-                                onClick={() => handleThemeSelect({ className: 'text-xl text-gray-800 bg-gradient-to-r from-purple-100 via-violet-300 to-purple-200 hover:opacity-90 transition-all rounded-2xl shadow-inner border border-purple-400/30' })}
-                                className="w-full h-20 mb-2 flex items-center justify-center gap-4 text-xl text-gray-800 bg-gradient-to-r from-purple-100 via-violet-300 to-purple-200 hover:opacity-90 transition-all rounded-2xl shadow-inner border border-purple-400/30">
-                                {getIcon(4)}
-                                <span className="font-semibold">LAVENDER MIST</span>
-                                {getIcon(4)}
                             </Button>
                         </div>
                     </div>
