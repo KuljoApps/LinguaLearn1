@@ -35,8 +35,8 @@ export default function QuizAnswersPage() {
 
     useEffect(() => {
         const tutorialState = getTutorialState();
-        if (!tutorialState || !tutorialState.isActive || (tutorialState.stage === 'quiz' && ![0, 2, 3].includes(tutorialState.step))) {
-            const timer = setTimeout(() => {
+        if (!tutorialState || !tutorialState.isActive) {
+             const timer = setTimeout(() => {
                 if (window.location.pathname.includes('/tutorial/')) {
                     router.push('/');
                 }
@@ -70,10 +70,6 @@ export default function QuizAnswersPage() {
         return () => clearInterval(interval);
     }, [activeStep]);
 
-    if (activeStep === null || ![0, 2, 3].includes(activeStep)) {
-        return null;
-    }
-    
     const isTimerView = activeStep === 0;
     const isCorrectView = activeStep === 2;
     const isIncorrectView = activeStep === 3;
