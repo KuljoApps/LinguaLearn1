@@ -73,7 +73,7 @@ export default function Home() {
         if (isSpanish) return "¿Listo para cuestionar tus elecciones de vida en otro idioma? ¡Vamos!";
         return "Ready to question your life choices in another language? Let's go!";
     };
-
+    
     const getLearningButtonText = () => {
         if (isFrench) return "Apprentissage";
         if (isGerman) return "Lernen";
@@ -116,27 +116,27 @@ export default function Home() {
                 <CardContent data-tutorial-id="quiz-buttons" className="flex flex-col space-y-4 p-6 pt-0 pb-4">
                      <div className="grid grid-cols-2 gap-4">
                         <Link href="/quizzes" passHref>
-                            <Button variant="outline" className="w-full h-28 flex-col gap-2 text-lg border-2 border-primary">
-                                <Swords className="h-12 w-12 text-deep-purple" />
+                            <Button variant="outline" className="w-full h-28 flex-col gap-2 text-lg hover:shadow-lg transition-shadow">
+                                <Swords className="h-12 w-12 text-primary" />
                                 Quizzes
                             </Button>
                         </Link>
-                        <Button variant="outline" className="w-full h-28 flex-col gap-2 text-lg border-2 border-primary" disabled>
-                            <Gamepad2 className="h-12 w-12 text-deep-purple" />
+                        <Button variant="outline" className="w-full h-28 flex-col gap-2 text-lg opacity-60 cursor-not-allowed">
+                            <Gamepad2 className="h-12 w-12 text-muted-foreground" />
                             Games
                         </Button>
                     </div>
                     <div className="flex flex-col space-y-2 pt-2">
-                        <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary" disabled>
-                            <Baseline className="mr-2 h-5 w-5 text-deep-purple" />
+                        <Button variant="outline" className="w-full h-12 text-lg justify-start opacity-60 cursor-not-allowed">
+                            <Baseline className="mr-2 h-5 w-5 text-muted-foreground" />
                             Fill the Gap
                         </Button>
-                        <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary" disabled>
-                            <BookText className="mr-2 h-5 w-5 text-deep-purple" />
+                        <Button variant="outline" className="w-full h-12 text-lg justify-start opacity-60 cursor-not-allowed">
+                            <BookText className="mr-2 h-5 w-5 text-muted-foreground" />
                             Reading
                         </Button>
-                         <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary" disabled>
-                            <Headphones className="mr-2 h-5 w-5 text-deep-purple" />
+                         <Button variant="outline" className="w-full h-12 text-lg justify-start opacity-60 cursor-not-allowed">
+                            <Headphones className="mr-2 h-5 w-5 text-muted-foreground" />
                             Listening
                         </Button>
                     </div>
@@ -150,7 +150,7 @@ export default function Home() {
                         </Button>
                     </Link>
                 </div>
-                <CardFooter data-tutorial-id="toolbar" className="flex justify-center gap-4 p-4 pt-4">
+                <CardFooter data-tutorial-id="toolbar" className="flex justify-center gap-2 p-4">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button data-tutorial-id="language-switcher" variant="outline" size="icon" title="Change language">
