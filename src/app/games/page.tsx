@@ -54,15 +54,15 @@ export default function GamesPage() {
                                 {getIcon(1)}
                             </Button>
                              <Button 
-                                onClick={() => handleThemeSelect({ className: 'text-xl font-bold text-black bg-gradient-to-b from-orange-600 via-yellow-400 to-orange-600 hover:brightness-125 transition-all shadow-[0_0_25px_#f59e0b] border border-amber-500/50' })}
-                                className="w-full h-20 mb-2 flex items-center justify-center gap-4 text-xl font-bold text-black bg-gradient-to-b from-orange-600 via-yellow-400 to-orange-600 hover:brightness-125 transition-all shadow-[0_0_25px_#f59e0b] border border-amber-500/50">
+                                onClick={() => handleThemeSelect({ className: 'text-xl font-bold text-black bg-amber-500 hover:brightness-125 transition-all shadow-[0_0_25px_#f59e0b] border border-amber-500/50' })}
+                                className="w-full h-20 mb-2 flex items-center justify-center gap-4 text-xl font-bold text-black bg-amber-500 hover:brightness-125 transition-all shadow-[0_0_25px_#f59e0b] border border-amber-500/50">
                                 {getIcon(0)}
                                 <span>AMBER VARIANT 1</span>
                                 {getIcon(0)}
                             </Button>
                             <Button 
-                                onClick={() => handleThemeSelect({ className: 'text-xl font-bold text-white bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-amber-400 via-orange-500 to-yellow-600 hover:brightness-125 transition-all shadow-[0_0_20px_#b91c1c] border border-red-700/50' })}
-                                className="w-full h-20 mb-2 flex items-center justify-center gap-4 text-xl font-bold text-white bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-amber-400 via-orange-500 to-yellow-600 hover:brightness-125 transition-all shadow-[0_0_20px_#b91c1c] border border-red-700/50">
+                                onClick={() => handleThemeSelect({ className: 'text-xl font-bold text-white bg-orange-500 hover:brightness-125 transition-all shadow-[0_0_25px_#f97316] border border-orange-600/50' })}
+                                className="w-full h-20 mb-2 flex items-center justify-center gap-4 text-xl font-bold text-white bg-orange-500 hover:brightness-125 transition-all shadow-[0_0_25px_#f97316] border border-orange-600/50">
                                 {getIcon(2)}
                                 <span>AMBER VARIANT 2</span>
                                 {getIcon(2)}
