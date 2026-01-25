@@ -1,6 +1,6 @@
 "use client";
 
-import { Swords, Gamepad2, Baseline, BookText, Headphones, Settings, BarChart, ShieldX, Trophy, GraduationCap } from 'lucide-react';
+import { BookOpen, Dumbbell, Sparkles, Settings, BarChart, ShieldX, MessageSquareQuote, Layers, Trophy, GraduationCap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
@@ -73,7 +73,47 @@ export default function Home() {
         if (isSpanish) return "¿Listo para cuestionar tus elecciones de vida en otro idioma? ¡Vamos!";
         return "Ready to question your life choices in another language? Let's go!";
     };
+
+    const getQuizTitle1 = () => {
+        if (isFrench) return "Français - Polonais";
+        if (isGerman) return "Deutsch - Polnisch";
+        if (isItalian) return "Italiano - Polacco";
+        if (isSpanish) return "Español - Polaco";
+        return "English - Polish";
+    };
+
+    const getQuizTitle2 = () => {
+        if (isFrench) return "Polonais - Français";
+        if (isGerman) return "Polnisch - Deutsch";
+        if (isItalian) return "Polacco - Italiano";
+        if (isSpanish) return "Polaco - Español";
+        return "Polish - English";
+    };
     
+    const getQuizTitle3 = () => {
+        if (isFrench) return "Verbes & Aux.";
+        if (isGerman) return "Unregelmäßige Verben";
+        if (isItalian) return "Verbi Irregolari";
+        if (isSpanish) return "Verbos Irregulares";
+        return "Irregular Verbs";
+    }
+
+    const getQuizTitle4 = () => {
+        if (isFrench) return "Faux Amis";
+        if (isGerman) return "Trennbare Verben";
+        if (isItalian) return "Falsi Amici";
+        if (isSpanish) return "Falsos Amigos";
+        return "Phrasal Verbs";
+    }
+    
+    const getQuizTitle5 = () => {
+        if (isFrench) return "Idiomes";
+        if (isGerman) return "Redewendungen";
+        if (isItalian) return "Modi di dire";
+        if (isSpanish) return "Modismos";
+        return "Idioms";
+    }
+
     const getLearningButtonText = () => {
         if (isFrench) return "Apprentissage";
         if (isGerman) return "Lernen";
@@ -114,32 +154,36 @@ export default function Home() {
                     </p>
                 </CardHeader>
                 <CardContent data-tutorial-id="quiz-buttons" className="flex flex-col space-y-4 p-6 pt-0 pb-4">
-                     <div className="grid grid-cols-2 gap-4">
-                        <Link href="/quizzes" passHref>
-                            <Button variant="outline" className="w-full h-28 flex-col gap-2 text-lg hover:shadow-lg transition-shadow">
-                                <Swords className="h-12 w-12 text-primary" />
-                                Quizzes
-                            </Button>
-                        </Link>
-                        <Button variant="outline" className="w-full h-28 flex-col gap-2 text-lg opacity-60 cursor-not-allowed">
-                            <Gamepad2 className="h-12 w-12 text-muted-foreground" />
-                            Games
+                    <Link href={isFrench ? "/quiz/fr-pl" : isGerman ? "/quiz/de-pl" : isItalian ? "/quiz/it-pl" : isSpanish ? "/quiz/es-pl" : "/quiz/en-pl"} passHref>
+                        <Button className="w-full h-12 text-lg" size="lg">
+                            <BookOpen className="mr-2 h-5 w-5" />
+                            {getQuizTitle1()}
                         </Button>
-                    </div>
-                    <div className="flex flex-col space-y-2 pt-2">
-                        <Button variant="outline" className="w-full h-12 text-lg justify-start opacity-60 cursor-not-allowed">
-                            <Baseline className="mr-2 h-5 w-5 text-muted-foreground" />
-                            Fill the Gap
+                    </Link>
+                    <Link href={isFrench ? "/quiz/pl-fr" : isGerman ? "/quiz/pl-de" : isItalian ? "/quiz/pl-it" : isSpanish ? "/quiz/pl-es" : "/quiz/pl-en"} passHref>
+                        <Button className="w-full h-12 text-lg" size="lg">
+                            <Dumbbell className="mr-2 h-5 w-5" />
+                            {getQuizTitle2()}
                         </Button>
-                        <Button variant="outline" className="w-full h-12 text-lg justify-start opacity-60 cursor-not-allowed">
-                            <BookText className="mr-2 h-5 w-5 text-muted-foreground" />
-                            Reading
+                    </Link>
+                    <Link href={isFrench ? "/quiz/irregular-verbs-fr" : isGerman ? "/quiz/irregular-verbs-de" : isItalian ? "/quiz/irregular-verbs-it" : isSpanish ? "/quiz/irregular-verbs-es" : "/quiz/irregular-verbs-en"} passHref>
+                        <Button className="w-full h-12 text-lg" size="lg">
+                            <Sparkles className="mr-2 h-5 w-5" />
+                            {getQuizTitle3()}
                         </Button>
-                         <Button variant="outline" className="w-full h-12 text-lg justify-start opacity-60 cursor-not-allowed">
-                            <Headphones className="mr-2 h-5 w-5 text-muted-foreground" />
-                            Listening
+                    </Link>
+                    <Link href={isFrench ? "/quiz/phrasal-verbs-fr" : isGerman ? "/quiz/phrasal-verbs-de" : isItalian ? "/quiz/phrasal-verbs-it" : isSpanish ? "/quiz/phrasal-verbs-es" : "/quiz/phrasal-verbs-en"} passHref>
+                        <Button className="w-full h-12 text-lg" size="lg">
+                            <Layers className="mr-2 h-5 w-5" />
+                            {getQuizTitle4()}
                         </Button>
-                    </div>
+                    </Link>
+                    <Link href={isFrench ? "/quiz/idioms-fr" : isGerman ? "/quiz/idioms-de" : isItalian ? "/quiz/idioms-it" : isSpanish ? "/quiz/idioms-es" : "/quiz/idioms-en"} passHref>
+                        <Button className="w-full h-12 text-lg" size="lg">
+                            <MessageSquareQuote className="mr-2 h-5 w-5" />
+                            {getQuizTitle5()}
+                        </Button>
+                    </Link>
                 </CardContent>
                 <div data-tutorial-id="learning-button" className="px-6 pb-2">
                     <Separator className="mb-2"/>
@@ -150,7 +194,7 @@ export default function Home() {
                         </Button>
                     </Link>
                 </div>
-                <CardFooter data-tutorial-id="toolbar" className="flex justify-center gap-2 p-4">
+                <CardFooter data-tutorial-id="toolbar" className="flex justify-center gap-4 p-4 pt-4">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button data-tutorial-id="language-switcher" variant="outline" size="icon" title="Change language">
