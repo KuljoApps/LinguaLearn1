@@ -1,11 +1,11 @@
 import type { Language } from './storage';
-import { sentenceStructureContent } from './grammar-sentence-structure';
-import { questionsContent } from './grammar-questions';
-import { negationsContent } from './grammar-negations';
-import { articlesContent } from './grammar-articles';
-import { adjectivesContent } from './grammar-adjectives';
-import { adverbsContent } from './grammar-adverbs';
-import { pronounsContent } from './grammar-pronouns';
+import { sentenceStructureContent } from './grammar/grammar-sentence-structure';
+import { questionsContent } from './grammar/grammar-questions';
+import { negationsContent } from './grammar/grammar-negations';
+import { articlesContent } from './grammar/grammar-articles';
+import { adjectivesContent } from './grammar/grammar-adjectives';
+import { adverbsContent } from './grammar/grammar-adverbs';
+import { pronounsContent } from './grammar/grammar-pronouns';
 import type { GrammarContent, GrammarRule } from './types';
 
 export type { GrammarRule };

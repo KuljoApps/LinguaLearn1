@@ -1,12 +1,12 @@
 import type { Language } from './storage';
-import { bodyPartsDictionary } from './dictionary-body-parts';
-import { colorsDictionary } from './dictionary-colors';
-import { familyDictionary } from './dictionary-family';
-import { foodDictionary } from './dictionary-food';
-import { homeDictionary } from './dictionary-home';
-import { numbersDictionary } from './dictionary-numbers';
-import { timeDictionary } from './dictionary-time';
-import { workDictionary } from './dictionary-work';
+import { bodyPartsDictionary } from './dictionary/dictionary-body-parts';
+import { colorsDictionary } from './dictionary/dictionary-colors';
+import { familyDictionary } from './dictionary/dictionary-family';
+import { foodDictionary } from './dictionary/dictionary-food';
+import { homeDictionary } from './dictionary/dictionary-home';
+import { numbersDictionary } from './dictionary/dictionary-numbers';
+import { timeDictionary } from './dictionary/dictionary-time';
+import { workDictionary } from './dictionary/dictionary-work';
 import type { DictionaryContent, DictionaryWord } from './types';
 
 export type { DictionaryWord };

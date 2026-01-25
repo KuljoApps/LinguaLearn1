@@ -1,13 +1,13 @@
 
 import type { Language } from './storage';
-import { airportPhrases } from './phrases-airport';
-import { emergencyPhrases } from './phrases-emergency';
-import { hotelPhrases } from './phrases-hotel';
-import { partyPhrases } from './phrases-party';
-import { restaurantPhrases } from './phrases-restaurant';
-import { shopPhrases } from './phrases-shop';
-import { stationPhrases } from './phrases-station';
-import { weatherPhrases } from './phrases-weather';
+import { airportPhrases } from './phrases/phrases-airport';
+import { emergencyPhrases } from './phrases/phrases-emergency';
+import { hotelPhrases } from './phrases/phrases-hotel';
+import { partyPhrases } from './phrases/phrases-party';
+import { restaurantPhrases } from './phrases/phrases-restaurant';
+import { shopPhrases } from './phrases/phrases-shop';
+import { stationPhrases } from './phrases/phrases-station';
+import { weatherPhrases } from './phrases/phrases-weather';
 import { tongueTwistersContent } from './tongue-twisters';
 
 export interface Phrase {

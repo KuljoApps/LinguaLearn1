@@ -1,5 +1,5 @@
 
-import type { PhrasesContent } from './phrases';
+import type { PhrasesContent } from '../phrases';
 
 export const hotelPhrases: PhrasesContent = {
   en: {
