@@ -194,7 +194,7 @@ export default function Home() {
                         </Button>
                     </Link>
                 </div>
-                <CardFooter data-tutorial-id="toolbar" className="flex justify-center gap-4 p-5 pt-4">
+                <CardFooter data-tutorial-id="toolbar" className="flex justify-center gap-4 p-6 pt-4">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button data-tutorial-id="language-switcher" variant="outline" size="icon" title="Change language">
@@ -250,3 +250,4 @@ export default function Home() {
         </main>
     );
 }
+    
