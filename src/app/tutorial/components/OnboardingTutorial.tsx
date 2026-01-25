@@ -44,8 +44,8 @@ const tutorialBubbleOffsets: { [key: string]: number } = {
     'phonetics-first-item': 0,
     'quiz-timer': 0,
     'quiz-pause-button': 16,
-    'quiz-correct-answer': 42,
-    'quiz-incorrect-answer': 42,
+    'correct-answer-button': 0,
+    'incorrect-answer-button': 0,
     'irregular-quiz-part1': 0,
     'irregular-quiz-part2': -340,
     'irregular-quiz-hint': 80,
@@ -234,70 +234,70 @@ const extendedSteps: Step[] = [
 ];
 
 const quizSteps: Step[] = [
-    { // Slajd 27 -> quiz index 0
+    { // Slajd 1/10
         path: '/tutorial/quiz-pause',
         elementId: 'quiz-timer',
         title: 'Czas na odpowiedź',
         description: 'Masz 15 sekund na każdą odpowiedź. Pasek postępu pokazuje, ile czasu pozostało. Nie marnuj go!',
         bubblePosition: 'bottom',
     },
-    { // Slajd 28 -> quiz index 1
+    { // Slajd 2/10
         path: '/tutorial/quiz-pause',
         elementId: 'quiz-pause-button',
         title: 'Potrzebujesz przerwy?',
         description: 'Kliknij pauzę, aby zatrzymać czas. Pamiętaj jednak, że wznowienie quizu kosztuje 5 sekund!',
         bubblePosition: 'top'
     },
-    { // Slajd 29 -> quiz index 2
+    { // Slajd 3/10
         path: '/tutorial/quiz-answers',
-        elementId: 'quiz-correct-answer',
+        elementId: 'correct-answer-button',
         title: 'Poprawna odpowiedź',
         description: 'Świetnie! Poprawna odpowiedź zostanie podświetlona na zielono. Po chwili automatycznie przejdziesz do następnego pytania.',
         bubblePosition: 'top',
     },
-    { // Slajd 30 -> quiz index 3
+    { // Slajd 4/10
         path: '/tutorial/quiz-answers',
-        elementId: 'quiz-incorrect-answer',
+        elementId: 'incorrect-answer-button',
         title: 'Błędna odpowiedź',
         description: 'Nie martw się! Twoja błędna odpowiedź podświetli się na czerwono, a prawidłowa — na zielono. Każdy błąd to okazja do nauki!',
         bubblePosition: 'top'
     },
-    { // Slajd 31 -> quiz index 4
+    { // Slajd 5/10
         path: '/tutorial/irregular-question',
         elementId: 'irregular-quiz-part1',
         title: 'Testy z czasowników',
         description: 'Ten typ quizu ma dłuższy czas na odpowiedź (30s) i sprawdza dwie rzeczy: tłumaczenie oraz znajomość form czasowników nieregularnych.',
         bubblePosition: 'bottom',
     },
-    { // Slajd 32 -> quiz index 5
+    { // Slajd 6/10
         path: '/tutorial/irregular-question',
         elementId: 'irregular-quiz-part2',
         title: 'Wpisywanie odpowiedzi',
         description: 'Po wybraniu poprawnego tłumaczenia, aktywują się pola do wpisania dwóch pozostałych form czasownika. Zobaczmy, jak to działa.',
         bubblePosition: 'bottom',
     },
-    { // Slajd 33 -> quiz index 6
+    { // Slajd 7/10
         path: '/tutorial/irregular-question',
         elementId: 'irregular-quiz-hint',
         title: 'Dwie poprawne formy',
         description: 'Gdy wpiszesz błędną odpowiedź, system podświetli ją na czerwono i wskaże poprawną formę. Niektóre czasowniki, jak "be", mają dwie opcje (was/were) - obie są zaliczane jako poprawne!',
         bubblePosition: 'top',
     },
-    { // Slajd 34 -> quiz index 7
+    { // Slajd 8/10
         path: '/tutorial/quiz-results',
         elementId: 'quiz-results-summary',
         title: 'Podsumowanie wyników',
         description: 'Po zakończeniu quizu zobaczysz swoje statystyki. Sprawdź, jak Ci poszło!',
         bubblePosition: 'bottom',
     },
-    { // Slajd 35 -> quiz index 8
+    { // Slajd 9/10
         path: '/tutorial/quiz-results',
         elementId: 'quiz-results-errors',
         title: 'Przegląd błędów',
         description: 'Wszystkie błędne odpowiedzi z sesji są tutaj. Przeanalizuj je, aby uniknąć ich w przyszłości.',
         bubblePosition: 'top'
     },
-    { // Slajd 36 -> quiz index 9
+    { // Slajd 10/10
         path: '/tutorial/quiz-results',
         elementId: 'quiz-results-actions',
         title: 'Co dalej?',

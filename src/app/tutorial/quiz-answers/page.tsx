@@ -34,28 +34,31 @@ export default function QuizAnswersPage() {
     useEffect(() => {
         const tutorialState = getTutorialState();
         if (!tutorialState || !tutorialState.isActive) {
-             const timer = setTimeout(() => {
-                if (window.location.pathname.includes('/tutorial/')) {
-                    router.push('/');
-                }
-            }, 2000);
-            return () => clearTimeout(timer);
+            router.push('/');
         }
 
         const updateStep = () => {
             const state = getTutorialState();
             if (state?.stage === 'quiz') {
                 setActiveStep(state.step);
+            } else {
+                setActiveStep(null);
             }
         };
 
         window.addEventListener('tutorial-state-changed', updateStep);
-        updateStep(); // Initial check
+        updateStep();
         return () => window.removeEventListener('tutorial-state-changed', updateStep);
     }, [router]);
     
     const isCorrectView = activeStep === 2;
     const isIncorrectView = activeStep === 3;
+
+    if (!isCorrectView && !isIncorrectView) {
+        // Render nothing if it's not the correct or incorrect answer step
+        // This prevents flickering between transitions.
+        return null;
+    }
 
     const question = isIncorrectView ? incorrectQuestion : correctQuestion;
     const answerStatus = isCorrectView ? "correct" : isIncorrectView ? "incorrect" : null;
@@ -109,9 +112,17 @@ export default function QuizAnswersPage() {
                         <p className="text-muted-foreground">What is the Polish meaning of</p>
                         <p className={cn("font-headline font-bold text-4xl", word.length > 15 ? "text-3xl" : "text-4xl")}>"{word}"?</p>
                     </div>
-                    <div data-tutorial-id={isCorrectView ? 'quiz-correct-answer' : 'quiz-incorrect-answer'} className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
                         {options.map((option: string) => (
-                            <Button key={option} disabled className={cn("h-auto text-lg p-4 whitespace-normal", getButtonClass(option))}>
+                            <Button 
+                                key={option} 
+                                disabled 
+                                className={cn("h-auto text-lg p-4 whitespace-normal", getButtonClass(option))}
+                                data-tutorial-id={
+                                    (isCorrectView && option === correctAnswer) ? 'correct-answer-button' :
+                                    (isIncorrectView && option === selectedAnswer) ? 'incorrect-answer-button' : undefined
+                                }
+                            >
                                 {option}
                             </Button>
                         ))}
