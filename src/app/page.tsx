@@ -172,7 +172,7 @@ export default function Home() {
                             {getQuizTitle3()}
                         </Button>
                     </Link>
-                    <Link href={isFrench ? "/quiz/phrasal-verbs-fr" : isGerman ? "/quiz/phrasal-verbs-de" : isItalian ? "/quiz/phrasal-verbs-it" : isSpanish ? "/quiz/phrasal-verbs-es" : "/quiz/phrasal-verbs"} passHref>
+                    <Link href={isFrench ? "/quiz/phrasal-verbs-fr" : isGerman ? "/quiz/phrasal-verbs-de" : isItalian ? "/quiz/phrasal-verbs-it" : isSpanish ? "/quiz/phrasal-verbs-es" : "/quiz/phrasal-verbs-en"} passHref>
                         <Button className="w-full h-12 text-lg" size="lg">
                             <Layers className="mr-2 h-5 w-5" />
                             {getQuizTitle4()}
