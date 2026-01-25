@@ -178,7 +178,7 @@ export default function Home() {
                             {getQuizTitle4()}
                         </Button>
                     </Link>
-                    <Link href={isFrench ? "/quiz/idioms-fr" : isGerman ? "/quiz/idioms-de" : isItalian ? "/quiz/idioms-it" : isSpanish ? "/quiz/idioms-es" : "/quiz/idioms"} passHref>
+                    <Link href={isFrench ? "/quiz/idioms-fr" : isGerman ? "/quiz/idioms-de" : isItalian ? "/quiz/idioms-it" : isSpanish ? "/quiz/idioms-es" : "/quiz/idioms-en"} passHref>
                         <Button className="w-full h-12 text-lg" size="lg">
                             <MessageSquareQuote className="mr-2 h-5 w-5" />
                             {getQuizTitle5()}
