@@ -54,10 +54,6 @@ export default function QuizAnswersPage() {
         return () => window.removeEventListener('tutorial-state-changed', updateStep);
     }, [router]);
     
-    if (activeStep !== 2 && activeStep !== 3) {
-        return null;
-    }
-
     const isCorrectView = activeStep === 2;
     const isIncorrectView = activeStep === 3;
 

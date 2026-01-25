@@ -62,10 +62,6 @@ export default function QuizPausePage() {
         return () => clearInterval(interval);
     }, [activeStep]);
     
-    if (activeStep !== 0 && activeStep !== 1) {
-        return null;
-    }
-
     const isTimerView = activeStep === 0;
     const isPausedView = activeStep === 1;
 
@@ -110,7 +106,8 @@ export default function QuizPausePage() {
                         {question.options.map((option) => (
                             <Button
                                 key={option}
-                                className={cn("h-auto text-lg p-4 whitespace-normal bg-primary text-primary-foreground pointer-events-none")}
+                                disabled
+                                className={cn("h-auto text-lg p-4 whitespace-normal bg-primary text-primary-foreground", "disabled:opacity-100")}
                             >
                                 {option}
                             </Button>
@@ -128,7 +125,9 @@ export default function QuizPausePage() {
                 </CardContent>
                  <CardFooter className="flex-col gap-4 p-6 pt-0">
                     <div className="flex justify-between w-full items-center">
-                        <div className="text-sm text-muted-foreground">Pytanie 1 z {QUIZ_LENGTH}</div>
+                        <div className="text-sm text-muted-foreground">
+                           Pytanie 1 z {QUIZ_LENGTH}
+                        </div>
                         <div className="flex items-center gap-2">
                             <span className="text-sm font-medium">Punkty:</span>
                             <div className="text-2xl font-bold text-primary">0</div>
