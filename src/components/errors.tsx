@@ -129,7 +129,7 @@ export default function ErrorsPage() {
             const isOnErrorsStep = tutorialState?.isActive &&
                                    tutorialState.stage === 'extended' &&
                                    tutorialState.step >= 4 && tutorialState.step <= 5;
-            setIsTutorialActive(isOnErrorsStep);
+            setIsTutorialActive(!!isOnErrorsStep);
         };
         handleStateUpdate();
 
@@ -399,29 +399,31 @@ export default function ErrorsPage() {
                             {getUIText('title')}
                         </CardTitle>
                     </div>
-                    <div className="flex flex-col gap-2 sm:flex-row" data-tutorial-id="errors-controls">
-                         <Select value={quizFilter} onValueChange={(value) => handleFilterChange(value as QuizFilter)}>
-                            <SelectTrigger className="w-full sm:w-[220px]">
-                                <SelectValue placeholder={getUIText('filterPlaceholder')} />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="all">{getUIText('allQuizzes')}</SelectItem>
-                                {quizOptionsByLanguage[language].map(option => (
-                                    <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                        <Button variant="outline" onClick={handleViewChange}>
-                            <ArrowUpDown className="mr-2 h-4 w-4" />
-                            {view === 'latest' ? getUIText('viewFrequent') : getUIText('viewLatest')}
-                        </Button>
+                    <div className="flex justify-center" data-tutorial-id="errors-controls">
+                        <div className="inline-flex flex-col gap-2 sm:flex-row">
+                             <Select value={quizFilter} onValueChange={(value) => handleFilterChange(value as QuizFilter)}>
+                                <SelectTrigger className="w-full sm:w-[220px]">
+                                    <SelectValue placeholder={getUIText('filterPlaceholder')} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">{getUIText('allQuizzes')}</SelectItem>
+                                    {quizOptionsByLanguage[language].map(option => (
+                                        <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                            <Button variant="outline" onClick={handleViewChange}>
+                                <ArrowUpDown className="mr-2 h-4 w-4" />
+                                {view === 'latest' ? getUIText('viewFrequent') : getUIText('viewLatest')}
+                            </Button>
+                        </div>
                     </div>
                 </CardHeader>
                 <CardContent className="h-96 w-full p-0" data-tutorial-id="errors-table">
                     {renderTable()}
                 </CardContent>
                 <CardFooter className="flex justify-center p-6">
-                    <div className="inline-flex flex-wrap justify-center gap-4">
+                    <div className="flex flex-wrap justify-center gap-4">
                         <Link href="/" passHref>
                             <Button variant="outline">
                                 <ArrowLeft className="mr-2 h-4 w-4" /> {getUIText('backToHome')}
