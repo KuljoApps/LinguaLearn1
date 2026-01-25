@@ -43,7 +43,7 @@ export default function Errors() {
                         </Button>
                     </div>
                 </CardHeader>
-                <CardContent className="h-96 w-full p-0" data-tutorial-id="errors-table">
+                <CardContent className="h-96 w-full py-0 px-4" data-tutorial-id="errors-table">
                      <Table>
                         <TableHeader>
                             <TableRow>
