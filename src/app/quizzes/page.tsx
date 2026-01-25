@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { getLanguage } from '@/lib/storage';
 import { useState, useEffect } from 'react';
+import LinguaLearnLogo from '@/components/LinguaLearnLogo';
+import { Separator } from '@/components/ui/separator';
 
 export default function QuizzesPage() {
     const [language, setCurrentLanguage] = useState<'en' | 'fr' | 'de' | 'it' | 'es'>('en');
@@ -25,6 +27,14 @@ export default function QuizzesPage() {
     const isGerman = language === 'de';
     const isItalian = language === 'it';
     const isSpanish = language === 'es';
+
+    const getWelcomeMessage = () => {
+        if (isFrench) return "Prêt à remettre en question tes choix de vie dans une autre langue? Allons-y!";
+        if (isGerman) return "Bereit, deine Lebensentscheidungen in einer anderen Sprache zu hinterfragen? Los geht's!";
+        if (isItalian) return "Pronto a mettere in discussione le tue scelte di vita in un'altra lingua? Andiamo!";
+        if (isSpanish) return "¿Listo para cuestionar tus elecciones de vida en otro idioma? ¡Vamos!";
+        return "Ready to question your life choices in another language? Let's go!";
+    };
 
     const getQuizTitle1 = () => {
         if (isFrench) return "Français - Polonais";
@@ -86,9 +96,27 @@ export default function QuizzesPage() {
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
             <Card className="w-full max-w-md shadow-2xl text-center">
                 <CardHeader>
-                     <CardTitle className="text-3xl font-bold tracking-tight">{getTitle()}</CardTitle>
+                    <div className="flex items-center justify-center gap-4 mb-4">
+                        <LinguaLearnLogo width="48" height="48" />
+                        <h1 className="text-4xl font-bold tracking-tight whitespace-nowrap">
+                            Lingua
+                            <span className="relative inline-block">
+                                Learn
+                                <span className="absolute -right-1 -bottom-4 text-lg font-semibold tracking-normal text-amber">
+                                Lite
+                                </span>
+                            </span>
+                        </h1>
+                    </div>
+                    <p className="text-muted-foreground">
+                        {getWelcomeMessage()}
+                    </p>
+                    <div className="pt-4">
+                        <Separator />
+                        <CardTitle className="text-3xl font-bold tracking-tight pt-6">{getTitle()}</CardTitle>
+                    </div>
                 </CardHeader>
-                <CardContent data-tutorial-id="quiz-buttons" className="flex flex-col space-y-4 p-6 pt-0 pb-4">
+                <CardContent data-tutorial-id="quiz-buttons" className="flex flex-col space-y-4 p-6 pt-2 pb-4">
                     <Link href={isFrench ? "/quiz/fr-pl" : isGerman ? "/quiz/de-pl" : isItalian ? "/quiz/it-pl" : isSpanish ? "/quiz/es-pl" : "/quiz/en-pl"} passHref>
                         <Button className="w-full h-12 text-lg" size="lg">
                             <BookOpen className="mr-2 h-5 w-5" />
