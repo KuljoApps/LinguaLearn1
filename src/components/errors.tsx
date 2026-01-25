@@ -395,9 +395,9 @@ export default function ErrorsPage() {
                     </div>
                 </CardHeader>
                 <CardContent className="p-6 pt-2">
-                    <div className="flex flex-col gap-2 sm:flex-row sm:justify-end mb-4" data-tutorial-id="errors-controls">
+                    <div className="flex flex-col items-end gap-2 sm:flex-row sm:justify-end mb-4" data-tutorial-id="errors-controls">
                          <Select value={quizFilter} onValueChange={(value) => handleFilterChange(value as QuizFilter)}>
-                            <SelectTrigger>
+                            <SelectTrigger className="w-full sm:w-auto">
                                 <SelectValue placeholder={getUIText('filterPlaceholder')} />
                             </SelectTrigger>
                             <SelectContent>
@@ -407,7 +407,7 @@ export default function ErrorsPage() {
                                 ))}
                             </SelectContent>
                         </Select>
-                        <Button variant="outline" onClick={handleViewChange}>
+                        <Button variant="outline" onClick={handleViewChange} className="w-full sm:w-auto">
                             <ArrowUpDown className="mr-2 h-4 w-4" />
                             {view === 'latest' ? getUIText('viewFrequent') : getUIText('viewLatest')}
                         </Button>
