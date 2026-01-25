@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import LinguaLearnLogo from '@/components/LinguaLearnLogo';
-import { getLanguage, setLanguage, shouldShowProPromo, shouldShowRateAppDialog, isTutorialCompleted, saveTutorialState, recordProPromoShown, recordRateAppDialogShown, getNewAchievementsCount, getAppTheme, type AppTheme, getIconColor } from '@/lib/storage';
+import { getLanguage, setLanguage, shouldShowProPromo, shouldShowRateAppDialog, isTutorialCompleted, saveTutorialState, recordProPromoShown, recordRateAppDialogShown, getNewAchievementsCount, getAppTheme, type AppTheme } from '@/lib/storage';
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -23,7 +23,6 @@ export default function Home() {
     const [showRateDialog, setShowRateDialog] = useState(false);
     const [newAchievementsCount, setNewAchievementsCount] = useState(0);
     const [theme, setTheme] = useState<AppTheme | null>(null);
-    const [iconColor, setIconColor] = useState<string | null>(null);
     const pathname = usePathname();
 
     useEffect(() => {
@@ -31,17 +30,12 @@ export default function Home() {
             setCurrentLanguage(getLanguage());
             updateAchievementCount();
             setTheme(getAppTheme());
-            setIconColor(getIconColor());
         };
 
         const updateAchievementCount = () => {
             setNewAchievementsCount(getNewAchievementsCount());
         };
         
-        const handleIconColorUpdate = () => {
-            setIconColor(getIconColor());
-        };
-
         handleStateUpdate();
         
         if (!isTutorialCompleted()) {
@@ -59,13 +53,11 @@ export default function Home() {
         window.addEventListener('language-changed', handleStateUpdate);
         window.addEventListener('achievements-count-changed', updateAchievementCount);
         window.addEventListener('theme-changed', handleStateUpdate);
-        window.addEventListener('icon-color-changed', handleIconColorUpdate);
 
         return () => {
             window.removeEventListener('language-changed', handleStateUpdate);
             window.removeEventListener('achievements-count-changed', updateAchievementCount);
             window.removeEventListener('theme-changed', handleStateUpdate);
-            window.removeEventListener('icon-color-changed', handleIconColorUpdate);
         };
     }, [pathname]);
 
@@ -133,30 +125,30 @@ export default function Home() {
                 <CardContent className="flex flex-col space-y-4 p-6 pt-0 pb-4">
                     <div className="grid grid-cols-2 gap-4">
                         <Link href="/quizzes" passHref>
-                             <Button variant={theme ? undefined : "outline"} className={cn(buttonBaseClasses, squareButtonClasses, "rounded-lg", theme ? theme.className : defaultThemeClasses)}>
-                                <LayoutGrid className={cn("h-12 w-12 text-deep-purple", iconColor)} />
-                                <span className={cn(iconColor)}>Quizzes</span>
+                             <Button variant={theme ? undefined : "outline"} className={cn(buttonBaseClasses, squareButtonClasses, "rounded-xl", theme ? theme.className : defaultThemeClasses)}>
+                                <LayoutGrid className={cn("h-12 w-12", theme ? 'text-white' : 'text-deep-purple')} />
+                                <span className={cn(theme ? 'text-white' : '')}>Quizzes</span>
                             </Button>
                         </Link>
                          <Link href="/games" passHref>
-                            <Button variant={theme ? undefined : "outline"} className={cn(buttonBaseClasses, squareButtonClasses, "rounded-lg", theme ? theme.className : defaultThemeClasses)}>
-                                <Gamepad2 className={cn("h-12 w-12 text-deep-purple", iconColor)} />
-                                <span className={cn(iconColor)}>Games</span>
+                            <Button variant={theme ? undefined : "outline"} className={cn(buttonBaseClasses, squareButtonClasses, "rounded-xl", theme ? theme.className : defaultThemeClasses)}>
+                                <Gamepad2 className={cn("h-12 w-12", theme ? 'text-white' : 'text-deep-purple')} />
+                                <span className={cn(theme ? 'text-white' : '')}>Games</span>
                             </Button>
                         </Link>
                     </div>
                     <div className="flex flex-col space-y-2">
-                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-lg", theme ? theme.className : defaultThemeClasses)}>
-                            <PencilLine className={cn("mr-2 h-5 w-5 text-deep-purple", iconColor)} />
-                            <span className={cn(iconColor)}>Fill the Gap</span>
+                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-xl", theme ? theme.className : defaultThemeClasses)}>
+                            <PencilLine className={cn("mr-2 h-5 w-5", theme ? 'text-white' : 'text-deep-purple')} />
+                            <span className={cn(theme ? 'text-white' : '')}>Fill the Gap</span>
                         </Button>
-                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-lg", theme ? theme.className : defaultThemeClasses)}>
-                            <BookOpenText className={cn("mr-2 h-5 w-5 text-deep-purple", iconColor)} />
-                            <span className={cn(iconColor)}>Reading</span>
+                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-xl", theme ? theme.className : defaultThemeClasses)}>
+                            <BookOpenText className={cn("mr-2 h-5 w-5", theme ? 'text-white' : 'text-deep-purple')} />
+                            <span className={cn(theme ? 'text-white' : '')}>Reading</span>
                         </Button>
-                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-lg", theme ? theme.className : defaultThemeClasses)}>
-                            <Ear className={cn("mr-2 h-5 w-5 text-deep-purple", iconColor)} />
-                            <span className={cn(iconColor)}>Listening</span>
+                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-xl", theme ? theme.className : defaultThemeClasses)}>
+                            <Ear className={cn("mr-2 h-5 w-5", theme ? 'text-white' : 'text-deep-purple')} />
+                            <span className={cn(theme ? 'text-white' : '')}>Listening</span>
                         </Button>
                     </div>
                 </CardContent>
