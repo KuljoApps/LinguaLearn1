@@ -133,28 +133,28 @@ export default function Home() {
                 <CardContent className="flex flex-col space-y-4 p-6 pt-0 pb-4">
                     <div className="grid grid-cols-2 gap-4">
                         <Link href="/quizzes" passHref>
-                             <Button variant={theme ? undefined : "outline"} className={cn(buttonBaseClasses, squareButtonClasses, theme ? theme.className : defaultThemeClasses)}>
+                             <Button variant={theme ? undefined : "outline"} className={cn(buttonBaseClasses, squareButtonClasses, "rounded-lg", theme ? theme.className : defaultThemeClasses)}>
                                 <LayoutGrid className={cn("h-12 w-12 text-deep-purple", iconColor)} />
                                 <span className={cn(iconColor)}>Quizzes</span>
                             </Button>
                         </Link>
                          <Link href="/games" passHref>
-                            <Button variant={theme ? undefined : "outline"} className={cn(buttonBaseClasses, squareButtonClasses, theme ? theme.className : defaultThemeClasses)}>
+                            <Button variant={theme ? undefined : "outline"} className={cn(buttonBaseClasses, squareButtonClasses, "rounded-lg", theme ? theme.className : defaultThemeClasses)}>
                                 <Gamepad2 className={cn("h-12 w-12 text-deep-purple", iconColor)} />
                                 <span className={cn(iconColor)}>Games</span>
                             </Button>
                         </Link>
                     </div>
                     <div className="flex flex-col space-y-2">
-                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", theme ? theme.className : defaultThemeClasses)}>
+                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-lg", theme ? theme.className : defaultThemeClasses)}>
                             <PencilLine className={cn("mr-2 h-5 w-5 text-deep-purple", iconColor)} />
                             <span className={cn(iconColor)}>Fill the Gap</span>
                         </Button>
-                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", theme ? theme.className : defaultThemeClasses)}>
+                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-lg", theme ? theme.className : defaultThemeClasses)}>
                             <BookOpenText className={cn("mr-2 h-5 w-5 text-deep-purple", iconColor)} />
                             <span className={cn(iconColor)}>Reading</span>
                         </Button>
-                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", theme ? theme.className : defaultThemeClasses)}>
+                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-lg", theme ? theme.className : defaultThemeClasses)}>
                             <Ear className={cn("mr-2 h-5 w-5 text-deep-purple", iconColor)} />
                             <span className={cn(iconColor)}>Listening</span>
                         </Button>
