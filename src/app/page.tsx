@@ -121,10 +121,12 @@ export default function Home() {
                                 <span>Quizzes</span>
                             </Button>
                         </Link>
-                        <Button variant="outline" className="w-full h-28 flex-col gap-2 text-lg border-2 border-primary pointer-events-none">
-                            <Gamepad2 className="h-12 w-12 text-deep-purple" />
-                            <span>Games</span>
-                        </Button>
+                         <Link href="/games" passHref>
+                            <Button variant="outline" className="w-full h-28 flex-col gap-2 text-lg border-2 border-primary">
+                                <Gamepad2 className="h-12 w-12 text-deep-purple" />
+                                <span>Games</span>
+                            </Button>
+                        </Link>
                     </div>
                     <div className="flex flex-col space-y-2">
                         <Button variant="outline" className="w-full h-12 text-lg border-2 border-primary pointer-events-none">
