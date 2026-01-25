@@ -40,7 +40,7 @@ function shuffleArray<T>(array: T[]): T[] {
 const QUESTION_TIME_LIMIT = 30;
 const PAUSE_PENALTY = 10;
 const MIN_TIME_FOR_PAUSE = 11;
-const QUIZ_NAME = 'Irregular Verbs (EN)';
+const QUIZ_NAME = 'Irregular Verbs';
 const TIME_UPDATE_INTERVAL = 5; // seconds
 const QUIZ_LENGTH = 10;
 

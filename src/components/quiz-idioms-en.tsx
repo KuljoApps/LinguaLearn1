@@ -38,7 +38,7 @@ function shuffleArray<T>(array: T[]): T[] {
 const QUESTION_TIME_LIMIT = 15;
 const PAUSE_PENALTY = 5;
 const MIN_TIME_FOR_PAUSE = 6;
-const QUIZ_NAME = 'Idioms (EN)';
+const QUIZ_NAME = 'Idioms';
 const TIME_UPDATE_INTERVAL = 5; // seconds
 const QUIZ_LENGTH = 10;
 
