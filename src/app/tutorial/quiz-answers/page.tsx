@@ -54,9 +54,7 @@ export default function QuizAnswersPage() {
     const isCorrectView = activeStep === 2;
     const isIncorrectView = activeStep === 3;
 
-    if (!isCorrectView && !isIncorrectView) {
-        // Render nothing if it's not the correct or incorrect answer step
-        // This prevents flickering between transitions.
+    if (activeStep === null) {
         return null;
     }
 
@@ -112,16 +110,15 @@ export default function QuizAnswersPage() {
                         <p className="text-muted-foreground">What is the Polish meaning of</p>
                         <p className={cn("font-headline font-bold text-4xl", word.length > 15 ? "text-3xl" : "text-4xl")}>"{word}"?</p>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+                    <div
+                        data-tutorial-id="quiz-answers-grid"
+                        className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full"
+                    >
                         {options.map((option: string) => (
                             <Button 
                                 key={option} 
                                 disabled 
                                 className={cn("h-auto text-lg p-4 whitespace-normal", getButtonClass(option))}
-                                data-tutorial-id={
-                                    (isCorrectView && option === correctAnswer) ? 'correct-answer-button' :
-                                    (isIncorrectView && option === selectedAnswer) ? 'incorrect-answer-button' : undefined
-                                }
                             >
                                 {option}
                             </Button>

@@ -44,8 +44,7 @@ const tutorialBubbleOffsets: { [key: string]: number } = {
     'phonetics-first-item': 0,
     'quiz-timer': 0,
     'quiz-pause-button': 16,
-    'quiz-correct-answers-grid': 0,
-    'quiz-incorrect-answers-grid': 0,
+    'quiz-answers-grid': 0,
     'irregular-quiz-part1': 0,
     'irregular-quiz-part2': -340,
     'irregular-quiz-hint': 80,
@@ -250,14 +249,14 @@ const quizSteps: Step[] = [
     },
     { // Slajd 3/10
         path: '/tutorial/quiz-answers',
-        elementId: 'quiz-correct-answers-grid',
+        elementId: 'quiz-answers-grid',
         title: 'Poprawna odpowiedź',
         description: 'Świetnie! Poprawna odpowiedź zostanie podświetlona na zielono. Po chwili automatycznie przejdziesz do następnego pytania.',
         bubblePosition: 'top',
     },
     { // Slajd 4/10
         path: '/tutorial/quiz-answers',
-        elementId: 'quiz-incorrect-answers-grid',
+        elementId: 'quiz-answers-grid',
         title: 'Błędna odpowiedź',
         description: 'Nie martw się! Twoja błędna odpowiedź podświetli się na czerwono, a prawidłowa — na zielono. Każdy błąd to okazja do nauki!',
         bubblePosition: 'top'
@@ -397,10 +396,15 @@ export default function OnboardingTutorial() {
 
                 const offset = tutorialBubbleOffsets[currentStep.elementId!] || 0;
                 
+                let finalOffset = offset;
+                if (currentStep.elementId === 'quiz-answers-grid' && tutorialState?.step === 3) {
+                    finalOffset = 40; // Custom offset for the "incorrect answer" slide
+                }
+                
                 if (isBubbleTop) {
-                    bubbleTop = rect.top - bubbleHeight - 25 - offset;
+                    bubbleTop = rect.top - bubbleHeight - 25 - finalOffset;
                 } else {
-                    bubbleTop = rect.bottom + 15 + offset;
+                    bubbleTop = rect.bottom + 15 + finalOffset;
                 }
                 
                 if (bubbleLeft < 16) bubbleLeft = 16;
@@ -448,7 +452,7 @@ export default function OnboardingTutorial() {
             clearTimeout(timeoutId);
             window.removeEventListener('resize', findAndPosition);
         };
-    }, [currentStep, pathname]);
+    }, [currentStep, pathname, tutorialState?.step]);
 
 
     const handleNext = () => {
