@@ -90,7 +90,10 @@ export default function ReadingPage() {
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
             <TooltipProvider>
-                <Card className="w-full max-w-md shadow-2xl text-center">
+                <Card className={cn(
+                    "w-full max-w-md shadow-2xl text-center",
+                    view === 'grid' && "flex flex-col h-[90vh]"
+                )}>
                     <CardHeader className="pt-6 pb-2">
                         <div className="flex items-center justify-center gap-4 mb-4">
                             <LinguaLearnLogo width="48" height="48" />
@@ -120,7 +123,10 @@ export default function ReadingPage() {
                             )}
                         </div>
                     </CardHeader>
-                    <CardContent className="p-6 pt-2 pb-4">
+                    <CardContent className={cn(
+                        "p-6 pt-2 pb-4",
+                        view === 'grid' && "overflow-y-auto"
+                    )}>
                         {view === 'list' && (
                             <div className="flex flex-col space-y-2">
                                 {readingTasks.map((task) => (
@@ -160,7 +166,10 @@ export default function ReadingPage() {
                             </div>
                         )}
                     </CardContent>
-                    <CardFooter className="flex flex-col p-6 pt-4 gap-4">
+                    <CardFooter className={cn(
+                        "flex flex-col p-6 pt-4 gap-4",
+                        view === 'grid' && "mt-auto"
+                    )}>
                         <Separator />
                         <div className="flex justify-center gap-4">
                              <Link href="/" passHref>
