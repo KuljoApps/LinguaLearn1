@@ -120,6 +120,10 @@ export default {
           '60%': { transform: 'translateX(-10px)', opacity: '1' },
           '80%': { transform: 'translateX(5px)', opacity: '1' },
           '100%': { transform: 'translateX(0)', opacity: '1' },
+        },
+        'background-shine': {
+          'from': { 'background-position': '0 0' },
+          'to': { 'background-position': '-200% 0' },
         }
       },
       animation: {
@@ -130,6 +134,7 @@ export default {
         'pulse-strong': 'pulse-strong 1.5s ease-in-out infinite',
         'icon-fly-out': 'icon-fly-out 0.8s ease-out forwards',
         'text-slide-in': 'text-slide-in 0.8s ease-out forwards',
+        'background-shine': 'background-shine 2s linear infinite',
       },
     },
   },
