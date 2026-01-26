@@ -79,7 +79,7 @@ export default function GamesPage() {
                             const Icon = game.icon;
                             const isFavorite = favorites.includes(game.href);
                             return (
-                                <Card key={game.title} className="relative">
+                                <Card key={game.title} className="relative border-2 border-amber">
                                     <Button
                                         variant="ghost"
                                         size="icon"
@@ -96,7 +96,7 @@ export default function GamesPage() {
                                         <CardTitle className="pt-2 text-center">{game.title}</CardTitle>
                                     </CardHeader>
                                     <CardContent>
-                                        <p className="text-sm text-center text-muted-foreground h-20">{game.description}</p>
+                                        <p className="text-sm text-center text-muted-foreground h-20">{game.description.replace(/ a /g, ' a ').replace(/ i /g, ' i ').replace(/ o /g, ' o ').replace(/ u /g, ' u ').replace(/ w /g, ' w ').replace(/ z /g, ' z ')}</p>
                                     </CardContent>
                                     <CardFooter>
                                         <Link href={game.href} className="w-full" onClick={handleGameClick}>
