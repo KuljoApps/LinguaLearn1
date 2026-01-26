@@ -47,7 +47,7 @@ export default function GamesPage() {
                         <div className="mb-4">
                             <h3 className="text-lg font-semibold mb-2 text-amber-300">Amber Network</h3>
                             <Button 
-                                onClick={() => handleThemeSelect({ className: 'text-xl font-bold text-black bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 hover:brightness-125 transition-all shadow-[0_0_20px_#ff8c00] border border-yellow-400/50' })}
+                                onClick={() => handleThemeSelect({ className: 'text-xl font-bold text-black bg-gradient-to-r from-yellow-500 via-amber-500 to-orange-500 hover:brightness-125 transition-all shadow-[0_0_20px_#ff8c00] border border-yellow-400/50' })}
                                 className="w-full h-20 mb-2 flex items-center justify-center gap-4 text-xl font-bold text-black bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 hover:brightness-125 transition-all shadow-[0_0_20px_#ff8c00] border border-yellow-400/50 bg-[length:300%_300%] animate-gradient-flow">
                                 {getIcon(1)}
                                 <span>AMBER NETWORK</span>
