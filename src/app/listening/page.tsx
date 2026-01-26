@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { ArrowLeft, Ear, Keyboard, BookOpen, LayoutGrid, List, MapPin, Users, HelpCircle, AudioLines, FileInput, PencilRuler } from 'lucide-react';
+import { ArrowLeft, Ear, Keyboard, BookOpen, LayoutGrid, List, MapPin, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardFooter, CardTitle } from '@/components/ui/card';
@@ -96,7 +96,7 @@ export default function ListeningPage() {
                     view === 'grid' && "flex-1 overflow-y-auto"
                 )}>
                     <p className="text-muted-foreground text-center pb-4">
-                        Ćwicz swoje umiejętności słuchania poprzez różnorodne zadania.
+                        Practice your listening skills with a variety of tasks.
                     </p>
                     {view === 'list' ? (
                         <div className="flex flex-col space-y-2">

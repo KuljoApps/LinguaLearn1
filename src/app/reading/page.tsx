@@ -15,37 +15,37 @@ const readingTasks = [
     {
         href: '/reading/read-and-answer',
         icon: BookOpenText,
-        title: 'Czytaj i Odpowiadaj',
+        title: 'Read and Answer',
         description: 'Przeczytaj krótki tekst i odpowiedz na pytania, aby sprawdzić swoje zrozumienie.',
     },
     {
         href: '/reading/true-false',
         icon: CheckCircle2,
-        title: 'Prawda czy Fałsz',
+        title: 'True or False',
         description: 'Przeczytaj stwierdzenia i zdecyduj, czy są prawdziwe, fałszywe, czy też informacja nie została podana w tekście.',
     },
     {
         href: '/reading/vocabulary-in-context',
         icon: ScanSearch,
-        title: 'Słownictwo w Kontekście',
+        title: 'Vocabulary in Context',
         description: 'Zidentyfikuj znaczenie wyróżnionych słów na podstawie kontekstu, w którym występują w tekście.',
     },
     {
         href: '/reading/matching-headings',
         icon: ListCollapse,
-        title: 'Dopasowywanie Nagłówków',
+        title: 'Matching Headings',
         description: 'Dopasuj nagłówki do odpowiednich akapitów tekstu, aby sprawdzić swoje zrozumienie głównej myśli każdej części.',
     },
     {
         href: '/reading/tone-analysis',
         icon: PenTool,
-        title: 'Analiza Tonu',
+        title: 'Tone Analysis',
         description: 'Określ ton autora tekstu (np. informacyjny, perswazyjny, humorystyczny), aby nauczyć się rozpoznawać głębsze intencje piszącego.',
     },
     {
         href: '/reading/fact-or-opinion',
         icon: Scale,
-        title: 'Fakt czy Opinia',
+        title: 'Fact or Opinion',
         description: 'Przeczytaj tekst i rozróżnij stwierdzenia oparte na faktach od tych, które wyrażają opinię autora, rozwijając swoje krytyczne myślenie.',
     },
 ];
@@ -105,7 +105,7 @@ export default function ReadingPage() {
                     "p-6 pt-0 pb-4",
                     view === 'grid' && "flex-1 overflow-y-auto"
                 )}>
-                    <p className="text-muted-foreground text-center pb-4">Doskonal swoje umiejętności czytania ze zrozumieniem i słownictwo.</p>
+                    <p className="text-muted-foreground text-center pb-4">Hone your reading comprehension and vocabulary skills.</p>
                     {view === 'list' ? (
                         <div className="flex flex-col space-y-2">
                             {readingTasks.map((task) => (

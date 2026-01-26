@@ -5,7 +5,7 @@ import { BookOpen, Dumbbell, Sparkles, MessageSquareQuote, Layers, ArrowLeft, La
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
-import { getLanguage } from '@/lib/storage';
+import { getLanguage, type Language } from '@/lib/storage';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import ProgressRing from '@/components/ProgressRing';
@@ -13,7 +13,7 @@ import ProgressRing from '@/components/ProgressRing';
 const VIEW_MODE_KEY = 'quizzesViewMode';
 
 export default function QuizzesPage() {
-    const [language, setCurrentLanguage] = useState<'en' | 'fr' | 'de' | 'it' | 'es'>('en');
+    const [language, setCurrentLanguage] = useState<Language>('en');
     const [view, setView] = useState<'grid' | 'list'>('list');
     const [progressData, setProgressData] = useState<{ completed: number; total: number; progress: number; }[]>([]);
 
@@ -45,117 +45,59 @@ export default function QuizzesPage() {
     const isItalian = language === 'it';
     const isSpanish = language === 'es';
 
-    const getWelcomeMessage = () => {
-        if (isFrench) return "Prêt à remettre en question tes choix de vie dans une autre langue? Allons-y!";
-        if (isGerman) return "Bereit, deine Lebensentscheidungen in einer anderen Sprache zu hinterfragen? Los geht's!";
-        if (isItalian) return "Pronto a mettere in discussione le tue scelte di vita in un'altra lingua? Andiamo!";
-        if (isSpanish) return "¿Listo para cuestionar tus elecciones de vida en otro idioma? ¡Vamos!";
-        return "Przetłumacz słowa z angielskiego na polski. Doskonały sposób na przetestowanie i poszerzenie podstawowego słownictwa.";
-    };
+    const quizTasks = useMemo(() => {
+        const getQuizTitle = (baseTitle: string, langMap: Partial<Record<Language, string>>) => {
+            return langMap[language] || baseTitle;
+        };
 
-    const getQuizTitle1 = () => {
-        if (isFrench) return "Français - Polonais";
-        if (isGerman) return "Deutsch - Polnisch";
-        if (isItalian) return "Italiano - Polacco";
-        if (isSpanish) return "Español - Polaco";
-        return "English - Polish";
-    };
-
-     const getQuizDesc1 = () => {
-        if (isFrench) return "Traduisez des mots du français vers le polonais. Un excellent moyen de tester et d'élargir votre vocabulaire de base.";
-        if (isGerman) return "Übersetzen Sie Wörter vom Deutschen ins Polnische. Ideal, um Ihren Grundwortschatz zu testen und zu erweitern.";
-        if (isItalian) return "Traduci parole dall'italiano al polacco. Un ottimo modo per testare ed espandere il tuo vocabolario di base.";
-        if (isSpanish) return "Traduce palabras del español al polaco. Una forma excelente de probar y ampliar tu vocabulario básico.";
-        return "Przetłumacz słowa z angielskiego na polski. Doskonały sposób na przetestowanie i poszerzenie podstawowego słownictwa.";
-    };
-
-    const getQuizTitle2 = () => {
-        if (isFrench) return "Polonais - Français";
-        if (isGerman) return "Polnisch - Deutsch";
-        if (isItalian) return "Polacco - Italiano";
-        if (isSpanish) return "Polaco - Español";
-        return "Polish - English";
-    };
-
-    const getQuizDesc2 = () => {
-        if (isFrench) return "Inversez les rôles ! Voyez si vous pouvez traduire des mots polonais en français pour renforcer vos compétences.";
-        if (isGerman) return "Tauschen Sie die Rollen! Sehen Sie, ob Sie polnische Wörter ins Deutsche übersetzen können, um Ihre Fähigkeiten zu stärken.";
-        if (isItalian) return "Inverti i ruoli! Vedi se riesci a tradurre parole polacche in italiano per rafforzare le tue competenze.";
-        if (isSpanish) return "¡Invierte los papeles! Comprueba si puedes traducir palabras del polaco al español para fortalecer tus habilidades.";
-        return "Odwróć role! Zobacz, czy potrafisz przetłumaczyć polskie słowa na angielski, aby wzmocnić swoje umiejętności.";
-    };
+        const getQuizTitle3 = () => {
+            if (isFrench) return "Verbes & Aux.";
+            if (isGerman) return "Irregular Verbs";
+            if (isItalian) return "Verbi Irregolari";
+            if (isSpanish) return "Verbos Irregulares";
+            return "Irregular Verbs";
+        }
     
-    const getQuizTitle3 = () => {
-        if (isFrench) return "Verbes & Aux.";
-        if (isGerman) return "Unregelmäßige Verben";
-        if (isItalian) return "Verbi Irregolari";
-        if (isSpanish) return "Verbos Irregulares";
-        return "Irregular Verbs";
-    }
+        const getQuizTitle4 = () => {
+            if (isFrench) return "Faux Amis";
+            if (isGerman) return "Separable Verbs";
+            if (isItalian) return "Falsi Amici";
+            if (isSpanish) return "Falsos Amigos";
+            return "Phrasal Verbs";
+        }
 
-    const getQuizDesc3 = () => {
-        if (isFrench) return "Testez vos connaissances des verbes et auxiliaires. Un quiz essentiel pour maîtriser la conjugaison française.";
-        if (isGerman) return "Testen Sie Ihr Wissen über unregelmäßige Verben. Dieses Quiz hilft Ihnen, sich ihre wichtigen Formen einzuprägen.";
-        if (isItalian) return "Metti alla prova la tua conoscenza dei verbi irregolari. Questo quiz ti aiuterà a memorizzare le loro forme chiave.";
-        if (isSpanish) return "Pon a prueba tu conocimiento de los verbos irregulares. Este cuestionario te ayudará a memorizar sus formas clave.";
-        return "Sprawdź swoją wiedzę o nieregularnych czasownikach. Ten quiz pomoże Ci zapamiętać ich kluczowe formy i zastosowanie.";
-    }
-
-    const getQuizTitle4 = () => {
-        if (isFrench) return "Faux Amis";
-        if (isGerman) return "Trennbare Verben";
-        if (isItalian) return "Falsi Amici";
-        if (isSpanish) return "Falsos Amigos";
-        return "Phrasal Verbs";
-    }
-
-    const getQuizDesc4 = () => {
-        if (isFrench) return "Méfiez-vous des 'faux amis' ! Identifiez les mots qui se ressemblent mais ont des significations différentes en français et en polonais.";
-        if (isGerman) return "Testen Sie Ihr Verständnis von trennbaren Verben. Meistern Sie diese einzigartige deutsche Grammatikstruktur.";
-        if (isItalian) return "Attenzione ai 'falsi amici'! Identifica le parole che sembrano simili ma hanno significati diversi in italiano e polacco.";
-        if (isSpanish) return "¡Cuidado con los 'falsos amigos'! Identifica las palabras que parecen similares pero tienen significados diferentes en español y polaco.";
-        return "Zmierz się z podchwytliwymi 'phrasal verbs'. Opanuj popularne zwroty, aby Twoja mowa brzmiała bardziej naturalnie i płynnie.";
-    }
-    
-    const getQuizTitle5 = () => {
-        if (isFrench) return "Idiomes";
-        if (isGerman) return "Redewendungen";
-        if (isItalian) return "Modi di dire";
-        if (isSpanish) return "Modismos";
-        return "Idioms";
-    }
-
-     const getQuizDesc5 = () => {
-        if (isFrench) return "Devinez le sens des idiomes courants. Une excellente façon de comprendre les nuances culturelles de la langue.";
-        if (isGerman) return "Errate die Bedeutung gängiger Redewendungen. Eine großartige Möglichkeit, die kulturellen Nuancen der Sprache zu verstehen.";
-        if (isItalian) return "Indovina il significato degli idiomi comuni. Un ottimo modo per comprendere le sfumature culturali della lingua.";
-        if (isSpanish) return "Adivina el significado de los modismos comunes. Una excelente manera de entender los matices culturales del idioma.";
-        return "Zgadnij znaczenie popularnych idiomów. To świetny sposób na zrozumienie kulturowych niuansów języka i wzbogacenie wypowiedzi.";
-    }
-
-    const getTitle = () => {
-        if (isFrench) return "Quiz";
-        if (isGerman) return "Quiz";
-        if (isItalian) return "Quiz";
-        if (isSpanish) return "Cuestionarios";
-        return "Quizzes";
-    }
-
-     const getBackText = () => {
-        if (isFrench) return "Retour à l'accueil";
-        if (isGerman) return "Zurück zur Startseite";
-        if (isItalian) return "Torna alla Home";
-        if (isSpanish) return "Volver al Inicio";
-        return "Back to Home";
-    };
-
-    const quizTasks = useMemo(() => [
-        { href: isFrench ? "/quiz/fr-pl" : isGerman ? "/quiz/de-pl" : isItalian ? "/quiz/it-pl" : isSpanish ? "/quiz/es-pl" : "/quiz/en-pl", icon: BookOpen, title: getQuizTitle1(), description: getQuizDesc1() },
-        { href: isFrench ? "/quiz/pl-fr" : isGerman ? "/quiz/pl-de" : isItalian ? "/quiz/pl-it" : isSpanish ? "/quiz/pl-es" : "/quiz/pl-en", icon: Dumbbell, title: getQuizTitle2(), description: getQuizDesc2() },
-        { href: isFrench ? "/quiz/irregular-verbs-fr" : isGerman ? "/quiz/irregular-verbs-de" : isItalian ? "/quiz/irregular-verbs-it" : isSpanish ? "/quiz/irregular-verbs-es" : "/quiz/irregular-verbs-en", icon: Sparkles, title: getQuizTitle3(), description: getQuizDesc3() },
-        { href: isFrench ? "/quiz/phrasal-verbs-fr" : isGerman ? "/quiz/phrasal-verbs-de" : isItalian ? "/quiz/phrasal-verbs-it" : isSpanish ? "/quiz/phrasal-verbs-es" : "/quiz/phrasal-verbs-en", icon: Layers, title: getQuizTitle4(), description: getQuizDesc4() },
-        { href: isFrench ? "/quiz/idioms-fr" : isGerman ? "/quiz/idioms-de" : isItalian ? "/quiz/idioms-it" : isSpanish ? "/quiz/idioms-es" : "/quiz/idioms-en", icon: MessageSquareQuote, title: getQuizTitle5(), description: getQuizDesc5() },
-    ], [language]);
+        return [
+        { 
+            href: isFrench ? "/quiz/fr-pl" : isGerman ? "/quiz/de-pl" : isItalian ? "/quiz/it-pl" : isSpanish ? "/quiz/es-pl" : "/quiz/en-pl", 
+            icon: BookOpen, 
+            title: getQuizTitle('English - Polish', { fr: 'Français - Polonais', de: 'Deutsch - Polnisch', it: 'Italiano - Polacco', es: 'Español - Polaco' }), 
+            description: "Przetłumacz słowa z wybranego języka na polski. Doskonały sposób na przetestowanie i poszerzenie podstawowego słownictwa." 
+        },
+        { 
+            href: isFrench ? "/quiz/pl-fr" : isGerman ? "/quiz/pl-de" : isItalian ? "/quiz/pl-it" : isSpanish ? "/quiz/pl-es" : "/quiz/pl-en", 
+            icon: Dumbbell, 
+            title: getQuizTitle('Polish - English', { fr: 'Polonais - Français', de: 'Polnisch - Deutsch', it: 'Polacco - Italiano', es: 'Polaco - Español' }), 
+            description: "Odwróć role! Zobacz, czy potrafisz przetłumaczyć polskie słowa na wybrany język, aby wzmocnić swoje umiejętności." 
+        },
+        { 
+            href: isFrench ? "/quiz/irregular-verbs-fr" : isGerman ? "/quiz/irregular-verbs-de" : isItalian ? "/quiz/irregular-verbs-it" : isSpanish ? "/quiz/irregular-verbs-es" : "/quiz/irregular-verbs-en", 
+            icon: Sparkles, 
+            title: getQuizTitle3(),
+            description: "Sprawdź swoją wiedzę o nieregularnych czasownikach. Ten quiz pomoże Ci zapamiętać ich kluczowe formy i zastosowanie." 
+        },
+        { 
+            href: isFrench ? "/quiz/phrasal-verbs-fr" : isGerman ? "/quiz/phrasal-verbs-de" : isItalian ? "/quiz/phrasal-verbs-it" : isSpanish ? "/quiz/phrasal-verbs-es" : "/quiz/phrasal-verbs-en", 
+            icon: Layers, 
+            title: getQuizTitle4(),
+            description: "Zmierz się z podchwytliwymi zwrotami i 'fałszywymi przyjaciółmi'. Opanuj popularne zwroty, aby Twoja mowa brzmiała bardziej naturalnie." 
+        },
+        { 
+            href: isFrench ? "/quiz/idioms-fr" : isGerman ? "/quiz/idioms-de" : isItalian ? "/quiz/idioms-it" : isSpanish ? "/quiz/idioms-es" : "/quiz/idioms-en", 
+            icon: MessageSquareQuote, 
+            title: getQuizTitle('Idioms', { fr: 'Idiomes', de: 'Redewendungen', it: 'Modi di dire', es: 'Modismos' }), 
+            description: "Zgadnij znaczenie popularnych idiomów. To świetny sposób na zrozumienie kulturowych niuansów języka i wzbogacenie wypowiedzi." 
+        },
+    ]}, [language, isFrench, isGerman, isItalian, isSpanish]);
 
     useEffect(() => {
         setProgressData(
@@ -185,7 +127,7 @@ export default function QuizzesPage() {
                         <LayoutGrid className="h-8 w-8" />
                         <h1 className="text-3xl font-bold tracking-tight">
                             <span className="relative inline-block">
-                                {getTitle()}
+                                Quizzes
                                 <span className="absolute -right-1 -bottom-2 text-sm font-semibold tracking-normal text-amber">
                                 Lite
                                 </span>
@@ -197,7 +139,7 @@ export default function QuizzesPage() {
                     "p-6 pt-0 pb-4",
                     view === 'grid' ? "flex-1 overflow-y-auto" : "flex flex-col space-y-2"
                 )}>
-                    <p className="text-muted-foreground text-center pb-4">{getWelcomeMessage()}</p>
+                    <p className="text-muted-foreground text-center pb-4">Test your language skills with a variety of quizzes.</p>
                     {view === 'list' ? (
                         <div className="flex flex-col space-y-2">
                             {quizTasks.map((task) => (
@@ -246,7 +188,7 @@ export default function QuizzesPage() {
                     <div className="flex justify-center gap-4">
                          <Link href="/" passHref>
                             <Button variant="outline">
-                                <ArrowLeft className="mr-2 h-4 w-4" /> {getBackText()}
+                                <ArrowLeft className="mr-2 h-4 w-4" /> Back to Home
                             </Button>
                         </Link>
                         <Button variant="outline" onClick={handleViewToggle} className="gap-2">

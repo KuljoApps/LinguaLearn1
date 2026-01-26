@@ -16,19 +16,19 @@ const tasks = [
         href: '/fill-the-gap/gap-words',
         icon: FileText,
         title: 'Gap in the Words',
-        description: 'Complete words by filling in the missing letters. A great way to practice spelling.',
+        description: 'Uzupełnij słowa, wpisując brakujące litery. Świetny sposób na ćwiczenie pisowni.',
     },
     {
         href: '/fill-the-gap/gap-sentences',
         icon: MessagesSquare,
         title: 'Gap in the Sentences',
-        description: 'Complete sentences by filling in the missing words. Test your grammar and vocabulary.',
+        description: 'Uzupełnij zdania, wpisując brakujące słowa. Sprawdź swoją gramatykę i słownictwo.',
     },
     {
         href: '/fill-the-gap/gap-text',
         icon: AlignLeft,
         title: 'Gap in the Text',
-        description: 'Complete the missing sentence in the text by choosing the best option to test your understanding of its coherence and logical flow.',
+        description: 'Uzupełnij brakujące zdanie w tekście, wybierając najlepszą opcję, aby sprawdzić rozumienie spójności i logicznego przepływu.',
     },
 ];
 
