@@ -65,6 +65,14 @@ export default function Home() {
         
         const animations = [
             () => {
+                setShowQuizzesSpin(true);
+                timers.push(setTimeout(() => setShowQuizzesSpin(false), 3000));
+            },
+            () => {
+                setShowGamesTilt(true);
+                timers.push(setTimeout(() => setShowGamesTilt(false), 3000));
+            },
+            () => {
                 setFillTheGapText('___');
                 timers.push(setTimeout(() => setFillTheGapText('the'), 3000));
             },
@@ -73,16 +81,8 @@ export default function Home() {
                 timers.push(setTimeout(() => setShowReadingDots(false), 3000));
             },
             () => {
-                setShowQuizzesSpin(true);
-                timers.push(setTimeout(() => setShowQuizzesSpin(false), 3000));
-            },
-            () => {
                 setShowListeningPulse(true);
                 timers.push(setTimeout(() => setShowListeningPulse(false), 3000));
-            },
-            () => {
-                setShowGamesTilt(true);
-                timers.push(setTimeout(() => setShowGamesTilt(false), 3000));
             }
         ];
 
