@@ -169,13 +169,13 @@ export default function Home() {
                     <div className="grid grid-cols-2 gap-4">
                         <Link href="/quizzes" passHref>
                              <Button variant={theme ? undefined : "outline"} className={cn(buttonBaseClasses, squareButtonClasses, "rounded-xl", theme ? theme.className : defaultThemeClasses, "font-normal", isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
-                                <LayoutGrid className={cn("h-32 w-32" /* ICON SIZE */, theme ? 'text-white' : 'text-deep-purple', showQuizzesSpin && "animate-spin-once")} />
+                                <LayoutGrid className={cn("h-24 w-24" /* ICON SIZE */, theme ? 'text-white' : 'text-deep-purple', showQuizzesSpin && "animate-spin-once")} />
                                 <span className={cn(theme ? 'text-white' : '')}>Quizzes</span>
                             </Button>
                         </Link>
                          <Link href="/games" passHref>
                             <Button variant={theme ? undefined : "outline"} className={cn(buttonBaseClasses, squareButtonClasses, "rounded-xl", theme ? theme.className : defaultThemeClasses, "font-normal", isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
-                                <Gamepad2 className={cn("h-40 w-40" /* ICON SIZE */, theme ? 'text-white' : 'text-deep-purple', showGamesTilt && "animate-joystick-tilt")} />
+                                <Gamepad2 className={cn("h-24 w-24" /* ICON SIZE */, theme ? 'text-white' : 'text-deep-purple', showGamesTilt && "animate-joystick-tilt")} />
                                 <span className={cn(theme ? 'text-white' : '')}>Games</span>
                             </Button>
                         </Link>
@@ -252,22 +252,22 @@ export default function Home() {
 
                     <Link href="/settings" passHref>
                         <Button variant="outline" size="icon">
-                            <Settings />
+                            <Settings className="h-5 w-5" />
                         </Button>
                     </Link>
                     <Link href="/stats" passHref>
                         <Button variant="outline" size="icon">
-                            <BarChart />
+                            <BarChart className="h-5 w-5" />
                         </Button>
                     </Link>
                     <Link href="/errors" passHref>
                         <Button variant="outline" size="icon">
-                            <ShieldX />
+                            <ShieldX className="h-5 w-5" />
                         </Button>
                     </Link>
                     <Link href="/achievements" passHref>
                         <Button variant="outline" size="icon" className="relative">
-                            <Trophy />
+                            <Trophy className="h-5 w-5" />
                             {newAchievementsCount > 0 && (
                                 <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground">
                                     {newAchievementsCount}
