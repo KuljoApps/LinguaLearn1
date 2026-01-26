@@ -6,15 +6,8 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowLeft, Brain, Award } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-const words = [
-  { en: 'cat', pl: 'kot' },
-  { en: 'dog', pl: 'pies' },
-  { en: 'house', pl: 'dom' },
-  { en: 'book', pl: 'książka' },
-  { en: 'sun', pl: 'słońce' },
-  { en: 'water', pl: 'woda' },
-];
+import { getLanguage, type Language } from '@/lib/storage';
+import { allMemoryQuestions, type MemoryPair } from '@/lib/games/memory';
 
 type CardInfo = {
   id: number;
@@ -24,15 +17,46 @@ type CardInfo = {
   isMatched: boolean;
 };
 
+const uiTexts = {
+    title: { en: 'Memory Game', fr: 'Jeu de Mémoire', de: 'Memory-Spiel', it: 'Gioco di Memoria', es: 'Juego de Memoria' },
+    moves: { en: 'Moves', fr: 'Coups', de: 'Züge', it: 'Mosse', es: 'Movimientos' },
+    winTitle: { en: 'You won!', fr: 'Vous avez gagné !', de: 'Du hast gewonnen!', it: 'Hai vinto!', es: '¡Has ganado!' },
+    winDescription: { 
+        en: 'Congratulations! You matched all the pairs in {moves} moves.', 
+        fr: 'Félicitations ! Vous avez trouvé toutes les paires en {moves} coups.', 
+        de: 'Herzlichen Glückwunsch! Du hast alle Paare in {moves} Zügen gefunden.', 
+        it: 'Congratulazioni! Hai trovato tutte le coppie in {moves} mosse.', 
+        es: '¡Felicidades! Has encontrado todos los pares en {moves} movimientos.' 
+    },
+    playAgain: { en: 'Play Again', fr: 'Rejouer', de: 'Nochmal spielen', it: 'Gioca di nuovo', es: 'Jugar de nuevo' },
+    backToGames: { en: 'Back to Game Center', fr: 'Retour au Centre de jeux', de: 'Zurück zur Spielzentrale', it: 'Torna al Centro Giochi', es: 'Volver al Centro de Juegos' }
+};
+
 const MemoryGamePage = () => {
+  const [language, setLanguage] = useState<Language>('en');
   const [cards, setCards] = useState<CardInfo[]>([]);
   const [flippedCards, setFlippedCards] = useState<CardInfo[]>([]);
   const [moves, setMoves] = useState(0);
   const [isGameWon, setIsGameWon] = useState(false);
 
+  const getUIText = (key: keyof typeof uiTexts, replacements: Record<string, string | number> = {}) => {
+      let text = uiTexts[key][language] || uiTexts[key]['en'];
+      for (const placeholder in replacements) {
+          text = text.replace(`{${placeholder}}`, String(replacements[placeholder]));
+      }
+      return text;
+  };
+
   const initializeGame = () => {
-    const gameCards = words.flatMap((word, index) => [
-      { id: index * 2, value: word.en, pairId: index, isFlipped: false, isMatched: false },
+    const currentLang = getLanguage();
+    setLanguage(currentLang);
+    const wordSet = allMemoryQuestions[currentLang];
+
+    // Shuffle and pick 6 pairs
+    const gamePairs = [...wordSet].sort(() => 0.5 - Math.random()).slice(0, 6);
+    
+    const gameCards = gamePairs.flatMap((word, index) => [
+      { id: index * 2, value: word.native, pairId: index, isFlipped: false, isMatched: false },
       { id: index * 2 + 1, value: word.pl, pairId: index, isFlipped: false, isMatched: false },
     ]);
 
@@ -50,6 +74,10 @@ const MemoryGamePage = () => {
 
   useEffect(() => {
     initializeGame();
+    window.addEventListener('language-changed', initializeGame);
+    return () => {
+      window.removeEventListener('language-changed', initializeGame);
+    }
   }, []);
 
   useEffect(() => {
@@ -103,17 +131,17 @@ const MemoryGamePage = () => {
         <CardHeader className="text-center p-6">
           <div className="flex items-center justify-center gap-4">
             <Brain className="h-8 w-8" />
-            <CardTitle className="text-3xl font-bold tracking-tight">Memory Game</CardTitle>
+            <CardTitle className="text-3xl font-bold tracking-tight">{getUIText('title')}</CardTitle>
           </div>
-          <p className="text-muted-foreground pt-2">Moves: {moves}</p>
+          <p className="text-muted-foreground pt-2">{getUIText('moves')}: {moves}</p>
         </CardHeader>
         <CardContent className="p-6">
           {isGameWon ? (
             <div className="text-center space-y-4">
               <Award className="h-16 w-16 mx-auto text-amber" />
-              <h2 className="text-2xl font-bold">You won!</h2>
-              <p>Congratulations! You matched all the pairs in {moves} moves.</p>
-              <Button onClick={initializeGame}>Play Again</Button>
+              <h2 className="text-2xl font-bold">{getUIText('winTitle')}</h2>
+              <p>{getUIText('winDescription', { moves })}</p>
+              <Button onClick={initializeGame}>{getUIText('playAgain')}</Button>
             </div>
           ) : (
             <div className="grid grid-cols-3 sm:grid-cols-4 gap-4">
@@ -137,7 +165,7 @@ const MemoryGamePage = () => {
           <Link href="/games" passHref>
             <Button variant="outline" className="gap-2">
               <ArrowLeft className="h-4 w-4" />
-              <span>Back to Game Center</span>
+              <span>{getUIText('backToGames')}</span>
             </Button>
           </Link>
         </CardFooter>
