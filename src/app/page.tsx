@@ -125,28 +125,28 @@ export default function Home() {
                 <CardContent className="flex flex-col space-y-4 p-6 pt-0 pb-4">
                     <div className="grid grid-cols-2 gap-4">
                         <Link href="/quizzes" passHref>
-                             <Button variant={theme ? undefined : "outline"} className={cn(buttonBaseClasses, squareButtonClasses, "rounded-xl", theme ? theme.className : defaultThemeClasses)}>
+                             <Button variant={theme ? undefined : "outline"} className={cn(buttonBaseClasses, squareButtonClasses, "rounded-xl", theme ? theme.className : defaultThemeClasses, theme?.className.includes('bg-gradient') && 'bg-[length:300%_300%] animate-gradient-flow')}>
                                 <LayoutGrid className={cn("h-12 w-12", theme ? 'text-white' : 'text-deep-purple')} />
                                 <span className={cn(theme ? 'text-white' : '')}>Quizzes</span>
                             </Button>
                         </Link>
                          <Link href="/games" passHref>
-                            <Button variant={theme ? undefined : "outline"} className={cn(buttonBaseClasses, squareButtonClasses, "rounded-xl", theme ? theme.className : defaultThemeClasses)}>
+                            <Button variant={theme ? undefined : "outline"} className={cn(buttonBaseClasses, squareButtonClasses, "rounded-xl", theme ? theme.className : defaultThemeClasses, theme?.className.includes('bg-gradient') && 'bg-[length:300%_300%] animate-gradient-flow')}>
                                 <Gamepad2 className={cn("h-12 w-12", theme ? 'text-white' : 'text-deep-purple')} />
                                 <span className={cn(theme ? 'text-white' : '')}>Games</span>
                             </Button>
                         </Link>
                     </div>
                     <div className="flex flex-col space-y-2">
-                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-xl", theme ? theme.className : defaultThemeClasses)}>
+                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-xl", theme ? theme.className : defaultThemeClasses, theme?.className.includes('bg-gradient') && 'bg-[length:300%_300%] animate-gradient-flow')}>
                             <PencilLine className={cn("mr-2 h-5 w-5", theme ? 'text-white' : 'text-deep-purple')} />
                             <span className={cn(theme ? 'text-white' : '')}>Fill the Gap</span>
                         </Button>
-                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-xl", theme ? theme.className : defaultThemeClasses)}>
+                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-xl", theme ? theme.className : defaultThemeClasses, theme?.className.includes('bg-gradient') && 'bg-[length:300%_300%] animate-gradient-flow')}>
                             <BookOpenText className={cn("mr-2 h-5 w-5", theme ? 'text-white' : 'text-deep-purple')} />
                             <span className={cn(theme ? 'text-white' : '')}>Reading</span>
                         </Button>
-                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-xl", theme ? theme.className : defaultThemeClasses)}>
+                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-xl", theme ? theme.className : defaultThemeClasses, theme?.className.includes('bg-gradient') && 'bg-[length:300%_300%] animate-gradient-flow')}>
                             <Ear className={cn("mr-2 h-5 w-5", theme ? 'text-white' : 'text-deep-purple')} />
                             <span className={cn(theme ? 'text-white' : '')}>Listening</span>
                         </Button>
