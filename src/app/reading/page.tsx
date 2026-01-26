@@ -23,6 +23,8 @@ export default function ReadingPage() {
         const savedPreference = localStorage.getItem(DESCRIPTIONS_VISIBLE_KEY);
         if (savedPreference !== null) {
             setShowDescriptions(JSON.parse(savedPreference));
+        } else {
+            setShowDescriptions(false);
         }
     }, []);
 
@@ -44,9 +46,9 @@ export default function ReadingPage() {
                             </h1>
                         </div>
                         <p className="text-muted-foreground">
-                            Improve your reading comprehension and vocabulary.
+                            Doskonal swoje umiejętności czytania ze zrozumieniem i słownictwo.
                         </p>
-                        <div className="flex items-center justify-center pt-4">
+                        <div className="flex items-center justify-center">
                             <div className="w-10" />
                             <CardTitle className="text-3xl font-bold tracking-tight flex-1">
                                 Reading
@@ -58,7 +60,7 @@ export default function ReadingPage() {
                                     </Button>
                                 </TooltipTrigger>
                                 <TooltipContent>
-                                    <p>{showDescriptions ? 'Hide descriptions' : 'Show descriptions'}</p>
+                                    <p>{showDescriptions ? 'Ukryj opisy' : 'Pokaż opisy'}</p>
                                 </TooltipContent>
                             </Tooltip>
                         </div>
@@ -66,34 +68,34 @@ export default function ReadingPage() {
                     <CardContent className="flex flex-col space-y-2 p-6 pt-2 pb-4">
                         <div>
                             <Link href="/reading/read-and-answer" passHref>
-                                <Button className="w-full h-16 text-lg" size="lg">
+                                <Button className="w-full h-12 text-lg" size="lg">
                                     <HelpCircle className="mr-2 h-5 w-5" />
                                     Read and Answer
                                 </Button>
                             </Link>
-                             {showDescriptions && <p className="text-xs italic text-muted-foreground mt-1 px-2">Read a short text and answer comprehension questions to test your understanding.</p>}
+                             {showDescriptions && <p className="text-xs italic text-muted-foreground mt-1 px-2">Przeczytaj krótki tekst i odpowiedz na pytania, aby sprawdzić swoje zrozumienie.</p>}
                         </div>
                         <div>
                             <Link href="/reading/true-false" passHref>
-                                <Button className="w-full h-16 text-lg" size="lg">
+                                <Button className="w-full h-12 text-lg" size="lg">
                                     <CheckCircle2 className="mr-2 h-5 w-5" />
                                     True or False
                                 </Button>
                             </Link>
-                             {showDescriptions && <p className="text-xs italic text-muted-foreground mt-1 px-2">Read statements and determine if they are true, false, or not mentioned in the text.</p>}
+                             {showDescriptions && <p className="text-xs italic text-muted-foreground mt-1 px-2">Przeczytaj stwierdzenia i zdecyduj, czy są prawdziwe, fałszywe, czy też informacja nie została podana w tekście.</p>}
                         </div>
                         <div>
                             <Link href="/reading/vocabulary-in-context" passHref>
-                                <Button className="w-full h-16 text-lg" size="lg">
+                                <Button className="w-full h-12 text-lg" size="lg">
                                     <ScanSearch className="mr-2 h-5 w-5" />
                                     Vocabulary in Context
                                 </Button>
                             </Link>
-                             {showDescriptions && <p className="text-xs italic text-muted-foreground mt-1 px-2">Identify the meaning of highlighted words based on their context within the passage.</p>}
+                             {showDescriptions && <p className="text-xs italic text-muted-foreground mt-1 px-2">Zidentyfikuj znaczenie wyróżnionych słów na podstawie kontekstu, w którym występują w tekście.</p>}
                         </div>
                          <div>
                             <Link href="/reading/matching-headings" passHref>
-                                <Button className="w-full h-16 text-lg" size="lg">
+                                <Button className="w-full h-12 text-lg" size="lg">
                                     <ListCollapse className="mr-2 h-5 w-5" />
                                     Matching Headings
                                 </Button>
@@ -102,7 +104,7 @@ export default function ReadingPage() {
                         </div>
                         <div>
                             <Link href="/reading/tone-analysis" passHref>
-                                <Button className="w-full h-16 text-lg" size="lg">
+                                <Button className="w-full h-12 text-lg" size="lg">
                                     <PenTool className="mr-2 h-5 w-5" />
                                     Tone Analysis
                                 </Button>
@@ -111,7 +113,7 @@ export default function ReadingPage() {
                         </div>
                         <div>
                             <Link href="/reading/fact-or-opinion" passHref>
-                                <Button className="w-full h-16 text-lg" size="lg">
+                                <Button className="w-full h-12 text-lg" size="lg">
                                     <Scale className="mr-2 h-5 w-5" />
                                     Fact or Opinion
                                 </Button>
