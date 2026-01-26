@@ -178,9 +178,11 @@ export default function Home() {
                     </div>
                     <div className="flex flex-col space-y-2">
                         <Link href="/fill-the-gap" passHref>
-                            <Button className={cn("h-12", "w-full justify-center items-center", "rounded-xl", themeClasses, "font-normal")}>
-                                <PencilLine className={cn("h-5 w-5", iconClasses)} />
-                                <span className={cn("flex items-center", iconClasses)}>
+                            <Button className={cn("h-12", "w-full grid grid-cols-[1fr_auto_1fr] items-center", "rounded-xl", themeClasses, "font-normal")}>
+                                <div className="flex justify-end">
+                                    <PencilLine className={cn("h-5 w-5 mr-2", iconClasses)} />
+                                </div>
+                                <span className={cn("col-start-2 flex items-center", iconClasses)}>
                                     <span>Fill</span>
                                     <span className="relative inline-block h-6 w-12 text-center overflow-hidden">
                                         <span
@@ -192,12 +194,15 @@ export default function Home() {
                                     </span>
                                     <span>Gap</span>
                                 </span>
+                                <div></div>
                             </Button>
                         </Link>
                         <Link href="/reading" passHref>
-                            <Button className={cn("h-12", "w-full justify-center items-center", "rounded-xl", themeClasses, "font-normal")}>
-                                <BookOpenText className={cn("h-5 w-5", iconClasses)} />
-                                <span className={cn("flex items-baseline", iconClasses)}>
+                             <Button className={cn("h-12", "w-full grid grid-cols-[1fr_auto_1fr] items-center", "rounded-xl", themeClasses, "font-normal")}>
+                                <div className="flex justify-end">
+                                    <BookOpenText className={cn("h-5 w-5 mr-2", iconClasses)} />
+                                </div>
+                                <span className={cn("col-start-2 flex items-baseline", iconClasses)}>
                                     <span>Reading</span>
                                     {showReadingDots && (
                                         <span className="flex pl-1">
@@ -207,12 +212,16 @@ export default function Home() {
                                         </span>
                                     )}
                                 </span>
+                                <div></div>
                             </Button>
                         </Link>
                         <Link href="/listening" passHref>
-                            <Button className={cn("h-12", "w-full justify-center items-center", "rounded-xl", themeClasses, "font-normal")}>
-                                <Ear className={cn("h-5 w-5", iconClasses, showListeningPulse && "animate-pulse-strong")} />
-                                <span className={iconClasses}>Listening</span>
+                            <Button className={cn("h-12", "w-full grid grid-cols-[1fr_auto_1fr] items-center", "rounded-xl", themeClasses, "font-normal")}>
+                                <div className="flex justify-end">
+                                    <Ear className={cn("h-5 w-5 mr-2", iconClasses, showListeningPulse && "animate-pulse-strong")} />
+                                </div>
+                                <span className={cn("col-start-2", iconClasses)}>Listening</span>
+                                <div></div>
                             </Button>
                         </Link>
                     </div>
