@@ -1,27 +1,18 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { BookOpen, Dumbbell, Sparkles, MessageSquareQuote, Layers, ArrowLeft, Info, LayoutGrid, List } from 'lucide-react';
+import { BookOpen, Dumbbell, Sparkles, MessageSquareQuote, Layers, ArrowLeft, LayoutGrid, List } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { getLanguage } from '@/lib/storage';
-import LinguaLearnLogo from '@/components/LinguaLearnLogo';
 import { Separator } from '@/components/ui/separator';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { cn } from '@/lib/utils';
 
-const DESCRIPTIONS_VISIBLE_KEY = 'quizzesDescriptionsVisible';
 const VIEW_MODE_KEY = 'quizzesViewMode';
 
 export default function QuizzesPage() {
     const [language, setCurrentLanguage] = useState<'en' | 'fr' | 'de' | 'it' | 'es'>('en');
-    const [showDescriptions, setShowDescriptions] = useState(false);
     const [view, setView] = useState<'grid' | 'list'>('list');
 
     useEffect(() => {
@@ -29,11 +20,6 @@ export default function QuizzesPage() {
             setCurrentLanguage(getLanguage());
         };
         handleLanguageChange();
-
-        const savedDescPreference = localStorage.getItem(DESCRIPTIONS_VISIBLE_KEY);
-        if (savedDescPreference !== null) {
-            setShowDescriptions(JSON.parse(savedDescPreference));
-        }
 
         const savedView = localStorage.getItem(VIEW_MODE_KEY);
         if (savedView === 'list' || savedView === 'grid') {
@@ -45,12 +31,6 @@ export default function QuizzesPage() {
             window.removeEventListener('language-changed', handleLanguageChange);
         };
     }, []);
-
-    const handleToggleDescriptions = () => {
-        const newValue = !showDescriptions;
-        setShowDescriptions(newValue);
-        localStorage.setItem(DESCRIPTIONS_VISIBLE_KEY, JSON.stringify(newValue));
-    };
 
     const handleViewToggle = () => {
         const newView = view === 'grid' ? 'list' : 'grid';
@@ -177,105 +157,84 @@ export default function QuizzesPage() {
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
-            <TooltipProvider>
-                <Card className={cn(
-                    "w-full max-w-md shadow-2xl text-center",
-                    view === 'grid' && "flex flex-col h-[90vh]"
-                )}>
-                    <CardHeader>
-                        <div className="flex items-center justify-center gap-4 mb-4">
-                            <LinguaLearnLogo width="48" height="48" />
-                            <h1 className="text-4xl font-bold tracking-tight whitespace-nowrap">
-                                Lingua
-                                <span className="relative inline-block">
-                                    Learn
-                                    <span className="absolute -right-1 -bottom-4 text-lg font-semibold tracking-normal text-amber">
-                                    Lite
-                                    </span>
+            <Card className={cn(
+                "w-full max-w-md shadow-2xl text-center",
+                view === 'grid' && "flex flex-col h-[90vh]"
+            )}>
+                <CardHeader className="text-center p-6">
+                    <div className="flex items-center justify-center gap-4">
+                        <LayoutGrid className="h-8 w-8" />
+                        <h1 className="text-3xl font-bold tracking-tight">
+                            <span className="relative inline-block">
+                                {getTitle()}
+                                <span className="absolute right-px -bottom-[10px] text-sm font-semibold tracking-normal text-amber">
+                                Lite
                                 </span>
-                            </h1>
-                        </div>
-                        <p className="text-muted-foreground">
-                            {getWelcomeMessage()}
-                        </p>
-                        <div className="flex items-center justify-center pt-4">
-                            <div className={cn(view === 'list' ? 'w-10' : '')} />
-                            <CardTitle className="text-3xl font-bold tracking-tight flex-1">{getTitle()}</CardTitle>
-                            {view === 'list' && (
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <Button variant="ghost" size="icon" onClick={handleToggleDescriptions}>
-                                            <Info className="h-5 w-5" />
+                            </span>
+                        </h1>
+                    </div>
+                </CardHeader>
+                <CardContent data-tutorial-id="quiz-buttons" className={cn(
+                    "p-6 pt-0 pb-4",
+                    view === 'grid' ? "overflow-y-auto" : "flex flex-col space-y-2"
+                )}>
+                    <p className="text-muted-foreground text-center pb-4">{getWelcomeMessage()}</p>
+                    {view === 'list' ? (
+                        <div className="flex flex-col space-y-2">
+                            {quizTasks.map((task) => (
+                                <div key={task.href}>
+                                    <Link href={task.href} passHref>
+                                        <Button className="w-full h-12 text-lg" size="lg">
+                                            <task.icon className="mr-2 h-5 w-5" />
+                                            {task.title}
                                         </Button>
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                        <p>{showDescriptions ? 'Ukryj opisy' : 'Pokaż opisy'}</p>
-                                    </TooltipContent>
-                                </Tooltip>
-                            )}
+                                    </Link>
+                                    <p className="text-xs italic text-muted-foreground mt-1 px-2">{task.description}</p>
+                                </div>
+                            ))}
                         </div>
-                    </CardHeader>
-                    <CardContent data-tutorial-id="quiz-buttons" className={cn(
-                        "p-6 pt-2 pb-4",
-                        view === 'grid' ? "overflow-y-auto" : "flex flex-col space-y-2"
-                    )}>
-                        {view === 'list' ? (
-                            <div className="flex flex-col space-y-2">
-                                {quizTasks.map((task) => (
-                                    <div key={task.href}>
-                                        <Link href={task.href} passHref>
-                                            <Button className="w-full h-12 text-lg" size="lg">
-                                                <task.icon className="mr-2 h-5 w-5" />
-                                                {task.title}
-                                            </Button>
-                                        </Link>
-                                        {showDescriptions && <p className="text-xs italic text-muted-foreground mt-1 px-2">{task.description}</p>}
-                                    </div>
-                                ))}
-                            </div>
-                        ) : (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {quizTasks.map((task) => {
-                                    const Icon = task.icon;
-                                    return (
-                                        <Card key={task.title} className="relative border-2">
-                                            <CardHeader className="items-center">
-                                                <Icon className="h-12 w-12 text-primary" />
-                                                <CardTitle className="pt-2 text-center">{task.title}</CardTitle>
-                                            </CardHeader>
-                                            <CardContent>
-                                                <p className="text-sm text-center text-muted-foreground h-20">{task.description}</p>
-                                            </CardContent>
-                                            <CardFooter>
-                                                <Link href={task.href} className="w-full">
-                                                    <Button className="w-full">Start</Button>
-                                                </Link>
-                                            </CardFooter>
-                                        </Card>
-                                    );
-                                })}
-                            </div>
-                        )}
-                    </CardContent>
-                    <CardFooter className={cn(
-                        "flex flex-col p-6 pt-4 gap-4",
-                        view === 'grid' && "mt-auto"
-                    )}>
-                        <Separator />
-                        <div className="flex justify-center gap-4">
-                             <Link href="/" passHref>
-                                <Button variant="outline">
-                                    <ArrowLeft className="mr-2 h-4 w-4" /> {getBackText()}
-                                </Button>
-                            </Link>
-                            <Button variant="outline" onClick={handleViewToggle} className="gap-2">
-                                {view === 'grid' ? <List className="h-4 w-4" /> : <LayoutGrid className="h-4 w-4" />}
-                                <span>View</span>
+                    ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {quizTasks.map((task) => {
+                                const Icon = task.icon;
+                                return (
+                                    <Card key={task.title} className="relative border-2">
+                                        <CardHeader className="items-center">
+                                            <Icon className="h-12 w-12 text-primary" />
+                                            <CardTitle className="pt-2 text-center">{task.title}</CardTitle>
+                                        </CardHeader>
+                                        <CardContent>
+                                            <p className="text-sm text-center text-muted-foreground h-20">{task.description}</p>
+                                        </CardContent>
+                                        <CardFooter>
+                                            <Link href={task.href} className="w-full">
+                                                <Button className="w-full">Start</Button>
+                                            </Link>
+                                        </CardFooter>
+                                    </Card>
+                                );
+                            })}
+                        </div>
+                    )}
+                </CardContent>
+                <CardFooter className={cn(
+                    "flex flex-col p-6 pt-4 gap-4",
+                    view === 'grid' && "mt-auto"
+                )}>
+                    <Separator />
+                    <div className="flex justify-center gap-4">
+                         <Link href="/" passHref>
+                            <Button variant="outline">
+                                <ArrowLeft className="mr-2 h-4 w-4" /> {getBackText()}
                             </Button>
-                        </div>
-                    </CardFooter>
-                </Card>
-            </TooltipProvider>
+                        </Link>
+                        <Button variant="outline" onClick={handleViewToggle} className="gap-2">
+                            {view === 'grid' ? <List className="h-4 w-4" /> : <LayoutGrid className="h-4 w-4" />}
+                            <span>View</span>
+                        </Button>
+                    </div>
+                </CardFooter>
+            </Card>
         </main>
     );
 }
