@@ -46,10 +46,6 @@ export interface Settings {
     eyeCareLevel: number;
 }
 
-export interface AppTheme {
-    className: string;
-}
-
 export type Language = 'en' | 'fr' | 'de' | 'it' | 'es';
 
 const LANGUAGE_KEY = 'linguaLearnLanguage';
@@ -57,7 +53,6 @@ const SETTINGS_KEY = 'linguaLearnSettings_v2';
 const GLOBAL_STATS_KEY = 'linguaLearnGlobalStats_v2';
 const TUTORIAL_COMPLETED_KEY = 'linguaLearnTutorialCompleted_v2';
 export const NEW_ACHIEVEMENTS_COUNT_KEY = 'linguaLearnNewAchievementsCount';
-const APP_THEME_KEY = 'linguaLearnAppTheme_v1';
 const FAVORITE_GAMES_KEY = 'linguaLearnFavoriteGames';
 
 
@@ -133,35 +128,6 @@ export const setLanguage = (lang: Language) => {
 const getKey = (baseKey: string) => {
     const lang = getLanguage();
     return `${baseKey}_${lang}`;
-};
-
-
-// --- Theme Functions ---
-export const getAppTheme = (): AppTheme | null => {
-    if (typeof window === 'undefined') return null;
-    try {
-        const themeJson = localStorage.getItem(APP_THEME_KEY);
-        return themeJson ? JSON.parse(themeJson) : null;
-    } catch (error) {
-        console.error("Failed to get app theme", error);
-        return null;
-    }
-};
-
-export const setAppTheme = (theme: AppTheme) => {
-    if (typeof window === 'undefined') return;
-    try {
-        localStorage.setItem(APP_THEME_KEY, JSON.stringify(theme));
-        window.dispatchEvent(new CustomEvent('theme-changed'));
-    } catch (error) {
-        console.error("Failed to set app theme", error);
-    }
-};
-
-export const clearAppTheme = () => {
-    if (typeof window === 'undefined') return;
-    localStorage.removeItem(APP_THEME_KEY);
-    window.dispatchEvent(new CustomEvent('theme-changed'));
 };
 
 
@@ -617,7 +583,6 @@ export const saveSettings = (settings: Settings) => {
 export const clearSettings = () => {
     if (typeof window === 'undefined') return;
     localStorage.removeItem(SETTINGS_KEY);
-    clearAppTheme();
     // After clearing, save default settings to trigger update
     saveSettings(getSettings());
 };

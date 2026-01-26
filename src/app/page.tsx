@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import LinguaLearnLogo from '@/components/LinguaLearnLogo';
-import { getLanguage, setLanguage, shouldShowProPromo, shouldShowRateAppDialog, isTutorialCompleted, saveTutorialState, recordProPromoShown, recordRateAppDialogShown, getNewAchievementsCount, getAppTheme, type AppTheme } from '@/lib/storage';
+import { getLanguage, setLanguage, shouldShowProPromo, shouldShowRateAppDialog, isTutorialCompleted, saveTutorialState, recordProPromoShown, recordRateAppDialogShown, getNewAchievementsCount } from '@/lib/storage';
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -22,7 +22,6 @@ export default function Home() {
     const [showPromo, setShowPromo] = useState(false);
     const [showRateDialog, setShowRateDialog] = useState(false);
     const [newAchievementsCount, setNewAchievementsCount] = useState(0);
-    const [theme, setTheme] = useState<AppTheme | null>(null);
     const [fillTheGapText, setFillTheGapText] = useState('the');
     const [showReadingDots, setShowReadingDots] = useState(false);
     const [showQuizzesSpin, setShowQuizzesSpin] = useState(false);
@@ -34,7 +33,6 @@ export default function Home() {
         const handleStateUpdate = () => {
             setCurrentLanguage(getLanguage());
             updateAchievementCount();
-            setTheme(getAppTheme());
         };
 
         const updateAchievementCount = () => {
@@ -57,7 +55,6 @@ export default function Home() {
 
         window.addEventListener('language-changed', handleStateUpdate);
         window.addEventListener('achievements-count-changed', updateAchievementCount);
-        window.addEventListener('theme-changed', handleStateUpdate);
 
         const timers: NodeJS.Timeout[] = [];
         let animationTimeoutId: NodeJS.Timeout;
@@ -99,7 +96,6 @@ export default function Home() {
             timers.forEach(clearTimeout);
             window.removeEventListener('language-changed', handleStateUpdate);
             window.removeEventListener('achievements-count-changed', updateAchievementCount);
-            window.removeEventListener('theme-changed', handleStateUpdate);
         };
     }, [pathname]);
 
@@ -140,8 +136,8 @@ export default function Home() {
     const buttonBaseClasses = "flex-col gap-2";
     const squareButtonClasses = "w-full h-28";
     const rectButtonClasses = "h-12";
-    const defaultThemeClasses = "border-2 border-primary";
-    const isGradientTheme = theme?.className.includes('bg-gradient');
+    const themeClasses = "text-xl font-bold text-white bg-gradient-to-r from-yellow-500 via-amber-500 to-orange-500 hover:brightness-125 transition-all shadow-[0_0_20px_#ff8c00] border border-yellow-400/50 bg-[length:300%_300%] animate-gradient-flow";
+    const iconClasses = "text-white";
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
@@ -168,23 +164,23 @@ export default function Home() {
                 <CardContent data-tutorial-id="home-main-buttons" className="flex flex-col space-y-4 p-6 pt-0 pb-4">
                     <div className="grid grid-cols-2 gap-4">
                         <Link href="/quizzes" passHref>
-                             <Button variant={theme ? undefined : "outline"} className={cn(buttonBaseClasses, squareButtonClasses, "rounded-xl", theme ? theme.className : defaultThemeClasses, "font-normal", isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
-                                <LayoutGrid className={cn("h-14 w-14" /* ICON SIZE */, theme ? 'text-white' : 'text-deep-purple', showQuizzesSpin && "animate-spin-once")} />
+                             <Button className={cn(buttonBaseClasses, squareButtonClasses, "rounded-xl", themeClasses, "font-normal")}>
+                                <LayoutGrid className={cn("h-14 w-14", iconClasses, showQuizzesSpin && "animate-spin-once")} />
                                 <span>Quizzes</span>
                             </Button>
                         </Link>
                          <Link href="/games" passHref>
-                            <Button variant={theme ? undefined : "outline"} className={cn(buttonBaseClasses, squareButtonClasses, "rounded-xl", theme ? theme.className : defaultThemeClasses, "font-normal", isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
-                                <Gamepad2 className={cn("h-20 w-20" /* ICON SIZE */, theme ? 'text-white' : 'text-deep-purple', showGamesTilt && "animate-joystick-tilt")} />
+                            <Button className={cn(buttonBaseClasses, squareButtonClasses, "rounded-xl", themeClasses, "font-normal")}>
+                                <Gamepad2 className={cn("h-20 w-20", iconClasses, showGamesTilt && "animate-joystick-tilt")} />
                                 <span>Games</span>
                             </Button>
                         </Link>
                     </div>
                     <div className="flex flex-col space-y-2">
                         <Link href="/fill-the-gap" passHref>
-                            <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "w-full gap-2 items-end", "rounded-xl", theme ? theme.className : defaultThemeClasses, "font-normal", isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
-                                <PencilLine className={cn("mr-2 h-5 w-5" /* ICON SIZE */, theme ? 'text-white' : 'text-deep-purple')} />
-                                <span className={cn("flex items-center", theme ? 'text-white' : '')}>
+                            <Button className={cn(rectButtonClasses, "w-full gap-2 items-end", "rounded-xl", themeClasses, "font-normal")}>
+                                <PencilLine className={cn("mr-2 h-5 w-5", iconClasses)} />
+                                <span className={cn("flex items-center", iconClasses)}>
                                     <span>Fill</span>
                                     <span className="relative inline-block h-6 w-12 text-center overflow-hidden">
                                         <span
@@ -199,9 +195,9 @@ export default function Home() {
                             </Button>
                         </Link>
                         <Link href="/reading" passHref>
-                            <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "w-full gap-2", "rounded-xl", theme ? theme.className : defaultThemeClasses, "font-normal", isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
-                                <BookOpenText className={cn("mr-2 h-5 w-5" /* ICON SIZE */, theme ? 'text-white' : 'text-deep-purple')} />
-                                <span className={cn("flex items-baseline", theme ? 'text-white' : '')}>
+                            <Button className={cn(rectButtonClasses, "w-full gap-2", "rounded-xl", themeClasses, "font-normal")}>
+                                <BookOpenText className={cn("mr-2 h-5 w-5", iconClasses)} />
+                                <span className={cn("flex items-baseline", iconClasses)}>
                                     <span>Reading</span>
                                     {showReadingDots && (
                                         <span className="flex pl-1">
@@ -214,9 +210,9 @@ export default function Home() {
                             </Button>
                         </Link>
                         <Link href="/listening" passHref>
-                            <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "w-full gap-2", "rounded-xl", theme ? theme.className : defaultThemeClasses, "font-normal", isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
-                                <Ear className={cn("mr-2 h-5 w-5" /* ICON SIZE */, theme ? 'text-white' : 'text-deep-purple', showListeningPulse && "animate-pulse-strong")} />
-                                <span className={cn(theme ? 'text-white' : '')}>Listening</span>
+                            <Button className={cn(rectButtonClasses, "w-full gap-2", "rounded-xl", themeClasses, "font-normal")}>
+                                <Ear className={cn("mr-2 h-5 w-5", iconClasses, showListeningPulse && "animate-pulse-strong")} />
+                                <span className={iconClasses}>Listening</span>
                             </Button>
                         </Link>
                     </div>
@@ -225,7 +221,7 @@ export default function Home() {
                     <Separator className="mb-2"/>
                     <Link href={isFrench ? "/learning/fr" : isGerman ? "/learning/de" : isItalian ? "/learning/it" : isSpanish ? "/learning/es" : "/learning/en"} passHref>
                         <Button variant="outline" className="w-full h-12 mt-2 border-2 border-primary">
-                            <GraduationCap className="mr-2 h-5 w-5 text-deep-purple" /* ICON SIZE */ />
+                            <GraduationCap className="mr-2 h-5 w-5 text-deep-purple" />
                             {getLearningButtonText()}
                         </Button>
                     </Link>
