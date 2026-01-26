@@ -175,13 +175,13 @@ export default function Home() {
                         </Link>
                          <Link href="/games" passHref>
                             <Button variant={theme ? undefined : "outline"} className={cn(buttonBaseClasses, squareButtonClasses, "rounded-xl", theme ? theme.className : defaultThemeClasses, "font-normal", isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
-                                <Gamepad2 className={cn("h-32 w-32" /* ICON SIZE */, theme ? 'text-white' : 'text-deep-purple', showGamesTilt && "animate-joystick-tilt")} />
+                                <Gamepad2 className={cn("h-40 w-40" /* ICON SIZE */, theme ? 'text-white' : 'text-deep-purple', showGamesTilt && "animate-joystick-tilt")} />
                                 <span className={cn(theme ? 'text-white' : '')}>Games</span>
                             </Button>
                         </Link>
                     </div>
                     <div className="flex flex-col space-y-2">
-                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "text-lg", "rounded-xl", theme ? theme.className : defaultThemeClasses, "font-normal", isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
+                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg items-baseline", "rounded-xl", theme ? theme.className : defaultThemeClasses, "font-normal", isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
                             <PencilLine className={cn("mr-2 h-6 w-6" /* ICON SIZE */, theme ? 'text-white' : 'text-deep-purple')} />
                              <span className={cn("flex items-baseline", theme ? 'text-white' : '')}>
                                 <span>Fill</span>
