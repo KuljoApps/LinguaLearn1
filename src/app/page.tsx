@@ -25,6 +25,7 @@ export default function Home() {
     const [theme, setTheme] = useState<AppTheme | null>(null);
     const [fillTheGapText, setFillTheGapText] = useState('the');
     const [showReadingDots, setShowReadingDots] = useState(false);
+    const [showQuizzesSpin, setShowQuizzesSpin] = useState(false);
     const pathname = usePathname();
 
     useEffect(() => {
@@ -56,14 +57,23 @@ export default function Home() {
         window.addEventListener('achievements-count-changed', updateAchievementCount);
         window.addEventListener('theme-changed', handleStateUpdate);
 
-        let animationStep = 0; // 0 for gap, 1 for dots
+        let animationStep = 0;
         
         const runAnimations = () => {
-          if (animationStep % 2 === 0) {
+          const currentAnimation = animationStep % 3;
+
+          if (currentAnimation === 0) {
             setFillTheGapText(prev => (prev === 'the' ? '___' : 'the'));
-          } else {
+            setShowReadingDots(false);
+            setShowQuizzesSpin(false);
+          } else if (currentAnimation === 1) {
             setShowReadingDots(true);
+            setShowQuizzesSpin(false);
             setTimeout(() => setShowReadingDots(false), 3000);
+          } else if (currentAnimation === 2) {
+            setShowQuizzesSpin(true);
+            setShowReadingDots(false);
+            setTimeout(() => setShowQuizzesSpin(false), 3000);
           }
           animationStep++;
         };
@@ -145,7 +155,7 @@ export default function Home() {
                     <div className="grid grid-cols-2 gap-4">
                         <Link href="/quizzes" passHref>
                              <Button variant={theme ? undefined : "outline"} className={cn(buttonBaseClasses, squareButtonClasses, "rounded-xl", theme ? theme.className : defaultThemeClasses, "font-normal", isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
-                                <LayoutGrid className={cn("h-24 w-24", theme ? 'text-white' : 'text-deep-purple')} />
+                                <LayoutGrid className={cn("h-24 w-24", theme ? 'text-white' : 'text-deep-purple', showQuizzesSpin && "animate-spin-once")} />
                                 <span className={cn(theme ? 'text-white' : '')}>Quizzes</span>
                             </Button>
                         </Link>
@@ -174,7 +184,7 @@ export default function Home() {
                         </Button>
                         <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-xl", theme ? theme.className : defaultThemeClasses, "font-normal", isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
                             <BookOpenText className={cn("mr-2 h-5 w-5", theme ? 'text-white' : 'text-deep-purple')} />
-                            <span className={cn("flex items-center", theme ? 'text-white' : '')}>
+                            <span className={cn("flex items-baseline", theme ? 'text-white' : '')}>
                                 <span>Reading</span>
                                 {showReadingDots && (
                                     <span className="flex pl-1">

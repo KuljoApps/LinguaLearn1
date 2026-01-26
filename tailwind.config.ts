@@ -133,6 +133,10 @@ export default {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-3px)' },
         },
+        'spin-once': {
+            'from': { transform: 'rotate(0deg)' },
+            'to': { transform: 'rotate(360deg)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -145,6 +149,7 @@ export default {
         'gradient-flow': 'gradient-flow 8s ease-in-out infinite',
         'text-fall-down': 'text-fall-down 0.5s ease-out forwards',
         'dancing-dots': 'dancing-dots 1.2s infinite ease-in-out',
+        'spin-once': 'spin-once 3s linear',
       },
     },
   },
