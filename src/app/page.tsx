@@ -171,15 +171,15 @@ export default function Home() {
                         </Link>
                          <Link href="/games" passHref>
                             <Button className={cn(buttonBaseClasses, squareButtonClasses, "rounded-xl", themeClasses, "font-normal", "!gap-0")}>
-                                <Gamepad2 className={cn("h-20 w-20", iconClasses, showGamesTilt && "animate-joystick-tilt")} />
-                                <span className="-mt-1">Games</span>
+                                <Gamepad2 className={cn("h-14 w-14", iconClasses, showGamesTilt && "animate-joystick-tilt")} />
+                                <span className="mt-1">Games</span>
                             </Button>
                         </Link>
                     </div>
                     <div className="flex flex-col space-y-2">
                         <Link href="/fill-the-gap" passHref>
-                            <Button className={cn("h-12", "w-full gap-2 items-center", "rounded-xl", themeClasses, "font-normal")}>
-                                <PencilLine className={cn("mr-2 h-5 w-5", iconClasses)} />
+                            <Button className={cn("h-12", "w-full justify-between items-center", "rounded-xl", themeClasses, "font-normal")}>
+                                <PencilLine className={cn("h-5 w-5", iconClasses)} />
                                 <span className={cn("flex items-center", iconClasses)}>
                                     <span>Fill</span>
                                     <span className="relative inline-block h-6 w-12 text-center overflow-hidden">
@@ -192,11 +192,12 @@ export default function Home() {
                                     </span>
                                     <span>Gap</span>
                                 </span>
+                                 <div className="w-5" />
                             </Button>
                         </Link>
                         <Link href="/reading" passHref>
-                            <Button className={cn("h-12", "w-full gap-2", "rounded-xl", themeClasses, "font-normal")}>
-                                <BookOpenText className={cn("mr-2 h-5 w-5", iconClasses)} />
+                            <Button className={cn("h-12", "w-full justify-between items-center", "rounded-xl", themeClasses, "font-normal")}>
+                                <BookOpenText className={cn("h-5 w-5", iconClasses)} />
                                 <span className={cn("flex items-baseline", iconClasses)}>
                                     <span>Reading</span>
                                     {showReadingDots && (
@@ -207,12 +208,14 @@ export default function Home() {
                                         </span>
                                     )}
                                 </span>
+                                 <div className="w-5" />
                             </Button>
                         </Link>
                         <Link href="/listening" passHref>
-                            <Button className={cn("h-12", "w-full gap-2", "rounded-xl", themeClasses, "font-normal")}>
-                                <Ear className={cn("mr-2 h-5 w-5", iconClasses, showListeningPulse && "animate-pulse-strong")} />
+                            <Button className={cn("h-12", "w-full justify-between items-center", "rounded-xl", themeClasses, "font-normal")}>
+                                <Ear className={cn("h-5 w-5", iconClasses, showListeningPulse && "animate-pulse-strong")} />
                                 <span className={iconClasses}>Listening</span>
+                                 <div className="w-5" />
                             </Button>
                         </Link>
                     </div>
