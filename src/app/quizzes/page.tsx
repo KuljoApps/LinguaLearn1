@@ -153,7 +153,7 @@ export default function QuizzesPage() {
                     </p>
                     <CardTitle className="text-3xl font-bold tracking-tight pt-4">{getTitle()}</CardTitle>
                 </CardHeader>
-                <CardContent data-tutorial-id="quiz-buttons" className="flex flex-col space-y-4 p-6 pt-2 pb-4">
+                <CardContent data-tutorial-id="quiz-buttons" className="flex flex-col space-y-2 p-6 pt-2 pb-4">
                     <div>
                         <Link href={isFrench ? "/quiz/fr-pl" : isGerman ? "/quiz/de-pl" : isItalian ? "/quiz/it-pl" : isSpanish ? "/quiz/es-pl" : "/quiz/en-pl"} passHref>
                             <Button className="w-full h-12 text-lg" size="lg">
