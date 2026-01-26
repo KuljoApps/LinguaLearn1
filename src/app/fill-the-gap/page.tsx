@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
+import ProgressRing from '@/components/ProgressRing';
 
 const VIEW_MODE_KEY = 'fillTheGapViewMode';
 
@@ -33,12 +34,28 @@ const tasks = [
 
 export default function FillTheGapPage() {
     const [view, setView] = useState<'grid' | 'list'>('list');
+    const [progressData, setProgressData] = useState<{ completed: number; total: number; progress: number; }[]>([]);
 
     useEffect(() => {
         const savedView = localStorage.getItem(VIEW_MODE_KEY) as 'grid' | 'list' | null;
         if (savedView) {
             setView(savedView);
         }
+
+        setProgressData(
+            Array(tasks.length)
+                .fill(0)
+                .map(() => {
+                    const completed = Math.floor(10 + Math.random() * 21);
+                    const total = 100;
+                    const progress = (completed / total) * 100;
+                    return {
+                        completed,
+                        total,
+                        progress: Math.max(10, Math.min(95, progress)),
+                    };
+                })
+        );
     }, []);
 
     const handleViewToggle = () => {
@@ -60,7 +77,7 @@ export default function FillTheGapPage() {
                             Fill the{' '}
                             <span className="relative inline-block">
                                 Gap
-                                <span className="absolute right-1.5 -bottom-9 text-sm font-semibold tracking-normal text-amber">
+                                <span className="absolute -left-[30px] -bottom-3 text-sm font-semibold tracking-normal text-amber">
                                     Lite
                                 </span>
                             </span>
@@ -90,11 +107,13 @@ export default function FillTheGapPage() {
                         </div>
                     ) : (
                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            {tasks.map((task) => {
+                            {tasks.map((task, index) => {
                                 const Icon = task.icon;
+                                const { completed, total, progress } = progressData[index] || { completed: 0, total: 0, progress: 0 };
                                 return (
-                                    <Card key={task.title} className="relative border-2">
-                                        <CardHeader className="items-center">
+                                    <Card key={task.title} className="relative border-2 overflow-hidden">
+                                        <ProgressRing progress={progress} completed={completed} total={total} />
+                                        <CardHeader className="items-center pt-12">
                                             <Icon className="h-12 w-12 text-primary" />
                                             <CardTitle className="pt-2 text-center">{task.title}</CardTitle>
                                         </CardHeader>

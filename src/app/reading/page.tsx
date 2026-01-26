@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
+import ProgressRing from '@/components/ProgressRing';
 
 const VIEW_MODE_KEY = 'readingViewMode';
 
@@ -14,49 +15,65 @@ const readingTasks = [
     {
         href: '/reading/read-and-answer',
         icon: BookOpenText,
-        title: 'Read and Answer',
+        title: 'Czytaj i Odpowiadaj',
         description: 'Przeczytaj krótki tekst i odpowiedz na pytania, aby sprawdzić swoje zrozumienie.',
     },
     {
         href: '/reading/true-false',
         icon: CheckCircle2,
-        title: 'True or False',
+        title: 'Prawda czy Fałsz',
         description: 'Przeczytaj stwierdzenia i zdecyduj, czy są prawdziwe, fałszywe, czy też informacja nie została podana w tekście.',
     },
     {
         href: '/reading/vocabulary-in-context',
         icon: ScanSearch,
-        title: 'Vocabulary in Context',
+        title: 'Słownictwo w Kontekście',
         description: 'Zidentyfikuj znaczenie wyróżnionych słów na podstawie kontekstu, w którym występują w tekście.',
     },
     {
         href: '/reading/matching-headings',
         icon: ListCollapse,
-        title: 'Matching Headings',
+        title: 'Dopasowywanie Nagłówków',
         description: 'Dopasuj nagłówki do odpowiednich akapitów tekstu, aby sprawdzić swoje zrozumienie głównej myśli każdej części.',
     },
     {
         href: '/reading/tone-analysis',
         icon: PenTool,
-        title: 'Tone Analysis',
+        title: 'Analiza Tonu',
         description: 'Określ ton autora tekstu (np. informacyjny, perswazyjny, humorystyczny), aby nauczyć się rozpoznawać głębsze intencje piszącego.',
     },
     {
         href: '/reading/fact-or-opinion',
         icon: Scale,
-        title: 'Fact or Opinion',
+        title: 'Fakt czy Opinia',
         description: 'Przeczytaj tekst i rozróżnij stwierdzenia oparte na faktach od tych, które wyrażają opinię autora, rozwijając swoje krytyczne myślenie.',
     },
 ];
 
 export default function ReadingPage() {
     const [view, setView] = useState<'grid' | 'list'>('list');
+    const [progressData, setProgressData] = useState<{ completed: number; total: number; progress: number; }[]>([]);
 
     useEffect(() => {
         const savedView = localStorage.getItem(VIEW_MODE_KEY) as 'grid' | 'list' | null;
         if (savedView) {
             setView(savedView);
         }
+
+        setProgressData(
+            Array(readingTasks.length)
+                .fill(0)
+                .map(() => {
+                    const completed = Math.floor(10 + Math.random() * 21);
+                    const total = 100;
+                    const progress = (completed / total) * 100;
+                    return {
+                        completed,
+                        total,
+                        progress: Math.max(10, Math.min(95, progress)),
+                    };
+                })
+        );
     }, []);
 
     const handleViewToggle = () => {
@@ -71,13 +88,13 @@ export default function ReadingPage() {
                 "w-full max-w-md shadow-2xl text-center",
                 view === 'grid' && "flex flex-col h-[90vh]"
             )}>
-                 <CardHeader className="text-center p-6 pb-2">
+                <CardHeader className="text-center p-6 pb-2">
                     <div className="flex items-center justify-center gap-4">
                         <BookOpenText className="h-8 w-8" />
                         <h1 className="text-3xl font-bold tracking-tight">
                             <span className="relative inline-block">
                                 Reading
-                                <span className="absolute right-[13px] -bottom-[8px] text-sm font-semibold tracking-normal text-amber">
+                                <span className="absolute -left-2 -bottom-2 text-sm font-semibold tracking-normal text-amber">
                                 Lite
                                 </span>
                             </span>
@@ -105,11 +122,13 @@ export default function ReadingPage() {
                         </div>
                     ) : (
                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            {readingTasks.map((task) => {
+                            {readingTasks.map((task, index) => {
                                 const Icon = task.icon;
+                                const { completed, total, progress } = progressData[index] || { completed: 0, total: 0, progress: 0 };
                                 return (
-                                    <Card key={task.title} className="relative border-2">
-                                        <CardHeader className="items-center">
+                                    <Card key={task.title} className="relative border-2 overflow-hidden">
+                                        <ProgressRing progress={progress} completed={completed} total={total} />
+                                        <CardHeader className="items-center pt-12">
                                             <Icon className="h-12 w-12 text-primary" />
                                             <CardTitle className="pt-2 text-center">{task.title}</CardTitle>
                                         </CardHeader>

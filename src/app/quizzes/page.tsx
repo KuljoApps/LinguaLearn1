@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { BookOpen, Dumbbell, Sparkles, MessageSquareQuote, Layers, ArrowLeft, LayoutGrid, List } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -8,12 +8,14 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/componen
 import { getLanguage } from '@/lib/storage';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
+import ProgressRing from '@/components/ProgressRing';
 
 const VIEW_MODE_KEY = 'quizzesViewMode';
 
 export default function QuizzesPage() {
     const [language, setCurrentLanguage] = useState<'en' | 'fr' | 'de' | 'it' | 'es'>('en');
     const [view, setView] = useState<'grid' | 'list'>('list');
+    const [progressData, setProgressData] = useState<{ completed: number; total: number; progress: number; }[]>([]);
 
     useEffect(() => {
         const handleLanguageChange = () => {
@@ -48,7 +50,7 @@ export default function QuizzesPage() {
         if (isGerman) return "Bereit, deine Lebensentscheidungen in einer anderen Sprache zu hinterfragen? Los geht's!";
         if (isItalian) return "Pronto a mettere in discussione le tue scelte di vita in un'altra lingua? Andiamo!";
         if (isSpanish) return "¿Listo para cuestionar tus elecciones de vida en otro idioma? ¡Vamos!";
-        return "Ready to question your life choices in another language? Let's go!";
+        return "Przetłumacz słowa z angielskiego na polski. Doskonały sposób na przetestowanie i poszerzenie podstawowego słownictwa.";
     };
 
     const getQuizTitle1 = () => {
@@ -147,13 +149,30 @@ export default function QuizzesPage() {
         return "Back to Home";
     };
 
-    const quizTasks = [
+    const quizTasks = useMemo(() => [
         { href: isFrench ? "/quiz/fr-pl" : isGerman ? "/quiz/de-pl" : isItalian ? "/quiz/it-pl" : isSpanish ? "/quiz/es-pl" : "/quiz/en-pl", icon: BookOpen, title: getQuizTitle1(), description: getQuizDesc1() },
         { href: isFrench ? "/quiz/pl-fr" : isGerman ? "/quiz/pl-de" : isItalian ? "/quiz/pl-it" : isSpanish ? "/quiz/pl-es" : "/quiz/pl-en", icon: Dumbbell, title: getQuizTitle2(), description: getQuizDesc2() },
         { href: isFrench ? "/quiz/irregular-verbs-fr" : isGerman ? "/quiz/irregular-verbs-de" : isItalian ? "/quiz/irregular-verbs-it" : isSpanish ? "/quiz/irregular-verbs-es" : "/quiz/irregular-verbs-en", icon: Sparkles, title: getQuizTitle3(), description: getQuizDesc3() },
         { href: isFrench ? "/quiz/phrasal-verbs-fr" : isGerman ? "/quiz/phrasal-verbs-de" : isItalian ? "/quiz/phrasal-verbs-it" : isSpanish ? "/quiz/phrasal-verbs-es" : "/quiz/phrasal-verbs-en", icon: Layers, title: getQuizTitle4(), description: getQuizDesc4() },
         { href: isFrench ? "/quiz/idioms-fr" : isGerman ? "/quiz/idioms-de" : isItalian ? "/quiz/idioms-it" : isSpanish ? "/quiz/idioms-es" : "/quiz/idioms-en", icon: MessageSquareQuote, title: getQuizTitle5(), description: getQuizDesc5() },
-    ];
+    ], [language]);
+
+    useEffect(() => {
+        setProgressData(
+            Array(quizTasks.length)
+                .fill(0)
+                .map(() => {
+                    const completed = Math.floor(10 + Math.random() * 21); // 10-30
+                    const total = 100;
+                    const progress = (completed / total) * 100;
+                    return {
+                        completed,
+                        total,
+                        progress: Math.max(10, Math.min(95, progress)),
+                    };
+                })
+        );
+    }, [quizTasks]);
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
@@ -167,7 +186,7 @@ export default function QuizzesPage() {
                         <h1 className="text-3xl font-bold tracking-tight">
                             <span className="relative inline-block">
                                 {getTitle()}
-                                <span className="absolute right-0 -bottom-[9px] text-sm font-semibold tracking-normal text-amber">
+                                <span className="absolute -right-1 -bottom-2 text-sm font-semibold tracking-normal text-amber">
                                 Lite
                                 </span>
                             </span>
@@ -195,11 +214,13 @@ export default function QuizzesPage() {
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            {quizTasks.map((task) => {
+                            {quizTasks.map((task, index) => {
                                 const Icon = task.icon;
+                                const { completed, total, progress } = progressData[index] || { completed: 0, total: 0, progress: 0 };
                                 return (
-                                    <Card key={task.title} className="relative border-2">
-                                        <CardHeader className="items-center">
+                                    <Card key={task.title} className="relative border-2 overflow-hidden">
+                                        <ProgressRing progress={progress} completed={completed} total={total} />
+                                        <CardHeader className="items-center pt-12">
                                             <Icon className="h-12 w-12 text-primary" />
                                             <CardTitle className="pt-2 text-center">{task.title}</CardTitle>
                                         </CardHeader>
