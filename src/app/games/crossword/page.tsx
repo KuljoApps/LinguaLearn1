@@ -47,28 +47,21 @@ const CrosswordPage = () => {
     const [shuffledOptions, setShuffledOptions] = useState<Record<number, string[]>>({});
 
     const generateGrid = useCallback((p: CrosswordPuzzle): Cell[][] => {
-        const newGrid: Cell[][] = Array(p.gridSize).fill(null).map(() => Array(p.gridSize).fill(null).map(() => ({ char: '', number: null, isInput: false })));
+        const newGrid: Cell[][] = Array(p.gridHeight || p.gridSize).fill(null).map(() => Array(p.gridSize).fill(null).map(() => ({ char: '', number: null, isInput: false })));
         p.clues.forEach(clue => {
             let { x, y } = clue;
-            
-            // Prevent out-of-bounds access at the start
-            if (y >= p.gridSize || x >= p.gridSize) {
-                console.error(`Clue ${clue.number} starting at (${x},${y}) is out of bounds for grid size ${p.gridSize}.`);
-                return; // Skip this clue to prevent crash
+            if (y >= (p.gridHeight || p.gridSize) || x >= p.gridSize) {
+                console.error(`Clue ${clue.number} starting at (${x},${y}) is out of bounds.`);
+                return;
             }
-
             if (newGrid[y][x].number === null) {
                 newGrid[y][x].number = clue.number;
             }
             for (let i = 0; i < clue.answer.length; i++) {
-                // Check bounds inside the loop *before* accessing the grid
-                if (y < p.gridSize && x < p.gridSize) {
+                 if (y < (p.gridHeight || p.gridSize) && x < p.gridSize) {
                     newGrid[y][x].isInput = true;
                     newGrid[y][x].char = clue.answer[i];
                     if (clue.direction === 'across') x++; else y++;
-                } else {
-                    console.error(`Clue '${clue.answer}' goes out of bounds.`);
-                    break;
                 }
             }
         });
@@ -120,10 +113,11 @@ const CrosswordPage = () => {
         const newCellStates: Record<string, CellStatus> = {};
         let allCorrect = true;
 
-        for (let y = 0; y < puzzle.gridSize; y++) {
+        const gridSize = puzzle.gridHeight || puzzle.gridSize;
+        for (let y = 0; y < gridSize; y++) {
             for (let x = 0; x < puzzle.gridSize; x++) {
                 const key = `${y}-${x}`;
-                if (grid[y][x].isInput) {
+                if (grid[y] && grid[y][x] && grid[y][x].isInput) {
                     const userAnswer = userAnswers[key] || '';
                     const correctAnswer = grid[y][x].char;
                     if (userAnswer.toUpperCase() === correctAnswer.toUpperCase()) {
@@ -144,7 +138,7 @@ const CrosswordPage = () => {
     
     const getUIText = (key: keyof typeof uiTexts) => uiTexts[key][language] || uiTexts[key]['en'];
     
-    if (!puzzle) {
+    if (!puzzle || !grid.length) {
         return null;
     }
 
@@ -170,7 +164,7 @@ const CrosswordPage = () => {
                         <Button onClick={initializeGame}>{getUIText('playAgain')}</Button>
                     </div>
                 ) : (
-                    <div className="flex flex-col gap-6 items-center justify-center w-full">
+                    <div className="flex flex-col items-center gap-6">
                         <div className="grid gap-0 bg-background" style={{gridTemplateColumns: `repeat(${puzzle.gridSize}, minmax(0, 1fr))`}}>
                             {grid.map((row, y) => row.map((cell, x) => {
                                 const key = `${y}-${x}`;
@@ -231,7 +225,7 @@ const CrosswordPage = () => {
                                 );
                             }))}
                         </div>
-                        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+                        <div className="w-full max-w-xl grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
                             <div>
                                 <h3 className="font-bold text-lg">{getUIText('across')}</h3>
                                 <div className="space-y-1 mt-2">
