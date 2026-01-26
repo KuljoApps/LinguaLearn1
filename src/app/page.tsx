@@ -181,21 +181,23 @@ export default function Home() {
                         </Link>
                     </div>
                     <div className="flex flex-col space-y-2">
-                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "w-full gap-2 items-end", "rounded-xl", theme ? theme.className : defaultThemeClasses, "font-normal", isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
-                            <PencilLine className={cn("mr-2 h-5 w-5" /* ICON SIZE */, theme ? 'text-white' : 'text-deep-purple')} />
-                             <span className={cn("flex items-center", theme ? 'text-white' : '')}>
-                                <span>Fill</span>
-                                <span className="relative inline-block h-6 w-12 text-center overflow-hidden">
-                                    <span
-                                        key={fillTheGapText}
-                                        className="absolute inset-0 flex items-end justify-center animate-text-fall-down"
-                                    >
-                                        {fillTheGapText}
+                        <Link href="/fill-the-gap" passHref>
+                            <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "w-full gap-2 items-end", "rounded-xl", theme ? theme.className : defaultThemeClasses, "font-normal", isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
+                                <PencilLine className={cn("mr-2 h-5 w-5" /* ICON SIZE */, theme ? 'text-white' : 'text-deep-purple')} />
+                                <span className={cn("flex items-center", theme ? 'text-white' : '')}>
+                                    <span>Fill</span>
+                                    <span className="relative inline-block h-6 w-12 text-center overflow-hidden">
+                                        <span
+                                            key={fillTheGapText}
+                                            className="absolute inset-0 flex items-end justify-center animate-text-fall-down"
+                                        >
+                                            {fillTheGapText}
+                                        </span>
                                     </span>
+                                    <span>Gap</span>
                                 </span>
-                                <span>Gap</span>
-                            </span>
-                        </Button>
+                            </Button>
+                        </Link>
                         <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "w-full gap-2", "rounded-xl", theme ? theme.className : defaultThemeClasses, "font-normal", isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
                             <BookOpenText className={cn("mr-2 h-5 w-5" /* ICON SIZE */, theme ? 'text-white' : 'text-deep-purple')} />
                             <span className={cn("flex items-baseline", theme ? 'text-white' : '')}>
@@ -282,3 +284,4 @@ export default function Home() {
         </main>
     );
 }
+    
