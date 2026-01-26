@@ -1,15 +1,58 @@
 "use client";
 
-import { ArrowLeft, PencilLine, FileText, MessagesSquare, AlignLeft } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { ArrowLeft, PencilLine, FileText, MessagesSquare, AlignLeft, LayoutGrid, List } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
+
+const VIEW_MODE_KEY = 'fillTheGapViewMode';
+
+const tasks = [
+    {
+        href: '/fill-the-gap/gap-words',
+        icon: FileText,
+        title: 'Gap in the Words',
+        description: 'Complete words by filling in the missing letters. A great way to practice spelling.',
+    },
+    {
+        href: '/fill-the-gap/gap-sentences',
+        icon: MessagesSquare,
+        title: 'Gap in the Sentences',
+        description: 'Complete sentences by filling in the missing words. Test your grammar and vocabulary.',
+    },
+    {
+        href: '/fill-the-gap/gap-text',
+        icon: AlignLeft,
+        title: 'Gap in the Text',
+        description: 'Complete the missing sentence in the text by choosing the best option to test your understanding of its coherence and logical flow.',
+    },
+];
 
 export default function FillTheGapPage() {
+    const [view, setView] = useState<'grid' | 'list'>('list');
+
+    useEffect(() => {
+        const savedView = localStorage.getItem(VIEW_MODE_KEY) as 'grid' | 'list' | null;
+        if (savedView) {
+            setView(savedView);
+        }
+    }, []);
+
+    const handleViewToggle = () => {
+        const newView = view === 'grid' ? 'list' : 'grid';
+        setView(newView);
+        localStorage.setItem(VIEW_MODE_KEY, newView);
+    };
+
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
-            <Card className="w-full max-w-md shadow-2xl text-center">
+            <Card className={cn(
+                "w-full max-w-md shadow-2xl text-center",
+                view === 'grid' && "flex flex-col h-[90vh]"
+            )}>
                 <CardHeader className="text-center p-6 pb-2">
                     <div className="flex items-center justify-center gap-4">
                         <PencilLine className="h-8 w-8" />
@@ -17,52 +60,74 @@ export default function FillTheGapPage() {
                             Fill the{' '}
                             <span className="relative inline-block">
                                 Gap
-                                <span className="absolute right-[16px] -top-0.5 text-sm font-semibold tracking-normal text-amber">
+                                <span className="absolute right-[-24px] -bottom-3.5 text-sm font-semibold tracking-normal text-amber">
                                     Lite
                                 </span>
                             </span>
                         </h1>
                     </div>
                 </CardHeader>
-                <CardContent className="flex flex-col space-y-2 p-6 pt-0 pb-4">
+                 <CardContent className={cn(
+                    "p-6 pt-0 pb-4",
+                    view === 'grid' && "flex-1 overflow-y-auto"
+                )}>
                     <p className="text-muted-foreground text-center pb-4">
                         Practice your language skills by filling in the missing parts.
                     </p>
-                    <div>
-                        <Link href="/fill-the-gap/gap-words" passHref>
-                            <Button className="w-full h-16 text-lg" size="lg">
-                                <FileText className="mr-2 h-5 w-5" />
-                                Gap in the Words
-                            </Button>
-                        </Link>
-                         <p className="text-xs italic text-muted-foreground mt-1 px-2">Complete words by filling in the missing letters. A great way to practice spelling.</p>
-                    </div>
-                    <div>
-                        <Link href="/fill-the-gap/gap-sentences" passHref>
-                            <Button className="w-full h-16 text-lg" size="lg">
-                                <MessagesSquare className="mr-2 h-5 w-5" />
-                                Gap in the Sentences
-                            </Button>
-                        </Link>
-                        <p className="text-xs italic text-muted-foreground mt-1 px-2">Complete sentences by filling in the missing words. Test your grammar and vocabulary.</p>
-                    </div>
-                    <div>
-                        <Link href="/fill-the-gap/gap-text" passHref>
-                            <Button className="w-full h-16 text-lg" size="lg">
-                                <AlignLeft className="mr-2 h-5 w-5" />
-                                Gap in the Text
-                            </Button>
-                        </Link>
-                         <p className="text-xs italic text-muted-foreground mt-1 px-2">Uzupełnij brakujące zdanie w tekście, wybierając najlepszą opcję, aby sprawdzić zrozumienie jego spójności i logicznego przepływu.</p>
-                    </div>
+                    {view === 'list' ? (
+                        <div className="flex flex-col space-y-2">
+                            {tasks.map((task) => (
+                                <div key={task.href}>
+                                    <Link href={task.href} passHref>
+                                        <Button className="w-full h-16 text-lg" size="lg">
+                                            <task.icon className="mr-2 h-5 w-5" />
+                                            {task.title}
+                                        </Button>
+                                    </Link>
+                                    <p className="text-xs italic text-muted-foreground mt-1 px-2">{task.description}</p>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {tasks.map((task) => {
+                                const Icon = task.icon;
+                                return (
+                                    <Card key={task.title} className="relative border-2">
+                                        <CardHeader className="items-center">
+                                            <Icon className="h-12 w-12 text-primary" />
+                                            <CardTitle className="pt-2 text-center">{task.title}</CardTitle>
+                                        </CardHeader>
+                                        <CardContent>
+                                            <p className="text-sm text-center text-muted-foreground h-20">{task.description}</p>
+                                        </CardContent>
+                                        <CardFooter>
+                                            <Link href={task.href} className="w-full">
+                                                <Button className="w-full">Start</Button>
+                                            </Link>
+                                        </CardFooter>
+                                    </Card>
+                                );
+                            })}
+                        </div>
+                    )}
                 </CardContent>
-                <CardFooter className="flex flex-col p-6 pt-4 gap-4">
+                <CardFooter className={cn(
+                    "flex flex-col p-6 pt-4 gap-4",
+                    view === 'grid' && "mt-auto"
+                )}>
                     <Separator />
-                     <Link href="/" passHref>
-                        <Button variant="outline">
-                            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Home
+                     <div className="flex justify-center gap-4">
+                         <Link href="/" passHref>
+                            <Button variant="outline">
+                                <ArrowLeft className="mr-2 h-4 w-4" /> Back to Home
+                            </Button>
+                        </Link>
+                        <Button variant="outline" onClick={handleViewToggle} className="gap-2">
+                            {view === 'grid' ? <List className="h-4 w-4" /> : <LayoutGrid className="h-4 w-4" />}
+                            <span>View</span>
                         </Button>
-                    </Link>
+                    </div>
                 </CardFooter>
             </Card>
         </main>
