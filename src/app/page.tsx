@@ -23,7 +23,6 @@ export default function Home() {
     const [showRateDialog, setShowRateDialog] = useState(false);
     const [newAchievementsCount, setNewAchievementsCount] = useState(0);
     const [theme, setTheme] = useState<AppTheme | null>(null);
-    const [animatedButtonIndex, setAnimatedButtonIndex] = useState<number | null>(null);
     const pathname = usePathname();
 
     useEffect(() => {
@@ -61,26 +60,6 @@ export default function Home() {
             window.removeEventListener('theme-changed', handleStateUpdate);
         };
     }, [pathname]);
-
-    useEffect(() => {
-        let interval: NodeJS.Timeout | null = null;
-
-        if (theme?.className.includes('bg-gradient')) {
-            setAnimatedButtonIndex(Math.floor(Math.random() * 5));
-
-            interval = setInterval(() => {
-                setAnimatedButtonIndex(Math.floor(Math.random() * 5));
-            }, 2000);
-        } else {
-            setAnimatedButtonIndex(null);
-        }
-
-        return () => {
-            if (interval) {
-                clearInterval(interval);
-            }
-        };
-    }, [theme]);
 
     const handleLanguageChange = (lang: 'en' | 'fr' | 'de' | 'it' | 'es') => {
         setLanguage(lang);
@@ -147,28 +126,28 @@ export default function Home() {
                 <CardContent className="flex flex-col space-y-4 p-6 pt-0 pb-4">
                     <div className="grid grid-cols-2 gap-4">
                         <Link href="/quizzes" passHref>
-                             <Button variant={theme ? undefined : "outline"} className={cn(buttonBaseClasses, squareButtonClasses, "rounded-xl", theme ? theme.className : defaultThemeClasses, isGradientTheme && animatedButtonIndex === 0 && 'bg-[length:300%_300%] animate-gradient-flow')}>
+                             <Button variant={theme ? undefined : "outline"} className={cn(buttonBaseClasses, squareButtonClasses, "rounded-xl", theme ? theme.className : defaultThemeClasses, isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
                                 <LayoutGrid className={cn("h-12 w-12", theme ? 'text-white' : 'text-deep-purple')} />
                                 <span className={cn(theme ? 'text-white' : '')}>Quizzes</span>
                             </Button>
                         </Link>
                          <Link href="/games" passHref>
-                            <Button variant={theme ? undefined : "outline"} className={cn(buttonBaseClasses, squareButtonClasses, "rounded-xl", theme ? theme.className : defaultThemeClasses, isGradientTheme && animatedButtonIndex === 1 && 'bg-[length:300%_300%] animate-gradient-flow')}>
+                            <Button variant={theme ? undefined : "outline"} className={cn(buttonBaseClasses, squareButtonClasses, "rounded-xl", theme ? theme.className : defaultThemeClasses, isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
                                 <Gamepad2 className={cn("h-12 w-12", theme ? 'text-white' : 'text-deep-purple')} />
                                 <span className={cn(theme ? 'text-white' : '')}>Games</span>
                             </Button>
                         </Link>
                     </div>
                     <div className="flex flex-col space-y-2">
-                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-xl", theme ? theme.className : defaultThemeClasses, isGradientTheme && animatedButtonIndex === 2 && 'bg-[length:300%_300%] animate-gradient-flow')}>
+                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-xl", theme ? theme.className : defaultThemeClasses, isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
                             <PencilLine className={cn("mr-2 h-5 w-5", theme ? 'text-white' : 'text-deep-purple')} />
                             <span className={cn(theme ? 'text-white' : '')}>Fill the Gap</span>
                         </Button>
-                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-xl", theme ? theme.className : defaultThemeClasses, isGradientTheme && animatedButtonIndex === 3 && 'bg-[length:300%_300%] animate-gradient-flow')}>
+                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-xl", theme ? theme.className : defaultThemeClasses, isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
                             <BookOpenText className={cn("mr-2 h-5 w-5", theme ? 'text-white' : 'text-deep-purple')} />
                             <span className={cn(theme ? 'text-white' : '')}>Reading</span>
                         </Button>
-                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-xl", theme ? theme.className : defaultThemeClasses, isGradientTheme && animatedButtonIndex === 4 && 'bg-[length:300%_300%] animate-gradient-flow')}>
+                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-xl", theme ? theme.className : defaultThemeClasses, isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
                             <Ear className={cn("mr-2 h-5 w-5", theme ? 'text-white' : 'text-deep-purple')} />
                             <span className={cn(theme ? 'text-white' : '')}>Listening</span>
                         </Button>
