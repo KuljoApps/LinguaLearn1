@@ -205,7 +205,7 @@ const CrosswordPage = () => {
                                                 <div className="space-y-2">
                                                     <p className="text-sm font-semibold">{startingClue.clue}</p>
                                                     <div className="flex flex-col gap-1">
-                                                        {(shuffledOptions[startingClue.number] || []).map(option => (
+                                                        {(shuffledOptions[startingClue.number] || []).map((option: string) => (
                                                             <Button
                                                                 key={option}
                                                                 variant="outline"
