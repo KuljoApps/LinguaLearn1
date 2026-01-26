@@ -2,6 +2,7 @@ export interface CrosswordClue {
   number: number;
   clue: string;
   answer: string;
+  options: string[];
   x: number;
   y: number;
   direction: 'across' | 'down';
