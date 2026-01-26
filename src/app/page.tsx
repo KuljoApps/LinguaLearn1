@@ -23,6 +23,7 @@ export default function Home() {
     const [showRateDialog, setShowRateDialog] = useState(false);
     const [newAchievementsCount, setNewAchievementsCount] = useState(0);
     const [theme, setTheme] = useState<AppTheme | null>(null);
+    const [fillTheGapText, setFillTheGapText] = useState('the');
     const pathname = usePathname();
 
     useEffect(() => {
@@ -54,10 +55,15 @@ export default function Home() {
         window.addEventListener('achievements-count-changed', updateAchievementCount);
         window.addEventListener('theme-changed', handleStateUpdate);
 
+        const gapInterval = setInterval(() => {
+            setFillTheGapText(prev => (prev === 'the' ? '___' : 'the'));
+        }, 5000);
+
         return () => {
             window.removeEventListener('language-changed', handleStateUpdate);
             window.removeEventListener('achievements-count-changed', updateAchievementCount);
             window.removeEventListener('theme-changed', handleStateUpdate);
+            clearInterval(gapInterval);
         };
     }, [pathname]);
 
@@ -141,7 +147,18 @@ export default function Home() {
                     <div className="flex flex-col space-y-2">
                         <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-xl", theme ? theme.className : defaultThemeClasses, "font-normal", isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
                             <PencilLine className={cn("mr-2 h-5 w-5", theme ? 'text-white' : 'text-deep-purple')} />
-                            <span className={cn(theme ? 'text-white' : '')}>Fill the Gap</span>
+                             <span className={cn("flex items-center gap-1", theme ? 'text-white' : '')}>
+                                <span>Fill</span>
+                                <span className="relative inline-block h-6 w-12 text-center overflow-hidden">
+                                    <span
+                                        key={fillTheGapText}
+                                        className="absolute inset-0 flex items-center justify-center animate-text-fall-down"
+                                    >
+                                        {fillTheGapText}
+                                    </span>
+                                </span>
+                                <span>Gap</span>
+                            </span>
                         </Button>
                         <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-xl", theme ? theme.className : defaultThemeClasses, "font-normal", isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
                             <BookOpenText className={cn("mr-2 h-5 w-5", theme ? 'text-white' : 'text-deep-purple')} />
