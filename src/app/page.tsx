@@ -24,7 +24,7 @@ export default function Home() {
     const [newAchievementsCount, setNewAchievementsCount] = useState(0);
     const [theme, setTheme] = useState<AppTheme | null>(null);
     const [fillTheGapText, setFillTheGapText] = useState('the');
-    const [isReadingAnimating, setIsReadingAnimating] = useState(false);
+    const [showReadingDots, setShowReadingDots] = useState(false);
     const pathname = usePathname();
 
     useEffect(() => {
@@ -60,23 +60,23 @@ export default function Home() {
             setFillTheGapText(prev => (prev === 'the' ? '___' : 'the'));
         }, 5000);
 
-        let readingInterval: NodeJS.Timeout;
-        const readingTimeout = setTimeout(() => {
-            const runAnimation = () => {
-                setIsReadingAnimating(true);
-                setTimeout(() => setIsReadingAnimating(false), 3000);
-            };
-            runAnimation(); // Initial run at t=5s
-            readingInterval = setInterval(runAnimation, 10000);
-        }, 5000); // 5s offset
+        const readingInterval = setInterval(() => {
+            setShowReadingDots(true);
+            setTimeout(() => setShowReadingDots(false), 3000);
+        }, 10000);
+
+        const initialReadingTimeout = setTimeout(() => {
+            setShowReadingDots(true);
+            setTimeout(() => setShowReadingDots(false), 3000);
+        }, 5000);
 
         return () => {
             window.removeEventListener('language-changed', handleStateUpdate);
             window.removeEventListener('achievements-count-changed', updateAchievementCount);
             window.removeEventListener('theme-changed', handleStateUpdate);
             clearInterval(gapInterval);
-            clearTimeout(readingTimeout);
             clearInterval(readingInterval);
+            clearTimeout(initialReadingTimeout);
         };
     }, [pathname]);
 
@@ -142,7 +142,7 @@ export default function Home() {
                         {getWelcomeMessage()}
                     </p>
                 </CardHeader>
-                <CardContent className="flex flex-col space-y-4 p-6 pt-0 pb-4">
+                <CardContent data-tutorial-id="home-main-buttons" className="flex flex-col space-y-4 p-6 pt-0 pb-4">
                     <div className="grid grid-cols-2 gap-4">
                         <Link href="/quizzes" passHref>
                              <Button variant={theme ? undefined : "outline"} className={cn(buttonBaseClasses, squareButtonClasses, "rounded-xl", theme ? theme.className : defaultThemeClasses, "font-normal", isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
@@ -158,7 +158,7 @@ export default function Home() {
                         </Link>
                     </div>
                     <div className="flex flex-col space-y-2">
-                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "text-lg", "rounded-xl", theme ? theme.className : defaultThemeClasses, "font-normal", isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
+                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-xl", theme ? theme.className : defaultThemeClasses, "font-normal", isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
                             <PencilLine className={cn("mr-2 h-5 w-5", theme ? 'text-white' : 'text-deep-purple')} />
                              <span className={cn("flex items-baseline", theme ? 'text-white' : '')}>
                                 <span>Fill</span>
@@ -175,17 +175,15 @@ export default function Home() {
                         </Button>
                         <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-xl", theme ? theme.className : defaultThemeClasses, "font-normal", isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
                             <BookOpenText className={cn("mr-2 h-5 w-5", theme ? 'text-white' : 'text-deep-purple')} />
-                            <span className={cn("flex items-baseline", theme ? 'text-white' : '')}>
+                            <span className={cn("flex items-center", theme ? 'text-white' : '')}>
                                 <span>Reading</span>
-                                <span className="flex w-6 items-end justify-start pl-1">
-                                    {isReadingAnimating && (
-                                        <>
-                                            <span className="w-1 h-1 bg-current rounded-full animate-dancing-dots" style={{ animationDelay: '0s' }}></span>
-                                            <span className="w-1 h-1 bg-current rounded-full animate-dancing-dots ml-0.5" style={{ animationDelay: '0.2s' }}></span>
-                                            <span className="w-1 h-1 bg-current rounded-full animate-dancing-dots ml-0.5" style={{ animationDelay: '0.4s' }}></span>
-                                        </>
-                                    )}
-                                </span>
+                                {showReadingDots && (
+                                    <span className="flex pl-1">
+                                        <span className="animate-dancing-dots" style={{ animationDelay: '0s' }}>.</span>
+                                        <span className="animate-dancing-dots" style={{ animationDelay: '0.2s' }}>.</span>
+                                        <span className="animate-dancing-dots" style={{ animationDelay: '0.4s' }}>.</span>
+                                    </span>
+                                )}
                             </span>
                         </Button>
                         <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-xl", theme ? theme.className : defaultThemeClasses, "font-normal", isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>

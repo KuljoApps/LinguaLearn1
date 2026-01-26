@@ -18,7 +18,7 @@ interface Step {
 
 const tutorialBubbleOffsets: { [key: string]: number } = {
     'language-switcher': 14,
-    'quiz-buttons': 10,
+    'home-main-buttons': 10,
     'learning-button': 36,
     'toolbar': 14,
     'settings-switches': 0,
@@ -68,9 +68,9 @@ const initialSteps: Step[] = [
         path: '/',
     },
     { // Slajd 3
-        elementId: 'quiz-buttons',
-        title: 'Główne quizy',
-        description: 'To serce aplikacji. Wybierz jeden z\u00A0pięciu trybów, aby sprawdzić swoją wiedzę w\u00A0różnych kategoriach.',
+        elementId: 'home-main-buttons',
+        title: 'Główne tryby nauki',
+        description: 'To serce aplikacji. Znajdziesz tu quizy, gry i\u00A0interaktywne ćwiczenia, które pomogą Ci w\u00A0nauce.',
         path: '/',
     },
     { // Slajd 4
