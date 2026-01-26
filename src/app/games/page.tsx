@@ -9,12 +9,12 @@ import { getFavoriteGames, toggleFavoriteGame } from '@/lib/storage';
 import { cn } from '@/lib/utils';
 
 const allGames = [
-    { title: 'Memory', href: '/games/memory', icon: Brain, description: 'Match pairs of words and their translations. A classic game to test and improve your vocabulary retention.' },
-    { title: 'Crossword', href: '/games/crossword', icon: Puzzle, description: 'Solve the crossword puzzle where clues are in one language and answers in another. A fun vocabulary challenge.' },
-    { title: 'Hangman', href: '/games/hangman', icon: Keyboard, description: 'Guess the hidden word letter by letter based on a Polish hint. A classic word-guessing game.' },
-    { title: 'Odd One Out', href: '/games/odd-one-out', icon: EyeOff, description: 'From a group of words, find the one that doesn\'t belong to the category. A test of logic and vocabulary.' },
-    { title: 'Translation Race', href: '/games/translation-race', icon: Timer, description: 'Translate as many words as you can in 60 seconds. A fast-paced challenge for quick thinkers.' },
-    { title: 'Synonym Match', href: '/games/synonym-match', icon: ArrowRightLeft, description: 'Match words from two columns that have the same or similar meaning. A great way to expand your vocabulary.' },
+    { title: 'Memory', href: '/games/memory', icon: Brain, description: 'Match pairs of words and their translations. A classic game to test and improve your vocabulary retention.' },
+    { title: 'Crossword', href: '/games/crossword', icon: Puzzle, description: 'Solve the crossword puzzle where clues are in one language and answers in another. A fun vocabulary challenge.' },
+    { title: 'Hangman', href: '/games/hangman', icon: Keyboard, description: 'Guess the hidden word letter by letter based on a Polish hint. A classic word-guessing game.' },
+    { title: 'Odd One Out', href: '/games/odd-one-out', icon: EyeOff, description: 'From a group of words, find the one that doesn\'t belong to the category. A test of logic and vocabulary.' },
+    { title: 'Translation Race', href: '/games/translation-race', icon: Timer, description: 'Translate as many words as you can in 60 seconds. A fast-paced challenge for quick thinkers.' },
+    { title: 'Synonym Match', href: '/games/synonym-match', icon: ArrowRightLeft, description: 'Match words from two columns that have the same or similar meaning. A great way to expand your vocabulary.' },
 ]
 
 const SCROLL_POSITION_KEY = 'gamesScrollPosition';
@@ -90,11 +90,19 @@ export default function GamesPage() {
                 <CardHeader className="text-center p-6">
                     <div className="flex items-center justify-center gap-4">
                         <Gamepad2 className="h-8 w-8" />
-                        <h1 className="text-3xl font-bold tracking-tight">Game Center</h1>
+                        <h1 className="text-3xl font-bold tracking-tight">
+                            Game{' '}
+                            <span className="relative inline-block">
+                                Center
+                                <span className="absolute -right-1 -bottom-3 text-sm font-semibold tracking-normal text-amber">
+                                Lite
+                                </span>
+                            </span>
+                        </h1>
                     </div>
                 </CardHeader>
                 <CardContent ref={scrollContainerRef} className="px-6 pb-6 pt-0 max-h-[70vh] overflow-y-auto">
-                    <p className="text-muted-foreground text-center pb-4">Choose a game to practice your language skills in a fun way!</p>
+                    <p className="text-muted-foreground text-center pb-4">Choose a game to practice your language skills in a fun way!</p>
                     <div className={cn(
                         view === 'grid' 
                         ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4' 
@@ -154,7 +162,7 @@ export default function GamesPage() {
                                         <CardTitle className="pt-2 text-center">{game.title}</CardTitle>
                                     </CardHeader>
                                     <CardContent>
-                                        <p className="text-sm text-center text-muted-foreground h-20">{game.description.replace(/ a /g, ' a ').replace(/ i /g, ' i ').replace(/ o /g, ' o ').replace(/ u /g, ' u ').replace(/ w /g, ' w ').replace(/ z /g, ' z ')}</p>
+                                        <p className="text-sm text-center text-muted-foreground h-20">{game.description.replace(/ a /g, ' a\u00A0').replace(/ i /g, ' i\u00A0').replace(/ o /g, ' o\u00A0').replace(/ u /g, ' u\u00A0').replace(/ w /g, ' w\u00A0').replace(/ z /g, ' z\u00A0')}</p>
                                     </CardContent>
                                     <CardFooter>
                                         <Link href={game.href} className="w-full" onClick={handleGameClick}>
