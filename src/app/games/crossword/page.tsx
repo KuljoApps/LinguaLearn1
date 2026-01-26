@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
@@ -52,24 +51,25 @@ const CrosswordPage = () => {
         const width = p.gridSize;
         const newGrid: Cell[][] = Array(height).fill(null).map(() => Array(width).fill(null).map(() => ({ char: '', number: null, isInput: false })));
 
-        p.clues.forEach(clue => {
+        p.clues.forEach((clue: CrosswordClue) => {
             let { x, y } = clue;
 
-            if (y >= height || x >= width) {
-                console.error(`Clue ${clue.number} starting at (${x},${y}) is out of bounds.`);
+            if (y >= height || x >= width || !newGrid[y] || !newGrid[y][x]) {
+                console.error(`Clue ${clue.number} starting at (${x},${y}) is out of bounds for a ${width}x${height} grid.`);
                 return;
             }
 
-            if (newGrid[y] && newGrid[y][x] && newGrid[y][x].number === null) {
+            if (newGrid[y][x].number === null) {
                 newGrid[y][x].number = clue.number;
             }
-            
             for (let i = 0; i < clue.answer.length; i++) {
                  if (y < height && x < width) {
-                    if (newGrid[y] && newGrid[y][x]) {
-                        newGrid[y][x].isInput = true;
-                        newGrid[y][x].char = clue.answer[i];
-                    }
+                    if (!newGrid[y] || !newGrid[y][x]) {
+                       console.error(`Invalid coordinates during word placement for clue ${clue.number}: (${x},${y})`);
+                       break; 
+                   }
+                    newGrid[y][x].isInput = true;
+                    newGrid[y][x].char = clue.answer[i];
                     if (clue.direction === 'across') x++; else y++;
                 }
             }
@@ -121,7 +121,6 @@ const CrosswordPage = () => {
         if (!puzzle) return;
         const newCellStates: Record<string, CellStatus> = {};
         let allCorrect = true;
-
         const height = puzzle.gridHeight || puzzle.gridSize;
         const width = puzzle.gridSize;
 
@@ -153,8 +152,8 @@ const CrosswordPage = () => {
         return null;
     }
 
-    const acrossClues = puzzle.clues.filter(c => c.direction === 'across').sort((a,b) => a.number - b.number);
-    const downClues = puzzle.clues.filter(c => c.direction === 'down').sort((a,b) => a.number - b.number);
+    const acrossClues = puzzle.clues.filter((c: CrosswordClue) => c.direction === 'across').sort((a: CrosswordClue, b: CrosswordClue) => a.number - b.number);
+    const downClues = puzzle.clues.filter((c: CrosswordClue) => c.direction === 'down').sort((a: CrosswordClue, b: CrosswordClue) => a.number - b.number);
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
@@ -179,11 +178,9 @@ const CrosswordPage = () => {
                         <div className="grid bg-background" style={{gridTemplateColumns: `repeat(${puzzle.gridSize}, minmax(0, 1fr))`}}>
                             {grid.map((row, y) => row.map((cell, x) => {
                                 const key = `${y}-${x}`;
-                                const startingClue = puzzle.clues.find(c => c.x === x && c.y === y);
+                                const startingClue = puzzle.clues.find((c: CrosswordClue) => c.x === x && c.y === y);
                                 const cellValue = userAnswers[key] || '';
                                 const cellStatus = cellStates[key] || 'default';
-                                
-                                const cellBaseClasses = "relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 text-center text-lg sm:text-2xl font-bold border rounded-none uppercase transition-colors";
                                 
                                 if (startingClue) {
                                     return (
@@ -193,7 +190,7 @@ const CrosswordPage = () => {
                                                     disabled={!cell.isInput}
                                                     onClick={() => handleTriggerClick(startingClue.number, startingClue.options)}
                                                     className={cn(
-                                                        cellBaseClasses,
+                                                        "relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 text-center text-lg sm:text-2xl font-bold border rounded-none uppercase transition-colors",
                                                         !cell.isInput && 'border-muted/20 bg-muted/20 cursor-default',
                                                         cell.isInput && 'border-primary bg-primary/10 cursor-pointer hover:bg-primary/20',
                                                         cellStatus === 'correct' && 'border-success bg-success/10 text-success-foreground',
@@ -227,7 +224,7 @@ const CrosswordPage = () => {
 
                                 return (
                                     <div key={key} className={cn(
-                                        cellBaseClasses,
+                                        "flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 text-center text-lg sm:text-2xl font-bold border rounded-none uppercase",
                                         !cell.isInput && 'border-muted/20 bg-muted/20',
                                         cell.isInput && 'border-input',
                                         cellStatus === 'correct' && 'border-success bg-success/10 text-success-foreground',
@@ -242,13 +239,13 @@ const CrosswordPage = () => {
                             <div>
                                 <h3 className="font-bold text-lg">{getUIText('across')}</h3>
                                 <div className="space-y-1 mt-2">
-                                {acrossClues.map(c => <p key={`across-${c.number}`} className="text-muted-foreground text-sm">{c.number}. {c.clue}</p>)}
+                                {acrossClues.map((c: CrosswordClue) => <p key={`across-${c.number}`} className="text-muted-foreground text-sm">{c.number}. {c.clue}</p>)}
                                 </div>
                             </div>
                             <div>
                                 <h3 className="font-bold text-lg">{getUIText('down')}</h3>
                                 <div className="space-y-1 mt-2">
-                                {downClues.map(c => <p key={`down-${c.number}`} className="text-muted-foreground text-sm">{c.number}. {c.clue}</p>)}
+                                {downClues.map((c: CrosswordClue) => <p key={`down-${c.number}`} className="text-muted-foreground text-sm">{c.number}. {c.clue}</p>)}
                                 </div>
                             </div>
                         </div>
