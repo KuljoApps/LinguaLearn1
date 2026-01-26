@@ -35,7 +35,7 @@ export default function SpeakerIdentificationPage() {
                             <Label htmlFor="speaker2">Speaker 2 (Man)</Label>
                         </div>
                     </RadioGroup>
-                    <Button disabled>Check</Button>
+                    <Button>Check</Button>
                 </CardContent>
                 <CardFooter className="flex justify-center p-6 border-t">
                     <Link href="/listening" passHref>

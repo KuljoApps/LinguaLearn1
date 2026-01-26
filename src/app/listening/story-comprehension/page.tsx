@@ -41,7 +41,7 @@ export default function StoryComprehensionPage() {
                             </div>
                         </RadioGroup>
                     </div>
-                    <Button disabled>Check</Button>
+                    <Button>Check</Button>
                 </CardContent>
                 <CardFooter className="flex justify-center p-6 border-t">
                     <Link href="/listening" passHref>

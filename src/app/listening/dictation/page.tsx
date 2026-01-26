@@ -24,7 +24,7 @@ export default function DictationPage() {
                         </Button>
                     </div>
                     <Textarea placeholder="Type what you hear..." />
-                    <Button disabled>Check</Button>
+                    <Button>Check</Button>
                 </CardContent>
                 <CardFooter className="flex justify-center p-6 border-t">
                     <Link href="/listening" passHref>

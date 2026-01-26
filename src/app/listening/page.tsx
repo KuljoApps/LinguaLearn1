@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { ArrowLeft, Ear, Keyboard, Puzzle, BookOpen, LayoutGrid, List, MapPin, Users, MessageCircleQuestion, AudioWaveform } from 'lucide-react';
+import { ArrowLeft, Ear, Keyboard, BookOpen, LayoutGrid, List, MapPin, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardFooter, CardTitle } from '@/components/ui/card';
@@ -36,18 +36,6 @@ const listeningTasks = [
         title: 'Speaker Identification',
         description: 'Wysłuchaj rozmowy i zidentyfikuj, który z mówców wypowiedział określoną frazę.',
     },
-    {
-        href: '/listening/intention-recognition',
-        icon: MessageCircleQuestion,
-        title: 'Intention Recognition',
-        description: 'Posłuchaj krótkiej wypowiedzi i określ intencję mówcy (np. pytanie, skarga, propozycja).',
-    },
-    {
-        href: '/listening/missing-word',
-        icon: AudioWaveform,
-        title: 'Missing Word',
-        description: 'Wysłuchaj zdania z brakującym słowem i wybierz poprawną opcję, aby je uzupełnić.',
-    },
 ];
 
 
@@ -79,7 +67,7 @@ export default function ListeningPage() {
                         <h1 className="text-3xl font-bold tracking-tight">
                              <span className="relative inline-block">
                                 Listening
-                                <span className="absolute right-[-1px] -bottom-[10px] text-sm font-semibold tracking-normal text-amber">
+                                <span className="absolute right-[-12px] -bottom-[11px] text-sm font-semibold tracking-normal text-amber">
                                 Lite
                                 </span>
                             </span>
