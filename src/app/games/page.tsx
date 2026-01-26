@@ -47,7 +47,7 @@ export default function GamesPage() {
                         <h1 className="text-3xl font-bold tracking-tight">Game Center</h1>
                     </div>
                 </CardHeader>
-                <CardContent ref={scrollContainerRef} className="p-6 max-h-[70vh] overflow-y-auto">
+                <CardContent ref={scrollContainerRef} className="px-6 pb-6 pt-0 max-h-[70vh] overflow-y-auto">
                     <p className="text-muted-foreground text-center pb-4">Choose a game to practice your language skills in a fun way!</p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {games.map((game) => {
