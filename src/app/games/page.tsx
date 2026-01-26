@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useMemo } from 'react';
-import { ArrowLeft, Gamepad2, Brain, Puzzle, Keyboard, EyeOff, Timer, ArrowRightLeft, Star } from 'lucide-react';
+import { ArrowLeft, Gamepad2, Brain, Puzzle, Keyboard, EyeOff, Timer, ArrowRightLeft, Star, List, LayoutGrid } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
@@ -31,6 +31,7 @@ const cardColors = [
 export default function GamesPage() {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const [favorites, setFavorites] = useState<string[]>([]);
+    const [view, setView] = useState<'grid' | 'list'>('grid');
 
     useEffect(() => {
         const container = scrollContainerRef.current;
@@ -83,18 +84,54 @@ export default function GamesPage() {
                 </CardHeader>
                 <CardContent ref={scrollContainerRef} className="px-6 pb-6 pt-0 max-h-[70vh] overflow-y-auto">
                     <p className="text-muted-foreground text-center pb-4">Choose a game to practice your language skills in a fun way!</p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className={cn(
+                        view === 'grid' 
+                        ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4' 
+                        : 'flex flex-col gap-2'
+                    )}>
                         {sortedGames.map((game) => {
                             const Icon = game.icon;
                             const isFavorite = favorites.includes(game.href);
                             const color = cardColors[allGames.findIndex(g => g.href === game.href) % cardColors.length];
+                            
+                            if (view === 'list') {
+                                return (
+                                    <Link key={game.title} href={game.href} onClick={handleGameClick} className="w-full">
+                                        <div className={cn("relative border-2 flex items-center p-2 justify-between rounded-lg", color.border, color.bg)}>
+                                            <div className="flex items-center gap-4">
+                                                <Icon className="h-8 w-8 text-primary" />
+                                                <h2 className="text-lg font-semibold">{game.title}</h2>
+                                            </div>
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                className="h-8 w-8 z-10"
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
+                                                    handleFavoriteToggle(game.href);
+                                                }}
+                                            >
+                                                <Star className={cn(
+                                                    "h-5 w-5 transition-colors",
+                                                    isFavorite ? "text-amber fill-amber" : "text-muted-foreground/50 hover:text-muted-foreground"
+                                                )} />
+                                            </Button>
+                                        </div>
+                                    </Link>
+                                )
+                            }
+
                             return (
                                 <Card key={game.title} className={cn("relative border-2", color.border, color.bg)}>
                                     <Button
                                         variant="ghost"
                                         size="icon"
                                         className="absolute top-2 right-2 z-10 h-8 w-8"
-                                        onClick={() => handleFavoriteToggle(game.href)}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            handleFavoriteToggle(game.href);
+                                        }}
                                     >
                                         <Star className={cn(
                                             "h-5 w-5 transition-colors",
@@ -118,13 +155,17 @@ export default function GamesPage() {
                         })}
                     </div>
                 </CardContent>
-                <CardFooter className="flex justify-center p-6 border-t">
+                <CardFooter className="flex justify-center p-6 border-t gap-4">
                     <Link href="/" passHref>
                         <Button variant="outline" className="gap-2">
                             <ArrowLeft className="h-4 w-4" /> 
                             <span>Back to Home</span>
                         </Button>
                     </Link>
+                    <Button variant="outline" onClick={() => setView(prev => prev === 'grid' ? 'list' : 'grid')} className="gap-2">
+                        {view === 'grid' ? <List className="h-4 w-4" /> : <LayoutGrid className="h-4 w-4" />}
+                        <span>View</span>
+                    </Button>
                 </CardFooter>
             </Card>
         </main>
