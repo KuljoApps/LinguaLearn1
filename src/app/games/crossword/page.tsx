@@ -170,8 +170,8 @@ const CrosswordPage = () => {
                         <Button onClick={initializeGame}>{getUIText('playAgain')}</Button>
                     </div>
                 ) : (
-                    <div className="flex flex-col md:flex-row gap-8 items-center md:items-start justify-center">
-                        <div className="grid bg-background" style={{gridTemplateColumns: `repeat(${puzzle.gridSize}, minmax(0, 1fr))`}}>
+                    <div className="flex flex-col gap-6 items-center justify-center w-full">
+                        <div className="grid gap-0 bg-background" style={{gridTemplateColumns: `repeat(${puzzle.gridSize}, minmax(0, 1fr))`}}>
                             {grid.map((row, y) => row.map((cell, x) => {
                                 const key = `${y}-${x}`;
                                 const startingClue = puzzle.clues.find(c => c.x === x && c.y === y);
@@ -231,18 +231,22 @@ const CrosswordPage = () => {
                                 );
                             }))}
                         </div>
-                        <div className="space-y-4 flex-1">
+                        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
                             <div>
                                 <h3 className="font-bold text-lg">{getUIText('across')}</h3>
+                                <div className="space-y-1 mt-2">
                                 {acrossClues.map(c => <p key={`across-${c.number}`} className="text-muted-foreground text-sm">{c.number}. {c.clue}</p>)}
+                                </div>
                             </div>
                             <div>
                                 <h3 className="font-bold text-lg">{getUIText('down')}</h3>
+                                <div className="space-y-1 mt-2">
                                 {downClues.map(c => <p key={`down-${c.number}`} className="text-muted-foreground text-sm">{c.number}. {c.clue}</p>)}
+                                </div>
                             </div>
-                            <div className="pt-4">
-                                <Button onClick={checkAnswers}>{getUIText('check')}</Button>
-                            </div>
+                        </div>
+                        <div className="pt-4">
+                            <Button onClick={checkAnswers}>{getUIText('check')}</Button>
                         </div>
                     </div>
                 )}
