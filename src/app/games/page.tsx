@@ -9,12 +9,12 @@ import { getFavoriteGames, toggleFavoriteGame } from '@/lib/storage';
 import { cn } from '@/lib/utils';
 
 const allGames = [
-    { title: 'Memory', href: '/games/memory', icon: Brain, description: 'Match pairs of words and their translations. A classic game to test and improve your vocabulary retention.' },
-    { title: 'Crossword', href: '/games/crossword', icon: Puzzle, description: 'Solve the crossword puzzle where clues are in one language and answers in another. A fun vocabulary challenge.' },
-    { title: 'Hangman', href: '/games/hangman', icon: Keyboard, description: 'Guess the hidden word letter by letter based on a Polish hint. A classic word-guessing game.' },
-    { title: 'Odd One Out', href: '/games/odd-one-out', icon: EyeOff, description: 'From a group of words, find the one that doesn\'t belong to the category. A test of logic and vocabulary.' },
-    { title: 'Translation Race', href: '/games/translation-race', icon: Timer, description: 'Translate as many words as you can in 60 seconds. A fast-paced challenge for quick thinkers.' },
-    { title: 'Synonym Match', href: '/games/synonym-match', icon: ArrowRightLeft, description: 'Match words from two columns that have the same or similar meaning. A great way to expand your vocabulary.' },
+    { title: 'Memory', href: '/games/memory', icon: Brain, description: 'Match pairs of words and their translations. A\u00A0classic game to test and improve your vocabulary retention.' },
+    { title: 'Crossword', href: '/games/crossword', icon: Puzzle, description: 'Solve the crossword puzzle where clues are in one language and answers in another. A\u00A0fun vocabulary challenge.' },
+    { title: 'Hangman', href: '/games/hangman', icon: Keyboard, description: 'Guess the hidden word letter by letter based on a\u00A0Polish hint. A\u00A0classic word-guessing game.' },
+    { title: 'Odd One Out', href: '/games/odd-one-out', icon: EyeOff, description: 'From a\u00A0group of words, find the one that doesn\'t belong to the category. A\u00A0test of logic and vocabulary.' },
+    { title: 'Translation Race', href: '/games/translation-race', icon: Timer, description: 'Translate as many words as you can in 60 seconds. A\u00A0fast-paced challenge for quick thinkers.' },
+    { title: 'Synonym Match', href: '/games/synonym-match', icon: ArrowRightLeft, description: 'Match words from two columns that have the same or similar meaning. A\u00A0great way to expand your vocabulary.' },
 ]
 
 const SCROLL_POSITION_KEY = 'gamesScrollPosition';
@@ -73,7 +73,7 @@ export default function GamesPage() {
                     </div>
                 </CardHeader>
                 <CardContent ref={scrollContainerRef} className="px-6 pb-6 pt-0 max-h-[70vh] overflow-y-auto">
-                    <p className="text-muted-foreground text-center pb-4">Choose a game to practice your language skills in a fun way!</p>
+                    <p className="text-muted-foreground text-center pb-4">Choose a\u00A0game to practice your language skills in a\u00A0fun way!</p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {sortedGames.map((game) => {
                             const Icon = game.icon;
