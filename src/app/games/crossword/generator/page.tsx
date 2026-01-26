@@ -72,7 +72,7 @@ const CrosswordGeneratorPage = () => {
     };
 
     const handleClueDataChange = (num: number, field: keyof ClueData, value: string | 'across' | 'down' | string[]) => {
-        const existingClue = clues.get(num) || { clue: '', answer: '', direction: 'across', options: ['', '', ''] };
+        const existingClue = clues.get(num) || { clue: '', answer: '', direction: 'across', options: ['', ''] };
         setClues(new Map(clues).set(num, { ...existingClue, [field]: value }));
     };
 
@@ -157,7 +157,7 @@ const CrosswordGeneratorPage = () => {
         if (numberedCells.size === 0) return <p className="text-sm text-muted-foreground text-center">Kliknij na komórkę i dodaj numerek, aby stworzyć hasło.</p>
 
         return Array.from(numberedCells).sort((a,b) => a - b).map(num => {
-            const clueData = clues.get(num) || { clue: '', answer: '', direction: 'across', options: ['', '', ''] };
+            const clueData = clues.get(num) || { clue: '', answer: '', direction: 'across', options: ['', ''] };
             return (
                 <div key={num} className="p-3 border rounded-md space-y-2">
                     <Label className="font-bold text-lg">Hasło #{num}</Label>
@@ -171,7 +171,7 @@ const CrosswordGeneratorPage = () => {
                     </Select>
                      <div className="space-y-1 pt-2">
                         <Label className="text-xs text-muted-foreground">Błędne odpowiedzi (opcje do wyboru)</Label>
-                        {[0, 1, 2].map(i => (
+                        {[0, 1].map(i => (
                             <Input key={i} placeholder={`Opcja ${i + 1}`} value={clueData.options[i]} onChange={(e) => {
                                 const newOptions = [...clueData.options];
                                 newOptions[i] = e.target.value;
