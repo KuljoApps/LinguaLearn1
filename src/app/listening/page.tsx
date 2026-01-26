@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { ArrowLeft, Ear, Mic, Keyboard, Puzzle, BookOpen, LayoutGrid, List } from 'lucide-react';
+import { ArrowLeft, Ear, Keyboard, Puzzle, BookOpen, LayoutGrid, List, MapPin, Users, MessageCircleQuestion, AudioWaveform } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardFooter, CardTitle } from '@/components/ui/card';
@@ -13,10 +13,10 @@ const VIEW_MODE_KEY = 'listeningViewMode';
 
 const listeningTasks = [
     {
-        href: '/listening/listen-and-repeat',
-        icon: Mic,
-        title: 'Listen & Repeat',
-        description: 'Powtórz usłyszane zdanie, aby ćwiczyć wymowę i intonację. System oceni Twoją dokładność.',
+        href: '/listening/story-comprehension',
+        icon: BookOpen,
+        title: 'Story Comprehension',
+        description: 'Wysłuchaj krótkiej historii, a następnie odpowiedz na pytania dotyczące jej treści, aby sprawdzić swoje rozumienie.',
     },
     {
         href: '/listening/dictation',
@@ -25,16 +25,28 @@ const listeningTasks = [
         description: 'Zapisz zdanie, które usłyszysz. Doskonałe ćwiczenie na rozumienie ze słuchu i ortografię.',
     },
     {
-        href: '/listening/whats-that-sound',
-        icon: Puzzle,
-        title: 'What\'s that sound?',
-        description: 'Rozpoznaj dźwięk, który słyszysz, i wybierz poprawną odpowiedź. Zabawne ćwiczenie na spostrzegawczość słuchową.',
+        href: '/listening/conversation-location',
+        icon: MapPin,
+        title: 'Conversation Location',
+        description: 'Wysłuchaj krótkiego dialogu i określ, gdzie odbywa się rozmowa (np. na lotnisku, w restauracji).',
     },
     {
-        href: '/listening/story-comprehension',
-        icon: BookOpen,
-        title: 'Story Comprehension',
-        description: 'Wysłuchaj krótkiej historii, a następnie odpowiedz na pytania dotyczące jej treści, aby sprawdzić swoje rozumienie.',
+        href: '/listening/speaker-identification',
+        icon: Users,
+        title: 'Speaker Identification',
+        description: 'Wysłuchaj rozmowy i zidentyfikuj, który z mówców wypowiedział określoną frazę.',
+    },
+    {
+        href: '/listening/intention-recognition',
+        icon: MessageCircleQuestion,
+        title: 'Intention Recognition',
+        description: 'Posłuchaj krótkiej wypowiedzi i określ intencję mówcy (np. pytanie, skarga, propozycja).',
+    },
+    {
+        href: '/listening/missing-word',
+        icon: AudioWaveform,
+        title: 'Missing Word',
+        description: 'Wysłuchaj zdania z brakującym słowem i wybierz poprawną opcję, aby je uzupełnić.',
     },
 ];
 
@@ -67,7 +79,7 @@ export default function ListeningPage() {
                         <h1 className="text-3xl font-bold tracking-tight">
                              <span className="relative inline-block">
                                 Listening
-                                <span className="absolute right-[13px] -bottom-[9px] text-sm font-semibold tracking-normal text-amber">
+                                <span className="absolute right-[-1px] -bottom-[10px] text-sm font-semibold tracking-normal text-amber">
                                 Lite
                                 </span>
                             </span>
@@ -79,7 +91,7 @@ export default function ListeningPage() {
                     view === 'grid' && "flex-1 overflow-y-auto"
                 )}>
                     <p className="text-muted-foreground text-center pb-4">
-                        Ćwicz swoje umiejętności słuchania i wymowy poprzez różnorodne zadania.
+                        Ćwicz swoje umiejętności słuchania poprzez różnorodne zadania.
                     </p>
                     {view === 'list' ? (
                         <div className="flex flex-col space-y-2">
