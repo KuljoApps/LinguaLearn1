@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
@@ -47,20 +48,28 @@ const CrosswordPage = () => {
     const [shuffledOptions, setShuffledOptions] = useState<Record<number, string[]>>({});
 
     const generateGrid = useCallback((p: CrosswordPuzzle): Cell[][] => {
-        const newGrid: Cell[][] = Array(p.gridHeight || p.gridSize).fill(null).map(() => Array(p.gridSize).fill(null).map(() => ({ char: '', number: null, isInput: false })));
+        const height = p.gridHeight || p.gridSize;
+        const width = p.gridSize;
+        const newGrid: Cell[][] = Array(height).fill(null).map(() => Array(width).fill(null).map(() => ({ char: '', number: null, isInput: false })));
+
         p.clues.forEach(clue => {
             let { x, y } = clue;
-            if (y >= (p.gridHeight || p.gridSize) || x >= p.gridSize) {
+
+            if (y >= height || x >= width) {
                 console.error(`Clue ${clue.number} starting at (${x},${y}) is out of bounds.`);
                 return;
             }
-            if (newGrid[y][x].number === null) {
+
+            if (newGrid[y] && newGrid[y][x] && newGrid[y][x].number === null) {
                 newGrid[y][x].number = clue.number;
             }
+            
             for (let i = 0; i < clue.answer.length; i++) {
-                 if (y < (p.gridHeight || p.gridSize) && x < p.gridSize) {
-                    newGrid[y][x].isInput = true;
-                    newGrid[y][x].char = clue.answer[i];
+                 if (y < height && x < width) {
+                    if (newGrid[y] && newGrid[y][x]) {
+                        newGrid[y][x].isInput = true;
+                        newGrid[y][x].char = clue.answer[i];
+                    }
                     if (clue.direction === 'across') x++; else y++;
                 }
             }
@@ -113,9 +122,11 @@ const CrosswordPage = () => {
         const newCellStates: Record<string, CellStatus> = {};
         let allCorrect = true;
 
-        const gridSize = puzzle.gridHeight || puzzle.gridSize;
-        for (let y = 0; y < gridSize; y++) {
-            for (let x = 0; x < puzzle.gridSize; x++) {
+        const height = puzzle.gridHeight || puzzle.gridSize;
+        const width = puzzle.gridSize;
+
+        for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
                 const key = `${y}-${x}`;
                 if (grid[y] && grid[y][x] && grid[y][x].isInput) {
                     const userAnswer = userAnswers[key] || '';
@@ -138,7 +149,7 @@ const CrosswordPage = () => {
     
     const getUIText = (key: keyof typeof uiTexts) => uiTexts[key][language] || uiTexts[key]['en'];
     
-    if (!puzzle || !grid.length) {
+    if (!puzzle) {
         return null;
     }
 
@@ -165,12 +176,14 @@ const CrosswordPage = () => {
                     </div>
                 ) : (
                     <div className="flex flex-col items-center gap-6">
-                        <div className="grid gap-0 bg-background" style={{gridTemplateColumns: `repeat(${puzzle.gridSize}, minmax(0, 1fr))`}}>
+                        <div className="grid bg-background" style={{gridTemplateColumns: `repeat(${puzzle.gridSize}, minmax(0, 1fr))`}}>
                             {grid.map((row, y) => row.map((cell, x) => {
                                 const key = `${y}-${x}`;
                                 const startingClue = puzzle.clues.find(c => c.x === x && c.y === y);
                                 const cellValue = userAnswers[key] || '';
                                 const cellStatus = cellStates[key] || 'default';
+                                
+                                const cellBaseClasses = "relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 text-center text-lg sm:text-2xl font-bold border rounded-none uppercase transition-colors";
                                 
                                 if (startingClue) {
                                     return (
@@ -180,7 +193,7 @@ const CrosswordPage = () => {
                                                     disabled={!cell.isInput}
                                                     onClick={() => handleTriggerClick(startingClue.number, startingClue.options)}
                                                     className={cn(
-                                                        "relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 text-center text-lg sm:text-2xl font-bold border rounded-none uppercase transition-colors",
+                                                        cellBaseClasses,
                                                         !cell.isInput && 'border-muted/20 bg-muted/20 cursor-default',
                                                         cell.isInput && 'border-primary bg-primary/10 cursor-pointer hover:bg-primary/20',
                                                         cellStatus === 'correct' && 'border-success bg-success/10 text-success-foreground',
@@ -214,7 +227,7 @@ const CrosswordPage = () => {
 
                                 return (
                                     <div key={key} className={cn(
-                                        "flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 text-center text-lg sm:text-2xl font-bold border rounded-none uppercase",
+                                        cellBaseClasses,
                                         !cell.isInput && 'border-muted/20 bg-muted/20',
                                         cell.isInput && 'border-input',
                                         cellStatus === 'correct' && 'border-success bg-success/10 text-success-foreground',
