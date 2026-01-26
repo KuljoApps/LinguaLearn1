@@ -96,22 +96,27 @@ const CrosswordPage = () => {
     }, [puzzle]);
 
     const handleCellClick = useCallback((y: number, x: number) => {
-        const clues = getCluesForCell(y, x);
-        if (clues.length === 0) {
+        const cluesForCell = getCluesForCell(y, x);
+        if (cluesForCell.length === 0) {
             setActiveClue(null);
             return;
         }
 
-        const isIntersection = clues.length > 1;
-        const currentActiveClueDef = activeClue ? clues.find(c => c.number === activeClue.number && c.direction === activeClue.direction) : undefined;
+        const acrossClue = cluesForCell.find(c => c.direction === 'across');
+        const downClue = cluesForCell.find(c => c.direction === 'down');
         
-        if (isIntersection && currentActiveClueDef) {
-            const otherDirection = activeClue.direction === 'across' ? 'down' : 'across';
-            const nextClue = clues.find(c => c.direction === otherDirection);
-            if (nextClue) setActiveClue({ number: nextClue.number, direction: nextClue.direction });
-        } else {
-            const preferredClue = clues.find(c => c.direction === (activeClue?.direction || 'across')) || clues[0];
-            setActiveClue({ number: preferredClue.number, direction: preferredClue.direction });
+        if (acrossClue && downClue) { // It's an intersection
+            if (activeClue && activeClue.direction === 'across' && activeClue.number === acrossClue.number) {
+                // Currently on 'across', switch to 'down'
+                setActiveClue({ number: downClue.number, direction: 'down' });
+            } else {
+                // Default to 'across' or switch from 'down' to 'across'
+                setActiveClue({ number: acrossClue.number, direction: 'across' });
+            }
+        } else if (acrossClue) { // Only an 'across' clue
+            setActiveClue({ number: acrossClue.number, direction: 'across' });
+        } else if (downClue) { // Only a 'down' clue
+            setActiveClue({ number: downClue.number, direction: 'down' });
         }
     }, [getCluesForCell, activeClue]);
 
@@ -119,10 +124,13 @@ const CrosswordPage = () => {
         const upperValue = value.toUpperCase().slice(-1);
         setUserAnswers(prev => ({ ...prev, [`${y}-${x}`]: upperValue }));
 
-        if (upperValue && activeClue) {
-            if (activeClue.direction === 'across' && x + 1 < (puzzle?.gridSize || 0)) {
+        if (upperValue && activeClue && puzzle) {
+            const clue = puzzle.clues.find(c => c.number === activeClue.number && c.direction === activeClue.direction);
+            if (!clue) return;
+
+            if (activeClue.direction === 'across' && x + 1 < clue.x + clue.answer.length) {
                 inputRefs.current[y]?.[x + 1]?.focus();
-            } else if (activeClue.direction === 'down' && y + 1 < (puzzle?.gridSize || 0)) {
+            } else if (activeClue.direction === 'down' && y + 1 < clue.y + clue.answer.length) {
                 inputRefs.current[y + 1]?.[x]?.focus();
             }
         }
@@ -130,10 +138,13 @@ const CrosswordPage = () => {
     
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, y: number, x: number) => {
         if (e.key === 'Backspace' && !userAnswers[`${y}-${x}`]) {
-            if (activeClue) {
-                if (activeClue.direction === 'across' && x > 0) {
+            if (activeClue && puzzle) {
+                const clue = puzzle.clues.find(c => c.number === activeClue.number && c.direction === activeClue.direction);
+                if (!clue) return;
+
+                if (activeClue.direction === 'across' && x > clue.x) {
                     inputRefs.current[y]?.[x - 1]?.focus();
-                } else if (activeClue.direction === 'down' && y > 0) {
+                } else if (activeClue.direction === 'down' && y > clue.y) {
                     inputRefs.current[y - 1]?.[x]?.focus();
                 }
             }
