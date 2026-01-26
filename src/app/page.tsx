@@ -56,27 +56,26 @@ export default function Home() {
         window.addEventListener('achievements-count-changed', updateAchievementCount);
         window.addEventListener('theme-changed', handleStateUpdate);
 
-        const gapInterval = setInterval(() => {
+        let animationStep = 0; // 0 for gap, 1 for dots
+        
+        const runAnimations = () => {
+          if (animationStep % 2 === 0) {
             setFillTheGapText(prev => (prev === 'the' ? '___' : 'the'));
-        }, 5000);
-
-        const readingInterval = setInterval(() => {
+          } else {
             setShowReadingDots(true);
             setTimeout(() => setShowReadingDots(false), 3000);
-        }, 10000);
+          }
+          animationStep++;
+        };
 
-        const initialReadingTimeout = setTimeout(() => {
-            setShowReadingDots(true);
-            setTimeout(() => setShowReadingDots(false), 3000);
-        }, 5000);
+        runAnimations();
+        const animationInterval = setInterval(runAnimations, 5 * 60 * 1000); // 5 minutes
 
         return () => {
             window.removeEventListener('language-changed', handleStateUpdate);
             window.removeEventListener('achievements-count-changed', updateAchievementCount);
             window.removeEventListener('theme-changed', handleStateUpdate);
-            clearInterval(gapInterval);
-            clearInterval(readingInterval);
-            clearTimeout(initialReadingTimeout);
+            clearInterval(animationInterval);
         };
     }, [pathname]);
 
@@ -162,7 +161,7 @@ export default function Home() {
                             <PencilLine className={cn("mr-2 h-5 w-5", theme ? 'text-white' : 'text-deep-purple')} />
                              <span className={cn("flex items-baseline", theme ? 'text-white' : '')}>
                                 <span>Fill</span>
-                                <span className="relative inline-block h-6 w-12 text-center overflow-hidden">
+                                <span className="relative inline-block h-7 w-12 text-center overflow-hidden">
                                     <span
                                         key={fillTheGapText}
                                         className="absolute inset-0 flex items-center justify-center animate-text-fall-down"
