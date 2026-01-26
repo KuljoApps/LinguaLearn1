@@ -24,6 +24,7 @@ export default function Home() {
     const [newAchievementsCount, setNewAchievementsCount] = useState(0);
     const [theme, setTheme] = useState<AppTheme | null>(null);
     const [fillTheGapText, setFillTheGapText] = useState('the');
+    const [activeButtonIndex, setActiveButtonIndex] = useState(0);
     const pathname = usePathname();
 
     useEffect(() => {
@@ -58,12 +59,17 @@ export default function Home() {
         const gapInterval = setInterval(() => {
             setFillTheGapText(prev => (prev === 'the' ? '___' : 'the'));
         }, 5000);
+        
+        const themeAnimationInterval = setInterval(() => {
+            setActiveButtonIndex(Math.floor(Math.random() * 5));
+        }, 2000);
 
         return () => {
             window.removeEventListener('language-changed', handleStateUpdate);
             window.removeEventListener('achievements-count-changed', updateAchievementCount);
             window.removeEventListener('theme-changed', handleStateUpdate);
             clearInterval(gapInterval);
+            clearInterval(themeAnimationInterval);
         };
     }, [pathname]);
 
@@ -101,11 +107,23 @@ export default function Home() {
         return '🇬🇧';
     }
     
-    const buttonBaseClasses = "flex-col gap-2 text-lg";
+    const buttonBaseClasses = "flex-col text-lg";
     const squareButtonClasses = "w-full h-28";
     const rectButtonClasses = "w-full h-12";
     const defaultThemeClasses = "border-2 border-primary";
     const isGradientTheme = theme?.className.includes('bg-gradient');
+    
+    const shouldAnimate = (index: number) => {
+        return theme ? isGradientTheme && activeButtonIndex === index : false;
+    }
+    
+    const getButtonClass = (index: number) => {
+        return cn(
+            theme ? theme.className : defaultThemeClasses,
+            "font-normal",
+            shouldAnimate(index) && "bg-[length:300%_300%] animate-gradient-flow"
+        );
+    };
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
@@ -132,22 +150,22 @@ export default function Home() {
                 <CardContent className="flex flex-col space-y-4 p-6 pt-0 pb-4">
                     <div className="grid grid-cols-2 gap-4">
                         <Link href="/quizzes" passHref>
-                             <Button variant={theme ? undefined : "outline"} className={cn(buttonBaseClasses, squareButtonClasses, "rounded-xl", theme ? theme.className : defaultThemeClasses, "font-normal", isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
+                             <Button variant={theme ? undefined : "outline"} className={cn(buttonBaseClasses, squareButtonClasses, "rounded-xl", getButtonClass(0), "gap-0")}>
                                 <LayoutGrid className={cn("h-24 w-24", theme ? 'text-white' : 'text-deep-purple')} />
                                 <span className={cn(theme ? 'text-white' : '')}>Quizzes</span>
                             </Button>
                         </Link>
                          <Link href="/games" passHref>
-                            <Button variant={theme ? undefined : "outline"} className={cn(buttonBaseClasses, squareButtonClasses, "rounded-xl", theme ? theme.className : defaultThemeClasses, "font-normal", isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
+                            <Button variant={theme ? undefined : "outline"} className={cn(buttonBaseClasses, squareButtonClasses, "rounded-xl", getButtonClass(1), "gap-0")}>
                                 <Gamepad2 className={cn("h-24 w-24", theme ? 'text-white' : 'text-deep-purple')} />
                                 <span className={cn(theme ? 'text-white' : '')}>Games</span>
                             </Button>
                         </Link>
                     </div>
                     <div className="flex flex-col space-y-2">
-                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-xl", theme ? theme.className : defaultThemeClasses, "font-normal", isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
+                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-xl", getButtonClass(2))}>
                             <PencilLine className={cn("mr-2 h-5 w-5", theme ? 'text-white' : 'text-deep-purple')} />
-                             <span className={cn("flex items-center", theme ? 'text-white' : '')}>
+                             <span className={cn("flex items-baseline", theme ? 'text-white' : '')}>
                                 <span>Fill</span>
                                 <span className="relative inline-block h-6 w-12 text-center overflow-hidden">
                                     <span
@@ -160,11 +178,11 @@ export default function Home() {
                                 <span>Gap</span>
                             </span>
                         </Button>
-                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-xl", theme ? theme.className : defaultThemeClasses, "font-normal", isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
+                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-xl", getButtonClass(3))}>
                             <BookOpenText className={cn("mr-2 h-5 w-5", theme ? 'text-white' : 'text-deep-purple')} />
                             <span className={cn(theme ? 'text-white' : '')}>Reading</span>
                         </Button>
-                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-xl", theme ? theme.className : defaultThemeClasses, "font-normal", isGradientTheme && 'bg-[length:300%_300%] animate-gradient-flow')}>
+                        <Button variant={theme ? undefined : "outline"} className={cn(rectButtonClasses, "gap-2 text-lg", "rounded-xl", getButtonClass(4))}>
                             <Ear className={cn("mr-2 h-5 w-5", theme ? 'text-white' : 'text-deep-purple')} />
                             <span className={cn(theme ? 'text-white' : '')}>Listening</span>
                         </Button>
