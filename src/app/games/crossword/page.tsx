@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
@@ -160,7 +161,7 @@ const CrosswordPage = () => {
                     </div>
                 ) : (
                     <div className="flex flex-col md:flex-row gap-8 items-center md:items-start justify-center">
-                        <div className="grid gap-1 bg-background" style={{gridTemplateColumns: `repeat(${puzzle.gridSize}, minmax(0, 1fr))`}}>
+                        <div className="grid bg-background" style={{gridTemplateColumns: `repeat(${puzzle.gridSize}, minmax(0, 1fr))`}}>
                             {grid.map((row, y) => row.map((cell, x) => {
                                 const key = `${y}-${x}`;
                                 const startingClue = puzzle.clues.find(c => c.x === x && c.y === y);
@@ -175,7 +176,7 @@ const CrosswordPage = () => {
                                                     disabled={!cell.isInput}
                                                     onClick={() => handleTriggerClick(startingClue.number, startingClue.options)}
                                                     className={cn(
-                                                        "relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 text-center text-lg sm:text-2xl font-bold border-2 rounded-none uppercase transition-colors",
+                                                        "relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 text-center text-lg sm:text-2xl font-bold border rounded-none uppercase transition-colors",
                                                         !cell.isInput && 'border-muted/20 bg-muted/20 cursor-default',
                                                         cell.isInput && 'border-primary bg-primary/10 cursor-pointer hover:bg-primary/20',
                                                         cellStatus === 'correct' && 'border-success bg-success/10 text-success-foreground',
@@ -209,7 +210,7 @@ const CrosswordPage = () => {
 
                                 return (
                                     <div key={key} className={cn(
-                                        "flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 text-center text-lg sm:text-2xl font-bold border-2 rounded-none uppercase",
+                                        "flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 text-center text-lg sm:text-2xl font-bold border rounded-none uppercase",
                                         !cell.isInput && 'border-muted/20 bg-muted/20',
                                         cell.isInput && 'border-input',
                                         cellStatus === 'correct' && 'border-success bg-success/10 text-success-foreground',
