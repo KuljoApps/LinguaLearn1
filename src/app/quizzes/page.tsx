@@ -1,11 +1,11 @@
 "use client";
 
-import { BookOpen, Dumbbell, Sparkles, MessageSquareQuote, Layers, ArrowLeft, Info } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { BookOpen, Dumbbell, Sparkles, MessageSquareQuote, Layers, ArrowLeft, Info, LayoutGrid, List } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { getLanguage } from '@/lib/storage';
-import { useState, useEffect } from 'react';
 import LinguaLearnLogo from '@/components/LinguaLearnLogo';
 import { Separator } from '@/components/ui/separator';
 import {
@@ -14,12 +14,15 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { cn } from '@/lib/utils';
 
 const DESCRIPTIONS_VISIBLE_KEY = 'quizzesDescriptionsVisible';
+const VIEW_MODE_KEY = 'quizzesViewMode';
 
 export default function QuizzesPage() {
     const [language, setCurrentLanguage] = useState<'en' | 'fr' | 'de' | 'it' | 'es'>('en');
     const [showDescriptions, setShowDescriptions] = useState(false);
+    const [view, setView] = useState<'grid' | 'list'>('list');
 
     useEffect(() => {
         const handleLanguageChange = () => {
@@ -27,9 +30,14 @@ export default function QuizzesPage() {
         };
         handleLanguageChange();
 
-        const savedPreference = localStorage.getItem(DESCRIPTIONS_VISIBLE_KEY);
-        if (savedPreference !== null) {
-            setShowDescriptions(JSON.parse(savedPreference));
+        const savedDescPreference = localStorage.getItem(DESCRIPTIONS_VISIBLE_KEY);
+        if (savedDescPreference !== null) {
+            setShowDescriptions(JSON.parse(savedDescPreference));
+        }
+
+        const savedView = localStorage.getItem(VIEW_MODE_KEY);
+        if (savedView === 'list' || savedView === 'grid') {
+            setView(savedView);
         }
 
         window.addEventListener('language-changed', handleLanguageChange);
@@ -42,6 +50,12 @@ export default function QuizzesPage() {
         const newValue = !showDescriptions;
         setShowDescriptions(newValue);
         localStorage.setItem(DESCRIPTIONS_VISIBLE_KEY, JSON.stringify(newValue));
+    };
+
+    const handleViewToggle = () => {
+        const newView = view === 'grid' ? 'list' : 'grid';
+        setView(newView);
+        localStorage.setItem(VIEW_MODE_KEY, newView);
     };
     
     const isFrench = language === 'fr';
@@ -153,10 +167,21 @@ export default function QuizzesPage() {
         return "Back to Home";
     };
 
+    const quizTasks = [
+        { href: isFrench ? "/quiz/fr-pl" : isGerman ? "/quiz/de-pl" : isItalian ? "/quiz/it-pl" : isSpanish ? "/quiz/es-pl" : "/quiz/en-pl", icon: BookOpen, title: getQuizTitle1(), description: getQuizDesc1() },
+        { href: isFrench ? "/quiz/pl-fr" : isGerman ? "/quiz/pl-de" : isItalian ? "/quiz/pl-it" : isSpanish ? "/quiz/pl-es" : "/quiz/pl-en", icon: Dumbbell, title: getQuizTitle2(), description: getQuizDesc2() },
+        { href: isFrench ? "/quiz/irregular-verbs-fr" : isGerman ? "/quiz/irregular-verbs-de" : isItalian ? "/quiz/irregular-verbs-it" : isSpanish ? "/quiz/irregular-verbs-es" : "/quiz/irregular-verbs-en", icon: Sparkles, title: getQuizTitle3(), description: getQuizDesc3() },
+        { href: isFrench ? "/quiz/phrasal-verbs-fr" : isGerman ? "/quiz/phrasal-verbs-de" : isItalian ? "/quiz/phrasal-verbs-it" : isSpanish ? "/quiz/phrasal-verbs-es" : "/quiz/phrasal-verbs-en", icon: Layers, title: getQuizTitle4(), description: getQuizDesc4() },
+        { href: isFrench ? "/quiz/idioms-fr" : isGerman ? "/quiz/idioms-de" : isItalian ? "/quiz/idioms-it" : isSpanish ? "/quiz/idioms-es" : "/quiz/idioms-en", icon: MessageSquareQuote, title: getQuizTitle5(), description: getQuizDesc5() },
+    ];
+
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
             <TooltipProvider>
-                <Card className="w-full max-w-md shadow-2xl text-center">
+                <Card className={cn(
+                    "w-full max-w-md shadow-2xl text-center",
+                    view === 'grid' && "flex flex-col h-[90vh]"
+                )}>
                     <CardHeader>
                         <div className="flex items-center justify-center gap-4 mb-4">
                             <LinguaLearnLogo width="48" height="48" />
@@ -174,74 +199,80 @@ export default function QuizzesPage() {
                             {getWelcomeMessage()}
                         </p>
                         <div className="flex items-center justify-center pt-4">
-                             <div className="w-10" />
+                            <div className={cn(view === 'list' ? 'w-10' : '')} />
                             <CardTitle className="text-3xl font-bold tracking-tight flex-1">{getTitle()}</CardTitle>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <Button variant="ghost" size="icon" onClick={handleToggleDescriptions}>
-                                        <Info className="h-5 w-5" />
-                                    </Button>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    <p>{showDescriptions ? 'Ukryj opisy' : 'Pokaż opisy'}</p>
-                                </TooltipContent>
-                            </Tooltip>
+                            {view === 'list' && (
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <Button variant="ghost" size="icon" onClick={handleToggleDescriptions}>
+                                            <Info className="h-5 w-5" />
+                                        </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>{showDescriptions ? 'Ukryj opisy' : 'Pokaż opisy'}</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                            )}
                         </div>
                     </CardHeader>
-                    <CardContent data-tutorial-id="quiz-buttons" className="flex flex-col space-y-2 p-6 pt-2 pb-4">
-                        <div>
-                            <Link href={isFrench ? "/quiz/fr-pl" : isGerman ? "/quiz/de-pl" : isItalian ? "/quiz/it-pl" : isSpanish ? "/quiz/es-pl" : "/quiz/en-pl"} passHref>
-                                <Button className="w-full h-12 text-lg" size="lg">
-                                    <BookOpen className="mr-2 h-5 w-5" />
-                                    {getQuizTitle1()}
-                                </Button>
-                            </Link>
-                             {showDescriptions && <p className="text-xs italic text-muted-foreground mt-1 px-2">{getQuizDesc1()}</p>}
-                        </div>
-                        <div>
-                            <Link href={isFrench ? "/quiz/pl-fr" : isGerman ? "/quiz/pl-de" : isItalian ? "/quiz/pl-it" : isSpanish ? "/quiz/pl-es" : "/quiz/pl-en"} passHref>
-                                <Button className="w-full h-12 text-lg" size="lg">
-                                    <Dumbbell className="mr-2 h-5 w-5" />
-                                    {getQuizTitle2()}
-                                </Button>
-                            </Link>
-                            {showDescriptions && <p className="text-xs italic text-muted-foreground mt-1 px-2">{getQuizDesc2()}</p>}
-                        </div>
-                        <div>
-                            <Link href={isFrench ? "/quiz/irregular-verbs-fr" : isGerman ? "/quiz/irregular-verbs-de" : isItalian ? "/quiz/irregular-verbs-it" : isSpanish ? "/quiz/irregular-verbs-es" : "/quiz/irregular-verbs-en"} passHref>
-                                <Button className="w-full h-12 text-lg" size="lg">
-                                    <Sparkles className="mr-2 h-5 w-5" />
-                                    {getQuizTitle3()}
-                                </Button>
-                            </Link>
-                            {showDescriptions && <p className="text-xs italic text-muted-foreground mt-1 px-2">{getQuizDesc3()}</p>}
-                        </div>
-                         <div>
-                            <Link href={isFrench ? "/quiz/phrasal-verbs-fr" : isGerman ? "/quiz/phrasal-verbs-de" : isItalian ? "/quiz/phrasal-verbs-it" : isSpanish ? "/quiz/phrasal-verbs-es" : "/quiz/phrasal-verbs-en"} passHref>
-                                <Button className="w-full h-12 text-lg" size="lg">
-                                    <Layers className="mr-2 h-5 w-5" />
-                                    {getQuizTitle4()}
-                                </Button>
-                            </Link>
-                            {showDescriptions && <p className="text-xs italic text-muted-foreground mt-1 px-2">{getQuizDesc4()}</p>}
-                        </div>
-                        <div>
-                            <Link href={isFrench ? "/quiz/idioms-fr" : isGerman ? "/quiz/idioms-de" : isItalian ? "/quiz/idioms-it" : isSpanish ? "/quiz/idioms-es" : "/quiz/idioms-en"} passHref>
-                                <Button className="w-full h-12 text-lg" size="lg">
-                                    <MessageSquareQuote className="mr-2 h-5 w-5" />
-                                    {getQuizTitle5()}
-                                </Button>
-                            </Link>
-                             {showDescriptions && <p className="text-xs italic text-muted-foreground mt-1 px-2">{getQuizDesc5()}</p>}
-                        </div>
+                    <CardContent data-tutorial-id="quiz-buttons" className={cn(
+                        "p-6 pt-2 pb-4",
+                        view === 'grid' ? "overflow-y-auto" : "flex flex-col space-y-2"
+                    )}>
+                        {view === 'list' ? (
+                            <div className="flex flex-col space-y-2">
+                                {quizTasks.map((task) => (
+                                    <div key={task.href}>
+                                        <Link href={task.href} passHref>
+                                            <Button className="w-full h-12 text-lg" size="lg">
+                                                <task.icon className="mr-2 h-5 w-5" />
+                                                {task.title}
+                                            </Button>
+                                        </Link>
+                                        {showDescriptions && <p className="text-xs italic text-muted-foreground mt-1 px-2">{task.description}</p>}
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                {quizTasks.map((task) => {
+                                    const Icon = task.icon;
+                                    return (
+                                        <Card key={task.title} className="relative border-2">
+                                            <CardHeader className="items-center">
+                                                <Icon className="h-12 w-12 text-primary" />
+                                                <CardTitle className="pt-2 text-center">{task.title}</CardTitle>
+                                            </CardHeader>
+                                            <CardContent>
+                                                <p className="text-sm text-center text-muted-foreground h-20">{task.description}</p>
+                                            </CardContent>
+                                            <CardFooter>
+                                                <Link href={task.href} className="w-full">
+                                                    <Button className="w-full">Start</Button>
+                                                </Link>
+                                            </CardFooter>
+                                        </Card>
+                                    );
+                                })}
+                            </div>
+                        )}
                     </CardContent>
-                    <CardFooter className="flex flex-col p-6 pt-4 gap-4">
+                    <CardFooter className={cn(
+                        "flex flex-col p-6 pt-4 gap-4",
+                        view === 'grid' && "mt-auto"
+                    )}>
                         <Separator />
-                         <Link href="/" passHref>
-                            <Button variant="outline">
-                                <ArrowLeft className="mr-2 h-4 w-4" /> {getBackText()}
+                        <div className="flex justify-center gap-4">
+                             <Link href="/" passHref>
+                                <Button variant="outline">
+                                    <ArrowLeft className="mr-2 h-4 w-4" /> {getBackText()}
+                                </Button>
+                            </Link>
+                            <Button variant="outline" onClick={handleViewToggle} className="gap-2">
+                                {view === 'grid' ? <List className="h-4 w-4" /> : <LayoutGrid className="h-4 w-4" />}
+                                <span>View</span>
                             </Button>
-                        </Link>
+                        </div>
                     </CardFooter>
                 </Card>
             </TooltipProvider>
