@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { ArrowLeft, Ear, Keyboard, BookOpen, LayoutGrid, List, MapPin, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -9,49 +9,112 @@ import ButtonColors from '@/components/button-colors';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import ProgressRing from '@/components/ProgressRing';
+import { getLanguage, type Language } from '@/lib/storage';
 
 const VIEW_MODE_KEY = 'listeningViewMode';
 
-const listeningTasks = [
+const uiTexts = {
+    welcome: {
+        en: 'Practice your listening skills with a variety of tasks.',
+        fr: 'Exercez vos compétences d\'écoute avec une variété de tâches.',
+        de: 'Übe deine Hörfähigkeiten mit einer Vielzahl von Aufgaben.',
+        it: 'Esercita le tue abilità di ascolto con una varietà di compiti.',
+        es: 'Practica tus habilidades de escucha con una variedad de tareas.'
+    },
+    backToHome: {
+        en: 'Back to Home',
+        fr: "Retour à l'accueil",
+        de: 'Zurück zur Startseite',
+        it: 'Torna alla Home',
+        es: 'Volver al Inicio'
+    },
+    view: {
+        en: 'View',
+        fr: 'Vue',
+        de: 'Ansicht',
+        it: 'Vista',
+        es: 'Vista'
+    },
+    start: {
+        en: 'Start',
+        fr: 'Démarrer',
+        de: 'Start',
+        it: 'Inizia',
+        es: 'Empezar'
+    }
+};
+
+const tasksData = [
     {
         href: '/listening/story-comprehension',
         icon: BookOpen,
-        title: 'Story Comprehension',
+        titles: {
+            en: 'Story Comprehension',
+            fr: 'Compréhension d\'Histoire',
+            de: 'Hörverständnis einer Geschichte',
+            it: 'Comprensione della Storia',
+            es: 'Comprensión de Historias'
+        },
         description: 'Wysłuchaj krótkiej historii, a następnie odpowiedz na pytania dotyczące jej treści, aby sprawdzić swoje zrozumienie.',
     },
     {
         href: '/listening/dictation',
         icon: Keyboard,
-        title: 'Dictation',
+        titles: {
+            en: 'Dictation',
+            fr: 'Dictée',
+            de: 'Diktat',
+            it: 'Dettato',
+            es: 'Dictado'
+        },
         description: 'Zapisz zdanie, które usłyszysz. Doskonałe ćwiczenie na rozumienie ze słuchu i ortografię.',
     },
     {
         href: '/listening/conversation-location',
         icon: MapPin,
-        title: 'Conversation Location',
+        titles: {
+            en: 'Conversation Location',
+            fr: 'Lieu de la Conversation',
+            de: 'Ort des Gesprächs',
+            it: 'Luogo della Conversazione',
+            es: 'Lugar de la Conversación'
+        },
         description: 'Wysłuchaj krótkiego dialogu i określ, gdzie odbywa się rozmowa (np. na lotnisku, w restauracji).',
     },
     {
         href: '/listening/speaker-identification',
         icon: Users,
-        title: 'Speaker Identification',
+        titles: {
+            en: 'Speaker Identification',
+            fr: 'Identification du Locuteur',
+            de: 'Sprecheridentifikation',
+            it: 'Identificazione dell\'Oratore',
+            es: 'Identificación del Hablante'
+        },
         description: 'Wysłuchaj rozmowy i zidentyfikuj, który z mówców wypowiedział określoną frazę.',
     },
 ];
 
 
 export default function ListeningPage() {
+    const [language, setLanguageState] = useState<Language>('en');
     const [view, setView] = useState<'grid' | 'list'>('list');
     const [progressData, setProgressData] = useState<{ completed: number; total: number; progress: number; }[]>([]);
 
     useEffect(() => {
+        const handleLanguageChange = () => {
+            setLanguageState(getLanguage());
+        };
+        handleLanguageChange();
+        window.addEventListener('language-changed', handleLanguageChange);
+
         const savedView = localStorage.getItem(VIEW_MODE_KEY) as 'grid' | 'list' | null;
         if (savedView) {
             setView(savedView);
         }
 
         setProgressData(
-            Array(listeningTasks.length)
+            Array(tasksData.length)
                 .fill(0)
                 .map(() => {
                     const completed = Math.floor(10 + Math.random() * 86);
@@ -64,6 +127,10 @@ export default function ListeningPage() {
                     };
                 })
         );
+        
+        return () => {
+            window.removeEventListener('language-changed', handleLanguageChange);
+        };
     }, []);
 
     const handleViewToggle = () => {
@@ -71,6 +138,15 @@ export default function ListeningPage() {
         setView(newView);
         localStorage.setItem(VIEW_MODE_KEY, newView);
     };
+    
+    const getUIText = (key: keyof typeof uiTexts) => {
+        return uiTexts[key][language] || uiTexts[key]['en'];
+    };
+
+    const tasks = useMemo(() => tasksData.map(task => ({
+        ...task,
+        title: task.titles[language] || task.titles.en
+    })), [language]);
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
@@ -96,11 +172,11 @@ export default function ListeningPage() {
                     view === 'grid' && "flex-1 overflow-y-auto"
                 )}>
                     <p className="text-muted-foreground text-center pb-4">
-                        Practice your listening skills with a variety of tasks.
+                        {getUIText('welcome')}
                     </p>
                     {view === 'list' ? (
                         <div className="flex flex-col space-y-2">
-                            {listeningTasks.map((task) => (
+                            {tasks.map((task) => (
                                 <div key={task.href}>
                                     <Link href={task.href} passHref>
                                         <Button className="w-full h-16 text-lg" size="lg">
@@ -114,7 +190,7 @@ export default function ListeningPage() {
                         </div>
                     ) : (
                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            {listeningTasks.map((task, index) => {
+                            {tasks.map((task, index) => {
                                 const Icon = task.icon;
                                 const { completed, total, progress } = progressData[index] || { completed: 0, total: 0, progress: 0 };
                                 return (
@@ -129,7 +205,7 @@ export default function ListeningPage() {
                                         </CardContent>
                                         <CardFooter>
                                             <Link href={task.href} className="w-full">
-                                                <Button className="w-full">Start</Button>
+                                                <Button className="w-full">{getUIText('start')}</Button>
                                             </Link>
                                         </CardFooter>
                                     </Card>
@@ -149,12 +225,12 @@ export default function ListeningPage() {
                     <div className="flex justify-center gap-4">
                          <Link href="/" passHref>
                             <Button variant="outline">
-                                <ArrowLeft className="mr-2 h-4 w-4" /> Back to Home
+                                <ArrowLeft className="mr-2 h-4 w-4" /> {getUIText('backToHome')}
                             </Button>
                         </Link>
                         <Button variant="outline" onClick={handleViewToggle} className="gap-2">
                             {view === 'grid' ? <List className="h-4 w-4" /> : <LayoutGrid className="h-4 w-4" />}
-                            <span>View</span>
+                            <span>{getUIText('view')}</span>
                         </Button>
                     </div>
                 </CardFooter>
