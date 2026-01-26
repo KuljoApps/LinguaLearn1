@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
@@ -51,14 +50,25 @@ const CrosswordPage = () => {
         const newGrid: Cell[][] = Array(p.gridSize).fill(null).map(() => Array(p.gridSize).fill(null).map(() => ({ char: '', number: null, isInput: false })));
         p.clues.forEach(clue => {
             let { x, y } = clue;
+            
+            // Prevent out-of-bounds access at the start
+            if (y >= p.gridSize || x >= p.gridSize) {
+                console.error(`Clue ${clue.number} starting at (${x},${y}) is out of bounds for grid size ${p.gridSize}.`);
+                return; // Skip this clue to prevent crash
+            }
+
             if (newGrid[y][x].number === null) {
                 newGrid[y][x].number = clue.number;
             }
             for (let i = 0; i < clue.answer.length; i++) {
+                // Check bounds inside the loop *before* accessing the grid
                 if (y < p.gridSize && x < p.gridSize) {
                     newGrid[y][x].isInput = true;
                     newGrid[y][x].char = clue.answer[i];
                     if (clue.direction === 'across') x++; else y++;
+                } else {
+                    console.error(`Clue '${clue.answer}' goes out of bounds.`);
+                    break;
                 }
             }
         });
