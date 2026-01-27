@@ -17,38 +17,38 @@ import { cn } from '@/lib/utils';
 import { playSound } from '@/lib/sounds';
 
 const themes = [
-    { name: 'Default Amber', gradient: 'from-yellow-500 via-amber-500 to-orange-500', shadow: '#ff8c00', mainColor: 'hsl(34 97% 61%)' },
-    { name: 'Mystic Green', gradient: 'from-green-500 via-emerald-500 to-teal-500', shadow: '#10b981', mainColor: 'hsl(142 76% 36%)' },
-    { name: 'Ocean Blue', gradient: 'from-blue-500 via-cyan-500 to-sky-500', shadow: '#06b6d4', mainColor: 'hsl(222.2 47.4% 11.2%)' },
-    { name: 'Royal Purple', gradient: 'from-purple-500 via-violet-500 to-indigo-500', shadow: '#8b5cf6', mainColor: 'hsl(265 82% 59%)' },
-    { name: 'Fiery Red', gradient: 'from-red-500 via-rose-500 to-pink-500', shadow: '#ec4899', mainColor: 'hsl(0 84.2% 60.2%)' },
-    { name: 'Slate Gray', gradient: 'from-slate-600 via-gray-500 to-zinc-400', shadow: '#71717a', mainColor: 'hsl(240 3.8% 46.1%)' },
-    { name: 'Sunny Yellow', gradient: 'from-yellow-300 via-amber-400 to-orange-400', shadow: '#facc15', mainColor: 'hsl(48 95% 54%)' },
-    { name: 'Lime Green', gradient: 'from-lime-400 via-green-500 to-emerald-500', shadow: '#84cc16', mainColor: 'hsl(84 70% 52%)' },
-    { name: 'Sky Blue', gradient: 'from-sky-400 via-cyan-300 to-blue-300', shadow: '#38bdf8', mainColor: 'hsl(204 92% 53%)' },
-    { name: 'Deep Indigo', gradient: 'from-indigo-600 via-purple-600 to-violet-600', shadow: '#4f46e5', mainColor: 'hsl(244 80% 63%)' },
-    { name: 'Hot Pink', gradient: 'from-fuchsia-500 via-pink-600 to-rose-500', shadow: '#d946ef', mainColor: 'hsl(289 83% 60%)' },
-    { name: 'Charcoal', gradient: 'from-gray-800 via-zinc-700 to-stone-600', shadow: '#334155', mainColor: 'hsl(222 12% 25%)' },
-    { name: 'Forest', gradient: 'from-green-700 via-teal-800 to-emerald-900', shadow: '#047857', mainColor: 'hsl(160 84% 39%)' },
-    { name: 'Ocean', gradient: 'from-blue-700 via-cyan-800 to-sky-900', shadow: '#0369a1', mainColor: 'hsl(204 92% 53%)' },
-    { name: 'Sunset', gradient: 'from-orange-500 via-red-600 to-rose-700', shadow: '#f97316', mainColor: 'hsl(24 95% 53%)' },
-    { name: 'Galaxy', gradient: 'from-slate-900 via-purple-900 to-indigo-900', shadow: '#4338ca', mainColor: 'hsl(244 80% 63%)' },
-    { name: 'Crimson', gradient: 'from-red-600 via-rose-700 to-red-800', shadow: '#dc143c', mainColor: 'hsl(348, 83%, 47%)' },
-    { name: 'Turquoise', gradient: 'from-cyan-400 via-teal-500 to-emerald-600', shadow: '#40e0d0', mainColor: 'hsl(174, 72%, 56%)' },
-    { name: 'Magenta', gradient: 'from-fuchsia-600 via-pink-700 to-purple-800', shadow: '#ff00ff', mainColor: 'hsl(300, 100%, 50%)' },
-    { name: 'Olive', gradient: 'from-yellow-600 via-olive-500 to-green-700', shadow: '#808000', mainColor: 'hsl(60, 100%, 25%)' },
-    { name: 'Maroon', gradient: 'from-red-800 via-rose-900 to-red-900', shadow: '#800000', mainColor: 'hsl(0, 100%, 25%)' },
-    { name: 'Navy', gradient: 'from-blue-800 via-indigo-900 to-slate-900', shadow: '#000080', mainColor: 'hsl(240, 100%, 25%)' },
-    { name: 'Teal', gradient: 'from-teal-600 via-cyan-700 to-emerald-800', shadow: '#008080', mainColor: 'hsl(180, 100%, 25%)' },
-    { name: 'Silver', gradient: 'from-gray-400 via-slate-400 to-gray-500', shadow: '#c0c0c0', mainColor: 'hsl(0, 0%, 75%)' },
-    { name: 'Gold', gradient: 'from-yellow-400 via-amber-500 to-orange-500', shadow: '#ffd700', mainColor: 'hsl(51, 100%, 50%)' },
-    { name: 'Coral', gradient: 'from-orange-400 via-rose-400 to-red-500', shadow: '#ff7f50', mainColor: 'hsl(16, 100%, 66%)' },
-    { name: 'Plum', gradient: 'from-purple-400 via-fuchsia-500 to-violet-600', shadow: '#dda0dd', mainColor: 'hsl(300, 47%, 78%)' },
-    { name: 'Orchid', gradient: 'from-fuchsia-400 via-pink-500 to-purple-500', shadow: '#da70d6', mainColor: 'hsl(302, 59%, 65%)' },
-    { name: 'Salmon', gradient: 'from-rose-400 via-red-400 to-orange-300', shadow: '#fa8072', mainColor: 'hsl(6, 93%, 71%)' },
-    { name: 'Chocolate', gradient: 'from-yellow-800 via-orange-900 to-red-900', shadow: '#d2691e', mainColor: 'hsl(25, 76%, 53%)' },
-    { name: 'Steel Blue', gradient: 'from-sky-600 via-blue-700 to-indigo-800', shadow: '#4682b4', mainColor: 'hsl(207, 44%, 49%)' },
-    { name: 'Sienna', gradient: 'from-orange-700 via-red-800 to-yellow-900', shadow: '#a0522d', mainColor: 'hsl(19, 72%, 40%)' },
+    { name: 'Default Amber', gradient: 'from-yellow-500 via-amber-500 to-orange-500', shadow: '#ff8c00', mainColor: '34 97% 61%' },
+    { name: 'Mystic Green', gradient: 'from-green-500 via-emerald-500 to-teal-500', shadow: '#10b981', mainColor: '142 76% 36%' },
+    { name: 'Ocean Blue', gradient: 'from-blue-500 via-cyan-500 to-sky-500', shadow: '#06b6d4', mainColor: '222.2 47.4% 11.2%' },
+    { name: 'Royal Purple', gradient: 'from-purple-500 via-violet-500 to-indigo-500', shadow: '#8b5cf6', mainColor: '265 82% 59%' },
+    { name: 'Fiery Red', gradient: 'from-red-500 via-rose-500 to-pink-500', shadow: '#ec4899', mainColor: '0 84.2% 60.2%' },
+    { name: 'Slate Gray', gradient: 'from-slate-600 via-gray-500 to-zinc-400', shadow: '#71717a', mainColor: '240 3.8% 46.1%' },
+    { name: 'Sunny Yellow', gradient: 'from-yellow-300 via-amber-400 to-orange-400', shadow: '#facc15', mainColor: '48 95% 54%' },
+    { name: 'Lime Green', gradient: 'from-lime-400 via-green-500 to-emerald-500', shadow: '#84cc16', mainColor: '84 70% 52%' },
+    { name: 'Sky Blue', gradient: 'from-sky-400 via-cyan-300 to-blue-300', shadow: '#38bdf8', mainColor: '204 92% 53%' },
+    { name: 'Deep Indigo', gradient: 'from-indigo-600 via-purple-600 to-violet-600', shadow: '#4f46e5', mainColor: '244 80% 63%' },
+    { name: 'Hot Pink', gradient: 'from-fuchsia-500 via-pink-600 to-rose-500', shadow: '#d946ef', mainColor: '289 83% 60%' },
+    { name: 'Charcoal', gradient: 'from-gray-800 via-zinc-700 to-stone-600', shadow: '#334155', mainColor: '222 12% 25%' },
+    { name: 'Forest', gradient: 'from-green-700 via-teal-800 to-emerald-900', shadow: '#047857', mainColor: '160 84% 39%' },
+    { name: 'Ocean', gradient: 'from-blue-700 via-cyan-800 to-sky-900', shadow: '#0369a1', mainColor: '204 92% 53%' },
+    { name: 'Sunset', gradient: 'from-orange-500 via-red-600 to-rose-700', shadow: '#f97316', mainColor: '24 95% 53%' },
+    { name: 'Galaxy', gradient: 'from-slate-900 via-purple-900 to-indigo-900', shadow: '#4338ca', mainColor: '244 80% 63%' },
+    { name: 'Crimson', gradient: 'from-red-600 via-rose-700 to-red-800', shadow: '#dc143c', mainColor: '348 83% 47%' },
+    { name: 'Turquoise', gradient: 'from-cyan-400 via-teal-500 to-emerald-600', shadow: '#40e0d0', mainColor: '174 72% 56%' },
+    { name: 'Magenta', gradient: 'from-fuchsia-600 via-pink-700 to-purple-800', shadow: '#ff00ff', mainColor: '300 100% 50%' },
+    { name: 'Olive', gradient: 'from-yellow-600 via-olive-500 to-green-700', shadow: '#808000', mainColor: '60 100% 25%' },
+    { name: 'Maroon', gradient: 'from-red-800 via-rose-900 to-red-900', shadow: '#800000', mainColor: '0 100% 25%' },
+    { name: 'Navy', gradient: 'from-blue-800 via-indigo-900 to-slate-900', shadow: '#000080', mainColor: '240 100% 25%' },
+    { name: 'Teal', gradient: 'from-teal-600 via-cyan-700 to-emerald-800', shadow: '#008080', mainColor: '180 100% 25%' },
+    { name: 'Silver', gradient: 'from-gray-400 via-slate-400 to-gray-500', shadow: '#c0c0c0', mainColor: '0 0% 75%' },
+    { name: 'Gold', gradient: 'from-yellow-400 via-amber-500 to-orange-500', shadow: '#ffd700', mainColor: '51 100% 50%' },
+    { name: 'Coral', gradient: 'from-orange-400 via-rose-400 to-red-500', shadow: '#ff7f50', mainColor: '16 100% 66%' },
+    { name: 'Plum', gradient: 'from-purple-400 via-fuchsia-500 to-violet-600', shadow: '#dda0dd', mainColor: '300 47% 78%' },
+    { name: 'Orchid', gradient: 'from-fuchsia-400 via-pink-500 to-purple-500', shadow: '#da70d6', mainColor: '302 59% 65%' },
+    { name: 'Salmon', gradient: 'from-rose-400 via-red-400 to-orange-300', shadow: '#fa8072', mainColor: '6 93% 71%' },
+    { name: 'Chocolate', gradient: 'from-yellow-800 via-orange-900 to-red-900', shadow: '#d2691e', mainColor: '25 76% 53%' },
+    { name: 'Steel Blue', gradient: 'from-sky-600 via-blue-700 to-indigo-800', shadow: '#4682b4', mainColor: '207 44% 49%' },
+    { name: 'Sienna', gradient: 'from-orange-700 via-red-800 to-yellow-900', shadow: '#a0522d', mainColor: '19 72% 40%' },
 ];
 
 const fakeUiTexts: Record<string, Record<Language, string>> = {
@@ -98,7 +98,7 @@ export default function ButtonColorsPage() {
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4 bg-muted/40">
             <Card className="w-full max-w-4xl shadow-2xl">
-                <CardContent className="flex flex-col items-center gap-6 p-6">
+                <CardContent className="flex flex-col items-center gap-4 p-6">
                     <div className="scale-100 origin-top border bg-background rounded-lg p-4">
                         <Card className="w-full max-w-md shadow-2xl text-center mx-auto pointer-events-none">
                              <CardHeader>
