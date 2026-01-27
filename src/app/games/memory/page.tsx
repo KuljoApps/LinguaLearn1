@@ -134,8 +134,8 @@ const MemoryGamePage = () => {
             <CardTitle className="text-3xl font-bold tracking-tight">{getUIText('title')}</CardTitle>
           </div>
         </CardHeader>
-        <CardContent className="p-6 pt-2">
-          <p className="text-muted-foreground text-center pb-4">{getUIText('moves')}: {moves}</p>
+        <CardContent className="p-6 pt-0">
+          <p className="text-muted-foreground text-center pb-6">{getUIText('moves')}: {moves}</p>
           {isGameWon ? (
             <div className="text-center space-y-4">
               <Award className="h-16 w-16 mx-auto text-amber" />
