@@ -1,17 +1,18 @@
 "use client";
 
 import { useState, useEffect, useMemo } from 'react';
-import { ArrowLeft, Ear, Keyboard, BookOpen, LayoutGrid, List, MapPin, Users } from 'lucide-react';
+import { ArrowLeft, Ear, Keyboard, BookOpen, LayoutGrid, List, MapPin, Users, Beaker, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardFooter, CardTitle } from '@/components/ui/card';
-import ButtonColors from '@/components/button-colors';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import ProgressRing from '@/components/ProgressRing';
 import { getLanguage, type Language } from '@/lib/storage';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 const VIEW_MODE_KEY = 'listeningViewMode';
+const DEV_TOOLS_COLLAPSIBLE_STATE_KEY = 'linguaLearnDevToolsOpen';
 
 const uiTexts = {
     welcome: {
@@ -100,6 +101,7 @@ export default function ListeningPage() {
     const [language, setLanguageState] = useState<Language>('en');
     const [view, setView] = useState<'grid' | 'list'>('list');
     const [progressData, setProgressData] = useState<{ completed: number; total: number; progress: number; }[]>([]);
+    const [isDevToolsOpen, setIsDevToolsOpen] = useState(false);
 
     useEffect(() => {
         const handleLanguageChange = () => {
@@ -111,6 +113,11 @@ export default function ListeningPage() {
         const savedView = localStorage.getItem(VIEW_MODE_KEY) as 'grid' | 'list' | null;
         if (savedView) {
             setView(savedView);
+        }
+
+        const savedDevToolsState = localStorage.getItem(DEV_TOOLS_COLLAPSIBLE_STATE_KEY);
+        if (savedDevToolsState === 'true') {
+            setIsDevToolsOpen(true);
         }
 
         setProgressData(
@@ -137,6 +144,11 @@ export default function ListeningPage() {
         const newView = view === 'grid' ? 'list' : 'grid';
         setView(newView);
         localStorage.setItem(VIEW_MODE_KEY, newView);
+    };
+
+    const handleDevToolsOpenChange = (open: boolean) => {
+        setIsDevToolsOpen(open);
+        localStorage.setItem(DEV_TOOLS_COLLAPSIBLE_STATE_KEY, JSON.stringify(open));
     };
     
     const getUIText = (key: keyof typeof uiTexts) => {
@@ -213,9 +225,6 @@ export default function ListeningPage() {
                             })}
                         </div>
                     )}
-                    <div className="pt-4">
-                        <ButtonColors />
-                    </div>
                 </CardContent>
                 <CardFooter className={cn(
                     "flex flex-col p-6 pt-4 gap-4",
@@ -232,6 +241,32 @@ export default function ListeningPage() {
                             {view === 'grid' ? <List className="h-4 w-4" /> : <LayoutGrid className="h-4 w-4" />}
                             <span>{getUIText('view')}</span>
                         </Button>
+                    </div>
+
+                    <div className="w-full pt-4 mt-4 border-t border-dashed">
+                        <Collapsible open={isDevToolsOpen} onOpenChange={handleDevToolsOpenChange} className="w-full">
+                            <div className="flex items-center justify-center -mb-2">
+                                <Separator className="flex-grow" />
+                                <CollapsibleTrigger asChild>
+                                    <Button variant="ghost" className="flex items-center gap-2 px-3">
+                                        <Beaker className="h-4 w-4" />
+                                        <span className="text-sm italic text-muted-foreground">Dev Tools Colors</span>
+                                        <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isDevToolsOpen ? 'rotate-180' : ''}`} />
+                                    </Button>
+                                </CollapsibleTrigger>
+                                <Separator className="flex-grow" />
+                            </div>
+                            <CollapsibleContent className="pt-4 space-y-4 text-center">
+                                <div className="p-4 bg-muted/50 rounded-lg">
+                                    <h4 className="font-semibold text-sm mb-2">Button Colors</h4>
+                                    <p className="text-xs text-muted-foreground">Button color configurator will be here.</p>
+                                </div>
+                                <div className="p-4 bg-muted/50 rounded-lg">
+                                    <h4 className="font-semibold text-sm mb-2">Confetti Configurator</h4>
+                                    <p className="text-xs text-muted-foreground">Confetti configurator will be here.</p>
+                                </div>
+                            </CollapsibleContent>
+                        </Collapsible>
                     </div>
                 </CardFooter>
             </Card>
