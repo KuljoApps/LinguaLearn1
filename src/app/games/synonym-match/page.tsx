@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -161,66 +161,71 @@ const SynonymMatchPage = () => {
         }
     }, [correctPairs, gameWonTime]);
     
-    const replaceAndShuffle = useCallback(() => {
-        const currentlyMatchedWords = new Set(correctPairs);
+    const showRemixToast = useCallback(() => {
+        toast({
+            title: (
+                <div className="flex items-center gap-3">
+                    <Shuffle className="h-8 w-8 text-amber" />
+                    <span className="text-xl font-bold">Shuffle Time!</span>
+                </div>
+            ),
+            description: "New words are entering the board.",
+            duration: 2000,
+        });
+    }, [toast]);
     
-        const currentBoardWords = [...activeWords1, ...activeWords2];
-        const unmatchedWordsOnBoard = currentBoardWords.filter(w => !currentlyMatchedWords.has(w));
-    
-        const remainingPairsOnBoard: SynonymPair[] = [];
-        const seenWords = new Set();
-        for (const word of unmatchedWordsOnBoard) {
-            if (!seenWords.has(word)) {
-                const partner = matches[word];
-                remainingPairsOnBoard.push({ word1: word, word2: partner });
-                seenWords.add(word);
-                seenWords.add(partner);
-            }
-        }
-    
-        const numToTakeFromDeck = BOARD_SIZE - remainingPairsOnBoard.length;
-        const newPairsFromDeck = deck.slice(0, numToTakeFromDeck);
-        const remainingDeck = deck.slice(numToTakeFromDeck);
-    
-        const nextBoardPairs = [...remainingPairsOnBoard, ...newPairsFromDeck];
-    
-        setActiveWords1(shuffle(nextBoardPairs.map(p => p.word1)));
-        setActiveWords2(shuffle(nextBoardPairs.map(p => p.word2)));
-        setDeck(remainingDeck);
-        setStage(prev => prev + 1);
-        setIsFrozen(false);
-        setSelected1(null);
-        setSelected2(null);
-    }, [correctPairs, activeWords1, activeWords2, deck, matches]);
-
     useEffect(() => {
         if (isFrozen) return;
-
         const correctPairCount = correctPairs.length / 2;
-
-        const showRemixToast = () => {
-            toast({
-                title: (
-                    <div className="flex items-center gap-3">
-                        <Shuffle className="h-8 w-8 text-amber" />
-                        <span className="text-xl font-bold">Shuffle Time!</span>
-                    </div>
-                ),
-                description: "New words are entering the board.",
-                duration: 2000,
-            });
+    
+        const handleShuffle = (numToTake: number) => {
+            showRemixToast();
+    
+            // This entire block runs in one state update.
+            // React batches these state setters.
+            const currentlyMatchedWords = new Set(correctPairs);
+            const currentBoardWords = [...activeWords1, ...activeWords2];
+            const unmatchedWordsOnBoard = currentBoardWords.filter(w => !currentlyMatchedWords.has(w));
+    
+            const remainingPairsOnBoard: SynonymPair[] = [];
+            const seenWords = new Set();
+            for (const word of unmatchedWordsOnBoard) {
+                if (!seenWords.has(word)) {
+                    const partner = matches[word];
+                    if (unmatchedWordsOnBoard.includes(partner)) {
+                        remainingPairsOnBoard.push({ word1: word, word2: partner });
+                        seenWords.add(word);
+                        seenWords.add(partner);
+                    }
+                }
+            }
+            
+            const newPairsFromDeck = deck.slice(0, numToTake);
+            const remainingDeck = deck.slice(numToTake);
+            const nextBoardPairs = [...remainingPairsOnBoard, ...newPairsFromDeck];
+            
+            // Set the new board state
+            setActiveWords1(shuffle(nextBoardPairs.map(p => p.word1)));
+            setActiveWords2(shuffle(nextBoardPairs.map(p => p.word2)));
+            setDeck(remainingDeck);
+            setStage(prev => prev + 1);
+            setSelected1(null);
+            setSelected2(null);
+    
+            // And trigger the animation for the re-render.
+            setIsFrozen(true);
+            setTimeout(() => {
+                setIsFrozen(false);
+            }, 1000); // Animation duration
         };
-
+    
         if (stage === 0 && correctPairCount === 3) {
-            showRemixToast();
-            setIsFrozen(true);
-            setTimeout(replaceAndShuffle, 1000);
+            handleShuffle(3);
         } else if (stage === 1 && correctPairCount === 5) {
-            showRemixToast();
-            setIsFrozen(true);
-            setTimeout(replaceAndShuffle, 1000);
+            handleShuffle(2);
         }
-    }, [correctPairs.length, isFrozen, replaceAndShuffle, stage, toast]);
+    
+    }, [correctPairs, activeWords1, activeWords2, deck, matches, stage, isFrozen, showRemixToast]);
 
     useEffect(() => {
         if (!gameContainerRef.current) return;
@@ -268,6 +273,7 @@ const SynonymMatchPage = () => {
         setSelected2(word);
 
         if (matches && matches[selected1] === word) {
+            playSound('correct');
             setCorrectPairs(prev => [...prev, selected1, word]);
             setCurrentStreak(prev => prev + 1);
             setSelected1(null);
@@ -335,7 +341,7 @@ const SynonymMatchPage = () => {
                                 <h2 className="text-2xl font-bold text-success">{getUIText('winTitle')}</h2>
                             </div>
                             <Card className="bg-muted/50">
-                                <CardHeader className="pb-2"><CardTitle className="text-xl text-center">{getUIText('summary')}</CardTitle></CardHeader>
+                                <CardHeader className="pb-2 pt-4"><CardTitle className="text-xl text-center">{getUIText('summary')}</CardTitle></CardHeader>
                                 <CardContent className="grid grid-cols-2 gap-4 text-center">
                                     <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-background">
                                         <div className="flex items-center gap-2"><Flame className="h-4 w-4 text-amber"/><span className="text-2xl font-bold">{longestStreak}</span></div>
