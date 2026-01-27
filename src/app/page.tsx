@@ -28,12 +28,12 @@ const uiTexts = {
     learning: { en: 'Learning', fr: 'Apprentissage', de: 'Lernen', it: 'Apprendimento', es: 'Aprendizaje' },
 };
 
-const fillTheGapAnimatedWord: Record<Language, { text: string; placeholder: string; width: string }> = {
-    en: { text: 'the', placeholder: '___', width: 'w-10' },
-    fr: { text: 'le', placeholder: '__', width: 'w-8' },
-    de: { text: 'die', placeholder: '___', width: 'w-10' },
-    it: { text: 'il', placeholder: '__', width: 'w-8' },
-    es: { text: 'el', placeholder: '__', width: 'w-8' },
+const fillTheGapAnimatedWord: Record<Language, { text: string; placeholder: string; width: string; marginClass: string; }> = {
+    en: { text: 'the', placeholder: '___', width: 'w-10', marginClass: '-mr-1 -ml-1' },
+    de: { text: 'die', placeholder: '___', width: 'w-10', marginClass: '-mr-1.5 -ml-1.5' },
+    fr: { text: 'le', placeholder: '__', width: 'w-8', marginClass: '-mr-1.5 -ml-1.5' },
+    it: { text: 'il', placeholder: '__', width: 'w-8', marginClass: '-mr-2 -ml-2' },
+    es: { text: 'el', placeholder: '__', width: 'w-8', marginClass: '-mr-1.5 -ml-1.5' },
 };
 
 export default function Home() {
@@ -191,8 +191,9 @@ export default function Home() {
                                 <span className={cn("col-start-2 flex items-center", iconClasses)}>
                                     {getUIText('fill')}&nbsp;
                                     <span className={cn(
-                                        "relative inline-block h-6 -mr-1 -ml-1 text-center overflow-hidden transition-all duration-300",
-                                        fillTheGapAnimatedWord[language].width
+                                        "relative inline-block h-6 text-center overflow-hidden transition-all duration-300",
+                                        fillTheGapAnimatedWord[language].width,
+                                        fillTheGapAnimatedWord[language].marginClass
                                     )}>
                                         <span
                                             key={fillTheGapText}
