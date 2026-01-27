@@ -177,39 +177,36 @@ const SynonymMatchPage = () => {
     }, [correctPairs, gameWonTime]);
     
     const handleShuffle = useCallback((numToTake: number) => {
-        setIsFrozen(true);
-        showRemixToast();
-        
-        setTimeout(() => {
-            const currentlyMatchedWords = new Set(correctPairs);
-            const currentBoardWords = [...activeWords1, ...activeWords2];
-            const unmatchedWordsOnBoard = currentBoardWords.filter(w => !currentlyMatchedWords.has(w));
-    
-            const remainingPairsOnBoard: SynonymPair[] = [];
-            const seenWords = new Set();
-            for (const word of unmatchedWordsOnBoard) {
-                if (!seenWords.has(word)) {
-                    const partner = matches[word];
-                    if (unmatchedWordsOnBoard.includes(partner)) {
-                        remainingPairsOnBoard.push({ word1: word, word2: partner });
-                        seenWords.add(word);
-                        seenWords.add(partner);
-                    }
+        const currentlyMatchedWords = new Set(correctPairs);
+        const currentBoardWords = [...activeWords1, ...activeWords2];
+        const unmatchedWordsOnBoard = currentBoardWords.filter(w => !currentlyMatchedWords.has(w));
+
+        const remainingPairsOnBoard: SynonymPair[] = [];
+        const seenWords = new Set();
+        for (const word of unmatchedWordsOnBoard) {
+            if (!seenWords.has(word)) {
+                const partner = matches[word];
+                if (unmatchedWordsOnBoard.includes(partner)) {
+                    remainingPairsOnBoard.push({ word1: word, word2: partner });
+                    seenWords.add(word);
+                    seenWords.add(partner);
                 }
             }
-            
-            const newPairsFromDeck = deck.slice(0, numToTake);
-            const remainingDeck = deck.slice(numToTake);
-            const nextBoardPairs = [...remainingPairsOnBoard, ...newPairsFromDeck];
-            
-            setActiveWords1(shuffle(nextBoardPairs.map(p => p.word1)));
-            setActiveWords2(shuffle(nextBoardPairs.map(p => p.word2)));
-            setDeck(remainingDeck);
-            setStage(prev => prev + 1);
-            setSelected1(null);
-            setSelected2(null);
-        }, 100);
+        }
+        
+        const newPairsFromDeck = deck.slice(0, numToTake);
+        const remainingDeck = deck.slice(numToTake);
+        const nextBoardPairs = [...remainingPairsOnBoard, ...newPairsFromDeck];
+        
+        setActiveWords1(shuffle(nextBoardPairs.map(p => p.word1)));
+        setActiveWords2(shuffle(nextBoardPairs.map(p => p.word2)));
+        setDeck(remainingDeck);
+        setStage(prev => prev + 1);
+        setSelected1(null);
+        setSelected2(null);
 
+        setIsFrozen(true);
+        showRemixToast();
         setTimeout(() => {
             setIsFrozen(false);
         }, 1000); // Animation duration
@@ -316,11 +313,11 @@ const SynonymMatchPage = () => {
         const isIncorrect = incorrectPair?.includes(word) ?? false;
         
         return cn(
-            "h-16 text-lg transition-all duration-150",
+            "h-16 text-lg transition-colors duration-150",
             isFrozen && !isCorrect && "animate-shuffle-blur-spin",
             isSelected && !isIncorrect && "border-primary border-2 ring-2 ring-primary/50",
-            isCorrect && "bg-success/20 text-muted-foreground line-through pointer-events-none",
-            isIncorrect && "bg-destructive/80 text-destructive-foreground border-destructive"
+            isCorrect && "bg-success/20 text-muted-foreground line-through disabled:opacity-100",
+            isIncorrect && "bg-destructive/80 text-destructive-foreground border-destructive disabled:opacity-100"
         );
     };
     
@@ -416,6 +413,7 @@ const SynonymMatchPage = () => {
                                         variant="outline"
                                         className={getButtonClasses(word, true)}
                                         onClick={() => handleSelect1(word)}
+                                        disabled={correctPairs.includes(word) || !!incorrectPair || isFrozen}
                                     >
                                         {word}
                                     </Button>
@@ -429,6 +427,7 @@ const SynonymMatchPage = () => {
                                         variant="outline"
                                         className={getButtonClasses(word, false)}
                                         onClick={() => handleSelect2(word)}
+                                        disabled={!selected1 || correctPairs.includes(word) || !!incorrectPair || isFrozen}
                                     >
                                         {word}
                                     </Button>
