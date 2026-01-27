@@ -191,12 +191,12 @@ export default function Home() {
                                 <span className={cn("col-start-2 flex items-center", iconClasses)}>
                                     {getUIText('fill')}&nbsp;
                                     <span className={cn(
-                                        "relative inline-block h-6 text-center overflow-hidden transition-all duration-300",
+                                        "relative inline-block h-6 -mr-1 -ml-1 text-center overflow-hidden transition-all duration-300",
                                         fillTheGapAnimatedWord[language].width
                                     )}>
                                         <span
                                             key={fillTheGapText}
-                                            className="absolute inset-0 flex items-center justify-center animate-text-fall-down"
+                                            className="absolute inset-0 mb-0.5 flex items-center justify-center animate-text-fall-down"
                                         >
                                             {fillTheGapText}
                                         </span>
@@ -324,6 +324,3 @@ export default function Home() {
         </main>
     );
 }
-    
-
-    
