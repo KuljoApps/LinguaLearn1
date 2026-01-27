@@ -4,13 +4,12 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowLeft, Timer, Play, SkipForward, FlagOff, Zap, Brain, ThumbsUp, Trophy, ShieldX } from 'lucide-react';
+import { ArrowLeft, Timer, Play, SkipForward, FlagOff, Zap, Brain, ThumbsUp, Trophy, ShieldX, CheckCircle, Percent } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { getLanguage, type Language } from '@/lib/storage';
 import { allTranslationRaceWords, type TranslationPair } from '@/lib/games/translation-race';
 import { playSound } from '@/lib/sounds';
 import { vibrate } from '@/lib/vibrations';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import TimerRing from '@/components/TimerRing';
 import TallyScore from '@/components/TallyScore';
@@ -184,7 +183,7 @@ const TranslationRacePage = () => {
                  <CardHeader className="text-center p-6">
                      <div className="flex items-center justify-center gap-4">
                          <Timer className="h-8 w-8" />
-                         <CardTitle className="text-3xl font-bold tracking-tight">{getUIText('title')}</CardTitle>
+                         {!shouldShowResults && <CardTitle className="text-3xl font-bold tracking-tight">{getUIText('title')}</CardTitle>}
                      </div>
                  </CardHeader>
                 <CardContent className="p-6 pt-0 flex flex-col justify-center min-h-[50vh]">
@@ -205,8 +204,8 @@ const TranslationRacePage = () => {
                                 <h2 className="text-2xl font-bold">{motivationalMessage.title}</h2>
                                 <CardDescription>{getUIText('finalScore')} <span className="font-bold text-primary">{score}</span></CardDescription>
                             </div>
-                            <Card className="bg-muted/50">
-                                <CardHeader className="pb-2"><CardTitle className="text-xl text-center">{getUIText('summary')}</CardTitle></CardHeader>
+                            <Card className="bg-muted/50 mt-2">
+                                <CardHeader className="pt-4 pb-2"><CardTitle className="text-xl text-center">{getUIText('summary')}</CardTitle></CardHeader>
                                 <CardContent className="grid grid-cols-2 gap-4 text-center">
                                     <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-background">
                                         <div className="flex items-center gap-2"><Zap className="h-4 w-4 text-amber"/><span className="text-2xl font-bold">{wpm}</span></div>
@@ -221,18 +220,18 @@ const TranslationRacePage = () => {
                             {sessionSkippedWords.length > 0 && (
                                 <div className="space-y-2">
                                     <h3 className="text-center font-semibold">{getUIText('worthRepeating')}</h3>
-                                    <ScrollArea className="h-24 w-full rounded-md border p-2">
+                                    <div className="w-full rounded-md border p-2">
                                         <div className="space-y-2">
-                                            {sessionSkippedWords.map((word, index) => (
+                                            {sessionSkippedWords.slice(0, 3).map((word, index) => (
                                                 <React.Fragment key={index}>
                                                     <div className="text-sm p-2 bg-muted/30 rounded-md">
                                                         <p><span className="text-destructive font-semibold">{getUIText('skippedWord')}:</span> {word.native} - {word.pl}</p>
                                                     </div>
-                                                    {index < sessionSkippedWords.length - 1 && <Separator />}
+                                                    {index < sessionSkippedWords.slice(0, 3).length - 1 && <Separator />}
                                                 </React.Fragment>
                                             ))}
                                         </div>
-                                    </ScrollArea>
+                                    </div>
                                 </div>
                             )}
                              <div className="text-center pt-2">
@@ -243,14 +242,15 @@ const TranslationRacePage = () => {
                     
                     {isActive && currentWord && (
                          <div className="flex flex-col h-full items-center">
-                            <div className="flex justify-around items-center w-full mb-8">
-                                <div className="flex flex-col items-center">
+                            <div className="flex justify-center items-center w-full mb-8 gap-4">
+                                <div className="flex-1 flex flex-col items-center">
                                     <span className="text-sm font-medium text-muted-foreground mb-2">{getUIText('timeLeft')}</span>
                                     <TimerRing timeLeft={timeLeft} totalTime={GAME_DURATION} />
                                 </div>
-                                <div className="flex flex-col items-center">
+                                <Separator orientation="vertical" className="h-24 self-center" />
+                                <div className="flex-1 flex flex-col items-center">
                                     <span className="text-sm font-medium text-muted-foreground mb-2">{getUIText('score')}</span>
-                                    <div className="h-[112px] flex items-center">
+                                    <div className="h-[112px] flex items-center justify-center">
                                         <TallyScore score={score} />
                                     </div>
                                 </div>
@@ -261,7 +261,7 @@ const TranslationRacePage = () => {
                                 <p className="text-6xl font-bold tracking-wider text-amber">{currentWord.native}</p>
                             </div>
 
-                            <div className="w-full max-w-sm space-y-6">
+                            <div className="w-full max-w-sm space-y-4">
                                 <Input 
                                     value={inputValue}
                                     onChange={handleInputChange}
@@ -269,7 +269,7 @@ const TranslationRacePage = () => {
                                     className="text-lg text-center h-12"
                                     autoFocus
                                 />
-                                <div className="flex justify-center gap-2">
+                                <div className="flex justify-center gap-2 mt-4">
                                     <Button variant="outline" size="lg" onClick={handleSkip} disabled={skipsLeft <= 0} className="relative">
                                     <SkipForward className="h-5 w-5" />
                                     <span className="absolute -top-1 -right-1 text-xs font-bold bg-destructive text-destructive-foreground rounded-full h-4 w-4 flex items-center justify-center">{skipsLeft}</span>

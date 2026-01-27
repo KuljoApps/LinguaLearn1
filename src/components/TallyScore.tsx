@@ -71,7 +71,7 @@ const TallyScore: React.FC<TallyScoreProps> = ({ score }) => {
     const animateLastMark = isAnimating && score > prevScore;
 
     return (
-        <div className="flex flex-wrap items-center gap-4">
+        <div className="flex flex-wrap items-center justify-center gap-4">
             {Array.from({ length: groupsOfFive }).map((_, i) => (
                 <svg key={i} width="32" height="28" className="stroke-success overflow-visible">
                     <TallyGroup animateLast={animateLastMark && remainder === 0 && i === groupsOfFive - 1} />
