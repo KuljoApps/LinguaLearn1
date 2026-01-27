@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -64,6 +64,9 @@ const OddOneOutPage = () => {
     const [currentStreak, setCurrentStreak] = useState(0);
     const [longestStreakInSession, setLongestStreakInSession] = useState(0);
     
+    const scrollAreaRef = useRef<HTMLDivElement>(null);
+    const [isInteracted, setIsInteracted] = useState(false);
+
     const currentSet = sessionQuestions[currentQuestionIndex];
     
     const getUIText = (key: keyof typeof uiTexts) => uiTexts[key][language] || uiTexts[key]['en'];
@@ -97,6 +100,7 @@ const OddOneOutPage = () => {
         setLongestStreakInSession(0);
         setTotalTime(0);
         setSessionErrors([]);
+        setIsInteracted(false);
         resetQuestionState(gameQuestions[0]);
         setGameStage('playing');
         setIsPreGame(true);
@@ -201,6 +205,39 @@ const OddOneOutPage = () => {
         };
     }, [gameStage, answerStatus, currentQuestionIndex, currentSet, showAchievementToast, language, isPreGame, currentStreak]);
     
+    useEffect(() => {
+        let animationFrameId: number;
+        if (gameStage === 'results' && sessionErrors.length > 0 && !isInteracted) {
+            const viewport = scrollAreaRef.current?.querySelector('div[data-radix-scroll-area-viewport]');
+            
+            const startTime = Date.now();
+            
+            const scroll = () => {
+                if (!viewport || isInteracted) {
+                    cancelAnimationFrame(animationFrameId);
+                    return;
+                }
+
+                // Start scrolling after 1 second
+                if (Date.now() - startTime < 1000) {
+                     animationFrameId = requestAnimationFrame(scroll);
+                     return;
+                }
+
+                if (viewport.scrollTop < viewport.scrollHeight - viewport.clientHeight) {
+                    viewport.scrollTop += 0.5; // slow scroll speed
+                    animationFrameId = requestAnimationFrame(scroll);
+                }
+            };
+            
+            animationFrameId = requestAnimationFrame(scroll);
+            
+            return () => {
+                cancelAnimationFrame(animationFrameId);
+            };
+        }
+    }, [gameStage, sessionErrors.length, isInteracted]);
+    
     const handleSelect = (word: string) => {
         if (answerStatus || isPreGame) return;
         setSelected(word);
@@ -274,7 +311,12 @@ const OddOneOutPage = () => {
                          {sessionErrors.length > 0 && (
                             <div className="space-y-2">
                                 <h3 className="text-center font-semibold">{getUIText('worthRepeating')}</h3>
-                                <ScrollArea className="h-24 w-full rounded-md border p-2">
+                                <ScrollArea 
+                                    ref={scrollAreaRef}
+                                    onPointerDown={() => setIsInteracted(true)}
+                                    onWheel={() => setIsInteracted(true)}
+                                    className="h-24 w-full rounded-md border p-2"
+                                >
                                     <div className="space-y-2">
                                         {sessionErrors.map((error, index) => (
                                             <React.Fragment key={index}>
@@ -320,7 +362,7 @@ const OddOneOutPage = () => {
                              <div className="relative flex h-28 w-28 items-center justify-center">
                                 <TimerRing timeLeft={isPreGame ? 0 : timeLeft} totalTime={GAME_DURATION} />
                                 {isPreGame && (
-                                    <div className="absolute inset-0 flex items-center justify-center bg-background rounded-full">
+                                    <div className="absolute inset-0 flex items-center justify-center bg-background/80 rounded-full">
                                         <span className="text-5xl font-bold text-amber animate-pulse">
                                             {preGameCountdown > 0 ? preGameCountdown : 'GO!'}
                                         </span>
@@ -355,7 +397,7 @@ const OddOneOutPage = () => {
                                 <Button 
                                     key={word}
                                     variant="outline"
-                                    className={cn("h-24 text-2xl", 
+                                    className={cn("h-24 text-2xl relative overflow-hidden", 
                                         answerStatus && isSelected && !isCorrectAnswer && 'bg-destructive text-destructive-foreground',
                                         answerStatus && isCorrectAnswer && 'bg-success text-success-foreground',
                                         answerStatus && !isSelected && !isCorrectAnswer && 'opacity-50'
@@ -364,6 +406,9 @@ const OddOneOutPage = () => {
                                     disabled={!!selected || isPreGame}
                                 >
                                     {word}
+                                     {answerStatus && isCorrectAnswer && (
+                                        <div className="absolute top-1/2 left-0 h-0.5 w-full bg-card-foreground/70 animate-strike-through" />
+                                    )}
                                 </Button>
                             );
                         })}
@@ -383,3 +428,4 @@ const OddOneOutPage = () => {
 };
 
 export default OddOneOutPage;
+

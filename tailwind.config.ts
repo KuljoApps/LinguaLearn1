@@ -170,6 +170,10 @@ export default {
             filter: 'blur(0)',
           },
         },
+        'strike-through': {
+          from: { width: '0' },
+          to: { width: '100%' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -187,10 +191,12 @@ export default {
         'letter-bounce': 'letter-bounce 0.5s ease-in-out 2',
         'draw-line': 'draw-line 0.5s ease-out forwards',
         'shuffle-blur-spin': 'shuffle-blur-spin 1s ease-in-out',
+        'strike-through': 'strike-through 0.3s ease-out forwards',
       },
     },
   },
   plugins: [require('tailwindcss-animate')],
 } satisfies Config;
+
 
 
