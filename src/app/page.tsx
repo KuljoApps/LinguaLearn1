@@ -19,10 +19,10 @@ import { cn } from '@/lib/utils';
 
 const uiTexts = {
     welcome: { en: "Ready to question your life choices in another language? Let's go!", fr: "Prêt à remettre en question tes choix de vie dans une autre langue? Allons-y!", de: "Bereit, deine Lebensentscheidungen in einer anderen Sprache zu hinterfragen? Los geht's!", it: "Pronto a mettere in discussione le tue scelte di vita in un'altra lingua? Andiamo!", es: "¿Listo para cuestionar tus elecciones de vida en otro idioma? ¡Vamos!" },
-    quizzes: { en: 'Quizzes', fr: 'Quiz', de: 'Quiz', it: 'Quiz', es: 'Cuestionarios' },
+    quizzes: { en: 'Quizzes', fr: 'Quiz', de: 'Quizze', it: 'Quiz', es: 'Cuestionarios' },
     games: { en: 'Games', fr: 'Jeux', de: 'Spiele', it: 'Giochi', es: 'Juegos' },
     fill: { en: 'Fill', fr: 'Combler', de: 'Füllen', it: 'Colma', es: 'Rellena' },
-    gap: { en: ' the Gap', fr: ' le Vide', de: ' die Lücke', it: ' il Vuoto', es: ' el Hueco' },
+    gap: { en: 'Gap', fr: 'Vide', de: 'Lücke', it: 'Vuoto', es: 'Hueco' },
     reading: { en: 'Reading', fr: 'Lecture', de: 'Lesen', it: 'Lettura', es: 'Lectura' },
     listening: { en: 'Listening', fr: 'Écoute', de: 'Hören', it: 'Ascolto', es: 'Escucha' },
     learning: { en: 'Learning', fr: 'Apprentissage', de: 'Lernen', it: 'Apprendimento', es: 'Aprendizaje' },
@@ -185,8 +185,8 @@ export default function Home() {
                                     <PencilLine className={cn("h-5 w-5 mr-2", iconClasses)} />
                                 </div>
                                 <span className={cn("col-start-2 flex items-center", iconClasses)}>
-                                    <span>{getUIText('fill')}</span>
-                                    <span className="relative inline-block h-6 w-12 text-center overflow-hidden">
+                                    <span>{getUIText('fill')}&nbsp;</span>
+                                    <span className="relative inline-block h-6 w-10 text-center overflow-hidden">
                                         <span
                                             key={fillTheGapText}
                                             className="absolute inset-0 flex items-center justify-center animate-text-fall-down"
@@ -194,7 +194,7 @@ export default function Home() {
                                             {fillTheGapText}
                                         </span>
                                     </span>
-                                    <span>{getUIText('gap')}</span>
+                                    <span>&nbsp;{getUIText('gap')}</span>
                                 </span>
                                  <div />
                             </Button>
