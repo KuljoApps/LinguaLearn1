@@ -113,10 +113,10 @@ body {
     }
     .qr-pattern-bg {
         background-color: hsl(var(--background));
-        background-image: 
-            repeating-conic-gradient(hsl(var(--amber) / 0.15) 0% 25%, transparent 0% 50%),
-            repeating-conic-gradient(hsl(var(--background)) 0% 25%, hsl(var(--amber) / 0.1) 0% 50%);
-        background-size: 12px 12px, 6px 6px;
-        background-blend-mode: difference;
+        background-image:
+          repeating-conic-gradient(hsl(var(--amber) / 0.2) 0% 25%, transparent 0% 50%),
+          repeating-conic-gradient(hsl(var(--amber) / 0.1) 0% 25%, transparent 0% 50%);
+        background-size: 20px 20px, 10px 10px;
+        background-position: 0 0, 5px 5px;
     }
 }

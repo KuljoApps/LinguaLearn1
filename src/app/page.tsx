@@ -27,7 +27,6 @@ export default function Home() {
     const [showQuizzesSpin, setShowQuizzesSpin] = useState(false);
     const [showGamesTilt, setShowGamesTilt] = useState(false);
     const [showListeningPulse, setShowListeningPulse] = useState(false);
-    const [showLearningAnim, setShowLearningAnim] = useState(false);
     const pathname = usePathname();
 
     useEffect(() => {
@@ -81,10 +80,6 @@ export default function Home() {
             () => {
                 setShowListeningPulse(true);
                 timers.push(setTimeout(() => setShowListeningPulse(false), 3000));
-            },
-            () => {
-                setShowLearningAnim(true);
-                timers.push(setTimeout(() => setShowLearningAnim(false), 4000));
             }
         ];
 
@@ -251,7 +246,7 @@ export default function Home() {
                         <Button
                             variant="outline"
                             className={cn(
-                                "w-full h-12 text-xl border-2 grid grid-cols-[1fr_auto_1fr] items-center text-amber hover:text-amber border-amber qr-pattern-bg animate-qr-pan"
+                                "w-full h-12 text-xl border-2 grid grid-cols-[1fr_auto_1fr] items-center text-amber hover:text-amber border-amber qr-pattern-bg"
                             )}
                         >
                             <div className="flex justify-end">
