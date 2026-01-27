@@ -4,11 +4,10 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowLeft, Keyboard, HelpCircle } from 'lucide-react';
+import { ArrowLeft, Keyboard } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { getLanguage, type Language } from '@/lib/storage';
 import { allHangmanQuestions, type HangmanQuestion } from '@/lib/games/hangman';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 
 const alphabets: Record<Language, string[]> = {
@@ -116,21 +115,13 @@ const HangmanPage = () => {
                     </div>
                     <p className="text-muted-foreground pt-2">{getUIText('description')}</p>
                 </CardHeader>
-                <CardContent className="p-6 space-y-6">
-                    <div className="flex items-center justify-center gap-2">
-                        <Popover>
-                            <PopoverTrigger asChild>
-                                <Button variant="outline" size="icon" className="h-10 w-10">
-                                    <HelpCircle className="h-5 w-5" />
-                                </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto max-w-sm">
-                                <p className="text-sm font-semibold">{getUIText('hint')}:</p>
-                                <p className="text-sm text-muted-foreground">{currentWord.hint}</p>
-                            </PopoverContent>
-                        </Popover>
-                         <p className="text-4xl font-bold tracking-widest text-center py-4">{wordDisplay}</p>
+                <CardContent className="p-6 space-y-6 text-center">
+                    <div>
+                        <p className="text-base font-semibold">{getUIText('hint')}:</p>
+                        <p className="text-lg text-muted-foreground italic">"{currentWord.hint}"</p>
                     </div>
+
+                    <p className="text-4xl font-bold tracking-widest text-center py-4">{wordDisplay}</p>
 
                     <div className="flex flex-wrap justify-center gap-2 max-w-md mx-auto">
                         {alphabet.map(letter => (
