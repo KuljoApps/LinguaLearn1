@@ -1,11 +1,10 @@
-
 "use client";
 
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRightLeft, Clock, ShieldX, CheckCircle, Percent, Trophy, ThumbsUp, Brain } from 'lucide-react';
+import { ArrowLeft, ArrowRightLeft, Clock, ShieldX, Percent, Trophy, ThumbsUp, Brain, Flame } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { getLanguage, type Language } from '@/lib/storage';
@@ -36,7 +35,7 @@ const uiTexts = {
     playAgain: { en: 'Play Again', fr: 'Rejouer', de: 'Nochmal spielen', it: 'Gioca di nuovo', es: 'Jugar de nuevo' },
     backToGames: { en: 'Back to Game Center', fr: 'Retour au Centre de jeux', de: 'Zurück zur Spielzentrale', it: 'Torna al Centro Giochi', es: 'Volver al Centro de Juegos' },
     summary: { en: 'Summary', fr: 'Résumé', de: 'Zusammenfassung', it: 'Riepilogo', es: 'Resumen' },
-    score: { en: 'Score', fr: 'Score', de: 'Ergebnis', it: 'Punteggio', es: 'Puntuación' },
+    streak: { en: 'Best Streak', fr: 'Meilleure Série', de: 'Beste Serie', it: 'Miglior Serie', es: 'Mejor Racha' },
     mistakes: { en: 'Mistakes', fr: 'Erreurs', de: 'Fehler', it: 'Errori', es: 'Errores' },
     time: { en: 'Time', fr: 'Temps', de: 'Zeit', it: 'Tempo', es: 'Tiempo' },
     successRate: { en: 'Success Rate', fr: 'Taux de réussite', de: 'Erfolgsquote', it: 'Tasso di successo', es: 'Tasa de éxito' },
@@ -56,6 +55,8 @@ const SynonymMatchPage = () => {
     const [startTime, setStartTime] = useState<number | null>(null);
     const [gameWonTime, setGameWonTime] = useState<number | null>(null);
     const [sessionErrors, setSessionErrors] = useState<Map<string, SessionError>>(new Map());
+    const [currentStreak, setCurrentStreak] = useState(0);
+    const [longestStreak, setLongestStreak] = useState(0);
 
     const gameContainerRef = useRef<HTMLDivElement>(null);
     const buttonRefs = useRef<Map<string, HTMLButtonElement | null>>(new Map());
@@ -121,6 +122,8 @@ const SynonymMatchPage = () => {
         setGameWonTime(null);
         setSessionErrors(new Map());
         setLines([]);
+        setCurrentStreak(0);
+        setLongestStreak(0);
     }, []);
 
     useEffect(() => {
@@ -129,6 +132,12 @@ const SynonymMatchPage = () => {
         window.addEventListener('language-changed', handleLanguageChange);
         return () => window.removeEventListener('language-changed', handleLanguageChange);
     }, [setupNewGame]);
+
+    useEffect(() => {
+        if (currentStreak > longestStreak) {
+            setLongestStreak(currentStreak);
+        }
+    }, [currentStreak, longestStreak]);
 
     useEffect(() => {
         if (correctPairs.length > 0 && correctPairs.length === GAME_SIZE * 2 && !gameWonTime) {
@@ -184,12 +193,14 @@ const SynonymMatchPage = () => {
 
         if (wordSet && wordSet.matches[selected1] === word) {
             setCorrectPairs(prev => [...prev, selected1, word]);
+            setCurrentStreak(prev => prev + 1);
             toast({ title: getUIText('correctToastTitle'), description: getUIText('correctToastDesc', { word1: selected1, word2: word }), duration: 2000 });
             setSelected1(null);
             setSelected2(null);
         } else {
             setIncorrectPair([selected1, word]);
             setMistakes(prev => prev + 1);
+            setCurrentStreak(0);
             if(wordSet) {
               const errorKey = [selected1!, word].sort().join('-');
               setSessionErrors(prev => {
@@ -251,8 +262,8 @@ const SynonymMatchPage = () => {
                                 <CardHeader className="pb-2"><CardTitle className="text-xl text-center">{getUIText('summary')}</CardTitle></CardHeader>
                                 <CardContent className="grid grid-cols-2 gap-4 text-center">
                                     <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-background">
-                                        <div className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-success"/><span className="text-2xl font-bold">{GAME_SIZE}</span></div>
-                                        <span className="text-xs text-muted-foreground">{getUIText('score')}</span>
+                                        <div className="flex items-center gap-2"><Flame className="h-4 w-4 text-amber"/><span className="text-2xl font-bold">{longestStreak}</span></div>
+                                        <span className="text-xs text-muted-foreground">{getUIText('streak')}</span>
                                     </div>
                                     <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-background">
                                         <div className="flex items-center gap-2"><ShieldX className="h-4 w-4 text-destructive"/><span className="text-2xl font-bold">{mistakes}</span></div>
@@ -306,7 +317,7 @@ const SynonymMatchPage = () => {
                                         x2={line.x2}
                                         y2={line.y2}
                                         stroke="hsl(var(--success))"
-                                        strokeWidth="2"
+                                        strokeWidth="1.5"
                                         className="animate-draw-line"
                                     />
                                 ))}
