@@ -12,13 +12,11 @@ import { getLanguage, addCompletedGapWord, type Language, getGapWordsProgress } 
 import { allGapWordQuestions, type GapWordQuestion } from '@/lib/fill-the-gap/gap-words';
 import { playSound } from '@/lib/sounds';
 import { vibrate } from '@/lib/vibrations';
-import Confetti from 'react-confetti';
-import { useWindowSize } from '@react-hook/window-size';
+import Confetti from '@/components/Confetti';
 
 export default function GapWordExercisePage() {
     const params = useParams();
     const router = useRouter();
-    const [width, height] = useWindowSize();
 
     const [question, setQuestion] = useState<GapWordQuestion | null>(null);
     const [inputValue, setInputValue] = useState('');
@@ -85,7 +83,7 @@ export default function GapWordExercisePage() {
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
-            {showConfetti && <Confetti width={width} height={height} recycle={false} numberOfPieces={200} gravity={0.2} onConfettiComplete={onConfettiComplete} />}
+            {showConfetti && <Confetti onConfettiComplete={onConfettiComplete} />}
             <Card className="w-full max-w-lg shadow-2xl">
                 <CardHeader className="text-center">
                     <div className="flex items-center justify-center gap-4">
