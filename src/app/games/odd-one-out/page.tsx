@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowLeft, EyeOff, Play, ShieldX, Percent, Clock, Trophy, ThumbsUp, Brain } from 'lucide-react';
+import { ArrowLeft, EyeOff, Play, ShieldX, Percent, Clock, Trophy, ThumbsUp, Brain, Flame } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { getLanguage, type Language, updateStats, addError, checkSessionAchievements, type Achievement, type ErrorRecord } from '@/lib/storage';
 import { allOddOneOutQuestions, type OddOneOutSet } from '@/lib/games/odd-one-out';
@@ -31,18 +31,17 @@ const uiTexts = {
         es: 'Encuentra la palabra que no pertenece al grupo.'
     },
     category: { en: 'Category', fr: 'Catégorie', de: 'Kategorie', it: 'Categoria', es: 'Categoría' },
-    startGame: { en: 'Start Game', fr: 'Commencer le jeu', de: 'Spiel starten', it: 'Inizia il gioco', es: 'Empezar juego' },
-    next: { en: 'Next', fr: 'Suivant', de: 'Nächste', it: 'Prossimo', es: 'Siguiente' },
     backToGames: { en: 'Back to Game Center', fr: 'Retour au Centre de jeux', de: 'Zurück zur Spielzentrale', it: 'Torna al Centro Giochi', es: 'Volver al Centro de Juegos' },
     summary: { en: 'Summary', fr: 'Résumé', de: 'Zusammenfassung', it: 'Riepilogo', es: 'Resumen' },
     worthRepeating: { en: 'Worth repeating', fr: 'À répéter', de: 'Wiederholenswert', it: 'Da ripetere', es: 'Vale la pena repetir' },
     score: { en: 'Score', fr: 'Score', de: 'Punkte', it: 'Punteggio', es: 'Puntuación' },
+    streak: { en: 'Best Streak', fr: 'Meilleure Série', de: 'Beste Serie', it: 'Miglior Serie', es: 'Mejor Racha' },
     playAgain: { en: 'Play Again', fr: 'Rejouer', de: 'Nochmal spielen', it: 'Gioca di nuovo', es: 'Jugar de nuevo' },
     timeLeft: { en: 'Time Left', fr: 'Temps restant', de: 'Verbleibende Zeit', it: 'Tempo rimasto', es: 'Tiempo restante' },
     finalScore: { en: 'Final Score', fr: 'Score Final', de: 'Endergebnis', it: 'Punteggio Finale', es: 'Puntuación Final' },
     successRate: { en: 'Success Rate', fr: 'Taux de réussite', de: 'Erfolgsquote', it: 'Tasso di successo', es: 'Tasa de éxito' },
     time: { en: 'Time', fr: 'Temps', de: 'Zeit', it: 'Tempo', es: 'Tiempo' },
-    timesUp: { en: 'Time\'s up!', fr: 'Le temps est écoulé !', de: 'Die Zeit ist um!', it: 'Tempo scaduto!', es: '¡Se acabó el tiempo!' },
+    question: { en: 'Question', fr: 'Question', de: 'Frage', it: 'Domanda', es: 'Pregunta' },
 };
 
 const shuffle = <T,>(array: T[]): T[] => [...array].sort(() => Math.random() - 0.5);
@@ -62,6 +61,8 @@ const OddOneOutPage = () => {
     const { toast } = useToast();
     const [isPreGame, setIsPreGame] = useState(true);
     const [preGameCountdown, setPreGameCountdown] = useState(4); // 4 -> 3, 2, 1, GO!
+    const [currentStreak, setCurrentStreak] = useState(0);
+    const [longestStreakInSession, setLongestStreakInSession] = useState(0);
     
     const currentSet = sessionQuestions[currentQuestionIndex];
     
@@ -92,6 +93,8 @@ const OddOneOutPage = () => {
         setSessionQuestions(gameQuestions);
         setCurrentQuestionIndex(0);
         setScore(0);
+        setCurrentStreak(0);
+        setLongestStreakInSession(0);
         setTotalTime(0);
         setSessionErrors([]);
         resetQuestionState(gameQuestions[0]);
@@ -101,6 +104,7 @@ const OddOneOutPage = () => {
     }, []);
 
     const resetQuestionState = (questionSet: OddOneOutSet) => {
+        if (!questionSet) return;
         setShuffledWords(shuffle(questionSet.words));
         setSelected(null);
         setAnswerStatus(null);
@@ -141,12 +145,13 @@ const OddOneOutPage = () => {
 
     const handleNextQuestion = useCallback(() => {
         if (currentQuestionIndex >= QUESTIONS_PER_SESSION - 1) {
+             setLongestStreakInSession(prev => Math.max(prev, currentStreak));
             setGameStage('results');
         } else {
             setCurrentQuestionIndex(prev => prev + 1);
             resetQuestionState(sessionQuestions[currentQuestionIndex + 1]);
         }
-    }, [currentQuestionIndex, sessionQuestions]);
+    }, [currentQuestionIndex, sessionQuestions, currentStreak]);
 
     useEffect(() => {
         let timer: NodeJS.Timeout;
@@ -176,6 +181,8 @@ const OddOneOutPage = () => {
                     setSessionErrors(prev => [...prev, { word: currentSet.category[language], userAnswer: 'Timeout', correctAnswer: currentSet.correct, quiz: 'Odd One Out' }]);
                     vibrate('incorrect');
                     playSound('incorrect');
+                    setLongestStreakInSession(prev => Math.max(prev, currentStreak));
+                    setCurrentStreak(0);
                     const unlocked = updateStats(false, 'Odd One Out', currentQuestionIndex);
                     unlocked.forEach(showAchievementToast);
                     return 0;
@@ -192,7 +199,7 @@ const OddOneOutPage = () => {
             clearInterval(questionTimer);
             clearInterval(gameTimer);
         };
-    }, [gameStage, answerStatus, currentQuestionIndex, currentSet, showAchievementToast, language, isPreGame]);
+    }, [gameStage, answerStatus, currentQuestionIndex, currentSet, showAchievementToast, language, isPreGame, currentStreak]);
     
     const handleSelect = (word: string) => {
         if (answerStatus || isPreGame) return;
@@ -202,12 +209,15 @@ const OddOneOutPage = () => {
         if (isCorrect) {
             setAnswerStatus('correct');
             setScore(prev => prev + 1);
+            setCurrentStreak(prev => prev + 1);
             vibrate('correct');
             playSound('correct');
         } else {
             setAnswerStatus('incorrect');
             vibrate('incorrect');
             playSound('incorrect');
+            setLongestStreakInSession(prev => Math.max(prev, currentStreak));
+            setCurrentStreak(0);
             const errorRecord = { word: currentSet.category[language], userAnswer: word, correctAnswer: currentSet.correct, quiz: 'Odd One Out' };
             addError(errorRecord);
             setSessionErrors(prev => [...prev, errorRecord]);
@@ -217,6 +227,7 @@ const OddOneOutPage = () => {
     };
 
     const successRate = totalTime > 0 ? Math.round((score / QUESTIONS_PER_SESSION) * 100) : 0;
+    const finalScoreColor = score > 10 ? "text-success" : score < 0 ? "text-destructive" : "text-foreground";
     const motivationalMessage = useMemo(() => {
         if (successRate >= 90) return { icon: <Trophy className="h-16 w-16 text-amber animate-shake" />, title: 'Excellent!' };
         if (successRate >= 70) return { icon: <ThumbsUp className="h-16 w-16 text-success" />, title: 'Great Job!' };
@@ -228,18 +239,27 @@ const OddOneOutPage = () => {
         return (
              <main className="flex min-h-screen flex-col items-center justify-center p-4">
                 <Card className="w-full max-w-2xl shadow-2xl">
-                    <CardHeader className="items-center text-center pb-4">
+                    <CardHeader className="text-center p-6">
+                        <div className="flex items-center justify-center gap-4">
+                            <EyeOff className="h-8 w-8" />
+                            <CardTitle className="text-3xl font-bold tracking-tight">{getUIText('title')}</CardTitle>
+                        </div>
+                    </CardHeader>
+                    <CardHeader className="items-center text-center pb-4 pt-0">
                         {motivationalMessage.icon}
                         <CardTitle className="text-3xl font-bold">{motivationalMessage.title}</CardTitle>
-                        <CardDescription>{getUIText('finalScore')}: <span className="font-bold text-lg text-primary">{score}/{QUESTIONS_PER_SESSION}</span></CardDescription>
+                        <CardDescription className="flex flex-col items-center gap-1">
+                            <span>{getUIText('finalScore')}</span>
+                            <span className={cn("text-4xl font-bold", finalScoreColor)}>{score}</span>
+                        </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <Card className="bg-muted/50">
                              <CardHeader className="pb-2 pt-4"><CardTitle className="text-xl text-center">{getUIText('summary')}</CardTitle></CardHeader>
                              <CardContent className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-center">
                                 <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-background">
-                                    <span className="text-3xl font-bold">{score}</span>
-                                    <span className="text-xs text-muted-foreground">{getUIText('score')}</span>
+                                    <div className="flex items-center gap-2"><Flame className="h-4 w-4 text-amber"/><span className="text-2xl font-bold">{longestStreakInSession}</span></div>
+                                    <span className="text-xs text-muted-foreground">{getUIText('streak')}</span>
                                 </div>
                                 <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-background">
                                     <div className="flex items-center gap-2"><Percent className="h-4 w-4 text-amber"/><span className="text-2xl font-bold">{successRate}%</span></div>
@@ -300,7 +320,7 @@ const OddOneOutPage = () => {
                              <div className="relative flex h-28 w-28 items-center justify-center">
                                 <TimerRing timeLeft={isPreGame ? 0 : timeLeft} totalTime={GAME_DURATION} />
                                 {isPreGame && (
-                                    <div className="absolute inset-0 flex items-center justify-center bg-background/80 rounded-full">
+                                    <div className="absolute inset-0 flex items-center justify-center bg-background rounded-full">
                                         <span className="text-5xl font-bold text-amber animate-pulse">
                                             {preGameCountdown > 0 ? preGameCountdown : 'GO!'}
                                         </span>
@@ -316,7 +336,13 @@ const OddOneOutPage = () => {
                             </div>
                         </div>
                     </div>
-                    <Progress value={((currentQuestionIndex + 1) / QUESTIONS_PER_SESSION) * 100} className="w-full h-2" />
+
+                    <div className="w-full space-y-1">
+                        <p className="text-sm font-medium text-muted-foreground text-center">
+                            {getUIText('question')} {currentQuestionIndex + 1} / {QUESTIONS_PER_SESSION}
+                        </p>
+                        <Progress value={((currentQuestionIndex + 1) / QUESTIONS_PER_SESSION) * 100} className="w-full h-2" />
+                    </div>
 
                     <p className="text-center text-lg">{getUIText('category')}: <span className="font-bold">{currentSet.category[language]}</span></p>
 
