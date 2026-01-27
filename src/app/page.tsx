@@ -222,7 +222,7 @@ export default function Home() {
                                         'Reading'
                                     )}
                                 </span>
-                                <div />
+                                 <div />
                             </Button>
                         </Link>
                         <Link href="/listening" passHref>
@@ -251,22 +251,22 @@ export default function Home() {
                         <Button
                             variant="outline"
                             className={cn(
-                                "w-full h-12 text-xl border-2 grid grid-cols-[1fr_auto_1fr] items-center font-bold text-amber hover:text-amber border-amber bg-orange-500/10 hover:bg-orange-500/20"
+                                "w-full h-12 text-xl border-2 grid grid-cols-[1fr_auto_1fr] items-center text-amber hover:text-amber border-amber bg-orange-500/10 hover:bg-orange-500/20"
                             )}
                         >
                             <div className="flex justify-end">
                                 <GraduationCap className="mr-2 h-5 w-5" />
                             </div>
                             <span className={cn(
-                                "col-start-2",
-                                showLearningAnim && "bg-clip-text text-transparent bg-gradient-to-r from-amber/80 via-white to-amber/80 bg-[length:200%_auto] animate-[text-shimmer_1.5s_ease-out_1.3s_1]"
+                                "col-start-2 font-bold",
+                                showLearningAnim && "bg-clip-text text-transparent bg-gradient-to-r from-amber/80 via-white to-amber/80 bg-[length:200%_auto] animate-text-shimmer"
                             )}>
                                 {getLearningButtonText()}
                             </span>
                             <div />
                         </Button>
                         {showLearningAnim && (
-                            <div className="pointer-events-none">
+                            <div className="pointer-events-none absolute inset-0">
                                 <span className="absolute top-0 left-0 block h-0.5 w-0 bg-amber animate-draw-horizontal" />
                                 <span className="absolute top-0 right-0 block w-0.5 h-0 bg-amber animate-draw-vertical [animation-delay:0.3s]" />
                                 <span className="absolute bottom-0 right-0 block h-0.5 w-0 bg-amber animate-draw-horizontal [animation-delay:0.6s]" />

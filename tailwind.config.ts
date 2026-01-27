@@ -178,7 +178,7 @@ export default {
         'letter-bounce': 'letter-bounce 0.6s ease-in-out 2',
         'draw-horizontal': 'draw-horizontal 0.3s ease-out forwards',
         'draw-vertical': 'draw-vertical 0.3s ease-out forwards',
-        'text-shimmer': 'text-shimmer 1.5s ease-in-out',
+        'text-shimmer': 'text-shimmer 1.5s ease-out 1.3s forwards',
       },
     },
   },
