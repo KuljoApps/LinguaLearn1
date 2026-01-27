@@ -9,6 +9,7 @@ export interface GapWordQuestion {
   wordWithGap: string;
   missingLetters: string;
   fullWord: string;
+  hint: string;
 }
 
 export const allGapWordQuestions: Record<Language, GapWordQuestion[]> = {
