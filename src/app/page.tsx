@@ -229,11 +229,11 @@ export default function Home() {
                 <div data-tutorial-id="learning-button" className="px-6 pb-2">
                     <Separator className="mb-2"/>
                     <Link href={isFrench ? "/learning/fr" : isGerman ? "/learning/de" : isItalian ? "/learning/it" : isSpanish ? "/learning/es" : "/learning/en"} passHref>
-                        <Button variant="outline" className="w-full h-12 mt-2 text-lg border-2 border-amber bg-orange-500/10 hover:bg-orange-500/20 text-amber grid grid-cols-[1fr_auto_1fr] items-center">
+                        <Button variant="outline" className="w-full h-12 mt-2 text-lg border-2 border-amber bg-orange-500/10 hover:bg-orange-500/20 text-amber hover:text-amber grid grid-cols-[1fr_auto_1fr] items-center">
                             <div className="flex justify-end">
                                 <GraduationCap className="mr-2 h-5 w-5" />
                             </div>
-                            <span className="col-start-2">{getLearningButtonText()}</span>
+                            <span className="col-start-2 font-bold">{getLearningButtonText()}</span>
                             <div />
                         </Button>
                     </Link>
