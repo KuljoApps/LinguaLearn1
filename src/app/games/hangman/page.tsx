@@ -132,8 +132,11 @@ const HangmanPage = () => {
                                 onClick={() => handleGuess(letter)}
                                 disabled={guessedLetters.includes(letter.toUpperCase()) || isGameWon || isGameLost}
                                 className={cn(
-                                    guessedLetters.includes(letter.toUpperCase()) && !currentWord.word.toUpperCase().includes(letter.toUpperCase()) && 'bg-destructive text-destructive-foreground',
-                                    guessedLetters.includes(letter.toUpperCase()) && currentWord.word.toUpperCase().includes(letter.toUpperCase()) && 'bg-success text-success-foreground'
+                                    'transition-colors duration-150',
+                                    guessedLetters.includes(letter.toUpperCase()) &&
+                                        (currentWord.word.toUpperCase().includes(letter.toUpperCase())
+                                            ? 'bg-success text-success-foreground hover:bg-success/90 disabled:bg-success disabled:text-success-foreground disabled:opacity-100'
+                                            : 'bg-destructive text-destructive-foreground hover:bg-destructive/90 disabled:bg-destructive disabled:text-destructive-foreground disabled:opacity-100')
                                 )}
                             >
                                 {letter}
