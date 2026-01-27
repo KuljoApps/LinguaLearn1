@@ -29,7 +29,11 @@ const uiTexts = {
 };
 
 const fillTheGapAnimatedWord = {
-    en: 'the', fr: 'le', de: 'die', it: 'il', es: 'el',
+    en: { text: 'the', placeholder: '___' },
+    fr: { text: 'le', placeholder: '__' },
+    de: { text: 'die', placeholder: '___' },
+    it: { text: 'il', placeholder: '__' },
+    es: { text: 'el', placeholder: '__' },
 };
 
 export default function Home() {
@@ -37,7 +41,7 @@ export default function Home() {
     const [showPromo, setShowPromo] = useState(false);
     const [showRateDialog, setShowRateDialog] = useState(false);
     const [newAchievementsCount, setNewAchievementsCount] = useState(0);
-    const [fillTheGapText, setFillTheGapText] = useState(fillTheGapAnimatedWord.en);
+    const [fillTheGapText, setFillTheGapText] = useState(fillTheGapAnimatedWord.en.text);
     const [showReadingBounce, setShowReadingBounce] = useState(false);
     const [showQuizzesSpin, setShowQuizzesSpin] = useState(false);
     const [showGamesTilt, setShowGamesTilt] = useState(false);
@@ -49,7 +53,7 @@ export default function Home() {
             const currentLang = getLanguage();
             setCurrentLanguage(currentLang);
             updateAchievementCount();
-            setFillTheGapText(fillTheGapAnimatedWord[currentLang]);
+            setFillTheGapText(fillTheGapAnimatedWord[currentLang].text);
         };
 
         const updateAchievementCount = () => {
@@ -87,10 +91,10 @@ export default function Home() {
                 timers.push(setTimeout(() => setShowGamesTilt(false), 3000));
             },
             () => {
-                setFillTheGapText('___');
+                const currentLang = getLanguage();
+                setFillTheGapText(fillTheGapAnimatedWord[currentLang].placeholder);
                 timers.push(setTimeout(() => {
-                    const currentLang = getLanguage();
-                    setFillTheGapText(fillTheGapAnimatedWord[currentLang]);
+                    setFillTheGapText(fillTheGapAnimatedWord[currentLang].text);
                 }, 3000));
             },
             () => {
@@ -185,7 +189,7 @@ export default function Home() {
                                     <PencilLine className={cn("h-5 w-5 mr-2", iconClasses)} />
                                 </div>
                                 <span className={cn("col-start-2 flex items-center", iconClasses)}>
-                                    <span>{getUIText('fill')}&nbsp;</span>
+                                    {getUIText('fill')}&nbsp;
                                     <span className="relative inline-block h-6 w-10 text-center overflow-hidden">
                                         <span
                                             key={fillTheGapText}
@@ -194,7 +198,7 @@ export default function Home() {
                                             {fillTheGapText}
                                         </span>
                                     </span>
-                                    <span>&nbsp;{getUIText('gap')}</span>
+                                    &nbsp;{getUIText('gap')}
                                 </span>
                                  <div />
                             </Button>
@@ -228,7 +232,7 @@ export default function Home() {
                                     <Ear className={cn("h-5 w-5 mr-2", iconClasses, showListeningPulse && "animate-pulse-strong")} />
                                 </div>
                                 <span className={cn("col-start-2 flex items-baseline", iconClasses)}>
-                                    <span>{getUIText('listening')}</span>
+                                    {getUIText('listening')}
                                     {showListeningPulse && (
                                         <span className="flex pl-1">
                                             <span className="animate-dancing-dots" style={{ animationDelay: '0s' }}>.</span>
@@ -317,4 +321,6 @@ export default function Home() {
         </main>
     );
 }
+    
+
     
