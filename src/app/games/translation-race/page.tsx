@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowLeft, Timer, Play, SkipForward, Trophy, ThumbsUp, Brain, CheckCircle, ShieldX, Zap, FlagOff } from 'lucide-react';
+import { ArrowLeft, Timer, Play, SkipForward, Trophy, ThumbsUp, Brain, CheckCircle, ShieldX, Zap, FlagOff, Clock } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { getLanguage, type Language } from '@/lib/storage';
 import { allTranslationRaceWords, type TranslationPair } from '@/lib/games/translation-race';
