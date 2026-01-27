@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -88,9 +88,12 @@ const SynonymMatchPage = () => {
     }, [successRate]);
 
 
-    const getUIText = (key: keyof typeof uiTexts) => {
-      let text = uiTexts[key][language] || uiTexts[key]['en'];
-      return text;
+    const getUIText = (key: keyof typeof uiTexts, replacements: Record<string, string> = {}) => {
+        let text = uiTexts[key][language] || uiTexts[key]['en'];
+        for (const placeholder in replacements) {
+            text = text.replace(`{${placeholder}}`, replacements[placeholder]);
+        }
+        return text;
     };
     
     const setupNewGame = useCallback((lang: Language) => {
@@ -179,10 +182,6 @@ const SynonymMatchPage = () => {
         const correctPairCount = correctPairs.length / 2;
     
         const handleShuffle = (numToTake: number) => {
-            showRemixToast();
-    
-            // This entire block runs in one state update.
-            // React batches these state setters.
             const currentlyMatchedWords = new Set(correctPairs);
             const currentBoardWords = [...activeWords1, ...activeWords2];
             const unmatchedWordsOnBoard = currentBoardWords.filter(w => !currentlyMatchedWords.has(w));
@@ -204,7 +203,6 @@ const SynonymMatchPage = () => {
             const remainingDeck = deck.slice(numToTake);
             const nextBoardPairs = [...remainingPairsOnBoard, ...newPairsFromDeck];
             
-            // Set the new board state
             setActiveWords1(shuffle(nextBoardPairs.map(p => p.word1)));
             setActiveWords2(shuffle(nextBoardPairs.map(p => p.word2)));
             setDeck(remainingDeck);
@@ -212,9 +210,9 @@ const SynonymMatchPage = () => {
             setSelected1(null);
             setSelected2(null);
     
-            // And trigger the animation for the re-render.
             setIsFrozen(true);
             setTimeout(() => {
+                showRemixToast();
                 setIsFrozen(false);
             }, 1000); // Animation duration
         };
@@ -295,7 +293,7 @@ const SynonymMatchPage = () => {
                 return newErrors;
               });
             }
-            toast({ variant: "destructive", title: getUIText('incorrectToastTitle'), description: `"${selected1}" and "${word}" are not synonyms.`, duration: 2000 });
+            toast({ variant: "destructive", title: getUIText('incorrectToastTitle'), description: getUIText('incorrectToastDesc', { word1: selected1, word2: word }), duration: 2000 });
             setTimeout(() => {
                 setSelected1(null);
                 setSelected2(null);
@@ -366,7 +364,7 @@ const SynonymMatchPage = () => {
                                     <h3 className="text-center font-semibold">{getUIText('worthRepeating')}</h3>
                                     <ScrollArea className="h-24 w-full rounded-md border p-2">
                                         <div className="space-y-2">
-                                            {aggregatedErrors.map((error, index) => (
+                                            {aggregatedErrors.map((error: SessionError, index: number) => (
                                                 <React.Fragment key={index}>
                                                     <div className="text-sm p-2 bg-muted/30 rounded-md">
                                                         <p className="flex justify-between items-start">
@@ -408,7 +406,7 @@ const SynonymMatchPage = () => {
                                 {activeWords1.map(word => (
                                     <Button
                                         key={word}
-                                        ref={(el) => buttonRefs.current.set(word, el)}
+                                        ref={(el) => { buttonRefs.current.set(word, el); }}
                                         variant="outline"
                                         className={getButtonClasses(word, true)}
                                         onClick={() => handleSelect1(word)}
@@ -421,7 +419,7 @@ const SynonymMatchPage = () => {
                                 {activeWords2.map(word => (
                                     <Button
                                         key={word}
-                                        ref={(el) => buttonRefs.current.set(word, el)}
+                                        ref={(el) => { buttonRefs.current.set(word, el); }}
                                         variant="outline"
                                         className={getButtonClasses(word, false)}
                                         onClick={() => handleSelect2(word)}
@@ -449,3 +447,6 @@ const SynonymMatchPage = () => {
 
 export default SynonymMatchPage;
 
+
+
+    
