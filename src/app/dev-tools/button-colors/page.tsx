@@ -1,13 +1,14 @@
 "use client";
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-    ArrowLeft, BookCopy, Dumbbell, Sparkles, Settings, BarChart, ShieldX, Trophy, GraduationCap,
-    LayoutGrid, Gamepad2, PencilLine, BookOpenText, Ear, Palette
+    ArrowLeft, GraduationCap,
+    LayoutGrid, Gamepad2, PencilLine, BookOpenText, Ear,
+    Settings, BarChart, ShieldX, Trophy
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card';
 import LinguaLearnLogo from '@/components/LinguaLearnLogo';
 import { getLanguage, setLanguage, type Language } from '@/lib/storage';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -73,24 +74,16 @@ export default function ButtonColorsPage() {
         return '🇬🇧';
     };
 
-    const buttonBaseClasses = "flex-col gap-2 pointer-events-none";
+    const buttonBaseClasses = "flex-col gap-2 pointer-events-none font-normal";
     const squareButtonClasses = "w-full h-28";
     const themeClasses = `text-xl font-bold text-white bg-gradient-to-r ${activeTheme.gradient} transition-all bg-[length:300%_300%]`;
+    const iconClasses = "text-white";
     
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4 bg-muted/40">
-            <Card className="w-full max-w-2xl shadow-2xl">
-                <CardHeader>
-                    <div className="flex justify-between items-center">
-                        <Button variant="outline" onClick={() => router.back()}>
-                            <ArrowLeft className="mr-2 h-4 w-4" /> Back
-                        </Button>
-                        <CardTitle className="text-2xl">Button Color Simulator</CardTitle>
-                        <div className="w-24"></div>
-                    </div>
-                </CardHeader>
-                <CardContent className="flex flex-col items-center gap-6">
-                    <div className="scale-75 md:scale-90 origin-top border bg-background rounded-lg p-4">
+            <Card className="w-full max-w-4xl shadow-2xl">
+                <CardContent className="flex flex-col items-center gap-4 p-6">
+                    <div className="scale-90 md:scale-100 origin-top border bg-background rounded-lg p-4">
                         <Card className="w-full max-w-md shadow-2xl text-center mx-auto pointer-events-none">
                              <CardHeader>
                                 <div className="flex items-center justify-center gap-4 mb-4">
@@ -99,8 +92,8 @@ export default function ButtonColorsPage() {
                                         Lingua
                                         <span className="relative inline-block">
                                             Learn
-                                            <span className="absolute -right-1 -bottom-4 text-lg font-semibold tracking-normal" style={{color: activeTheme.mainColor}}>
-                                            Lite
+                                            <span className="absolute -right-3 -bottom-4 text-xl font-semibold tracking-normal text-deep-purple">
+                                                PRO
                                             </span>
                                         </span>
                                     </h1>
@@ -112,26 +105,37 @@ export default function ButtonColorsPage() {
                             <CardContent className="flex flex-col space-y-4 p-6 pt-0 pb-4">
                                 <div className="grid grid-cols-2 gap-4">
                                     <Button className={cn(buttonBaseClasses, squareButtonClasses, "rounded-xl", themeClasses)} style={{ boxShadow: `0 0 20px ${activeTheme.shadow}` }}>
-                                        <LayoutGrid className="h-12 w-12 text-white" />
+                                        <LayoutGrid className={cn("h-12 w-12", iconClasses)} />
                                         <span>{getUIText('quizzes')}</span>
                                     </Button>
                                     <Button className={cn(buttonBaseClasses, squareButtonClasses, "rounded-xl", themeClasses, "!gap-0")} style={{ boxShadow: `0 0 20px ${activeTheme.shadow}` }}>
-                                        <Gamepad2 className="h-14 w-14 text-white" />
+                                        <Gamepad2 className={cn("h-14 w-14", iconClasses)} />
                                         <span className="mt-1 mb-0.5">{getUIText('games')}</span>
                                     </Button>
                                 </div>
                                 <div className="flex flex-col space-y-2">
-                                    <Button className={cn("h-12 w-full rounded-xl", themeClasses)} style={{ boxShadow: `0 0 20px ${activeTheme.shadow}` }}>
-                                        <PencilLine className="h-5 w-5 mr-2 text-white" />
-                                        <span>{getUIText('fill')} ___ {getUIText('gap')}</span>
+                                    <Button className={cn("h-12 w-full grid grid-cols-[1fr_auto_1fr] items-center rounded-xl", themeClasses)} style={{ boxShadow: `0 0 20px ${activeTheme.shadow}` }}>
+                                        <div className="flex justify-end">
+                                            <PencilLine className={cn("h-5 w-5 mr-2", iconClasses)} />
+                                        </div>
+                                        <span className={cn("col-start-2 flex items-center", iconClasses)}>
+                                            {getUIText('fill')} ___ {getUIText('gap')}
+                                        </span>
+                                        <div />
                                     </Button>
-                                    <Button className={cn("h-12 w-full rounded-xl", themeClasses)} style={{ boxShadow: `0 0 20px ${activeTheme.shadow}` }}>
-                                        <BookOpenText className="h-5 w-5 mr-2 text-white" />
-                                        <span>{getUIText('reading')}</span>
+                                    <Button className={cn("h-12 w-full grid grid-cols-[1fr_auto_1fr] items-center rounded-xl", themeClasses)} style={{ boxShadow: `0 0 20px ${activeTheme.shadow}` }}>
+                                        <div className="flex justify-end">
+                                            <BookOpenText className={cn("h-5 w-5 mr-2", iconClasses)} />
+                                        </div>
+                                        <span className={cn("col-start-2", iconClasses)}>{getUIText('reading')}</span>
+                                        <div />
                                     </Button>
-                                    <Button className={cn("h-12 w-full rounded-xl", themeClasses)} style={{ boxShadow: `0 0 20px ${activeTheme.shadow}` }}>
-                                        <Ear className="h-5 w-5 mr-2 text-white" />
-                                        <span>{getUIText('listening')}</span>
+                                    <Button className={cn("h-12 w-full grid grid-cols-[1fr_auto_1fr] items-center rounded-xl", themeClasses)} style={{ boxShadow: `0 0 20px ${activeTheme.shadow}` }}>
+                                        <div className="flex justify-end">
+                                            <Ear className={cn("h-5 w-5 mr-2", iconClasses)} />
+                                        </div>
+                                        <span className={cn("col-start-2", iconClasses)}>{getUIText('listening')}</span>
+                                        <div />
                                     </Button>
                                 </div>
                             </CardContent>
@@ -139,7 +143,7 @@ export default function ButtonColorsPage() {
                                 <Separator className="mb-4"/>
                                 <Button
                                     variant="outline"
-                                    className="w-full h-12 text-xl border-2 rounded-xl"
+                                    className={cn("w-full h-12 text-xl border-2 rounded-xl qr-pattern-bg")}
                                     style={{
                                         borderColor: activeTheme.mainColor,
                                         '--amber': activeTheme.mainColor, 
@@ -174,8 +178,6 @@ export default function ButtonColorsPage() {
                         </Card>
                     </div>
                     
-                    <Separator className="my-4" />
-                    
                     <div className="p-4 w-full">
                         <h3 className="text-center font-semibold mb-4 text-xl">Color Palette</h3>
                         <div className="grid grid-cols-4 sm:grid-cols-8 gap-3 justify-items-center">
@@ -195,6 +197,11 @@ export default function ButtonColorsPage() {
                         </div>
                     </div>
                 </CardContent>
+                <CardFooter className="flex justify-center p-6 border-t">
+                    <Button variant="outline" onClick={() => router.back()}>
+                        <ArrowLeft className="mr-2 h-4 w-4" /> Back
+                    </Button>
+                </CardFooter>
             </Card>
         </main>
     );
