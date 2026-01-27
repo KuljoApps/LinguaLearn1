@@ -192,7 +192,8 @@ export default function Home() {
                                     {getUIText('fill')}&nbsp;
                                     <span className={cn(
                                         "relative inline-block h-6 text-center overflow-hidden transition-all duration-300",
-                                        fillTheGapAnimatedWord[language].marginClass
+                                        fillTheGapAnimatedWord[language].marginClass,
+                                        fillTheGapAnimatedWord[language].width
                                     )}>
                                         <span
                                             key={fillTheGapText}
