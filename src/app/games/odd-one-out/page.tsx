@@ -400,5 +400,3 @@ const OddOneOutPage = () => {
 };
 
 export default OddOneOutPage;
-
-```
