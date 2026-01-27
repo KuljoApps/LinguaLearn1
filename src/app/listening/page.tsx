@@ -250,17 +250,16 @@ export default function ListeningPage() {
                                 <CollapsibleTrigger asChild>
                                     <Button variant="ghost" className="flex items-center gap-2 px-3">
                                         <Beaker className="h-4 w-4" />
-                                        <span className="text-sm italic text-muted-foreground">Dev Tools Colors</span>
+                                        <span className="text-sm italic text-muted-foreground">Dev Tools</span>
                                         <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isDevToolsOpen ? 'rotate-180' : ''}`} />
                                     </Button>
                                 </CollapsibleTrigger>
                                 <Separator className="flex-grow" />
                             </div>
                             <CollapsibleContent className="pt-4 space-y-4 text-center">
-                                <div className="p-4 bg-muted/50 rounded-lg">
-                                    <h4 className="font-semibold text-sm mb-2">Button Colors</h4>
-                                    <p className="text-xs text-muted-foreground">Button color configurator will be here.</p>
-                                </div>
+                                <Link href="/dev-tools/button-colors">
+                                    <Button variant="secondary" className="w-full">Button Colors</Button>
+                                </Link>
                                 <div className="p-4 bg-muted/50 rounded-lg">
                                     <h4 className="font-semibold text-sm mb-2">Confetti Configurator</h4>
                                     <p className="text-xs text-muted-foreground">Confetti configurator will be here.</p>
