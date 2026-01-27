@@ -112,7 +112,11 @@ body {
         box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7);
     }
     .qr-pattern-bg {
-        background-image: repeating-conic-gradient(hsl(var(--background)) 0% 25%, hsl(var(--amber) / 0.15) 0% 50%);
-        background-size: 8px 8px;
+        background-color: hsl(var(--background));
+        background-image: 
+            repeating-conic-gradient(hsl(var(--amber) / 0.15) 0% 25%, transparent 0% 50%),
+            repeating-conic-gradient(hsl(var(--background)) 0% 25%, hsl(var(--amber) / 0.1) 0% 50%);
+        background-size: 12px 12px, 6px 6px;
+        background-blend-mode: difference;
     }
 }

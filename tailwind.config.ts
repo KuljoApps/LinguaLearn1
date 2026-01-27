@@ -149,8 +149,8 @@ export default {
           '50%': { transform: 'translateY(-5px)' },
         },
         'qr-pan': {
-          '0%': { backgroundPosition: '0px 0px' },
-          '100%': { backgroundPosition: '8px 8px' },
+          '0%': { backgroundPosition: '0px 0px, 0px 0px' },
+          '100%': { backgroundPosition: '12px 12px, 6px 6px' },
         },
       },
       animation: {
