@@ -148,6 +148,10 @@ export default {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-8px)' },
         },
+        'draw-line': {
+          'from': { 'stroke-dasharray': '50', 'stroke-dashoffset': '50' },
+          'to': { 'stroke-dashoffset': '0' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -163,6 +167,7 @@ export default {
         'spin-once': 'spin-once 3s linear',
         'joystick-tilt': 'joystick-tilt 3s ease-in-out',
         'letter-bounce': 'letter-bounce 0.5s ease-in-out 2',
+        'draw-line': 'draw-line 0.5s ease-out forwards',
       },
     },
   },
