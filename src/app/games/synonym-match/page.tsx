@@ -66,7 +66,7 @@ const SynonymMatchPage = () => {
     
     const aggregatedErrors = useMemo(() => Array.from(sessionErrors.values()), [sessionErrors]);
     const totalTime = gameWonTime && startTime ? Math.round((gameWonTime - startTime) / 1000) : 0;
-    const successRate = GAME_SIZE + mistakes > 0 ? Math.round((GAME_SIZE / (GAME_SIZE + mistakes)) * 100) : 100;
+    const successRate = GAME_SIZE + mistakes > 0 ? Math.round((GAME_SIZE / (GAME_SIZE + mistakes)) * 100) : 0;
 
     const motivationalMessage = useMemo(() => {
         if (successRate === 100) return { icon: <Trophy className="h-16 w-16 text-amber animate-shake" />, title: 'Perfect Match!' };
@@ -246,7 +246,7 @@ const SynonymMatchPage = () => {
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
             <Card className="w-full max-w-2xl shadow-2xl">
                 <CardHeader className="text-center p-6">
-                    <div className={cn("flex items-center justify-center gap-4", isGameWon && "hidden")}>
+                    <div className="flex items-center justify-center gap-4">
                         <ArrowRightLeft className="h-8 w-8" />
                         <CardTitle className="text-3xl font-bold tracking-tight">{getUIText('title')}</CardTitle>
                     </div>
@@ -326,7 +326,7 @@ const SynonymMatchPage = () => {
                                 {wordSet.words1.map(word => (
                                     <Button
                                         key={word}
-                                        ref={(el) => buttonRefs.current.set(word, el)}
+                                        ref={(el) => { buttonRefs.current.set(word, el); }}
                                         variant="outline"
                                         className={getButtonClasses(word, true)}
                                         onClick={() => handleSelect1(word)}
@@ -339,7 +339,7 @@ const SynonymMatchPage = () => {
                                 {wordSet.words2.map(word => (
                                     <Button
                                         key={word}
-                                        ref={(el) => buttonRefs.current.set(word, el)}
+                                        ref={(el) => { buttonRefs.current.set(word, el); }}
                                         variant="outline"
                                         className={getButtonClasses(word, false)}
                                         onClick={() => handleSelect2(word)}
