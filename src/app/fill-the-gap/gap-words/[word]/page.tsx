@@ -69,10 +69,11 @@ export default function GapWordExercisePage() {
         playSound('correct');
         vibrate('correct');
         setShowConfetti(true);
-        setTimeout(() => {
-            setShowConfetti(false);
-            router.push('/fill-the-gap/gap-words');
-        }, 2500);
+    };
+
+    const onConfettiComplete = () => {
+        setShowConfetti(false);
+        router.push('/fill-the-gap/gap-words');
     };
 
     if (!question) {
@@ -84,7 +85,7 @@ export default function GapWordExercisePage() {
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
-            {showConfetti && <Confetti width={width} height={height} recycle={false} numberOfPieces={200} />}
+            {showConfetti && <Confetti width={width} height={height} recycle={false} numberOfPieces={200} gravity={0.2} onConfettiComplete={onConfettiComplete} />}
             <Card className="w-full max-w-lg shadow-2xl">
                 <CardHeader className="text-center">
                     <div className="flex items-center justify-center gap-4">
