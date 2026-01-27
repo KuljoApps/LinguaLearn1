@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -50,6 +50,29 @@ const SynonymMatchPage = () => {
     const [sessionErrors, setSessionErrors] = useState<{ word1: string; word2: string; correct: string }[]>([]);
 
     const { toast } = useToast();
+
+    const totalTime = gameWonTime && startTime ? Math.round((gameWonTime - startTime) / 1000) : 0;
+    const successRate = GAME_SIZE + mistakes > 0 ? Math.round((GAME_SIZE / (GAME_SIZE + mistakes)) * 100) : 100;
+
+    const motivationalMessage = useMemo(() => {
+        if (successRate === 100) {
+            return {
+                icon: <Trophy className="h-16 w-16 text-amber animate-shake" />,
+                title: 'Perfect Match!',
+            };
+        }
+        if (successRate >= 80) {
+            return {
+                icon: <ThumbsUp className="h-16 w-16 text-primary" />,
+                title: 'Great Job!',
+            };
+        }
+        return {
+            icon: <Brain className="h-16 w-16 text-muted-foreground" />,
+            title: 'Good Effort!',
+        };
+    }, [successRate]);
+
 
     const getUIText = (key: keyof typeof uiTexts, replacements: Record<string, string> = {}) => {
       let text = uiTexts[key][language] || uiTexts[key]['en'];
@@ -140,19 +163,20 @@ const SynonymMatchPage = () => {
 
     const handleSelect2 = (word: string) => {
         if (correctPairs.includes(word) || !selected1 || incorrectPair) return;
+        setSelected2(word);
 
         if (wordSet && wordSet.matches[selected1] === word) {
             // Correct match
             setCorrectPairs(prev => [...prev, selected1, word]);
             toast({ title: getUIText('correctToastTitle'), description: getUIText('correctToastDesc', { word1: selected1, word2: word }), duration: 2000 });
             setSelected1(null);
+            setSelected2(null);
         } else {
             // Incorrect match
-            setSelected2(word);
             setIncorrectPair([selected1, word]);
             setMistakes(prev => prev + 1);
             if(wordSet) {
-              setSessionErrors(prev => [...prev, { word1: selected1, word2: word, correct: wordSet.matches[selected1] }]);
+              setSessionErrors(prev => [...prev, { word1: selected1!, word2: word, correct: wordSet.matches[selected1!] }]);
             }
             toast({ variant: "destructive", title: getUIText('incorrectToastTitle'), description: getUIText('incorrectToastDesc', { word1: selected1, word2: word }), duration: 2000 });
             setTimeout(() => {
@@ -182,32 +206,11 @@ const SynonymMatchPage = () => {
         );
     };
     
-    const totalTime = gameWonTime && startTime ? Math.round((gameWonTime - startTime) / 1000) : 0;
-    const successRate = GAME_SIZE + mistakes > 0 ? Math.round((GAME_SIZE / (GAME_SIZE + mistakes)) * 100) : 100;
     const formatTime = (seconds: number) => {
         const minutes = Math.floor(seconds / 60);
         const remainingSeconds = seconds % 60;
         return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
     };
-
-    const motivationalMessage = useMemo(() => {
-        if (successRate === 100) {
-            return {
-                icon: <Trophy className="h-16 w-16 text-amber animate-shake" />,
-                title: 'Perfect Match!',
-            };
-        }
-        if (successRate >= 80) {
-            return {
-                icon: <ThumbsUp className="h-16 w-16 text-primary" />,
-                title: 'Great Job!',
-            };
-        }
-        return {
-            icon: <Brain className="h-16 w-16 text-muted-foreground" />,
-            title: 'Good Effort!',
-        };
-    }, [successRate]);
 
 
     return (
@@ -220,7 +223,6 @@ const SynonymMatchPage = () => {
                     </div>
                 </CardHeader>
                 <CardContent className="p-6 pt-0 space-y-8">
-                    <p className="text-muted-foreground pt-2 text-center pb-0">{getUIText('description')}</p>
                     {isGameWon ? (
                         <div className="space-y-4">
                             <div className="text-center space-y-2 flex flex-col items-center">
@@ -271,6 +273,8 @@ const SynonymMatchPage = () => {
                              </div>
                         </div>
                     ) : (
+                        <>
+                         <p className="text-muted-foreground pt-2 text-center pb-0">{getUIText('description')}</p>
                         <div className="grid grid-cols-2 gap-8">
                             <div className="flex flex-col gap-4">
                                 {wordSet.words1.map(word => (
@@ -297,6 +301,7 @@ const SynonymMatchPage = () => {
                                 ))}
                             </div>
                         </div>
+                        </>
                     )}
                 </CardContent>
                 <CardFooter className="flex justify-center p-6 border-t">
