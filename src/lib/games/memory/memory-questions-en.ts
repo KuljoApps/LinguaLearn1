@@ -1,4 +1,4 @@
-export type MemoryPair = { native: string; pl: string; };
+import type { MemoryPair } from './memory-data';
 
 export const memoryQuestionsEn: MemoryPair[] = [
   { native: 'cat', pl: 'kot' },

@@ -4,8 +4,9 @@ import { memoryQuestionsDe } from './memory/memory-questions-de';
 import { memoryQuestionsFr } from './memory/memory-questions-fr';
 import { memoryQuestionsIt } from './memory/memory-questions-it';
 import { memoryQuestionsEs } from './memory/memory-questions-es';
+import type { MemoryPair } from './memory/memory-data';
 
-export type MemoryPair = { native: string; pl: string; };
+export type { MemoryPair };
 
 export const allMemoryQuestions: Record<Language, MemoryPair[]> = {
     en: memoryQuestionsEn,
