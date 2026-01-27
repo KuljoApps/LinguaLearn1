@@ -13,6 +13,7 @@ import { vibrate } from '@/lib/vibrations';
 import { Separator } from '@/components/ui/separator';
 import TimerRing from '@/components/TimerRing';
 import TallyScore from '@/components/TallyScore';
+import { cn } from '@/lib/utils';
 
 const GAME_DURATION = 60; // seconds
 
@@ -198,6 +199,8 @@ const TranslationRacePage = () => {
 
     const isGameFinished = !isActive && timeLeft === 0;
     const shouldShowResults = isGameFinished || isGameOver;
+    
+    const finalScoreColor = score > 10 ? "text-success" : score < 0 ? "text-destructive" : "text-primary";
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
@@ -216,6 +219,7 @@ const TranslationRacePage = () => {
                                 <h4 className="font-semibold text-center mb-2 text-foreground">Instrukcja</h4>
                                 <ul className="list-disc list-inside space-y-1">
                                     <li>Tłumacz jak najwięcej słów w 60 sekund.</li>
+                                    <li>Nie musisz używać polskich znaków.</li>
                                     <li>Każda poprawna odpowiedź to +1 punkt.</li>
                                     <li>Pominięcie słowa kosztuje 1 punkt.</li>
                                     <li>Masz 3 pominięcia na grę.</li>
@@ -235,7 +239,7 @@ const TranslationRacePage = () => {
                                 <h2 className="text-2xl font-bold">{motivationalMessage.title}</h2>
                                 <CardDescription className="flex flex-col items-center gap-1">
                                     <span>{getUIText('finalScore')}</span>
-                                    <span className="text-4xl font-bold text-primary">{score}</span>
+                                    <span className={cn("text-4xl font-bold", finalScoreColor)}>{score}</span>
                                 </CardDescription>
                             </div>
                             <Card className="bg-muted/50 mt-2">
@@ -243,7 +247,7 @@ const TranslationRacePage = () => {
                                 <CardContent className="grid grid-cols-2 gap-4 text-center">
                                     <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-background">
                                         <div className="flex items-center gap-2"><Zap className="h-4 w-4 text-amber"/><span className="text-2xl font-bold">{wpm}</span></div>
-                                        <span className="text-xs text-muted-foreground">{getUIText('wpm')}</span>
+                                        <span className="text-xs text-muted-foreground whitespace-nowrap">{getUIText('wpm')}</span>
                                     </div>
                                     <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-background">
                                         <div className="flex items-center gap-2"><ShieldX className="h-4 w-4 text-destructive"/><span className="text-2xl font-bold">{3 - skipsLeft}</span></div>
