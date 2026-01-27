@@ -192,8 +192,7 @@ export default function Home() {
                                     {getUIText('fill')}&nbsp;
                                     <span className={cn(
                                         "relative inline-block h-6 text-center overflow-hidden transition-all duration-300",
-                                        fillTheGapAnimatedWord[language].marginClass,
-                                        fillTheGapAnimatedWord[language].width
+                                        fillTheGapAnimatedWord[language].marginClass
                                     )}>
                                         <span
                                             key={fillTheGapText}
@@ -251,7 +250,7 @@ export default function Home() {
                     </div>
                 </CardContent>
                 <div data-tutorial-id="learning-button" className="px-6 pb-2">
-                    <Separator className="mb-3"/>
+                    <Separator className="mb-4"/>
                      <Link href={`/learning/${language}`} passHref>
                         <Button
                             variant="outline"
