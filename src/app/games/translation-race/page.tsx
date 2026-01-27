@@ -98,11 +98,23 @@ const TranslationRacePage = () => {
         return () => clearTimeout(timer);
     }, [isActive, timeLeft]);
     
+    const normalizeString = (str: string): string => {
+        return str
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/ł/g, 'l');
+    };
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!currentWord) return;
         const value = e.target.value;
         setInputValue(value);
-        if (value.toLowerCase().trim() === currentWord.pl.toLowerCase()) {
+
+        const normalizedInput = normalizeString(value.trim());
+        const normalizedAnswer = normalizeString(currentWord.pl);
+
+        if (normalizedInput === normalizedAnswer) {
             setScore(score + 1);
             setInputValue('');
             setCurrentWord(getNextWord());
