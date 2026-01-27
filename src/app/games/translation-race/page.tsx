@@ -210,9 +210,18 @@ const TranslationRacePage = () => {
                  </CardHeader>
                 <CardContent className="p-6 pt-0 flex flex-col justify-center min-h-[50vh]">
                     {!isActive && !shouldShowResults && (
-                        <div className="text-center flex flex-col items-center justify-center gap-8 flex-grow">
-                             <p className="text-muted-foreground mt-4">{getUIText('description')}</p>
-                             <Button size="lg" onClick={setupNewGame} className="mt-4">
+                        <div className="text-center flex flex-col items-center justify-center gap-6 flex-grow">
+                             <p className="text-muted-foreground">{getUIText('description')}</p>
+                             <div className="text-left text-sm text-muted-foreground bg-muted/50 p-4 rounded-lg border max-w-sm">
+                                <h4 className="font-semibold text-center mb-2 text-foreground">Instrukcja</h4>
+                                <ul className="list-disc list-inside space-y-1">
+                                    <li>Tłumacz jak najwięcej słów w 60 sekund.</li>
+                                    <li>Każda poprawna odpowiedź to +1 punkt.</li>
+                                    <li>Pominięcie słowa kosztuje 1 punkt.</li>
+                                    <li>Masz 3 pominięcia na grę.</li>
+                                </ul>
+                            </div>
+                             <Button size="lg" onClick={setupNewGame} className="mt-2">
                                 <Play className="mr-2 h-5 w-5 animate-pulse-strong" />
                                  {getUIText('startGame')}
                              </Button>
@@ -224,7 +233,10 @@ const TranslationRacePage = () => {
                             <div className="text-center space-y-2 flex flex-col items-center">
                                 {motivationalMessage.icon}
                                 <h2 className="text-2xl font-bold">{motivationalMessage.title}</h2>
-                                <CardDescription>{getUIText('finalScore')} <TallyScore score={score} /></CardDescription>
+                                <CardDescription className="flex flex-col items-center gap-1">
+                                    <span>{getUIText('finalScore')}</span>
+                                    <span className="text-4xl font-bold text-primary">{score}</span>
+                                </CardDescription>
                             </div>
                             <Card className="bg-muted/50 mt-2">
                                 <CardHeader className="pt-4 pb-2"><CardTitle className="text-xl text-center">{getUIText('summary')}</CardTitle></CardHeader>
