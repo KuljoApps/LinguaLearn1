@@ -27,7 +27,6 @@ export default function Home() {
     const [showQuizzesSpin, setShowQuizzesSpin] = useState(false);
     const [showGamesTilt, setShowGamesTilt] = useState(false);
     const [showListeningPulse, setShowListeningPulse] = useState(false);
-    const [showLearningAnim, setShowLearningAnim] = useState(false);
     const pathname = usePathname();
 
     useEffect(() => {
@@ -76,22 +75,18 @@ export default function Home() {
             },
             () => {
                 setShowReadingBounce(true);
-                timers.push(setTimeout(() => setShowReadingBounce(false), 3000));
+                timers.push(setTimeout(() => setShowReadingBounce(false), 4000));
             },
             () => {
                 setShowListeningPulse(true);
                 timers.push(setTimeout(() => setShowListeningPulse(false), 3000));
             },
-            () => {
-                setShowLearningAnim(true);
-                timers.push(setTimeout(() => setShowLearningAnim(false), 4000));
-            }
         ];
 
         const scheduleNextAnimation = () => {
             animations[currentIndex]();
             currentIndex = (currentIndex + 1) % animations.length;
-            animationTimeoutId = setTimeout(scheduleNextAnimation, 3000 + 5000); // 3s anim + 5s pause
+            animationTimeoutId = setTimeout(scheduleNextAnimation, 3000 + 5000); // anim time + pause time
         };
 
         const initialAnimTimeout = setTimeout(scheduleNextAnimation, 3000);
@@ -247,7 +242,7 @@ export default function Home() {
                 </CardContent>
                 <div data-tutorial-id="learning-button" className="px-6 pb-2">
                     <Separator className="mb-3"/>
-                     <Link href={isFrench ? "/learning/fr" : isGerman ? "/learning/de" : isItalian ? "/learning/it" : isSpanish ? "/learning/es" : "/learning/en"} passHref className="relative block">
+                     <Link href={isFrench ? "/learning/fr" : isGerman ? "/learning/de" : isItalian ? "/learning/it" : isSpanish ? "/learning/es" : "/learning/en"} passHref>
                         <Button
                             variant="outline"
                             className={cn(
@@ -255,11 +250,9 @@ export default function Home() {
                             )}
                         >
                             <div className="flex justify-end">
-                                <GraduationCap className="mr-2 h-5 w-5" />
+                                <GraduationCap className="mr-2 h-6 w-6" />
                             </div>
-                            <span className={cn(
-                                "col-start-2 font-bold"
-                            )}>
+                            <span className="col-start-2 font-bold">
                                 {getLearningButtonText()}
                             </span>
                             <div />
@@ -270,7 +263,7 @@ export default function Home() {
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button data-tutorial-id="language-switcher" variant="outline" size="icon" title="Change language">
-                                <span className="text-xl">{getFlag()}</span>
+                                <span className="text-2xl">{getFlag()}</span>
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="center">
