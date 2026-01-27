@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowLeft, Timer, Play, SkipForward, FlagOff, Zap, Brain, ThumbsUp, Trophy } from 'lucide-react';
+import { ArrowLeft, Timer, Play, SkipForward, FlagOff, Zap, Brain, ThumbsUp, Trophy, ShieldX } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { getLanguage, type Language } from '@/lib/storage';
 import { allTranslationRaceWords, type TranslationPair } from '@/lib/games/translation-race';
@@ -37,7 +37,6 @@ const uiTexts = {
     summary: { en: 'Summary', fr: 'Résumé', de: 'Zusammenfassung', it: 'Riepilogo', es: 'Resumen' },
     wpm: { en: 'Words per minute', fr: 'Mots par minute', de: 'Wörter pro Minute', it: 'Parole al minuto', es: 'Palabras por minuto' },
     skips: { en: 'Skips Used', fr: 'Passes utilisées', de: 'Übersprungen', it: 'Salti usati', es: 'Saltos usados' },
-    worthRepeating: { en: 'Worth repeating', fr: 'À répéter', de: 'Wiederholenswert', it: 'Da ripetere', es: 'Vale la pena repetir' },
     skippedWord: { en: 'Skipped word', fr: 'Mot passé', de: 'Übersprungenes Wort', it: 'Parola saltata', es: 'Palabra saltada' },
     finalScore: { en: 'Final Score', fr: 'Score Final', de: 'Endergebnis', it: 'Punteggio Finale', es: 'Puntuación Final' },
     surrender: { en: 'Surrender', fr: 'Abandonner', de: 'Aufgeben', it: 'Arrendersi', es: 'Rendirse' },
@@ -247,25 +246,25 @@ const TranslationRacePage = () => {
                     
                     {isActive && currentWord && (
                          <div className="flex flex-col h-full items-center">
-                            <div className="flex justify-between items-center w-full mb-8">
-                                <div className="flex-1" />
-                                <div className="flex-1 flex justify-center">
+                            <div className="flex justify-around items-center w-full mb-8">
+                                <div className="flex flex-col items-center">
+                                    <span className="text-sm font-medium text-muted-foreground mb-2">{getUIText('timeLeft')}</span>
                                     <TimerRing timeLeft={timeLeft} totalTime={GAME_DURATION} />
                                 </div>
-                                <div className="flex-1 flex justify-end">
-                                    <div className="flex flex-col items-center">
-                                        <span className="text-sm font-medium text-muted-foreground">{getUIText('score')}</span>
+                                <div className="flex flex-col items-center">
+                                    <span className="text-sm font-medium text-muted-foreground mb-2">{getUIText('score')}</span>
+                                    <div className="h-[112px] flex items-center">
                                         <TallyScore score={score} />
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="flex-grow flex flex-col items-center justify-center text-center mb-12">
+                            <div className="flex-grow flex flex-col items-center justify-center text-center mb-8">
                                 <p className="text-muted-foreground">{getUIText('translateWord')}</p>
                                 <p className="text-6xl font-bold tracking-wider text-amber">{currentWord.native}</p>
                             </div>
 
-                            <div className="w-full max-w-sm space-y-4">
+                            <div className="w-full max-w-sm space-y-6">
                                 <Input 
                                     value={inputValue}
                                     onChange={handleInputChange}
