@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
@@ -88,10 +89,10 @@ const SynonymMatchPage = () => {
     }, [successRate]);
 
 
-    const getUIText = (key: keyof typeof uiTexts) => {
+    const getUIText = (key: keyof typeof uiTexts, replacements: Record<string, string | number> = {}) => {
       let text = uiTexts[key][language] || uiTexts[key]['en'];
       for (const placeholder in replacements) {
-          text = text.replace(`{${placeholder}}`, replacements[placeholder]);
+          text = text.replace(`{${placeholder}}`, String(replacements[placeholder]));
       }
       return text;
     };
@@ -391,7 +392,10 @@ const SynonymMatchPage = () => {
                                 {activeWords1.map(word => (
                                     <Button
                                         key={word}
-                                        ref={(el) => buttonRefs.current.set(word, el)}
+                                        ref={(el) => {
+                                            if (el) buttonRefs.current.set(word, el);
+                                            else buttonRefs.current.delete(word);
+                                        }}
                                         variant="outline"
                                         className={getButtonClasses(word, true)}
                                         onClick={() => handleSelect1(word)}
@@ -404,7 +408,10 @@ const SynonymMatchPage = () => {
                                 {activeWords2.map(word => (
                                     <Button
                                         key={word}
-                                        ref={(el) => buttonRefs.current.set(word, el)}
+                                        ref={(el) => {
+                                            if (el) buttonRefs.current.set(word, el);
+                                            else buttonRefs.current.delete(word);
+                                        }}
                                         variant="outline"
                                         className={getButtonClasses(word, false)}
                                         onClick={() => handleSelect2(word)}
@@ -431,4 +438,3 @@ const SynonymMatchPage = () => {
 };
 
 export default SynonymMatchPage;
-
