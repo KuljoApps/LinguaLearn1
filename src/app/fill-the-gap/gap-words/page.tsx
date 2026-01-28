@@ -4,10 +4,10 @@ import { useState, useEffect, useMemo, type SetStateAction, type Dispatch } from
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowLeft, FileText, CheckCircle, Pencil, LayoutGrid, List, Lightbulb } from 'lucide-react';
+import { ArrowLeft, FileText, CheckCircle, Pencil, LayoutGrid, List, Lightbulb, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { getLanguage, type Language, getGapWordsProgress, addCompletedGapWord } from '@/lib/storage';
-import { allGapWordQuestions, type GapWordQuestion } from '@/lib/fill-the-gap/gap-words';
+import { allGapWordQuestions, type GapWordQuestion, type GapWordCategory } from '@/lib/fill-the-gap/gap-words';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
@@ -16,8 +16,25 @@ import { playSound } from '@/lib/sounds';
 import { vibrate } from '@/lib/vibrations';
 
 const VIEW_MODE_KEY = 'gapWordsViewMode';
+const CATEGORY_INDEX_KEY = 'gapWordsCategoryIndex_';
 
-function GapWordExercise({ question, onComplete }: { question: GapWordQuestion, onComplete: () => void }) {
+const uiTexts = {
+    title: { en: 'Gap in the Words', fr: 'Trou dans les Mots', de: 'Lücke in den Wörtern', it: 'Spazio nelle Parole', es: 'Hueco en las Palabras' },
+    description: {
+        en: 'Complete the words by typing in the missing letters. This is a great way to practice spelling.',
+        fr: 'Complétez les mots en tapant les lettres manquantes. C\'est un excellent moyen de pratiquer l\'orthographe.',
+        de: 'Vervollständige die Wörter, indem du die fehlenden Buchstaben eingibst. Dies ist eine großartige Möglichkeit, die Rechtschreibung zu üben.',
+        it: 'Completa le parole digitando le lettere mancanti. Questo è un ottimo modo per esercitarsi con l\'ortografia.',
+        es: 'Completa las palabras escribiendo las letras que faltan. Esta es una excelente manera de practicar la ortografía.'
+    },
+    back: { en: 'Back to Fill the Gap', fr: 'Retour à Fill the Gap', de: 'Zurück zu Lückentext', it: 'Torna a Riempi gli spazi', es: 'Volver a Rellenar Huecos' },
+    view: { en: 'View', fr: 'Vue', de: 'Ansicht', it: 'Vista', es: 'Vista' },
+    backToWords: { en: 'Back to Word List', fr: 'Retour à la liste', de: 'Zurück zur Wortliste', it: 'Torna all\'elenco', es: 'Volver a la lista' },
+    hint: { en: 'Hint', fr: 'Indice', de: 'Hinweis', it: 'Suggerimento', es: 'Pista' },
+};
+
+
+function GapWordExercise({ question, onComplete, language }: { question: GapWordQuestion, onComplete: () => void, language: Language }) {
     const [inputValue, setInputValue] = useState('');
     const [isCompleted, setIsCompleted] = useState(false);
     const [showConfetti, setShowConfetti] = useState(false);
@@ -27,6 +44,9 @@ function GapWordExercise({ question, onComplete }: { question: GapWordQuestion, 
         if (completedSet.has(question.fullWord)) {
             setIsCompleted(true);
             setInputValue(question.missingLetters);
+        } else {
+            setIsCompleted(false);
+            setInputValue('');
         }
     }, [question]);
 
@@ -57,6 +77,7 @@ function GapWordExercise({ question, onComplete }: { question: GapWordQuestion, 
 
     const { wordWithGap, missingLetters, fullWord, hint } = question;
     const parts = wordWithGap.replace(/_+/, '_').split('_');
+    const getUIText = (key: keyof typeof uiTexts) => uiTexts[key][language] || uiTexts[key]['en'];
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
@@ -98,12 +119,12 @@ function GapWordExercise({ question, onComplete }: { question: GapWordQuestion, 
                     </div>
                      <div className="flex items-center gap-3 p-3 rounded-md bg-amber/10 border border-amber/20 text-amber">
                         <Lightbulb className="h-5 w-5 flex-shrink-0" />
-                        <p className="text-sm font-medium">Podpowiedź: <span className="font-semibold italic">{hint}</span></p>
+                        <p className="text-sm font-medium">{getUIText('hint')}: <span className="font-semibold italic">{hint}</span></p>
                     </div>
                 </CardContent>
                 <CardFooter className="flex justify-center p-6 border-t">
                     <Button variant="outline" onClick={onComplete}>
-                        <ArrowLeft className="mr-2 h-4 w-4" /> Back to Word List
+                        <ArrowLeft className="mr-2 h-4 w-4" /> {getUIText('backToWords')}
                     </Button>
                 </CardFooter>
             </Card>
@@ -113,21 +134,25 @@ function GapWordExercise({ question, onComplete }: { question: GapWordQuestion, 
 
 function WordListPage({ onSelectQuestion }: { onSelectQuestion: Dispatch<SetStateAction<GapWordQuestion | null>> }) {
     const [language, setLanguageState] = useState<Language>('en');
-    const [questions, setQuestions] = useState<GapWordQuestion[]>([]);
+    const [categories, setCategories] = useState<GapWordCategory[]>([]);
+    const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0);
     const [completedWords, setCompletedWords] = useState<Set<string>>(new Set());
     const [view, setView] = useState<'list' | 'grid'>('list');
 
+    const getUIText = (key: keyof typeof uiTexts) => uiTexts[key][language] || uiTexts[key]['en'];
+
     useEffect(() => {
         const savedView = localStorage.getItem(VIEW_MODE_KEY) as 'list' | 'grid' | null;
-        if (savedView) {
-            setView(savedView);
-        }
+        if (savedView) setView(savedView);
         
         const handleStateUpdate = () => {
             const lang = getLanguage();
             setLanguageState(lang);
-            setQuestions(allGapWordQuestions[lang] || []);
+            const loadedCategories = allGapWordQuestions[lang] || [];
+            setCategories(loadedCategories);
             setCompletedWords(getGapWordsProgress());
+            const savedCategoryIndex = localStorage.getItem(`${CATEGORY_INDEX_KEY}${lang}`);
+            setCurrentCategoryIndex(savedCategoryIndex ? parseInt(savedCategoryIndex, 10) : 0);
         };
         handleStateUpdate();
 
@@ -146,18 +171,34 @@ function WordListPage({ onSelectQuestion }: { onSelectQuestion: Dispatch<SetStat
         localStorage.setItem(VIEW_MODE_KEY, newView);
     };
 
+    const handleNextCategory = () => {
+        const newIndex = (currentCategoryIndex + 1) % categories.length;
+        setCurrentCategoryIndex(newIndex);
+        localStorage.setItem(`${CATEGORY_INDEX_KEY}${language}`, String(newIndex));
+    };
+
+    const handlePrevCategory = () => {
+        const newIndex = (currentCategoryIndex - 1 + categories.length) % categories.length;
+        setCurrentCategoryIndex(newIndex);
+        localStorage.setItem(`${CATEGORY_INDEX_KEY}${language}`, String(newIndex));
+    };
+
+    const currentCategory = categories[currentCategoryIndex];
+
     const { uncompleted, completed } = useMemo(() => {
-        const uncompleted: GapWordQuestion[] = [];
-        const completed: GapWordQuestion[] = [];
-        questions.forEach(q => {
+        if (!currentCategory) return { uncompleted: [], completed: [] };
+        
+        const uncompletedList: GapWordQuestion[] = [];
+        const completedList: GapWordQuestion[] = [];
+        currentCategory.words.forEach(q => {
             if (completedWords.has(q.fullWord)) {
-                completed.push(q);
+                completedList.push(q);
             } else {
-                uncompleted.push(q);
+                uncompletedList.push(q);
             }
         });
-        return { uncompleted, completed };
-    }, [questions, completedWords]);
+        return { uncompleted: uncompletedList, completed: completedList };
+    }, [currentCategory, completedWords]);
     
     const renderWordItem = (question: GapWordQuestion, index: number, isCompleted: boolean) => (
         <div onClick={() => onSelectQuestion(question)} key={question.fullWord} className="cursor-pointer">
@@ -176,17 +217,33 @@ function WordListPage({ onSelectQuestion }: { onSelectQuestion: Dispatch<SetStat
         </div>
     );
     
+    if (!currentCategory) return null;
+
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
             <Card className="w-full max-w-2xl shadow-2xl">
                 <CardHeader className="text-center">
                     <div className="flex items-center justify-center gap-4">
                         <FileText className="h-8 w-8" />
-                        <CardTitle className="text-3xl">Gap in the Words</CardTitle>
+                        <CardTitle className="text-3xl">{getUIText('title')}</CardTitle>
                     </div>
+                    <p className="text-muted-foreground pt-2">{getUIText('description')}</p>
                 </CardHeader>
                 <CardContent className="pl-6 pr-2 pt-2 pb-4">
-                    <ScrollArea className="h-[60vh] pr-4">
+                     <div className="flex items-center justify-between p-2 mb-4 rounded-lg bg-muted/50 border">
+                        <Button variant="ghost" size="icon" onClick={handlePrevCategory}>
+                          <ArrowLeft className="h-5 w-5" />
+                        </Button>
+                        <div className="text-center">
+                          <h3 className="font-semibold">{currentCategory.title}</h3>
+                          <p className="text-sm text-muted-foreground">{currentCategoryIndex + 1} / {categories.length}</p>
+                        </div>
+                        <Button variant="ghost" size="icon" onClick={handleNextCategory}>
+                          <ArrowRight className="h-5 w-5" />
+                        </Button>
+                      </div>
+
+                    <ScrollArea className="h-[64vh] pr-4">
                         {view === 'list' ? (
                             <div className="space-y-1">
                                 {uncompleted.map((q, i) => renderWordItem(q, i, false))}
@@ -199,8 +256,8 @@ function WordListPage({ onSelectQuestion }: { onSelectQuestion: Dispatch<SetStat
                                 {completed.map((q, i) => renderWordItem(q, uncompleted.length + i, true))}
                             </div>
                         ) : (
-                             <div className="grid grid-cols-4 sm:grid-cols-6 gap-3">
-                                {questions.map((question, index) => {
+                             <div className="grid grid-cols-4 sm:grid-cols-7 gap-3">
+                                {currentCategory.words.map((question, index) => {
                                     const isCompleted = completedWords.has(question.fullWord);
                                     return (
                                         <div onClick={() => onSelectQuestion(question)} key={question.fullWord} className="cursor-pointer">
@@ -223,12 +280,12 @@ function WordListPage({ onSelectQuestion }: { onSelectQuestion: Dispatch<SetStat
                     <div className="flex flex-wrap justify-center gap-4">
                         <Link href="/fill-the-gap" passHref>
                             <Button variant="outline">
-                                <ArrowLeft className="mr-2 h-4 w-4" /> Back to Fill the Gap
+                                <ArrowLeft className="mr-2 h-4 w-4" /> {getUIText('back')}
                             </Button>
                         </Link>
                         <Button variant="outline" onClick={handleViewToggle}>
                             {view === 'list' ? <LayoutGrid className="h-4 w-4 mr-2" /> : <List className="h-4 w-4 mr-2" />}
-                            View
+                            {getUIText('view')}
                         </Button>
                     </div>
                 </CardFooter>
@@ -239,15 +296,21 @@ function WordListPage({ onSelectQuestion }: { onSelectQuestion: Dispatch<SetStat
 
 export default function GapWordsContainerPage() {
     const [selectedQuestion, setSelectedQuestion] = useState<GapWordQuestion | null>(null);
-    const [_, setTick] = useState(0); 
+    const [language, setLanguageState] = useState<Language>('en');
+
+    useEffect(() => {
+      const handleLangChange = () => setLanguageState(getLanguage());
+      handleLangChange();
+      window.addEventListener('language-changed', handleLangChange);
+      return () => window.removeEventListener('language-changed', handleLangChange);
+    }, []);
 
     const handleComplete = () => {
         setSelectedQuestion(null);
-        setTick(t => t + 1); 
     };
 
     if (selectedQuestion) {
-        return <GapWordExercise question={selectedQuestion} onComplete={handleComplete} />;
+        return <GapWordExercise question={selectedQuestion} onComplete={handleComplete} language={language}/>;
     }
 
     return <WordListPage onSelectQuestion={setSelectedQuestion} />;

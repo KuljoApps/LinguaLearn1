@@ -12,7 +12,12 @@ export interface GapWordQuestion {
   hint: string;
 }
 
-export const allGapWordQuestions: Record<Language, GapWordQuestion[]> = {
+export interface GapWordCategory {
+  title: string;
+  words: GapWordQuestion[];
+}
+
+export const allGapWordQuestions: Record<Language, GapWordCategory[]> = {
   en: gapWordsQuestionsEn,
   de: gapWordsQuestionsDe,
   fr: gapWordsQuestionsFr,
