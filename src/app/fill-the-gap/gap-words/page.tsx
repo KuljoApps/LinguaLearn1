@@ -207,7 +207,7 @@ function WordListPage({ onSelectQuestion }: { onSelectQuestion: Dispatch<SetStat
                                             <div className={cn(
                                                 "flex items-center justify-center aspect-square rounded-lg transition-colors border-2",
                                                 isCompleted 
-                                                    ? "bg-success/10 text-success-foreground border-success/20 hover:bg-success/20" 
+                                                    ? "bg-success/20 text-foreground border-success/40 hover:bg-success/30" 
                                                     : "bg-card hover:bg-muted/50 border-primary"
                                             )}>
                                                 <span className="font-bold text-xl">{index + 1}</span>
