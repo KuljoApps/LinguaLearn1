@@ -21,11 +21,11 @@ const CATEGORY_INDEX_KEY = 'gapWordsCategoryIndex_';
 const uiTexts = {
     title: { en: 'Gap in the Words', fr: 'Trou dans les Mots', de: 'Lücke in den Wörtern', it: 'Spazio nelle Parole', es: 'Hueco en las Palabras' },
     description: {
-        en: 'Complete the words by typing in the missing letters. This is a great way to practice spelling.',
-        fr: 'Complétez les mots en tapant les lettres manquantes. C\'est un excellent moyen de pratiquer l\'orthographe.',
-        de: 'Vervollständige die Wörter, indem du die fehlenden Buchstaben eingibst. Dies ist eine großartige Möglichkeit, die Rechtschreibung zu üben.',
-        it: 'Completa le parole digitando le lettere mancanti. Questo è un ottimo modo per esercitarsi con l\'ortografia.',
-        es: 'Completa las palabras escribiendo las letras que faltan. Esta es una excelente manera de practicar la ortografía.'
+        en: 'Complete the words by typing in the missing letters.',
+        fr: 'Complétez les mots en tapant les lettres manquantes.',
+        de: 'Vervollständige die Wörter, indem du die fehlenden Buchstaben eingibst.',
+        it: 'Completa le parole digitando le lettere mancanti.',
+        es: 'Completa las palabras escribiendo las letras que faltan.'
     },
     back: { en: 'Back to Fill the Gap', fr: 'Retour à Fill the Gap', de: 'Zurück zu Lückentext', it: 'Torna a Riempi gli spazi', es: 'Volver a Rellenar Huecos' },
     view: { en: 'View', fr: 'Vue', de: 'Ansicht', it: 'Vista', es: 'Vista' },
@@ -264,7 +264,7 @@ function WordListPage({ onSelectQuestion }: { onSelectQuestion: Dispatch<SetStat
                                             <div className={cn(
                                                 "flex items-center justify-center aspect-square rounded-lg transition-colors border-2",
                                                 isCompleted 
-                                                    ? "bg-success/10 text-success-foreground border-success/20 hover:bg-success/20" 
+                                                    ? "bg-success/20 text-foreground border-success/30 hover:bg-success/30" 
                                                     : "bg-card hover:bg-muted/50 border-primary"
                                             )}>
                                                 <span className="font-bold text-xl">{index + 1}</span>
