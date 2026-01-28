@@ -55,6 +55,7 @@ const TUTORIAL_COMPLETED_KEY = 'linguaLearnTutorialCompleted_v2';
 export const NEW_ACHIEVEMENTS_COUNT_KEY = 'linguaLearnNewAchievementsCount';
 const FAVORITE_GAMES_KEY = 'linguaLearnFavoriteGames';
 const GAP_WORDS_PROGRESS_KEY_PREFIX = 'linguaLearnGapWordsProgress_';
+const GAP_SENTENCES_PROGRESS_KEY_PREFIX = 'linguaLearnGapSentencesProgress_';
 
 
 export interface GlobalStats {
@@ -236,6 +237,36 @@ export const addCompletedGapWord = (word: string) => {
     const currentProgress = getGapWordsProgress();
     currentProgress.add(word);
     saveGapWordsProgress(currentProgress);
+};
+
+// --- Gap in the Sentences Progress ---
+export const getGapSentencesProgress = (): Set<number> => {
+    if (typeof window === 'undefined') return new Set();
+    try {
+        const progressJson = localStorage.getItem(getKey(GAP_SENTENCES_PROGRESS_KEY_PREFIX));
+        const progressArray = progressJson ? JSON.parse(progressJson) : [];
+        return new Set(progressArray);
+    } catch (e) {
+        console.error("Failed to get gap sentences progress", e);
+        return new Set();
+    }
+};
+
+const saveGapSentencesProgress = (completedSetIds: Set<number>) => {
+    if (typeof window === 'undefined') return;
+    try {
+        localStorage.setItem(getKey(GAP_SENTENCES_PROGRESS_KEY_PREFIX), JSON.stringify(Array.from(completedSetIds)));
+        window.dispatchEvent(new Event('storage'));
+    } catch (e) {
+        console.error("Failed to save gap sentences progress", e);
+    }
+};
+
+export const addCompletedGapSentenceSet = (setId: number) => {
+    if (typeof window === 'undefined') return;
+    const currentProgress = getGapSentencesProgress();
+    currentProgress.add(setId);
+    saveGapSentencesProgress(currentProgress);
 };
 
 
