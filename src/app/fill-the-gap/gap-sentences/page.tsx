@@ -114,10 +114,10 @@ function SentenceExercise({
     );
 
     return (
-        <div className="space-y-4 pt-2">
+        <div className="space-y-4">
             {showConfetti && <Confetti onConfettiComplete={() => setShowConfetti(false)} />}
             
-            <div className="space-y-6">
+            <div className="space-y-4">
                 {renderSentence(sentenceSet.sentence1, 'sentence1')}
                 {renderSentence(sentenceSet.sentence2, 'sentence2')}
             </div>
@@ -172,9 +172,9 @@ export default function GapSentencesPage() {
                         <MessagesSquare className="h-8 w-8" />
                         <CardTitle className="text-3xl">{getUIText('title')}</CardTitle>
                     </div>
-                    <p className="text-muted-foreground pt-2">{getUIText('description')}</p>
+                    <p className="text-muted-foreground">{getUIText('description')}</p>
                 </CardHeader>
-                <CardContent className="pl-6 pr-2 pt-2 pb-4">
+                <CardContent className="pl-6 pr-2 pt-0 pb-4">
                     <ScrollArea className="h-[60vh] pr-4">
                        <Accordion type="multiple" className="w-full">
                             {questions.map((q, index) => (
