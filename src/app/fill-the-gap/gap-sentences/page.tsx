@@ -99,6 +99,11 @@ function SentenceExercise({
     const handleReset = () => {
         setSelectedAnswers({});
         setAnswerStates({ sentence1: null, sentence2: null, sentence3: null });
+        setShuffledOptions({
+            s1: shuffle(sentenceSet.sentence1.options),
+            s2: shuffle(sentenceSet.sentence2.options),
+            s3: shuffle(sentenceSet.sentence3.options),
+        });
     };
 
     const renderSentence = (sentence: Gap, key: 'sentence1' | 'sentence2' | 'sentence3') => {
