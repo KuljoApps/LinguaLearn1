@@ -93,7 +93,7 @@ export default function ConfettiConfiguratorPage() {
                     gravity={config.gravity}
                     colors={config.colors}
                     confettiSource={{ w: 10, h: 10, x: window.innerWidth / 2, y: window.innerHeight / 2 }}
-                    {...(config.shape === 'circle' && { drawShape: (ctx) => {
+                    {...(config.shape === 'circle' && { drawShape: (ctx: CanvasRenderingContext2D) => {
                         ctx.beginPath();
                         ctx.arc(0, 0, 5, 0, 2 * Math.PI);
                         ctx.fill();
@@ -200,7 +200,7 @@ export default function ConfettiConfiguratorPage() {
                                     <Button variant="outline" size="sm" className="col-span-1">Custom</Button>
                                 </PopoverTrigger>
                                 <PopoverContent>
-                                    <HexColorPicker color={config.colors[0]} onChange={(c) => setConfig(p => ({ ...p, colors: [c] }))} />
+                                    <HexColorPicker color={config.colors[0]} onChange={(c: string) => setConfig(p => ({ ...p, colors: [c] }))} />
                                 </PopoverContent>
                             </Popover>
                         </div>
