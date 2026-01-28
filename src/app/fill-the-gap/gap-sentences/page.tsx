@@ -86,11 +86,11 @@ function SentenceExercise({
     };
 
     const renderSentence = (sentence: Gap, key: 'sentence1' | 'sentence2') => (
-        <div className="flex items-center gap-4">
+        <div className="flex items-start gap-4">
             <div className="flex-shrink-0 h-8 w-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold mt-1">
                 {key === 'sentence1' ? 1 : 2}
             </div>
-            <p className="text-base flex flex-wrap items-center gap-2">
+            <p className="text-base flex flex-wrap items-baseline gap-2">
                 <span>{sentence.text[0]}</span>
                 <Select
                     onValueChange={(value) => handleSelectChange(key, value)}
@@ -98,7 +98,7 @@ function SentenceExercise({
                     disabled={!!answerStates.sentence1}
                 >
                     <SelectTrigger className={cn(
-                        "h-8 font-semibold w-fit [&>svg]:hidden pr-2",
+                        "h-8 font-semibold w-fit [&>svg]:hidden px-2",
                         answerStates[key] === 'correct' && 'border-success text-success ring-2 ring-success/50',
                         answerStates[key] === 'incorrect' && 'border-destructive text-destructive ring-2 ring-destructive/50'
                     )}>
