@@ -86,45 +86,44 @@ function SentenceExercise({
     };
 
     const renderSentence = (sentence: Gap, key: 'sentence1' | 'sentence2') => (
-        <p className="text-base flex flex-wrap items-center gap-2">
-            <span>{sentence.text[0]}</span>
-            <Select
-                onValueChange={(value) => handleSelectChange(key, value)}
-                value={selectedAnswers[key] || ''}
-                disabled={!!answerStates.sentence1}
-            >
-                <SelectTrigger className={cn(
-                    "w-auto h-8 font-semibold min-w-[140px]",
-                    answerStates[key] === 'correct' && 'border-success text-success ring-2 ring-success/50',
-                    answerStates[key] === 'incorrect' && 'border-destructive text-destructive ring-2 ring-destructive/50'
-                )}>
-                    <SelectValue placeholder={getUIText('selectPlaceholder')} />
-                </SelectTrigger>
-                <SelectContent>
-                    {sentence.options.map(opt => <SelectItem key={opt} value={opt} className="text-base">{opt}</SelectItem>)}
-                </SelectContent>
-            </Select>
-            <span>{sentence.text[1]}</span>
-        </p>
+        <div className="flex items-center gap-4">
+            <div className="flex-shrink-0 h-8 w-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold mt-1">
+                {key === 'sentence1' ? 1 : 2}
+            </div>
+            <p className="text-base flex flex-wrap items-center gap-2">
+                <span>{sentence.text[0]}</span>
+                <Select
+                    onValueChange={(value) => handleSelectChange(key, value)}
+                    value={selectedAnswers[key] || ''}
+                    disabled={!!answerStates.sentence1}
+                >
+                    <SelectTrigger className={cn(
+                        "h-8 font-semibold w-fit",
+                        answerStates[key] === 'correct' && 'border-success text-success ring-2 ring-success/50',
+                        answerStates[key] === 'incorrect' && 'border-destructive text-destructive ring-2 ring-destructive/50'
+                    )}>
+                        <SelectValue placeholder={getUIText('selectPlaceholder')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {sentence.options.map(opt => <SelectItem key={opt} value={opt} className="text-lg">{opt}</SelectItem>)}
+                    </SelectContent>
+                </Select>
+                <span>{sentence.text[1]}</span>
+            </p>
+        </div>
     );
 
     return (
         <div className="space-y-4 pt-2">
             {showConfetti && <Confetti onConfettiComplete={() => setShowConfetti(false)} />}
             
-            <div className="space-y-4">
-                <div className="flex gap-4 items-start">
-                    <div className="flex-shrink-0 h-8 w-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold mt-1">1</div>
-                    <div className="flex-grow">{renderSentence(sentenceSet.sentence1, 'sentence1')}</div>
-                </div>
-                <div className="flex gap-4 items-start">
-                    <div className="flex-shrink-0 h-8 w-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold mt-1">2</div>
-                    <div className="flex-grow">{renderSentence(sentenceSet.sentence2, 'sentence2')}</div>
-                </div>
+            <div className="space-y-6">
+                {renderSentence(sentenceSet.sentence1, 'sentence1')}
+                {renderSentence(sentenceSet.sentence2, 'sentence2')}
             </div>
 
             <div className="flex justify-end gap-2 pt-2">
-                {answerStates.sentence1 && (
+                {answerStates.sentence1 && !isCompleted && (
                      <Button variant="outline" size="sm" onClick={handleReset}><RefreshCw className="h-4 w-4 mr-2" /> {getUIText('reset')}</Button>
                 )}
                 <Button size="sm" onClick={handleCheckAnswers} disabled={!selectedAnswers.sentence1 || !selectedAnswers.sentence2 || !!answerStates.sentence1}>
