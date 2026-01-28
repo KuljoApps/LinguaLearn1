@@ -234,30 +234,31 @@ function WordListPage({ onSelectQuestion }: { onSelectQuestion: Dispatch<SetStat
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4">
             <Card className="w-full max-w-2xl shadow-2xl">
-                <CardHeader className="text-center">
+                <CardHeader className="text-center pb-2">
                     <div className="flex items-center justify-center gap-4 pb-3">
                         <FileText className="h-8 w-8" />
                         <CardTitle className="text-3xl">{getUIText('title')}</CardTitle>
                     </div>
-                    <p className="text-muted-foreground pt-0 -pb-1">{getUIText('description')}</p>
+                    <p className="text-muted-foreground pt-0">{getUIText('description')}</p>
                 </CardHeader>
-                <CardContent className="pl-4 pr-0 pt-0 pb-4">
-                     <div className="flex items-center justify-between p-2 mb-2 rounded-lg bg-amber/10 border border-amber">
-                        <Button variant="ghost" size="icon" onClick={handlePrevCategory}>
-                          <ArrowLeft className="h-5 w-5" />
-                        </Button>
-                        <div className="text-center">
-                          <h3 className="font-semibold">{currentCategory.title}</h3>
-                          <p className="text-sm text-muted-foreground">{currentCategoryIndex + 1} / {categories.length}</p>
+                <CardContent className="p-0 pt-2 pb-4">
+                    <div className="px-4 mb-2">
+                        <div className="flex items-center justify-between p-2 rounded-lg bg-amber/10 border border-amber">
+                            <Button variant="ghost" size="icon" onClick={handlePrevCategory}>
+                            <ArrowLeft className="h-5 w-5" />
+                            </Button>
+                            <div className="text-center">
+                            <h3 className="font-semibold">{currentCategory.title}</h3>
+                            <p className="text-sm text-muted-foreground">{currentCategoryIndex + 1} / {categories.length}</p>
+                            </div>
+                            <Button variant="ghost" size="icon" onClick={handleNextCategory}>
+                            <ArrowRight className="h-5 w-5" />
+                            </Button>
                         </div>
-                        <Button variant="ghost" size="icon" onClick={handleNextCategory}>
-                          <ArrowRight className="h-5 w-5" />
-                        </Button>
-                      </div>
-
-                    <ScrollArea className="h-[63vh] pr-4">
+                    </div>
+                    <ScrollArea className="h-[64vh]">
                         {view === 'list' ? (
-                            <div className="space-y-1">
+                            <div className="space-y-1 px-4">
                                 {uncompleted.map((q, i) => renderWordItem(q, i, false))}
                                 {completed.length > 0 && uncompleted.length > 0 && (
                                     <div className="py-4">
@@ -268,7 +269,7 @@ function WordListPage({ onSelectQuestion }: { onSelectQuestion: Dispatch<SetStat
                                 {completed.map((q, i) => renderWordItem(q, uncompleted.length + i, true))}
                             </div>
                         ) : (
-                             <div className="grid grid-cols-4 sm:grid-cols-7 gap-3">
+                             <div className="grid grid-cols-4 sm:grid-cols-7 gap-3 px-4">
                                 {currentCategory.words.map((question, index) => {
                                     const isCompleted = completedWords.has(question.fullWord);
                                     return (
