@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/componen
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
-import { ArrowLeft, MessagesSquare, CheckCircle, RefreshCw, Link2, FileText, Type } from 'lucide-react';
+import { ArrowLeft, MessagesSquare, CheckCircle, RefreshCw } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { allGapSentenceQuestions, type Gap, type GapSentenceSet } from '@/lib/fill-the-gap/gap-sentences';
@@ -94,7 +94,7 @@ function SentenceExercise({
                 disabled={!!answerStates.sentence1}
             >
                 <SelectTrigger className={cn(
-                    "w-[140px] h-8 font-semibold",
+                    "w-auto h-8 font-semibold min-w-[140px]",
                     answerStates[key] === 'correct' && 'border-success text-success ring-2 ring-success/50',
                     answerStates[key] === 'incorrect' && 'border-destructive text-destructive ring-2 ring-destructive/50'
                 )}>
