@@ -90,7 +90,7 @@ function SentenceExercise({
             <div className="flex-shrink-0 h-8 w-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold mt-1">
                 {key === 'sentence1' ? 1 : 2}
             </div>
-            <p className="text-base leading-snug">
+            <p className="text-base leading-loose">
                 <span>{sentence.text[0]}</span>{' '}
                 <Select
                     onValueChange={(value) => handleSelectChange(key, value)}
