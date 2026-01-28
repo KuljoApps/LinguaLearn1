@@ -100,7 +100,7 @@ function SentenceExercise({
                     disabled={!!answerStates.sentence1}
                 >
                     <SelectTrigger className={cn(
-                        "h-8 font-semibold text-base w-auto inline-flex items-baseline justify-start [&>svg]:hidden px-2 border-amber",
+                        "h-7 pt-0 font-semibold text-base w-auto inline-flex items-baseline justify-start [&>svg]:hidden px-2 border-amber",
                         answerStates[key] === 'correct' && 'border-success text-success ring-2 ring-success/50',
                         answerStates[key] === 'incorrect' && 'border-destructive text-destructive ring-2 ring-destructive/50'
                     )}>
@@ -175,10 +175,10 @@ export default function GapSentencesPage() {
                         <MessagesSquare className="h-8 w-8" />
                         <CardTitle className="text-3xl">{getUIText('title')}</CardTitle>
                     </div>
-                    <p className="text-muted-foreground">{getUIText('description')}</p>
+                    <p className="pt-3 text-muted-foreground">{getUIText('description')}</p>
                 </CardHeader>
                 <CardContent className="pl-6 pr-2 pt-0 pb-4">
-                    <ScrollArea className="h-[65vh] pr-4">
+                    <ScrollArea className="h-[63vh] pr-4">
                        <Accordion type="multiple" className="w-full">
                             {questions.map((q, index) => (
                                 <AccordionItem value={`item-${q.id}`} key={q.id}>
