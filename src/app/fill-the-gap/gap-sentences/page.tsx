@@ -32,6 +32,8 @@ const uiTexts = {
     congratulations: { en: 'Congratulations!', fr: 'Félicitations !', de: 'Glückwunsch!', it: 'Congratulazioni!', es: '¡Felicidades!' },
 };
 
+const shuffle = (array: string[]) => [...array].sort(() => Math.random() - 0.5);
+
 function SentenceExercise({
     sentenceSet,
     onComplete,
@@ -47,6 +49,20 @@ function SentenceExercise({
     const [selectedAnswers, setSelectedAnswers] = useState<{ sentence1?: string; sentence2?: string, sentence3?: string }>({});
     const [answerStates, setAnswerStates] = useState<{ sentence1?: 'correct' | 'incorrect' | null; sentence2?: 'correct' | 'incorrect' | null, sentence3?: 'correct' | 'incorrect' | null }>({ sentence1: null, sentence2: null, sentence3: null });
     const [showConfetti, setShowConfetti] = useState(false);
+    const [shuffledOptions, setShuffledOptions] = useState({
+        s1: [] as string[],
+        s2: [] as string[],
+        s3: [] as string[],
+    });
+
+    useEffect(() => {
+        setShuffledOptions({
+            s1: shuffle(sentenceSet.sentence1.options),
+            s2: shuffle(sentenceSet.sentence2.options),
+            s3: shuffle(sentenceSet.sentence3.options),
+        });
+    }, [sentenceSet]);
+
 
     const handleSelectChange = (sentenceKey: 'sentence1' | 'sentence2' | 'sentence3', value: string) => {
         if (answerStates.sentence1) return; // Don't allow changes after checking
@@ -85,39 +101,43 @@ function SentenceExercise({
         setAnswerStates({ sentence1: null, sentence2: null, sentence3: null });
     };
 
-    const renderSentence = (sentence: Gap, key: 'sentence1' | 'sentence2' | 'sentence3') => (
-        <div className="flex items-start gap-4" key={key}>
-            <div className="flex-shrink-0 h-8 w-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold mt-1">
-                {key === 'sentence1' ? 1 : key === 'sentence2' ? 2 : 3}
+    const renderSentence = (sentence: Gap, key: 'sentence1' | 'sentence2' | 'sentence3') => {
+        const options = key === 'sentence1' ? shuffledOptions.s1 : key === 'sentence2' ? shuffledOptions.s2 : shuffledOptions.s3;
+
+        return (
+            <div className="flex items-start gap-4" key={key}>
+                <div className="flex-shrink-0 h-8 w-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold mt-1">
+                    {key === 'sentence1' ? 1 : key === 'sentence2' ? 2 : 3}
+                </div>
+                <p className="text-base leading-loose">
+                    <span>{sentence.text[0]}</span>{' '}
+                    <Select
+                        onValueChange={(value) => handleSelectChange(key, value)}
+                        value={selectedAnswers[key] || ''}
+                        disabled={!!answerStates.sentence1}
+                    >
+                        <SelectTrigger className={cn(
+                            "h-8 pt-0 font-semibold text-base w-auto inline-flex items-baseline justify-start [&>svg]:hidden px-2 border-amber",
+                            answerStates[key] === 'correct' && 'border-success text-success ring-2 ring-success/50',
+                            answerStates[key] === 'incorrect' && 'border-destructive text-destructive ring-2 ring-destructive/50'
+                        )}>
+                            <SelectValue placeholder={getUIText('selectPlaceholder')} />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {options.map(opt => <SelectItem key={opt} value={opt} className="text-lg">{opt}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
+                    {' '}<span>{sentence.text[1]}</span>
+                </p>
             </div>
-            <p className="text-base leading-loose">
-                <span>{sentence.text[0]}</span>{' '}
-                <Select
-                    onValueChange={(value) => handleSelectChange(key, value)}
-                    value={selectedAnswers[key] || ''}
-                    disabled={!!answerStates.sentence1}
-                >
-                    <SelectTrigger className={cn(
-                        "h-8 pt-0 font-semibold text-base w-auto inline-flex items-baseline justify-start [&>svg]:hidden px-2 border-amber",
-                        answerStates[key] === 'correct' && 'border-success text-success ring-2 ring-success/50',
-                        answerStates[key] === 'incorrect' && 'border-destructive text-destructive ring-2 ring-destructive/50'
-                    )}>
-                        <SelectValue placeholder={getUIText('selectPlaceholder')} />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {sentence.options.map(opt => <SelectItem key={opt} value={opt} className="text-lg">{opt}</SelectItem>)}
-                    </SelectContent>
-                </Select>
-                {' '}<span>{sentence.text[1]}</span>
-            </p>
-        </div>
-    );
+        );
+    };
     
     const allCorrectAfterCheck = answerStates.sentence1 === 'correct' && answerStates.sentence2 === 'correct' && answerStates.sentence3 === 'correct';
 
     return (
         <div className="space-y-4">
-            {showConfetti && <Confetti numberOfPieces={100} gravity={0.3} onConfettiComplete={() => setShowConfetti(false)} />}
+            {showConfetti && <Confetti onConfettiComplete={() => setShowConfetti(false)} />}
             
             <div className="space-y-4">
                 {renderSentence(sentenceSet.sentence1, 'sentence1')}
