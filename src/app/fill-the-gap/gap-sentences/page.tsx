@@ -98,7 +98,7 @@ function SentenceExercise({
                     disabled={!!answerStates.sentence1}
                 >
                     <SelectTrigger className={cn(
-                        "h-8 font-semibold w-fit",
+                        "h-8 font-semibold w-fit [&>svg]:hidden pr-2",
                         answerStates[key] === 'correct' && 'border-success text-success ring-2 ring-success/50',
                         answerStates[key] === 'incorrect' && 'border-destructive text-destructive ring-2 ring-destructive/50'
                     )}>
