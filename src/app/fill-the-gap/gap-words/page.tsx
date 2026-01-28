@@ -238,7 +238,7 @@ function WordListPage({ onSelectQuestion }: { onSelectQuestion: Dispatch<SetStat
                         <FileText className="h-8 w-8" />
                         <CardTitle className="text-3xl">{getUIText('title')}</CardTitle>
                     </div>
-                    <p className="text-muted-foreground pt-0 -pb-1">{getUIText('description')}</p>
+                    <p className="text-muted-foreground pt-0">{getUIText('description')}</p>
                 </CardHeader>
                 <CardContent className="p-0 pt-2 pb-4">
                     <div className="px-4 mb-4">
@@ -255,7 +255,7 @@ function WordListPage({ onSelectQuestion }: { onSelectQuestion: Dispatch<SetStat
                             </Button>
                         </div>
                     </div>
-                    <ScrollArea className="h-[63vh] pr-4">
+                    <ScrollArea className="h-[64vh]">
                         {view === 'list' ? (
                             <div className="space-y-1 px-4">
                                 {uncompleted.map((q, i) => renderWordItem(q, i, false))}
