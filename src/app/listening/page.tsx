@@ -260,10 +260,9 @@ export default function ListeningPage() {
                                 <Link href="/dev-tools/button-colors">
                                     <Button variant="secondary" className="w-full">Button Colors</Button>
                                 </Link>
-                                <div className="p-4 bg-muted/50 rounded-lg">
-                                    <h4 className="font-semibold text-sm mb-2">Confetti Configurator</h4>
-                                    <p className="text-xs text-muted-foreground">Confetti configurator will be here.</p>
-                                </div>
+                                <Link href="/dev-tools/confetti-configurator">
+                                    <Button variant="secondary" className="w-full">Confetti Configurator</Button>
+                                </Link>
                             </CollapsibleContent>
                         </Collapsible>
                     </div>

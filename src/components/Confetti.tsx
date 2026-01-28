@@ -1,15 +1,11 @@
 "use client";
 
 import React from 'react';
-import ReactConfetti from 'react-confetti';
+import ReactConfetti, { Props as ReactConfettiProps } from 'react-confetti';
 import { useWindowSize } from '@react-hook/window-size';
 
-interface ConfettiProps {
-  onConfettiComplete?: () => void;
-}
-
-const Confetti: React.FC<ConfettiProps> = ({ onConfettiComplete }) => {
-  const [width, height] = useWindowSize();
+const Confetti: React.FC<Partial<ReactConfettiProps>> = (props) => {
+  const { width, height } = useWindowSize();
 
   return (
     <ReactConfetti
@@ -18,7 +14,7 @@ const Confetti: React.FC<ConfettiProps> = ({ onConfettiComplete }) => {
       recycle={false}
       numberOfPieces={200}
       gravity={0.2}
-      onConfettiComplete={onConfettiComplete}
+      {...props}
     />
   );
 };
